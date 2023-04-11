@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+    app:
+        build: .
+        container_name: sistema_becas
+        #restart: always
+        command: python3 manage.py runserver 0.0.0.0:8000        
+        depends_on:
+            - db-becas
+        links:
+            - db-becas
+        volumes:
+            - ./:/app
+        ports:
+            - "8000:8000"
+          
+    db-becas:
+        image: mariadb
+        container_name: db-becas
+        environment:
+            MYSQL_DATABASE: db-becas
+            MYSQL_USER: becas_user
+            MYSQL_PASSWORD: becas_password
+            MYSQL_ROOT_PASSWORD: becas_root_password
+        volumes:
+            - db-becas:/var/lib/mysql
+        ports:
+            - 3320:3306
+
+volumes:
+    db-becas:
