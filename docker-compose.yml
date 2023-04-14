@@ -16,6 +16,7 @@ services:
           
     db-becas:
         image: mariadb
+        restart: always
         container_name: db-becas
         environment:
             MYSQL_DATABASE: db-becas
@@ -24,8 +25,8 @@ services:
             MYSQL_ROOT_PASSWORD: becas_root_password
         volumes:
             - db-becas:/var/lib/mysql
-        ports:
-            - 3320:3306
+#        ports:
+#           - 3320:3306
 
 volumes:
     db-becas:
