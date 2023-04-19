@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
@@ -43,7 +44,34 @@ class Carrera(models.Model):
     def __str__(self):
         return self.nombre
 
-class Usuario(AbstractUser):
+class UsuarioManager(BaseUserManager):
+    def create_user(self, email, curp, nombre,  password=None, is_admin=False, is_staff=False, is_active=True):        
+        user = self.model(
+            email=self.normalize_email(email)
+        )
+        user.curp = curp
+        user.nombre = nombre
+        user.set_password(password)  # change password to hash
+        user.is_superuser = is_admin
+        user.is_staff = is_staff
+        user.active = is_active
+        user.save(using=self._db)
+        return user
+        
+    def create_superuser(self, email, curp, nombre, password=None, **extra_fields):        
+        user = self.model(
+            email=self.normalize_email(email)
+        )
+        user.curp = curp
+        user.nombre = nombre
+        user.set_password(password)        
+        user.is_superuser = True
+        user.is_staff = True
+        user.active = True
+        user.save(using=self._db)
+        return user
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     nombre = models.CharField(
         verbose_name="Nombre", max_length=191, blank=False, null=True)    
     curp = models.CharField(
@@ -51,12 +79,20 @@ class Usuario(AbstractUser):
         validators=[RegexValidator(r'^[a-zA-Z0-9]{18}$', 'Debe tener exactamente 18 caracteres alfanuméricos.')],
         blank=False, null=False, unique=True)
     email = models.EmailField(verbose_name="E-mail", blank=False, null=False, unique=True)
+    is_staff = models.BooleanField(default=False)    
     
     EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'curp'
+    USERNAME_FIELD = 'curp'    
+    REQUIRED_FIELDS = ['nombre','email']
+    objects = UsuarioManager()
 
     def __str__(self):
-        return self.curp
+        str = ""
+        if self.is_superuser:
+            str = str + "SuperUser "
+        if self.is_staff:
+            str = str + "Staff "
+        return str + self.curp
 
 
 class Solicitante(Usuario):
