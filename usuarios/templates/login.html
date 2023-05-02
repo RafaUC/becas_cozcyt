@@ -1,24 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% load static %}
-  <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-  <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet">
+  <!-- Enlace a Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
   <title>Document</title>
 </head>
-<body>
-  <div class="v1_7">
-    <div class="v1_8"></div>
-    <span class="v1_9">Bienvenido al sistema de impulso al talento</span>
-    <div class="v1_10"></div>
-    <span class="v1_11">CURP</span>
-    <div class="v1_12"></div>
-    <div class="v1_13"></div>
-    <span class="v1_14">Iniciar sesión</span>
-    <span class="v1_15">Contraseña</span>
-    <span class="v1_16">¿Olvidaste tu contraseña?</span>
-    <span class="v1_17">Crear nueva cuenta</span>
-    <div class="name"></div>
+<body class="pagina-principal">
+  
+  <div class="container">
+    <div class="row align-items-center" style="height:100vh;">
+      <div class="col d-flex justify-content-center">
+        <div class="container pagina-blanco login-contenedor">                    
+          <div class="text-center">  
+            <img class="img-fluid w-75" src="/static/images/Logo cozcyt.png" alt="Logo" >
+            <p class="h4" style="color: #676767;">
+              Bienvenido al sistema de impulso al talento
+            </p>
+          </div>
+          {% for message in messages %}
+              
+            <div class="alert alert-danger">
+                <a class="close" href="#" data-dismiss="alert">×</a>
+                  {{ message }}
+            </div>
+
+          {% endfor %}
+          <div class="col text-center">
+            <form method="POST">
+              {% csrf_token %}
+              <input class="form-control form-control-lg mt-3" type="text" required id="curp" name="curp"  placeholder="Curp">
+              <input  class="form-control form-control-lg my-3" type="password" required id="id_password" name="password"   placeholder="Contraseña">
+              <p class="h6"><a href="#">¿Olvidaste tu contraseña?</a></p>
+              <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="iniciar sesion">Iniciar Sesión</button>
+              <p class="h6 mb-4"><a href="#">Registrarse</a></p>
+            </form>
+          </div>
+        </img>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
