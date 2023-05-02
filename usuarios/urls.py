@@ -19,4 +19,5 @@ from django.urls import path
 app_name = 'usuarios'
 urlpatterns = [
     path('login/', views.loginSistema, name='login'),
+    path('registrar/', views.register, name='register'),
 ]

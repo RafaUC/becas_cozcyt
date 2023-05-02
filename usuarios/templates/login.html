@@ -8,7 +8,7 @@
   <!-- Enlace a Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link href="{% static 'css/main.css' %}" rel="stylesheet">
-  <title>Document</title>
+  <title>Login</title>
 </head>
 <body class="pagina-principal">
   
@@ -33,11 +33,20 @@
           <div class="col text-center">
             <form method="POST">
               {% csrf_token %}
+              {% for field in form %}
+                  <div class="fieldWrapper">
+                      {{ field.errors }}
+                      {{ field }}
+                  </div>
+              {% endfor %}
+              <!-- 
               <input class="form-control form-control-lg mt-3" type="text" required id="curp" name="curp"  placeholder="Curp">
               <input  class="form-control form-control-lg my-3" type="password" required id="id_password" name="password"   placeholder="Contraseña">
+              -->
               <p class="h6"><a href="#">¿Olvidaste tu contraseña?</a></p>
               <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="iniciar sesion">Iniciar Sesión</button>
               <p class="h6 mb-4"><a href="#">Registrarse</a></p>
+              
             </form>
           </div>
         </img>
