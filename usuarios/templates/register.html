@@ -19,7 +19,7 @@
         top:30px;
         background: #FFFFFF;
         border: 0.5px solid #5E5858;
-        border-radius: 49px;
+        border-radius: 30px;
 
       }   
       .headerContainer{
@@ -40,7 +40,7 @@
         width: 100%;
         text-align: center;
       }
-      button {   
+      .create-user {   
         background-color: #ABEBC6;
         border-radius: 10px;
         width: 50%;  
@@ -55,7 +55,7 @@
       a {
         color: #C9B0B0;
       } 
-      input[type=text], input[type=password] {   
+      input[type=text], input[type=password], [type=email]{   
         width: 90%;   
         padding: 15px 15px; 
         border: 1px solid #676767;    
@@ -63,15 +63,16 @@
         font-size: 15px;
         text-align: left;
       }  
-      button:hover {   
+      .create-user:hover {   
         opacity: 0.7;   
-      }     
+      } 
       </style>  
 </head>
 <body>
-    <form action="">
+    <form method="POST" action = "">
+    {% csrf_token %}
         <!-- Header -->
-        <div class="headerContainer">
+        <div class="headerContainer mt-5">
             <img src="https://cozcyt.gob.mx/labsol/wp-content/uploads/2022/09/logo-labsol-y-cozcyt.png" name="logo" height="65px" width="350px">
             <p>Bienvenido al sistema de impulso al talento</p>
         </div>
@@ -79,24 +80,24 @@
         <!-- Container -->
         <div class="mainContainer">
             <!-- curp user-->
-            <input type="text" placeholder="CURP" name="CURP" required>
+            {{form.curp}}
             <br><br><br>
 
             <!-- mail -->
-            <input type="text" placeholder="Correo electrónico" name="mail" required>
+            {{form.email}}
             <br><br><br>
 
             <!-- password -->
-            <input type="password" placeholder="Contraseña" name="pswd" required>
+            {{form.password1}}
             <br><br><br>
 
             <!-- confirm password -->
-            <input type="password" placeholder="Confirmar contraseña" name="cpswd" required>
+            {{form.password2}}
             <br><br>
 
             <!-- sub container -->
             <div class="child">
-              <button class="form-button" type="submit">Crear cuenta</button>
+              <input type="submit" class = "create-user" value="Crear cuenta">
               <br><a href="#">Iniciar sesión</a>
             </div>
         </div>
@@ -104,5 +105,15 @@
     </form>
 </body>
 <script>
+  var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='CURP..';
+		form_fields[2].placeholder='Correo electrónico..';
+		form_fields[3].placeholder='Contraseña...';
+		form_fields[4].placeholder='Confirmar contraseña...';
+
+
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
 </script>
 </html>
