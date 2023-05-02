@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta</title>
+    <style>   
+      Body {  
+        font-family: Calibri, Helvetica, sans-serif;  
+        background: #E4756F;
+        color:#676767
+      }   
+      form {   
+        position: relative;
+        width: 460px;
+        height: 650px;
+        margin: auto;
+        top:30px;
+        background: #FFFFFF;
+        border: 0.5px solid #5E5858;
+        border-radius: 30px;
+
+      }   
+      .headerContainer{
+        position: absolute;
+        top:30px;
+        left: 12%;
+        font-size: 20px;
+        color: #676767;
+      }
+      .mainContainer {  
+        position: absolute; 
+        width:70%;
+        top: 170px;
+        left: 15%;
+      }
+      .child{
+        position: absolute; 
+        width: 100%;
+        text-align: center;
+      }
+      .create-user {   
+        background-color: #ABEBC6;
+        border-radius: 10px;
+        width: 50%;  
+        color: #FFFFFF;   
+        padding: 15px;   
+        margin: 10px 0px;   
+        border: none;   
+        cursor: pointer;
+        font-size: 17px; 
+        font-weight: bold;
+      }  
+      a {
+        color: #C9B0B0;
+      } 
+      input[type=text], input[type=password], [type=email]{   
+        width: 90%;   
+        padding: 15px 15px; 
+        border: 1px solid #676767;    
+        color:#676767;
+        font-size: 15px;
+        text-align: left;
+      }  
+      .create-user:hover {   
+        opacity: 0.7;   
+      } 
+      </style>  
+</head>
+<body>
+    <form method="POST" action = "">
+    {% csrf_token %}
+        <!-- Header -->
+        <div class="headerContainer mt-5">
+            <img src="https://cozcyt.gob.mx/labsol/wp-content/uploads/2022/09/logo-labsol-y-cozcyt.png" name="logo" height="65px" width="350px">
+            <p>Bienvenido al sistema de impulso al talento</p>
+        </div>
+
+        <!-- Container -->
+        <div class="mainContainer">
+            <!-- curp user-->
+            {{form.curp}}
+            <br><br><br>
+
+            <!-- mail -->
+            {{form.email}}
+            <br><br><br>
+
+            <!-- password -->
+            {{form.password1}}
+            <br><br><br>
+
+            <!-- confirm password -->
+            {{form.password2}}
+            <br><br>
+
+            <!-- sub container -->
+            <div class="child">
+              <input type="submit" class = "create-user" value="Crear cuenta">
+              <br><a href="#">Iniciar sesión</a>
+            </div>
+        </div>
+
+    </form>
+</body>
+<script>
+  var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='CURP..';
+		form_fields[2].placeholder='Correo electrónico..';
+		form_fields[3].placeholder='Contraseña...';
+		form_fields[4].placeholder='Confirmar contraseña...';
+
+
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+</script>
+</html>
