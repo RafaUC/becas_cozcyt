@@ -1,0 +1,102 @@
+:root {
+  /* Color styles */
+  --pagina-blanco: rgba(255, 255, 255, 1);
+  --pagina-fuerte: rgba(120, 21, 15, 1);
+  --pagina-principal: rgba(190, 70, 53, 1);
+  --pagina-tenue: rgba(228, 117, 111, 1);
+  --pagina-tenue-claro: rgba(254, 225, 229, 1);
+  --aceptado-desactivado: rgba(209, 237, 214, 1);
+  --aceptado-activado: rgb(70, 199, 100);
+  --aceptado-hover: rgba(133, 231, 160, 1);
+  --cancelar-desactivado: rgba(233, 195, 193, 1);
+  --cancelar-activado: rgba(234, 94, 94, 1);
+
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 14px;
+}
+
+/*Clases de estolo de Colores*/
+.pagina-blanco {
+  background-color: var(--pagina-blanco);
+}
+
+.pagina-fuerte {
+  background-color: var(--pagina-fuerte);
+}
+
+.pagina-principal {
+  background-color: var(--pagina-principal);
+}
+
+.pagina-tenue {
+  background-color: var(--pagina-tenue);
+}
+
+.pagina-tenue-claro {
+  background-color: var(--pagina-tenue-claro);
+}
+
+.aceptado-desactivado {
+  background-color: var(--aceptado-desactivado);
+}
+
+.aceptado-activado {
+  background-color: var(--aceptado-activado);
+}
+
+.aceptado-hover {
+  background-color: var(--aceptado-hover);
+}
+
+.cancelar-desactivado {
+  background-color: var(---cancelar-desactivado);
+}
+
+.cancelar-activado {
+  background-color: var(--cancelar-activado);
+}
+
+/* Login */
+.login-contenedor {  
+  max-width: 550px;
+  border-radius: 20px;
+}
+
+.btn-aceptado {
+  color: #fff;
+  background-color: var(--aceptado-activado);
+  border-color: var(--aceptado-activado);
+}
+
+.btn-aceptado:hover {
+  color: #fff;
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-aceptado:focus, .btn-aceptado.focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+.btn-aceptado.disabled, .btn-aceptado:disabled {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-aceptado:not(:disabled):not(.disabled):active, .btn-aceptado:not(:disabled):not(.disabled).active,
+.show > .btn-aceptado.dropdown-toggle {
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
+
+.btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
+.show > .btn-aceptado.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
