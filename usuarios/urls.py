@@ -20,4 +20,5 @@ app_name = 'usuarios'
 urlpatterns = [
     path('login/', views.loginSistema, name='login'),
     path('registrar/', views.register, name='register'),
+    path('perfil/',views.perfil, name='perfil'),
 ]
