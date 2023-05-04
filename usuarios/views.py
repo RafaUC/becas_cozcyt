@@ -45,3 +45,6 @@ def register(request):
             print('not valid')
     context = {'form' : form}
     return render(request, 'register.html', context)
+
+def perfil(request):
+    return render(request, 'perfil.html')

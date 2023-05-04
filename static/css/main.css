@@ -67,6 +67,8 @@ body {
   border-radius: 20px;
 }
 
+/* Componenetes */
+
 .btn-aceptado {
   color: #fff;
   background-color: var(--aceptado-activado);
@@ -99,4 +101,10 @@ body {
 .btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
 .show > .btn-aceptado.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+
+.nav .nav-link.active {
+  border-left: 12px solid var(--pagina-principal); 
+  background-color: var(--pagina-fuerte);
 }
