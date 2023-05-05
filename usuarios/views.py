@@ -28,12 +28,13 @@ def loginSistema(request):
 def register(request):
     form = CreateUserForm()
     if request.method == 'POST':
-        form = CreateUserForm(data=request.POST)
+        form = CreateUserForm(data = request.POST)
         if form.is_valid():
-            print('valid')
+            #print('valid')
             form.save()
             return render(request, "login.html") #cambiar a la vista de confirmar email cuando se tenga implementada
         else:
-            print('not valid')
+            #print('not valid')
+            messages.error(request, " ")
     context = {'form' : form}
     return render(request, 'register.html', context)
