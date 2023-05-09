@@ -22,9 +22,9 @@
 
     <!-- Seccion de la barra lateral  -->
     <div class="container-fluid" style="padding: 0px;">
-      <div class="row">
-        <div class="col">
-          <div class="d-flex flex-column justify-content-between flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+      <div class="row" style="margin: 0px;">
+        <div class="col-sm-auto nopadding">
+          <div class="d-flex flex-column justify-content-between flex-shrink-0 p-3 bg-light" style="width: 280px; height: 97.5vh;">
             <a href="#" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
               <img class="img-fluid w-75" src="{% static 'images/Logo cozcyt.png' %}" alt="Logo" >              
               <span class="fs-4">Sistema de impulso al Talento</span>
@@ -40,38 +40,40 @@
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link d-flex link-dark {% if url_name == 'mensajes' %}active{% endif %} h4">
-                  <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
+                  <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"> </i>
                   Mensajes
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
-                  <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
+                  <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
                   Convocatorias
                 </a>
               </li>
               <li class="nav-item ">
                 <a href="#" class="nav-link d-flex link-dark {% if url_name == 'estudio' %}active{% endif %} h4" style="text-align: left;">
-                  <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
+                  <i class="fa fa-id-card-o px-2 align-self-center" aria-hidden="true"> </i>
                   Estudio Socioeconómico
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link d-flex {% if url_name == 'historial' %}active{% endif %} link-dark h4">
-                  <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
+                  <i class="fa fa-clock-o px-2 align-self-center" aria-hidden="true"> </i>
                   Historial
                 </a>
               </li>
             </ul>
             {% endwith %}
             <hr>
-            <div >              
-              <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
-              <strong> <a href="#"> Cerrar sesión </a> </strong>            
+            <div >  
+              <a href="#" class="link-dark h6">           
+                <i class="fa fa-sign-out px-2 align-self-center" aria-hidden="true"> </i>
+                <strong>Cerrar sesión  </strong>    
+              </a>        
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col ">
           {% block body %}
           {% endblock body %}
         </div>
