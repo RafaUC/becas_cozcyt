@@ -108,3 +108,9 @@ body {
   border-left: 12px solid var(--pagina-principal); 
   background-color: var(--pagina-fuerte);
 }
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
