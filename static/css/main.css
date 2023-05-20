@@ -22,43 +22,83 @@ body {
 
 /*Clases de estolo de Colores*/
 .pagina-blanco {
-  background-color: var(--pagina-blanco);
+  background-color: var(--pagina-blanco) !important;
 }
 
 .pagina-fuerte {
-  background-color: var(--pagina-fuerte);
+  background-color: var(--pagina-fuerte) !important;
 }
 
 .pagina-principal {
-  background-color: var(--pagina-principal);
+  background-color: var(--pagina-principal) !important;
 }
 
 .pagina-tenue {
-  background-color: var(--pagina-tenue);
+  background-color: var(--pagina-tenue) !important;
 }
 
 .pagina-tenue-claro {
-  background-color: var(--pagina-tenue-claro);
+  background-color: var(--pagina-tenue-claro) !important;
 }
 
 .aceptado-desactivado {
-  background-color: var(--aceptado-desactivado);
+  background-color: var(--aceptado-desactivado) !important;
 }
 
 .aceptado-activado {
-  background-color: var(--aceptado-activado);
+  background-color: var(--aceptado-activado) !important;
 }
 
 .aceptado-hover {
-  background-color: var(--aceptado-hover);
+  background-color: var(--aceptado-hover) !important;
 }
 
 .cancelar-desactivado {
-  background-color: var(---cancelar-desactivado);
+  background-color: var(---cancelar-desactivado) !important;
 }
 
 .cancelar-activado {
-  background-color: var(--cancelar-activado);
+  background-color: var(--cancelar-activado) !important;
+}
+
+.borde-pagina-blanco {
+  border-color: var(--pagina-blanco) !important;
+}
+
+.borde-pagina-fuerte {
+  border-color: var(--pagina-fuerte) !important;
+}
+
+.borde-pagina-principal {
+  border-color: var(--pagina-principal) !important;
+}
+
+.borde-pagina-tenue {
+  border-color: var(--pagina-tenue) !important;
+}
+
+.borde-pagina-tenue-claro {
+  border-color: var(--pagina-tenue-claro) !important;
+}
+
+.borde-aceptado-desactivado {
+  border-color: var(--aceptado-desactivado) !important;
+}
+
+.borde-aceptado-activado {
+  border-color: var(--aceptado-activado) !important;
+}
+
+.borde-aceptado-hover {
+  border-color: var(--aceptado-hover) !important;
+}
+
+.borde-cancelar-desactivado {
+  border-color: var(--cancelar-desactivado) !important;
+}
+
+.borde-cancelar-activado {
+  border-color: var(--cancelar-activado) !important;
 }
 
 /* Login */
@@ -114,3 +154,6 @@ body {
   margin: 0 !important;
 }
 
+.errorlist {
+  color: red;
+}

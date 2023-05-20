@@ -19,6 +19,20 @@ from django.urls import path
 app_name = 'usuarios'
 urlpatterns = [
     path('login/', views.loginSistema, name='login'),
+    path('primer_login/', views.primerLogin, name='primer_login'),
     path('registrar/', views.register, name='register'),
     path('perfil/',views.perfil, name='perfil'),
+    path('cargar_select_municipios/', views.cargar_select_list, 
+         kwargs={'app': 'usuarios', 
+                 'modDep': 'municipio', 
+                 'modIndep': 'estado',
+                 'orderBy': 'nombre'}, 
+         name='cargar_select_municipios'),  
+    path('cargar_select_carreras/', views.cargar_select_list, 
+         kwargs={'app': 'usuarios', 
+                 'modDep': 'carrera', 
+                 'modIndep': 'institucion',
+                 'orderBy': 'nombre'}, 
+         name='cargar_select_carreras'),  
+    path('logout', views.cerrarSesion, name='logout'),
 ]
