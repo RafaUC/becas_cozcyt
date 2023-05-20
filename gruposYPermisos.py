@@ -3,13 +3,13 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'becas_cozcyt.settings')
 django.setup()
 from django.contrib.contenttypes.models import ContentType
-from usuarios.models import Solicitante
+from usuarios.models import Solicitante, Usuario
 from django.contrib.auth.models import Permission, Group, User
 
 administradores = Group.objects.get_or_create(name='administradores')
 solicitantes = Group.objects.get_or_create(name='solicitantes')
 
-content_type_administrador = ContentType.objects.get_for_model(User)
+content_type_administrador = ContentType.objects.get_for_model(Usuario)
 content_type_solicitante = ContentType.objects.get_for_model(Solicitante)
 
 permisos_administrador = Permission.objects.get_or_create(

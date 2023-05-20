@@ -6,6 +6,162 @@
 
 {% block body %}
 
-<h1>Perfil page</h1>
+<p class="m-4 h3" >Mi Perfil</p>
+<div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>        
+        {% csrf_token %}        
+        <p class="h4" style="color: var(--pagina-principal);">Complete Sus Datos Personales </p>
+        <div>
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Personales</p>
+                <div class="col-4">
+                    {{ formPersonal.nombre.label }} 
+                    {{ formPersonal.nombre }}
+                    {{ formPersonal.nombre.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formPersonal.ap_paterno.label }} 
+                    {{ formPersonal.ap_paterno }}
+                    {{ formPersonal.ap_paterno.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formPersonal.ap_materno.label }}
+                    {{ formPersonal.ap_materno }}
+                    {{ formPersonal.ap_materno.errors }}
+                </div>
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ formPersonal.fecha_nacimiento.label }} 
+                    {{ formPersonal.fecha_nacimiento }}
+                    {{ formPersonal.fecha_nacimiento.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formPersonal.genero.label }} 
+                    {{ formPersonal.genero }}
+                    {{ formPersonal.genero.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formPersonal.g_etnico.label }}
+                    {{ formPersonal.g_etnico }}
+                    {{ formPersonal.g_etnico.errors }}
+                </div>
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ formPersonal.rfc.label }}
+                    {{ formPersonal.rfc }}
+                    {{ formPersonal.rfc.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="personal">Guardar</button>    
+            </div>            
+        </div>
+    </form>
+</div>
+
+<div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <form method="POST" id="domicilioForm" novalidate>
+        {% csrf_token %}   
+        <hr>
+        <div>            
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Domicilio</p>    
+                <div class="col-4">
+                    {{ formDomicilio.calle.label }} 
+                    {{ formDomicilio.calle }}
+                    {{ formDomicilio.calle.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formDomicilio.numero.label }} 
+                    {{ formDomicilio.numero }}
+                    {{ formDomicilio.numero.errors }}                    
+                </div>
+                <div class="col-4">
+                    {{ formDomicilio.colonia.label }} 
+                    {{ formDomicilio.colonia }}
+                    {{ formDomicilio.colonia.errors }}
+                </div>
+            </div>    
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ estadoSelectForm.estado.label }} 
+                    {{ estadoSelectForm.estado }}
+                    {{ estadoSelectForm.estado.errors }}
+                </div>
+                <div class="col-4">                    
+                    {{ formDomicilio.municipio.label }} 
+                    {{ formDomicilio.municipio }}
+                    {{ formDomicilio.municipio.errors }}
+                </div>   
+                <div class="col-4">
+                    {{ formDomicilio.codigo_postal.label }} 
+                    {{ formDomicilio.codigo_postal }}
+                    {{ formDomicilio.codigo_postal.errors }}
+                </div>             
+            </div>    
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ formDomicilio.tel_cel.label }} 
+                    {{ formDomicilio.tel_cel }}
+                    {{ formDomicilio.tel_cel.errors }}
+                </div>
+                <div class="col-4">
+                    {{ formDomicilio.tel_fijo.label }}
+                    {{ formDomicilio.tel_fijo }}
+                    {{ formDomicilio.tel_fijo.error }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="domicilio">Guardar</button>    
+            </div>            
+        </div>
+    </form>
+</div>
+
+<div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <form method="POST" id="domicilioForm" novalidate>
+        {% csrf_token %}  
+        <div>
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Escolares</p>
+                <div class="col-6">
+                    {{ institucionSelectForm.institucion.label }} 
+                    {{ institucionSelectForm.institucion }}
+                    {{ institucionSelectForm.institucion.errors }}
+                </div>
+                <div class="col-6">
+                    {{ formEscolar.carrera.label }} 
+                    {{ formEscolar.carrera }}
+                    {{ formEscolar.carrera.errors }}
+                </div>                
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-6">
+                    {{ formEscolar.grado.label }} 
+                    {{ formEscolar.grado }}
+                    {{ formEscolar.grado.errors }}
+                </div>
+                <div class="col-6">
+                    {{ formEscolar.promedio.label }} 
+                    {{ formEscolar.promedio }}
+                    {{ formEscolar.promedio.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="escolar">Guardar</button>    
+            </div>            
+        </div>
+    </form>
+</div>
+
+{% include "carga_municipios_script.html" %}
 
 {% endblock body %}
