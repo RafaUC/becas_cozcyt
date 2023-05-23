@@ -71,23 +71,23 @@ class SolicitanteForm(forms.ModelForm):
                   'promedio', 
                   'carrera']        
         widgets = {            
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese Nombre'}),
-            'rfc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el RFC'}),
-            'ap_paterno': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el apellido paterno'}),
-            'ap_materno': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el apellido materno'}),
-            'fecha_nacimiento': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control', 'type': 'date'}),
-            'genero': forms.Select(attrs={'class': 'form-control form-select'}),
-            'g_etnico': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'municipio': forms.Select(attrs={'class': 'form-control form-select'}),
-            'colonia': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la colonia'}),
-            'calle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la calle'}),
-            'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el número'}),
-            'codigo_postal': forms.TextInput(attrs={'class': 'form-control', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
-            'tel_cel': forms.TextInput(attrs={'class': 'form-control', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
-            'tel_fijo': forms.TextInput(attrs={'class': 'form-control', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
-            'grado': forms.TextInput(attrs={'class': 'form-control', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el grado'}),
-            'promedio': forms.NumberInput(attrs={'class': 'form-control', 'onkeypress': "return isNumberFloatKey(event)", 'placeholder': 'Ingrese el promedio'}),
-            'carrera': forms.Select(attrs={'class': 'form-control form-select'}),        
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese Nombre'}),
+            'rfc': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el RFC'}),
+            'ap_paterno': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el apellido paterno'}),
+            'ap_materno': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el apellido materno'}),
+            'fecha_nacimiento': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control border-3', 'type': 'date'}),
+            'genero': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
+            'g_etnico': forms.CheckboxInput(attrs={'class': 'form-check-input border-3'}),
+            'municipio': forms.Select(attrs={'class': 'form-control form-select border-3'}),
+            'colonia': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la colonia'}),
+            'calle': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la calle'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el número'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
+            'tel_cel': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
+            'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
+            'grado': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el grado'}),
+            'promedio': forms.NumberInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberFloatKey(event)", 'placeholder': 'Ingrese el promedio'}),
+            'carrera': forms.Select(attrs={'class': 'form-control border-3 form-select'}),        
         }
         labels = {
             'nombre': 'Nombre',
@@ -139,7 +139,7 @@ class SolicitanteForm(forms.ModelForm):
             self.fields['carrera'].queryset = carreras    
 
 class SolicitantePersonalesForm(SolicitanteForm):
-    rfc = forms.CharField(disabled=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'No RFC Asignado'}))
+    rfc = forms.CharField(disabled=True, label='RFC', widget=forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'No RFC Asignado'}))
 
     class Meta(SolicitanteForm.Meta):
         exclude = ('municipio', 

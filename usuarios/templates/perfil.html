@@ -8,12 +8,21 @@
 
 <p class="m-4 h3" >Mi Perfil</p>
 <div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <div class="row">
+        <p class="col h5">Datos Personales</p>
+        <div class="collapse show multi-collapse col text-end" id="collapse1-1">
+            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1-1, #collapse2-1, #collapse3-1, #collapse1-2" aria-expanded="false" aria-controls="collapse1-1 collapse1-2">
+                Editar
+                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+            </button>
+        </div>  
+    </div>
+      
     <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>        
-        {% csrf_token %}        
-        <p class="h4" style="color: var(--pagina-principal);">Complete Sus Datos Personales </p>
+        {% csrf_token %}                
         <div>
             <div class="row align-items-center p-2">
-                <p class="h5">Datos Personales</p>
+                
                 <div class="col-4">
                     {{ formPersonal.nombre.label }} 
                     {{ formPersonal.nombre }}
@@ -55,21 +64,30 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="personal">Guardar</button>    
-            </div>            
+        <div class="row">            
+            <div class="collapse multi-collapse" id="collapse1-2">
+                <div class="d-grid gap-2 col-4 mx-auto ">
+                    <button  id="submitPersonal" type="submit"  class="btn btn-aceptado btn-lg my-3 " name="guardar" value="personal">Guardar</button>    
+                </div>     
+            </div>                   
         </div>
     </form>
 </div>
 
 <div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <div class="row">
+        <p class="h5 col">Datos Domicilio</p>    
+        <div class="collapse show multi-collapse text-end col" id="collapse2-1">
+            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2-1, #collapse1-1, #collapse3-1, #collapse2-2" aria-expanded="false" aria-controls="collapse2-1 collapse2-2">
+                Editar
+                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+            </button>
+        </div>  
+    </div>
     <form method="POST" id="domicilioForm" novalidate>
-        {% csrf_token %}   
-        <hr>
+        {% csrf_token %}           
         <div>            
-            <div class="row align-items-center p-2">
-                <p class="h5">Datos Domicilio</p>    
+            <div class="row align-items-center p-2">                
                 <div class="col-4">
                     {{ formDomicilio.calle.label }} 
                     {{ formDomicilio.calle }}
@@ -117,19 +135,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="domicilio">Guardar</button>    
-            </div>            
+            <div class="collapse multi-collapse" id="collapse2-2">
+                <div class="d-grid gap-2 col-4 mx-auto">
+                    <button id="submitdomicilio" type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="domicilio">Guardar</button>    
+                </div>            
+            </div>
         </div>
     </form>
 </div>
 
 <div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
-    <form method="POST" id="domicilioForm" novalidate>
+    <div class="row">
+        <p class="h5 col">Datos Escolares</p>
+        <div class="collapse show multi-collapse text-end col" id="collapse3-1">
+            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3-1, #collapse2-1, #collapse1-1, #collapse3-2" aria-expanded="false" aria-controls="collapse3-1 collapse3-2">
+                Editar
+                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+            </button>
+        </div>   
+    </div>    
+    <form method="POST" id="escolarForm" novalidate>
         {% csrf_token %}  
         <div>
-            <div class="row align-items-center p-2">
-                <p class="h5">Datos Escolares</p>
+            <div class="row align-items-center p-2">                
                 <div class="col-6">
                     {{ institucionSelectForm.institucion.label }} 
                     {{ institucionSelectForm.institucion }}
@@ -155,13 +183,39 @@
             </div>
         </div>
         <div class="row">
-            <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="escolar">Guardar</button>    
-            </div>            
+            <div class="collapse multi-collapse" id="collapse3-2">
+                <div class="d-grid gap-2 col-4 mx-auto">
+                    <button id="submitEscolar" type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="escolar">Guardar</button>    
+                </div>    
+            </div>
         </div>
     </form>
 </div>
 
 {% include "carga_municipios_script.html" %}
+
+<script>
+document.getElementById('enableFormButton1').addEventListener('click', function() {
+  var form = document.getElementById('mainForm');
+  var fields = form.elements;
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].disabled = false;
+  }  
+});
+document.getElementById('enableFormButton2').addEventListener('click', function() {
+  var form = document.getElementById('domicilioForm');
+  var fields = form.elements;
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].disabled = false;
+  }  
+});
+document.getElementById('enableFormButton3').addEventListener('click', function() {
+  var form = document.getElementById('escolarForm');
+  var fields = form.elements;
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].disabled = false;
+  }  
+});
+</script>
 
 {% endblock body %}

@@ -6,8 +6,8 @@
   --pagina-tenue: rgba(228, 117, 111, 1);
   --pagina-tenue-claro: rgba(254, 225, 229, 1);
   --aceptado-desactivado: rgba(209, 237, 214, 1);
-  --aceptado-activado: rgb(70, 199, 100);
-  --aceptado-hover: rgba(133, 231, 160, 1);
+  --aceptado-activado: rgb(49, 185, 81);
+  --aceptado-hover: rgb(30, 139, 56);
   --cancelar-desactivado: rgba(233, 195, 193, 1);
   --cancelar-activado: rgba(234, 94, 94, 1);
 
@@ -117,30 +117,60 @@ body {
 
 .btn-aceptado:hover {
   color: #fff;
-  background-color: #218838;
-  border-color: #1e7e34;
+  background-color: var(--aceptado-hover);
+  border-color: var(--aceptado-hover);
 }
 
 .btn-aceptado:focus, .btn-aceptado.focus {
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
 }
 
 .btn-aceptado.disabled, .btn-aceptado:disabled {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
 }
 
 .btn-aceptado:not(:disabled):not(.disabled):active, .btn-aceptado:not(:disabled):not(.disabled).active,
 .show > .btn-aceptado.dropdown-toggle {
   color: #fff;
-  background-color: #1e7e34;
-  border-color: #1c7430;
+  background-color: var(--aceptado-hover);
+  border-color: var(--aceptado-hover);
 }
 
 .btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
 .show > .btn-aceptado.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem var(--aceptado-hover);
+}
+
+/* btn-pagina-tenue */
+
+.btn-pagina-tenue {
+  color: #fff; 
+  background-color: var(--pagina-tenue); 
+  border-color: var(--pagina-tenue); 
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  margin: 0.5rem;
+}
+
+.btn-pagina-tenue:hover {
+  /* Estilos para el estado hover (al pasar el cursor sobre el botón) */
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-principal);
+}
+
+.btn-pagina-tenue:focus,
+.btn-pagina-tenue.focus {
+  /* Estilos para el estado de enfoque (al hacer clic en el botón) */
+  box-shadow: 0 0 0 0.0rem var(--pagina-tenue); 
+}
+
+.btn-pagina-tenue:active,
+.btn-pagina-tenue.active {
+  /* Estilos para el estado activo (al presionar el botón) */
+  background-color: var(--pagina-tenue); 
+  border-color: var(--pagina-tenue); 
 }
 
 
@@ -150,7 +180,10 @@ body {
 }
 
 .nopadding {
-  padding: 0 !important;
+  padding: 0 !important;  
+}
+
+.nomargin {  
   margin: 0 !important;
 }
 
