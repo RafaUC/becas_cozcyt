@@ -122,6 +122,10 @@ def borrarSelect(formDep, formIndep, campoDep, campoIndep):
 
 @login_required
 def perfil(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    if verificarPrimerLogin(solicitante):          #Verifica si el usuario ha llenaod su informacion personal por primera vez
+        return redirect(verificarPrimerLogin(solicitante))
+    
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     rfc = solicitante.rfc      
     formPersonal = SolicitantePersonalesForm(instance = solicitante) #asegurarse de no modificar el rfc
