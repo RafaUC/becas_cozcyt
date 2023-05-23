@@ -13,16 +13,12 @@ from django.urls import reverse_lazy
 
 
 
-def verificarPrimerLogin(usuario):
-    print('en verificar')
-    if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:
-        print('es admin')
+def verificarPrimerLogin(usuario):    
+    if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:        
         return
-    elif Solicitante.objects.filter(id=usuario.id).exists():
-        print('solicitante ya existe')
+    elif Solicitante.objects.filter(id=usuario.id).exists():        
         return
-    else:
-        print('nuevo solicitante')
+    else:        
         return ("usuarios:primer_login")
 
 def loginSistema(request):
@@ -80,8 +76,7 @@ def primerLogin(request):
 
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:
         return redirect(settings.LOGIN_REDIRECT_URL)   
-    elif Solicitante.objects.filter(id=usuario.id).exists():
-        print('solicitante ya existe')
+    elif Solicitante.objects.filter(id=usuario.id).exists():        
         return redirect(settings.LOGIN_REDIRECT_URL)  
 
     if request.method == 'POST':
@@ -89,18 +84,13 @@ def primerLogin(request):
         estadoSelectForm = EstadoSelectForm(data = request.POST)   
         institucionSelectForm = InstitucionSelectForm(data = request.POST)
         estadoSelectForm.errors.as_data()
-        if form.is_valid() and estadoSelectForm.is_valid() and institucionSelectForm.is_valid():   
-            print('intentndo guardar')         
+        if form.is_valid() and estadoSelectForm.is_valid() and institucionSelectForm.is_valid():                     
             solicitante = form.save(commit=False)
             solicitante.pk = usuario.pk
             solicitante.__dict__.update(usuario.__dict__)            
             solicitante.save()
             return redirect(settings.LOGIN_REDIRECT_URL)       
-        else:    #el formulario no es valido
-            print('no es valido')
-            print(form.errors.as_data())
-            print(estadoSelectForm.errors.as_data())
-            print(institucionSelectForm.errors.as_data())            
+        else:    #el formulario no es valido                    
             borrarSelect(form, estadoSelectForm, 'municipio', 'estado')
             borrarSelect(form, institucionSelectForm, 'carrera', 'institucion')
     context = {'form' : form,
@@ -114,8 +104,7 @@ def cargar_select_list(request, app, modDep, modIndep, orderBy='id'):
     columna = modIndep+'_id'
     try:                     
         query = modelo.objects.filter(**{columna: estado_id}).order_by(orderBy)        
-    except Exception as e:      
-        print(e)  
+    except Exception as e:              
         query = Municipio.objects.none()    
     return render(request, 'select_list.html', {'query': query})
 
@@ -140,6 +129,17 @@ def perfil(request):
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
     estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})
     institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})
+    for field in formPersonal.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formDomicilio.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formEscolar.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in estadoSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in institucionSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+
     if request.method == 'POST':
         boton = request.POST.get('guardar', None)
         if boton == 'personal':
