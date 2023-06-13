@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import get_object_or_404
 from django.apps import apps
 from django.contrib.auth import logout
@@ -9,17 +8,28 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .forms import *
 from .models import *
-from django.urls import reverse_lazy
 
-
-
-def verificarPrimerLogin(usuario):    
-    if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:        
+@login_required
+def loginRedirect(request):    
+    usuario = get_object_or_404(Usuario, id=request.user.id)
+    if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
+        return redirect("usuarios:AInicio")
+    else:
+        return redirect("usuarios:convocatorias")
+    
+#Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no retorna la url donde deberia ser redirigido
+def verificarRedirect(usuario, *permisos):    
+    """if not any(usuario.has_perm(perm) for perm in permisos):  #el no usuario tiene permiso de estar en la pagina
+        return settings.LOGIN_REDIRECT_URL """
+    if (not usuario.has_perm('permiso_administrador')) and ('permiso_administrador' in permisos): # el usuario no es admin y se requiere un admin
+        return settings.LOGIN_REDIRECT_URL
+    elif usuario.has_perm('permiso_administrador') and ('permiso_administrador' not in permisos): #el usuario es admin pero los administradores no puede estar en la view
+        return settings.LOGIN_REDIRECT_URL
+    elif not Solicitante.objects.filter(id=usuario.id).exists():   # el solicitante no existe y por lo tanto no ha completado su informacion persoanl
+        return "usuarios:primer_login"
+    else: #si ningun caso anterior se ejecuto significa que el usuario puede estar en la view actual
         return
-    elif Solicitante.objects.filter(id=usuario.id).exists():        
-        return
-    else:        
-        return ("usuarios:primer_login")
+        
 
 def loginSistema(request):
     form = LoginForm()
@@ -34,12 +44,11 @@ def loginSistema(request):
             #si el usuario existe y se autentico
             if usuario is not None:                                
                 login(request, usuario)
-                messages.success(request, "Sesion iniciada correctamente.")                
-                verificarPrimerLogin(usuario)                
-                succes_url = verificarPrimerLogin(usuario)
+                messages.success(request, "Sesion iniciada correctamente.")                                         
+                succes_url = verificarRedirect(usuario, 'permiso_administrador', 'permiso_solicitante')
                 if succes_url is None:                    
                     if 'next' in request.GET:                    
-                        succes_url = request.GET['next']
+                        succes_url = request.GET['next']                        
                     else:                    
                         succes_url = settings.LOGIN_REDIRECT_URL
                 return redirect(succes_url)
@@ -123,8 +132,9 @@ def borrarSelect(formDep, formIndep, campoDep, campoIndep):
 @login_required
 def perfil(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    if verificarPrimerLogin(solicitante):          #Verifica si el usuario ha llenaod su informacion personal por primera vez
-        return redirect(verificarPrimerLogin(solicitante))
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
     
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     rfc = solicitante.rfc      
@@ -182,5 +192,40 @@ def perfil(request):
                'formPersonal': formPersonal,
                'formDomicilio': formDomicilio,
                'formEscolar': formEscolar}
-    return render(request, 'perfil.html', context)
+    return render(request, 'solicitante/perfil.html', context)
 
+
+def sMensajes(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
+    return render(request, 'solicitante/sMensajes.html')
+
+
+def convocatorias(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    return render(request, 'solicitante/convocatorias.html')
+
+
+def estudioSE(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    return render(request, 'solicitante/estudioSE.html')
+
+
+def historial(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    return render(request, 'solicitante/historial.html')

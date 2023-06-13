@@ -67,7 +67,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                'django.contrib.auth.context_processors.auth',                
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -141,4 +141,4 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 
 LOGIN_URL = "usuarios:login"
 
-LOGIN_REDIRECT_URL = 'usuarios:perfil'
+LOGIN_REDIRECT_URL = 'usuarios:loginRedirect'

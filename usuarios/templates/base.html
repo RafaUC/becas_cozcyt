@@ -22,7 +22,7 @@
   <body>
     {% include "mensajes.html" %}
 
-    <!-- Seccion de la barra lateral  -->
+    <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">
       <div class="row" style="margin: 0px;">
         <div class="col-auto nopadding border-end border-2 borde-pagina-principal">
@@ -33,37 +33,71 @@
             </a>
             <hr>
             {% with url_name=request.resolver_match.url_name %}
-            <ul class="nav nav-pills flex-column mb-auto ">
+            <ul class="nav nav-pills flex-column mb-auto ">              
+              {% if perms.usuarios.permiso_administrador and request.user.is_superuser == 1 %}
               <li class="nav-item">
-                <a href="{% url 'usuarios:perfil' %}" class="nav-link d-flex {% if url_name == 'perfil' %}active{% endif %} h4" aria-current="page">
+                <a href="{% url 'usuarios:AInicio' %}" class="nav-link d-flex link-dark {% if url_name == 'AInicio' %}active{% endif %} h4">
+                  <i class="fa fa-shield px-2 align-self-center" aria-hidden="true"> </i>
+                  Inicio
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'usuarios:ASolicitudes' %}" class="nav-link d-flex link-dark {% if url_name == 'ASolicitudes' %}active{% endif %} h4">
+                  <i class="fa fa-list-ul px-2 align-self-center" aria-hidden="true"> </i>
+                  Solicitudes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'usuarios:AEstadisticas' %}" class="nav-link d-flex link-dark {% if url_name == 'AEstadisticas' %}active{% endif %} h4">
+                  <i class="fa fa-bar-chart px-2 align-self-center" aria-hidden="true"> </i>
+                  Estadisticas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'usuarios:AUsuarios' %}" class="nav-link d-flex link-dark {% if url_name == 'AUsuarios' %}active{% endif %} h4">
+                  <i class="fa fa-users px-2 align-self-center" aria-hidden="true"> </i>
+                  Lista Usuarios
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'usuarios:AConfiguracion' %}" class="nav-link d-flex link-dark {% if url_name == 'AConfiguracion' %}active{% endif %} h4">
+                  <i class="fa fa-cog px-2 align-self-center" aria-hidden="true"> </i>
+                  Configuracion
+                </a>
+              </li>
+
+              {% else %}
+              <li class="nav-item">
+                <a href="{% url 'usuarios:perfil' %}" class="nav-link d-flex link-dark {% if url_name == 'perfil' %}active{% endif %} h4" aria-current="page">
                   <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
                   Perfil
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link d-flex link-dark {% if url_name == 'mensajes' %}active{% endif %} h4">
+                <a href="{% url 'usuarios:mensajes' %}" class="nav-link d-flex link-dark {% if url_name == 'mensajes' %}active{% endif %} h4">
                   <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"> </i>
-                  Mensajes
+                  mensajes
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
+                <a href="{% url 'usuarios:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
                   <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
                   Convocatorias
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="#" class="nav-link d-flex link-dark {% if url_name == 'estudio' %}active{% endif %} h4" style="text-align: left;">
+                <a href="{% url 'usuarios:estudioSE' %}" class="nav-link d-flex link-dark {% if url_name == 'estudioSE' %}active{% endif %} h4" style="text-align: left;">
                   <i class="fa fa-id-card-o px-2 align-self-center" aria-hidden="true"> </i>
                   Estudio Socioeconómico
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link d-flex {% if url_name == 'historial' %}active{% endif %} link-dark h4">
+                <a href="{% url 'usuarios:historial' %}" class="nav-link d-flex {% if url_name == 'historial' %}active{% endif %} link-dark h4">
                   <i class="fa fa-clock-o px-2 align-self-center" aria-hidden="true"> </i>
                   Historial
                 </a>
               </li>
+              {% endif %}
             </ul>
             {% endwith %}
             <hr>
@@ -75,13 +109,21 @@
             </div>
           </div>
         </div>
-        <div class="col ">
+        <div class="col nopadding nomargin d-flex flex-column justify-content-between">
           {% block body %}
           {% endblock body %}
-        </div>
+          
+          <!-- Pie de pagina -->
+          <footer>
+            <div class="container-fluid text-center pagina-fuerte">
+              <p class=" nomargin" style="color: #fff;">Este es el pie página.</p>
+            </div>
+          </footer>
+        </div>                
       </div>
     </div>
-
+    
+    
     
 
     <!-- Optional JavaScript; choose one of the two! -->
