@@ -1,0 +1,35 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$("#id_estado").change(function () {
+    var url = $("#mainForm").attr("data-municipios-url");  // get the url of the `cargar_minicipios` view
+    var estadoId = $(this).val();  // get the selected country ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    data: {
+        'estado': estadoId       // add the country id to the GET parameters
+    },
+    success: function (data) {   // `data` is the return of the `cargar_minicipios` view function
+        $("#id_municipio").html(data);  // replace the contents of the city input with the data that came from the server
+    }
+    });
+
+});
+
+$("#id_institucion").change(function () {
+    var url = $("#mainForm").attr("data-carreras-url");  // get the url of the `cargar_minicipios` view
+    var institucionId = $(this).val();  // get the selected country ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    data: {
+        'institucion': institucionId       // add the country id to the GET parameters
+    },
+    success: function (data) {   // `data` is the return of the `cargar_minicipios` view function
+        $("#id_carrera").html(data);  // replace the contents of the city input with the data that came from the server
+    }
+    });
+
+});
+
+</script>
