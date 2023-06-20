@@ -36,6 +36,7 @@ urlpatterns = [
                  'orderBy': 'nombre'}, 
          name='cargar_select_carreras'),  
     path('logout', views.cerrarSesion, name='logout'),
+    path('registrar/confirmar_email/',views.confirmar, name='confirmar'),
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
@@ -49,4 +50,3 @@ urlpatterns = [
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
     path('administracion/configuracion', viewsAdmin.configuracion, name='AConfiguracion'),
-]
