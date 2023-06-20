@@ -69,7 +69,7 @@ def register(request):
         if form.is_valid():
             #print('valid')
             form.save()
-            return render(request, "login.html") #cambiar a la vista de confirmar email cuando se tenga implementada
+            return redirect("confirmar_email/")
         else:
             #print('not valid')
             messages.error(request, " ")
@@ -229,3 +229,6 @@ def historial(request):
         return redirect(url)
     
     return render(request, 'solicitante/historial.html')
+
+def confirmar(request):
+  return render(request, 'confirmar_email.html')
