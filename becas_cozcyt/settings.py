@@ -67,7 +67,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                'django.contrib.auth.context_processors.auth',                
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -138,3 +138,7 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+LOGIN_URL = "usuarios:login"
+
+LOGIN_REDIRECT_URL = 'usuarios:loginRedirect'

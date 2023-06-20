@@ -1,0 +1,148 @@
+{% extends "base_blank.html" %}
+
+{% block titulo %}
+    Completar Datos Personales
+{% endblock titulo %}
+
+{% block body %}
+
+<div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+    <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>
+        
+        {% csrf_token %}        
+    
+        <p class="h4" style="color: var(--pagina-principal);">Complete Sus Datos Personales </p>
+        <div class="row">
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Personales</p>
+                <div class="col-4">
+                    {{ form.nombre.label }} *
+                    {{ form.nombre }}
+                    {{ form.nombre.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.ap_paterno.label }} *
+                    {{ form.ap_paterno }}
+                    {{ form.ap_paterno.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.ap_materno.label }}
+                    {{ form.ap_materno }}
+                    {{ form.ap_materno.errors }}
+                </div>
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ form.fecha_nacimiento.label }} *
+                    {{ form.fecha_nacimiento }}
+                    {{ form.fecha_nacimiento.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.genero.label }} *
+                    {{ form.genero }}
+                    {{ form.genero.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.g_etnico.label }}
+                    {{ form.g_etnico }}
+                    {{ form.g_etnico.errors }}
+                </div>
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ form.rfc.label }}
+                    {{ form.rfc }}
+                    {{ form.rfc.errors }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">            
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Domicilio</p>    
+                <div class="col-4">
+                    {{ form.calle.label }} *
+                    {{ form.calle }}
+                    {{ form.calle.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.numero.label }} *
+                    {{ form.numero }}
+                    {{ form.numero.errors }}                    
+                </div>
+                <div class="col-4">
+                    {{ form.colonia.label }} *
+                    {{ form.colonia }}
+                    {{ form.colonia.errors }}
+                </div>
+            </div>    
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ estadoSelectForm.estado.label }} *
+                    {{ estadoSelectForm.estado }}
+                    {{ estadoSelectForm.estado.errors }}
+                </div>
+                <div class="col-4">                    
+                    {{ form.municipio.label }} *
+                    {{ form.municipio }}
+                    {{ form.municipio.errors }}
+                </div>   
+                <div class="col-4">
+                    {{ form.codigo_postal.label }} *
+                    {{ form.codigo_postal }}
+                    {{ form.codigo_postal.errors }}
+                </div>             
+            </div>    
+            <div class="row align-items-center p-2">
+                <div class="col-4">
+                    {{ form.tel_cel.label }} *
+                    {{ form.tel_cel }}
+                    {{ form.tel_cel.errors }}
+                </div>
+                <div class="col-4">
+                    {{ form.tel_fijo.label }}
+                    {{ form.tel_fijo }}
+                    {{ form.tel_fijo.error }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="row align-items-center p-2">
+                <p class="h5">Datos Escolares</p>
+                <div class="col-6">
+                    {{ institucionSelectForm.institucion.label }} *
+                    {{ institucionSelectForm.institucion }}
+                    {{ institucionSelectForm.institucion.errors }}
+                </div>
+                <div class="col-6">
+                    {{ form.carrera.label }} *
+                    {{ form.carrera }}
+                    {{ form.carrera.errors }}
+                </div>                
+            </div>
+            <div class="row align-items-center p-2">
+                <div class="col-6">
+                    {{ form.grado.label }} *
+                    {{ form.grado }}
+                    {{ form.grado.errors }}
+                </div>
+                <div class="col-6">
+                    {{ form.promedio.label }} *
+                    {{ form.promedio }}
+                    {{ form.promedio.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar">Guardar</button>    
+            </div>            
+        </div>
+        
+    </form>
+</div>
+
+{% include "carga_municipios_script.html" %}
+
+{% endblock body %}
