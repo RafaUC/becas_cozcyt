@@ -131,6 +131,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static/"),
 )
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR, "media/")
+
+#PROJECT_ROOT=os.path.abspath(os.path.dirname(__file__))
+PROTECTED_MEDIA_URL='/protected_uploads/'
+PROTECTED_MEDIA_ROOT=os.path.join(BASE_DIR, 'protected_uploads/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
