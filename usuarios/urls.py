@@ -13,13 +13,40 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from . import views
+from . import views, viewsAdmin
 from django.urls import path
 
 app_name = 'usuarios'
-urlpatterns = [
+urlpatterns = [    
     path('login/', views.loginSistema, name='login'),
-    path('registrar/', views.register, name='register'),
-    path('perfil/',views.perfil, name='perfil'),
+    path('loginRedirect/', views.loginRedirect, name='loginRedirect'),
+
+    path('primer_login/', views.primerLogin, name='primer_login'),
+    path('registrar/', views.register, name='register'),    
+    path('cargar_select_municipios/', views.cargar_select_list, 
+         kwargs={'app': 'usuarios', 
+                 'modDep': 'municipio', 
+                 'modIndep': 'estado',
+                 'orderBy': 'nombre'}, 
+         name='cargar_select_municipios'),  
+    path('cargar_select_carreras/', views.cargar_select_list, 
+         kwargs={'app': 'usuarios', 
+                 'modDep': 'carrera', 
+                 'modIndep': 'institucion',
+                 'orderBy': 'nombre'}, 
+         name='cargar_select_carreras'),  
+    path('logout', views.cerrarSesion, name='logout'),
     path('registrar/confirmar_email/',views.confirmar, name='confirmar'),
-]
+
+    path('perfil/',views.perfil, name='perfil'),
+    path('mensajes/',views.sMensajes, name='mensajes'),
+    path('convocatorias/',views.convocatorias, name='convocatorias'),
+    path('estudioSE/',views.estudioSE, name='estudioSE'),
+    path('historial/',views.historial, name='historial'),
+
+    ### urls Administrador ###
+    path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),
+    path('administracion/solicitudes', viewsAdmin.solicitudes, name='ASolicitudes'),
+    path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
+    path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
+    path('administracion/configuracion', viewsAdmin.configuracion, name='AConfiguracion'),
