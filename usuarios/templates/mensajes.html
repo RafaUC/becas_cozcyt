@@ -1,0 +1,22 @@
+{% load static %}
+{% for message in messages %}
+    {% if message.tags == 'error'%}
+      <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+      <script src="{% static '/js/jquery.toast.js' %}" type="text/javascript"></script>  
+      <script>
+        var toast = 
+        $.toast({
+          heading: 'Error',
+          text: '{{form.errors}}',
+          showHideTransition: 'slide',
+          icon: 'error',
+          position: 'top-right',
+          loader: false,
+          hideAfter: 10000, 
+          allowToastClose: false,
+          textColor: 'white',
+
+        }) 
+      </script>
+    {% endif %}
+  {% endfor %}
