@@ -85,6 +85,7 @@ class Elemento(models.Model):
         ('desplegable', 'Desplegable'),
     )
 
+    seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255, verbose_name='Nombre')
     obligatorio = models.BooleanField(default=True, verbose_name='Obligatorio')
     lookup_id = models.UUIDField(verbose_name='Lookup ID')
