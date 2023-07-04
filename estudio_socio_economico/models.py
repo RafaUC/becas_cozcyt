@@ -102,10 +102,6 @@ class Elemento(models.Model):
         verbose_name = 'Elemento'
         verbose_name_plural = 'Elementos'
 
-class ElementoOpcion(models.Model):
-    elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE)
-    opcion = models.ForeignKey(Opcion, on_delete=models.CASCADE)    
-
 
 class ElementoSeparador(Elemento):
     respuestaModel = None    
