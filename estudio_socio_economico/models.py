@@ -2,51 +2,155 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.db import models
+from model_utils.managers import InheritanceManager
+from usuarios.models import Solicitante
 
-""""
-class EetudioSE(models.Model):
-    VIVES_CHOICES = (
-        ('1', 'Padres'),
-        ('2', 'Familiares (tios, abuelos, etc.)'),
-        ('3', 'Amigos'),
-        ('4', 'Esposo(a)'),
+class Seccion(models.Model):
+    TIPOS_CHOICES = (
+        ('único', 'Único'),
+        ('agregación', 'Agregación'),
     )
 
-    ESTADO_CASA_CHOICES = (
-        ('1', 'Propia'),
-        ('2', 'Rentado'),
-        ('3', 'Casa de huéspedes'),
-        ('4', 'otro:'),
+    nombre = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=10, choices=TIPOS_CHOICES)
+
+    def __str__(self):
+        return self.nombre
+
+
+class Opcion(models.Model):    
+    nombre = models.CharField(max_length=255, verbose_name='Nombre Opción')
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = 'Opción'
+        verbose_name_plural = 'Opciones'
+
+
+#----------Respuestas-------------
+
+class Respuesta(models.Model):
+    elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE)
+    solicitante = models.ForeignKey(Solicitante, on_delete=models.CASCADE)
+    otro = None    
+
+    objects = InheritanceManager()
+
+    def __str__(self):
+        return f"Respuesta - Elemento: {self.elemento} - Solicitante: {self.solicitante}"
+
+    class Meta:
+        verbose_name = 'Respuesta'
+        verbose_name_plural = 'Respuestas'
+        unique_together = ['elemento', 'solicitante']
+        
+
+class RTextoCorto(Respuesta):
+    texto = models.CharField(max_length=255)
+
+
+class RTextoParrafo(Respuesta):
+    texto = models.TextField()
+
+
+class ROpcionMultiple(Respuesta):
+    respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE)
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
+
+
+class RCasillas(Respuesta):
+    respuestas = models.ManyToManyField(Opcion)
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
+
+
+class RDesplegable(Respuesta):
+    respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE)
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
+
+
+
+
+#---------Elementos-----------
+
+class Elemento(models.Model):
+    TIPO_CHOICES = (
+        ('separador', 'Separador'),
+        ('texto_corto', 'Texto Corto'),
+        ('texto_parrafo', 'Texto Párrafo'),
+        ('opcion_multiple', 'Opción Múltiple'),
+        ('casillas', 'Casillas'),
+        ('desplegable', 'Desplegable'),
     )
 
-    MATERIAL_PISO_CHOICES = (
-        ('1','Tierra'),
-        ('2','Madera'),
-        ('3','Cemento'),
-        ('4','Mosaico'),
-        ('5','Alfombra'),
-        ('6','Duela'),
-        ('7','otro: '),
-    )
+    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    obligatorio = models.BooleanField(default=True, verbose_name='Obligatorio')
+    lookup_id = models.UUIDField(verbose_name='Lookup ID')
+    order = models.IntegerField(verbose_name='Orden')
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo')
+    opciones = None
 
-    ocupacion = models.CharField(verbose_name="Ocupacion", max_length=191, blank=False, null=False)
-    trabajas = models.BooleanField(verbose_name="Trabajas", blank=False, null=False)
-    telefono_trabajo= models.IntegerField(verbose_name="Telefono del Trabajo", null=True, blank=False, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
-    Horario_trabajo_inicio = models.TimeField(verbose_name="Inicio Horario de Trabajo", null=True, blank=False)
-    Horario_trabajo_final = models.TimeField(verbose_name="Final Horario de Trabajo", null=True, blank=False)
-    sueldo_mensual = models.FloatField(verbose_name="Sueldo Mensual", blank=False, null=True)
-    vives_con = models.CharField(verbose_name="Vives Con", max_length=191, blank=False, null=False, choices=VIVES_CHOICES)
-    tiempo_viviendo = models.FloatField(verbose_name="Tiempo Viviendo Ahí", blank=False, null=False)
-    personas_viviendo = models.PositiveIntegerField(verbose_name="Numero de personas vivendo ahí", blank=False, null=False)
-    estatus_casa = models.CharField(verbose_name="Estatus del Domicilio", max_length=255, blank=False, null=False, choices=ESTADO_CASA_CHOICES)
-    estatus_casa_otro = models.CharField(verbose_name="Otro Estado del domicilio", max_length=255, blank=True, null=False)
-    material_piso = models.CharField(verbose_name="Material del Piso", max_length=255, blank=False, null=False, choices=MATERIAL_PISO_CHOICES)
-    material_piso_otro = models.CharField(verbose_name="Otro Estado del domicilio", max_length=255, blank=True, null=False)
-    cantidad_recamaras = models.PositiveIntegerField(verbose_name="cantidad de recamaras", blank=False, null=False)
-    Cantidad_banos = models.PositiveIntegerField(verbose_name="Cantidad de Baños", blank=False, null=False)
-    tiene_sala = models.BooleanField(verbose_name="Tiene Sala", blank=False, null=False)
-    tiene_concina_independiente = models.BooleanField(
-        verbose_name="Tiene concina Independiente", blank=False, null=False)
-    servicios
+    respuestaModel = None
+    objects = InheritanceManager()
 
-    """
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = 'Elemento'
+        verbose_name_plural = 'Elementos'
+
+class ElementoOpcion(models.Model):
+    elemento = models.ForeignKey(Elemento, on_delete=models.CASCADE)
+    opcion = models.ForeignKey(Opcion, on_delete=models.CASCADE)    
+
+
+class ElementoSeparador(Elemento):
+    respuestaModel = None    
+
+    class Meta:
+        verbose_name = 'Elemento Separador'
+
+
+class ElementoTextoCorto(Elemento):
+    respuestaModel = RTextoCorto
+    
+
+    class Meta:
+        verbose_name = 'Elemento Texto Corto'
+
+
+class ElementoTextoParrafo(Elemento):
+    respuestaModel = RTextoParrafo    
+
+    class Meta:
+        verbose_name = 'Elemento Texto Párrafo'
+        
+
+
+class ElementoOpcionMultiple(Elemento):
+    respuestaModel = ROpcionMultiple
+    opciones = models.ManyToManyField(Opcion)
+
+    class Meta:
+        verbose_name = 'Elemento Opción Múltiple'
+
+
+class ElementoCasillas(Elemento):
+    respuestaModel = RCasillas
+    opciones = models.ManyToManyField(Opcion)
+
+    class Meta:
+        verbose_name = 'Elemento Casillas'
+
+
+class ElementoDesplegable(Elemento):
+    respuestaModel = RDesplegable
+    opciones = models.ManyToManyField(Opcion)
+
+    class Meta:
+        verbose_name = 'Elemento Desplegable'
+
+

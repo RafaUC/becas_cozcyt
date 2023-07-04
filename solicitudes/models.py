@@ -29,7 +29,7 @@ def validador_pdf(value):
 
 def documentoMediaPath(instance, filename):
     ext = filename.split('.')[-1]  # Obtiene la extensión del archivo
-    #filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
+    filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
     return os.path.join(settings.PROTECTED_MEDIA_ROOT, filename)  # Ruta de almacenamiento deseada
 
 
