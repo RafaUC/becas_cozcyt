@@ -63,7 +63,7 @@
         padding: 15px 15px; 
         border: 1px solid #676767;    
         color:#676767;
-        font-size: 15px;
+        font-size: 17px;
         text-align: left;
         margin-bottom: 10%;
       }  
@@ -82,29 +82,7 @@
       </style>  
 </head>
 <body>
-  {% for message in messages %}
-    {% if message.tags == 'success'%}
-      {{form.success}}
-    {% elif message.tags == 'error'%}
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-    <script src="{% static '/js/jquery.toast.js' %}" type="text/javascript"></script>  
-    <script>
-      var toast = 
-      $.toast({
-        heading: 'Error',
-        text: '{{form.errors}}',
-        showHideTransition: 'slide',
-        icon: 'error',
-        position: 'top-right',
-        loader: false,
-        hideAfter: 10000, 
-        allowToastClose: false,
-        bgColor: '#E9C3C1',
-        textColor: 'white'
-      }) 
-    </script>
-    {% endif %}
-  {% endfor %}
+  {% include "mensajes.html" %}
     <form method="POST" action = "">
     {% csrf_token %}
         <!-- Header -->
@@ -147,10 +125,10 @@
 </body>
 <script>
   var form_fields = document.getElementsByTagName('input')
-		form_fields[1].placeholder='CURP...';
-		form_fields[2].placeholder='Correo electrónico...';
-		form_fields[3].placeholder='Contraseña...';
-		form_fields[4].placeholder='Confirmar contraseña...';
+		form_fields[1].placeholder='CURP';
+		form_fields[2].placeholder='Correo electrónico';
+		form_fields[3].placeholder='Contraseña';
+		form_fields[4].placeholder='Confirmar contraseña';
 
 
 		for (var field in form_fields){	
