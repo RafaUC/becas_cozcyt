@@ -91,63 +91,25 @@ class Elemento(models.Model):
     lookup_id = models.UUIDField(verbose_name='Lookup ID')
     order = models.IntegerField(verbose_name='Orden')
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo')
-    opciones = None
-
-    respuestaModel = None
-    objects = InheritanceManager()
+    opciones = models.ManyToManyField(Opcion)
 
     def __str__(self):
         return self.nombre
+    
+    def getRespuestaModel(self):
+        if self.tipo == 'texto_corto':
+            return RTextoCorto
+        elif self.tipo == 'texto_parrafo':
+            return RTextoParrafo
+        elif self.tipo == 'opcion_multiple':
+            return ROpcionMultiple
+        elif self.tipo == 'casillas':
+            return RCasillas
+        elif self.tipo == 'desplegable':
+            return RDesplegable
+        else:
+            return None
 
     class Meta:
         verbose_name = 'Elemento'
         verbose_name_plural = 'Elementos'
-
-
-class ElementoSeparador(Elemento):
-    respuestaModel = None    
-
-    class Meta:
-        verbose_name = 'Elemento Separador'
-
-
-class ElementoTextoCorto(Elemento):
-    respuestaModel = RTextoCorto
-    
-
-    class Meta:
-        verbose_name = 'Elemento Texto Corto'
-
-
-class ElementoTextoParrafo(Elemento):
-    respuestaModel = RTextoParrafo    
-
-    class Meta:
-        verbose_name = 'Elemento Texto Párrafo'
-        
-
-
-class ElementoOpcionMultiple(Elemento):
-    respuestaModel = ROpcionMultiple
-    opciones = models.ManyToManyField(Opcion)
-
-    class Meta:
-        verbose_name = 'Elemento Opción Múltiple'
-
-
-class ElementoCasillas(Elemento):
-    respuestaModel = RCasillas
-    opciones = models.ManyToManyField(Opcion)
-
-    class Meta:
-        verbose_name = 'Elemento Casillas'
-
-
-class ElementoDesplegable(Elemento):
-    respuestaModel = RDesplegable
-    opciones = models.ManyToManyField(Opcion)
-
-    class Meta:
-        verbose_name = 'Elemento Desplegable'
-
-
