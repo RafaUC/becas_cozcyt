@@ -35,7 +35,7 @@ urlpatterns = [
                  'modIndep': 'institucion',
                  'orderBy': 'nombre'}, 
          name='cargar_select_carreras'),  
-    path('logout', views.cerrarSesion, name='logout'),
+    path('logout/', views.cerrarSesion, name='logout'),
     path('registrar/confirmar_email/',views.confirmar, name='confirmar'),
 
     path('perfil/',views.perfil, name='perfil'),
@@ -50,4 +50,5 @@ urlpatterns = [
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
     path('administracion/configuracion', viewsAdmin.configuracion, name='AConfiguracion'),
+    path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
 ]
