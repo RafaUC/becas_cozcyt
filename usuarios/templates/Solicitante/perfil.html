@@ -6,7 +6,10 @@
 
 {% block body %}
 
-<p class="mx-5 my-4 h3" >Mi Perfil</p>
+    {% block nombreUsuario %}
+    <p class="mx-5 my-4 h3" >Mi Perfil</p>
+    {% endblock nombreUsuario %}
+
 <div class="border border-2 rounded-2 p-4 mx-5 mb-4 borde-pagina-principal">
     <div class="row">
         <p class="col h5">Datos Personales</p>
