@@ -85,7 +85,7 @@ class SolicitanteForm(forms.ModelForm):
             'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
             'tel_cel': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
             'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
-            'grado': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el grado'}),
+            'grado': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
             'promedio': forms.NumberInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberFloatKey(event)", 'placeholder': 'Ingrese el promedio'}),
             'carrera': forms.Select(attrs={'class': 'form-control border-3 form-select'}),        
         }
@@ -138,8 +138,7 @@ class SolicitanteForm(forms.ModelForm):
             carreras = self.instance.carrera.institucion.carrera_set.all().order_by('nombre')                
             self.fields['carrera'].queryset = carreras    
 
-class SolicitantePersonalesForm(SolicitanteForm):
-    rfc = forms.CharField(disabled=True, label='RFC', widget=forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'No RFC Asignado'}))
+class SolicitantePersonalesForm(SolicitanteForm):    
 
     class Meta(SolicitanteForm.Meta):
         exclude = ('municipio', 
