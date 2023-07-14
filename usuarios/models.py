@@ -108,6 +108,8 @@ class Solicitante(Usuario):
         ('M', 'Masculino'),
         ('F', 'Femenino'),
     )
+    GRADO_CHOICES = [(f"{i:02d}", f"{i:02d}") for i in range(1, 16)]
+    
     RFC_REGEX = r'^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$'
     FOLIO_REGEX = r'^[a-zA-Z]{4}[0-9]{4}$'
     GRADO_REGEX = r'^\d{1,2}$'
@@ -137,8 +139,9 @@ class Solicitante(Usuario):
     numero = models.CharField(verbose_name="Numero", max_length=5, blank=False, null=True)
     codigo_postal = models.CharField(verbose_name="Codigo Postal", max_length=5, blank=False, null=True, validators=[MinLengthValidator(5), MaxLengthValidator(5)])
     tel_cel = models.CharField(verbose_name="Telefono Celular", max_length=10, null=True, blank=False, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
-    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=False, validators=[MinLengthValidator(5), MaxLengthValidator(10)])
-    grado = models.CharField(verbose_name="Grado", max_length=2, null=True, blank=False, validators=[only_int])
+    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=False, validators=[MinLengthValidator(5), MaxLengthValidator(10)])    
+    grado = models.CharField(verbose_name="Grado", max_length=2, null=True, blank=False, choices=GRADO_CHOICES)
+
     promedio = models.FloatField(verbose_name="Promedio", null=True, blank=False)    
     carrera = models.ForeignKey(Carrera, 
         verbose_name="Carrera",  null=True, blank=False, on_delete=models.CASCADE)

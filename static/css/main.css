@@ -224,6 +224,7 @@ a:hover{
 
 }
 
+/*
 input[type=text], input[type=password], [type=email]{
   border: 1px solid #676767;    
   color:#676767;
