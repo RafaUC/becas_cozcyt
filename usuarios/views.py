@@ -92,7 +92,7 @@ def register(request):
                         mail_subject, message, to=[to_email]  
             )  
             email.content_subtype = 'html'
-            #email.send()  #comentar esta linea para si no se desea mandar el correo
+            email.send()  #comentar esta linea para si no se desea mandar el correo
             return render(request, 'confirmar_email.html')
             #return HttpResponse('Please confirm your email address to complete the registration') 
         else:
