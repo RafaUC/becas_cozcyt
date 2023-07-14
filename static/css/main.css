@@ -5,7 +5,7 @@
   --pagina-principal: rgba(190, 70, 53, 1);
   --pagina-tenue: rgba(228, 117, 111, 1);
   --pagina-tenue-claro: rgba(254, 225, 229, 1);
-  --aceptado-desactivado: rgba(209, 237, 214, 1);
+  --aceptado-desactivado: #ABEBC6;
   --aceptado-activado: rgb(49, 185, 81);
   --aceptado-hover: rgb(30, 139, 56);
   --cancelar-desactivado: rgba(233, 195, 193, 1);
@@ -122,8 +122,8 @@ body {
 
 .btn-aceptado {
   color: #fff;
-  background-color: var(--aceptado-activado);
-  border-color: var(--aceptado-activado);
+  background-color: var(--aceptado-desactivado);
+  border-color: var(--aceptado-desactivado);
   font-weight: bold;
   border-radius: 10px;
   font-size: 17px; 
@@ -234,7 +234,7 @@ input[type=text], input[type=password], [type=email]{
   padding: 15px 0 15px 15px;
   
 } 
-
+/* 
 .errorlist {
   color: red;
-}
+} */

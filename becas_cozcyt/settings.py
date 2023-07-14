@@ -148,3 +148,14 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 LOGIN_URL = "usuarios:login"
 
 LOGIN_REDIRECT_URL = 'usuarios:loginRedirect'
+
+#Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_FROM = 'esmeraldapacheco05@gmail.com'
+EMAIL_HOST_USER = 'esmeraldapacheco05@gmail.com'
+EMAIL_HOST_PASSWORD = 'osrruvryhaqpmegi'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+PASSWORD_RESET_TIMEOUT = 14400

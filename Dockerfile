@@ -16,6 +16,6 @@ ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app/
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --break-system-packages
 COPY . /app/
 EXPOSE 8000

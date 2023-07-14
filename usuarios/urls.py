@@ -36,7 +36,9 @@ urlpatterns = [
                  'orderBy': 'nombre'}, 
          name='cargar_select_carreras'),  
     path('logout', views.cerrarSesion, name='logout'),
-    path('registrar/confirmar_email/',views.confirmar, name='confirmar'),
+    
+    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
+    
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),

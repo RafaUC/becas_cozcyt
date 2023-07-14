@@ -6,8 +6,16 @@ from django.apps import apps
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from django.http import HttpResponse  
+
 from .forms import *
 from .models import *
+from .tokens import account_activation_token
 
 @login_required
 def loginRedirect(request):    
@@ -67,14 +75,49 @@ def register(request):
     if request.method == 'POST':
         form = CreateUserForm(data = request.POST)
         if form.is_valid():
-            #print('valid')
-            form.save()
-            return redirect("confirmar_email/")
+            #Hacer que el registro válido se guarda en la memoria, no en la base de datos
+            user = form.save(commit=False)
+            user.is_active = False 
+            user.save()
+            #print(form.cleaned_data.get('email'))
+            mail_subject = 'Confirmar cuenta'  
+            message = render_to_string('email.html', {  
+                'user': user,  
+                'domain': get_current_site(request).domain,  
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                'token':account_activation_token.make_token(user),  
+            })  
+            to_email = form.cleaned_data.get('email')  
+            email = EmailMessage(  
+                        mail_subject, message, to=[to_email]  
+            )  
+            email.content_subtype = 'html'
+            #email.send()  #comentar esta linea para si no se desea mandar el correo
+            return render(request, 'confirmar_email.html')
+            #return HttpResponse('Please confirm your email address to complete the registration') 
         else:
             #print('not valid')
+            #for error in list (form.errors.values()):
             messages.error(request, " ")
     context = {'form' : form}
     return render(request, 'register.html', context)
+
+def activate(request, uidb64, token):
+    usuario = get_user_model()
+    try :
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = usuario.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user,token):
+        user.is_active = True    
+        user.save()
+
+        print('Correo confirmado')
+        return HttpResponse('Gracias por verificar su email. Ya puede iniciar sesión en el sitio.')  
+    else:  
+        return HttpResponse('Link inválido o no disponible.')  
 
 @login_required
 def primerLogin(request):
@@ -229,6 +272,3 @@ def historial(request):
         return redirect(url)
     
     return render(request, 'solicitante/historial.html')
-
-def confirmar(request):
-  return render(request, 'confirmar_email.html')
