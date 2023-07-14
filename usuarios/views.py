@@ -28,12 +28,12 @@ def loginRedirect(request):
 #Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no retorna la url donde deberia ser redirigido
 def verificarRedirect(usuario, *permisos):    
     """if not any(usuario.has_perm(perm) for perm in permisos):  #el no usuario tiene permiso de estar en la pagina
-        return settings.LOGIN_REDIRECT_URL """
-    if (not usuario.has_perm('permiso_administrador')) and ('permiso_administrador' in permisos): # el usuario no es admin y se requiere un admin
+        return settings.LOGIN_REDIRECT_URL """    
+    if (not usuario.has_perm('permiso_administrador')) and ('permiso_administrador' in permisos): # el usuario no es admin y se requiere un admin        
         return settings.LOGIN_REDIRECT_URL
     elif usuario.has_perm('permiso_administrador') and ('permiso_administrador' not in permisos): #el usuario es admin pero los administradores no puede estar en la view
         return settings.LOGIN_REDIRECT_URL
-    elif not Solicitante.objects.filter(id=usuario.id).exists():   # el solicitante no existe y por lo tanto no ha completado su informacion persoanl
+    elif not Solicitante.objects.filter(id=usuario.id).exists() and (not usuario.has_perm('permiso_administrador')):   # el solicitante no existe y por lo tanto no ha completado su informacion persoanl
         return "usuarios:primer_login"
     else: #si ningun caso anterior se ejecuto significa que el usuario puede estar en la view actual
         return
@@ -136,10 +136,12 @@ def primerLogin(request):
         estadoSelectForm = EstadoSelectForm(data = request.POST)   
         institucionSelectForm = InstitucionSelectForm(data = request.POST)
         estadoSelectForm.errors.as_data()
-        if form.is_valid() and estadoSelectForm.is_valid() and institucionSelectForm.is_valid():                     
+        if form.is_valid() and estadoSelectForm.is_valid() and institucionSelectForm.is_valid():                        
             solicitante = form.save(commit=False)
             solicitante.pk = usuario.pk
-            solicitante.__dict__.update(usuario.__dict__)            
+            nombre = request.POST.get('nombre')     
+            usuario.__dict__.update({'nombre': nombre})
+            solicitante.__dict__.update(usuario.__dict__)  
             solicitante.save()
             return redirect(settings.LOGIN_REDIRECT_URL)       
         else:    #el formulario no es valido                    
@@ -180,7 +182,7 @@ def perfil(request):
         return redirect(url)
     
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
-    rfc = solicitante.rfc      
+    #rfc = solicitante.rfc      
     formPersonal = SolicitantePersonalesForm(instance = solicitante) #asegurarse de no modificar el rfc
     formDomicilio = SolicitanteDomicilioForm(instance = solicitante)
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
@@ -201,11 +203,11 @@ def perfil(request):
         boton = request.POST.get('guardar', None)
         if boton == 'personal':
             post = request.POST.copy()
-            post['rfc'] = rfc
+            #post['rfc'] = rfc
             formPersonal = SolicitantePersonalesForm(post, instance=solicitante)             
             if formPersonal.is_valid():
                 solicitante = formPersonal.save(commit=False)
-                solicitante.rfc = rfc
+                #solicitante.rfc = rfc
                 solicitante.save()
                 return redirect("usuarios:perfil")  
 
