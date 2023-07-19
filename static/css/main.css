@@ -193,6 +193,17 @@ body {
   background-color: var(--pagina-fuerte);
 }
 
+.nav-pills .nav-link.active{
+  border-left: 12px solid var(--pagina-principal); 
+  background-color: var(--pagina-fuerte);
+}
+
+.confpage-ul a {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-bottom: 0.7rem;
+}
+
 .nopadding {
   padding: 0 !important;  
 }
