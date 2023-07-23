@@ -11,6 +11,7 @@
   --cancelar-desactivado: rgba(233, 195, 193, 1);
   --cancelar-activado: rgba(234, 94, 94, 1);
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
+  --pagina-gris: #b9b4b4;
 }
 
 * {
@@ -23,6 +24,10 @@ body {
 /*Clases de estolo de Colores*/
 .pagina-blanco {
   background-color: var(--pagina-blanco) !important;
+}
+
+.pagina-fondo {
+  background-color: var(--pagina-fondo) !important;
 }
 
 .pagina-fuerte {
@@ -65,8 +70,16 @@ body {
   background-color: var(--cancelar-activado) !important;
 }
 
+.pagina-gris {
+  background-color: var(--pagina-gris) !important;
+}
+
 .borde-pagina-blanco {
   border-color: var(--pagina-blanco) !important;
+}
+
+.borde-pagina-gris {
+  border-color: var(--pagina-gris) !important;
 }
 
 .borde-pagina-fuerte {
@@ -103,6 +116,14 @@ body {
 
 .borde-cancelar-activado {
   border-color: var(--cancelar-activado) !important;
+}
+
+.borde-punteado {
+  border: 1px dashed #000; /* Puedes ajustar el color y el grosor según tus necesidades */
+}
+
+.altura-min-100px {
+  min-height: 30px;
 }
 
 /* Login */
@@ -187,14 +208,45 @@ body {
   border-color: var(--pagina-tenue); 
 }
 
+/* Estilo para el checkbox principal */
+.checkbox-principal.form-check-input:checked {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:checked:focus {
+  box-shadow: 0 0 0 0.25rem var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:checked:hover {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-principal);
+}
+
+/* Estilo para el label (etiqueta) del checkbox principal */
+.checkbox-principal.form-check-label {
+  color: var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:disabled {
+  background-color: var(--pagina-principal);
+  opacity: 0.65;
+}
+
+.handle {
+  cursor: move;  
+}
+
+.handle2 {
+  cursor: move;  
+}
 
 .nav .nav-link.active {
   border-left: 12px solid var(--pagina-principal); 
   background-color: var(--pagina-fuerte);
 }
 
-.nav-pills .nav-link.active{
-  border-left: 12px solid var(--pagina-principal); 
+.nav-pills .nav-link.active{  
   background-color: var(--pagina-fuerte);
 }
 
@@ -250,3 +302,35 @@ input[type=text], input[type=password], [type=email]{
 .errorlist {
   color: red;
 } */
+
+/* Clase para fuente normal */
+.font-normal {
+  font-weight: normal;
+}
+
+/* Clase para fuente en negrita */
+.font-bold {
+  font-weight: bold;
+}
+
+/* Clase para fuente semi-bold */
+.font-semi-bold {
+  font-weight: 600;
+}
+
+/* Clase para fuente ligera */
+.font-light {
+  font-weight: lighter;
+}
+
+/* Clase para fuente más negrita */
+.font-bolder {
+  font-weight: bolder;
+}
+
+/* Clase para fuente con peso personalizado */
+.font-custom-weight {
+  font-weight: 700; /* Cambia el valor a tu preferencia */
+}
+
+

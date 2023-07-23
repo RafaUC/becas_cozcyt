@@ -5,8 +5,393 @@
 {% endblock titulo %}
 
 {% block body %}
+    {% load custom_filters %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+        function eliminarSeccion(parentDiv, seccionCont) {
+            const divPadre = document.getElementById(parentDiv);            
+            // Obtener el número de formularios presentes en el formset    
+            
+            const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta Seccion y todas sus preguntas?");
+            if (confirmacion) {
+                // Crear el input para marcar el elemento para eliminar
+                const inputEliminar = document.createElement("input");
+                inputEliminar.type = "hidden";
+                inputEliminar.name = `seccion_formset-${seccionCont}-DELETE`;
+                inputEliminar.id = `id_seccion_formset-${seccionCont}-DELETE`;
+                inputEliminar.value = "on";                
+                divPadre.appendChild(inputEliminar);
+
+                // Ocultar el divPadre del formset                
+                divPadre.style.display = "none";
+
+            }
+            
+        }
+
+
+        function ocultarElementoExtra(parentDiv) {
+            const divPadre = document.getElementById(parentDiv);  
+            const divElementos = divPadre.getElementsByClassName("cont-elem");   
+            const divElemento = divElementos[divElementos.length-1]
+            divElemento.id = `${parentDiv}-baseElemForm`
+            // Obtener el número de formularios presentes en el formset    
+                                                    
+            // Ocultar el divPadre del formset            
+            divPadre.appendChild(divElemento);
+            divElemento.style.display = "none";                              
+        }
+        
+
+        function eliminarElemento(parentDiv, seccionID, elementCont) {
+            const divPadre = document.getElementById(parentDiv);            
+            // Obtener el número de formularios presentes en el formset    
+            
+            const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
+            if (confirmacion) {
+                // Crear el input para marcar el elemento para eliminar
+                const inputEliminar = document.createElement("input");
+                inputEliminar.type = "hidden";
+                inputEliminar.name = `elemento_formset_${seccionID}-${elementCont}-DELETE`;
+                inputEliminar.id = `id_elemento_formset_${seccionID}-${elementCont}-DELETE`;
+                inputEliminar.value = "on";                
+                divPadre.appendChild(inputEliminar);
+
+                // Ocultar el divPadre del formset
+                const divAbuelo = divPadre.parentNode.parentNode;
+                divAbuelo.appendChild(divPadre);
+                divPadre.style.display = "none";
+
+                revisarFilasVacias(divAbuelo.id)
+                updateRowColValues(divAbuelo.id)
+            }
+            
+        }
+
+        function updateRowColValues(divPadre){
+            // Obtener el elemento padre (parentDiv)
+            const parentDiv = document.getElementById(divPadre);
+
+            // Obtener todos los divs con clase "conte-sort" dentro de parentDiv
+            const conteSortDivs = parentDiv.getElementsByClassName("conte-sort");
+
+            // Recorrer los divs con clase "conte-sort"
+            for (let i = 0; i < conteSortDivs.length; i++) {
+                const conteSortDiv = conteSortDivs[i];
+
+                // Obtener todos los divs hijos con clase "cont-elem" dentro de cada "conte-sort" div
+                const contElemDivs = conteSortDiv.getElementsByClassName("cont-elem");
+
+                // Actualizar los valores de los campos hidden dentro de cada "cont-elem" div
+                for (let j = 0; j < contElemDivs.length; j++) {
+                    const contElemDiv = contElemDivs[j];
+                    const rowInput = contElemDiv.querySelector("input[id$='-row']");
+                    const colInput = contElemDiv.querySelector("input[id$='-col']");
+
+                    // Actualizar los valores de los campos hidden
+                    rowInput.value = i + 1; // El número de elemento conte-sort
+                    colInput.value = j + 1; // La posición dentro de los que tienen el mismo row
+                }
+            }
+        }
+
+        function renombrarConteSort(parentDiv) {
+            const divPadre = document.getElementById(parentDiv);
+            const filas = divPadre.getElementsByClassName('conte-sort');
+
+            for (let i = 0; i < filas.length; i++) {
+                const elemento = filas[i];
+                const idActual = elemento.id;
+                const partes = idActual.split('-');
+                const nuevoColid = i;
+
+                partes[2] = nuevoColid;
+                const nuevoId = partes.join('-');
+
+                elemento.id = nuevoId;
+            }            
+        }
+
+        function agregarNuevoConteSort(parentDiv) {
+            const divPadre = document.getElementById(parentDiv);
+            const filas = divPadre.getElementsByClassName('conte-sort');
+
+            // Obtener el último row y su id
+            const ultimoRow = filas[filas.length - 1];
+            const ultimoId = ultimoRow.id.split('-').pop(); // Extraer el número después del último guion
+            
+            // Crear un nuevo elemento row
+            const nuevoId = parseInt(ultimoId) + 1;
+            const nuevoRow = document.createElement('div');
+            const rowid = ultimoRow.id.split('-')[1];
+            nuevoRow.id = `elementos-${rowid}-${nuevoId}`;       
+            nuevoRow.classList.add('row', 'conte-sort', 'pagina-fondo', 'altura-min-100px');
+                             
+
+            // Insertar el nuevo script dentro del nuevoRow
+            nuevoRow.appendChild(document.createElement('script'));
+
+            // Insertar el nuevo row dentro del divPadre            
+            divPadre.insertBefore(nuevoRow, ultimoRow.nextSibling);            
+            initializeSortable(nuevoRow.id, rowid, '.handle2', 150, 'ghost', parentDiv);            
+        }
+
+        function revisarFilasVacias(parentDiv) {
+            const miDiv = document.getElementById(parentDiv);
+            const filas = miDiv.getElementsByClassName('conte-sort');
+                        
+            let todasFilasLlenas = true;
+
+            for (let i = filas.length - 1; i >= 0; i--) {
+                const fila = filas[i];
+                const elementosEnFila = fila.children;
+
+                // Verificar si la fila contiene un script pero no contiene otros elementos
+                let contieneScript = false;
+                let contieneOtroElemento = false;
+
+                for (let j = 0; j < elementosEnFila.length; j++) {
+                    const elemento = elementosEnFila[j];
+
+                    if (elemento.tagName === 'SCRIPT') {
+                        contieneScript = true;
+                    } else {
+                        contieneOtroElemento = true;
+                    }
+                    // Si la fila contiene un script pero también otros elementos, no la eliminamos
+                    if (contieneScript && contieneOtroElemento) {
+                        break;
+                    }
+                }
+
+                // Eliminar la fila si solo contiene un script y no tiene otros elementos
+                if (contieneScript && !contieneOtroElemento) {
+                fila.remove();                
+                renombrarConteSort(parentDiv);
+                todasFilasLlenas = false;
+                }
+            }
+            agregarNuevoConteSort(parentDiv);        
+        }
+
+        
+        function agregarNuevoElemento(parentDiv, seccionID) {
+            // Obtener el div padre que contiene los formularios
+            const divPadre = document.getElementById(parentDiv);
+            const filas = divPadre.getElementsByClassName('conte-sort');
+            const ultimaFila = filas[filas.length-1];
+               
+
+            // Obtener el total de formularios existentes en el formset
+            const total_elementos = document.getElementById(`id_elemento_formset_${seccionID}-TOTAL_FORMS`);
+            const elemnto_form_count = parseInt(total_elementos.value);
+            total_elementos.value = elemnto_form_count + 1;                      
+            
+            // Obtener el formulario original que será clonado   
+
+            const formularioOriginal = document.getElementById(`${parentDiv}-baseElemForm`);            
+
+            // Clonar el formulario original y cambiar su id y otros atributos para que sea único
+            const nuevoFormulario = formularioOriginal.cloneNode(true);
+            nuevoFormulario.style.display = "inline-block";
+            nuevoFormulario.id = `${parentDiv}-${elemnto_form_count+1}`;
+            nuevoFormulario.querySelectorAll("input, select").forEach((elemento) => {
+                const name = elemento.getAttribute("name");
+
+                const partes = name.split('-');                
+                partes[1] = elemnto_form_count;
+                const nuevoName = partes.join('-');                
+
+
+                elemento.setAttribute("name", nuevoName);
+                elemento.setAttribute("id", `id_${nuevoName}`);
+                if (elemento.getAttribute("type") === "checkbox") {
+                elemento.checked = true;
+                } else if (elemento.getAttribute("type") === "text") {
+                elemento.value = "";
+                }
+            });
+
+            // Agregar el nuevo formulario al div padre
+            ultimaFila.appendChild(nuevoFormulario);   
+            revisarFilasVacias(parentDiv)         
+        }
+
+
+        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass, parentDiv) {
+            const element = document.getElementById(elementId);
+            let sortable = Sortable.create(element, {
+            group: groupName,
+            handle: handleClass,
+            animation: animationTime,
+            ghostClass: ghostClass,
+            swapThreshold: 0.9,
+            forceFallback: false,
+            onUpdate: function(evt) {
+                // Se ejecuta cuando se termina de reordenar los elementos
+                console.log("Nueva posición:", evt.newIndex);
+            },
+            onEnd: function(evt){                
+                if (parentDiv !== undefined) {
+                    console.log("Actualizando posicion:", evt.newIndex);
+                    updateRowColValues(parentDiv)
+                }                                        
+            },
+            onMove: function(evt) { 
+                if(evt.related.classList.contains('element-fixed')) { 
+                    return false; 
+                } 
+            },
+            onRemove: function(evt) {         
+                if (parentDiv !== undefined) {
+                    revisarFilasVacias(parentDiv);
+                }                
+            },
+            });
+        }
+    </script>
 
     {% include 'admin/config_nav.html' %}
-    <p class="h1"> Configuracion Estudio Socioeconomico (implementacion pendiente)</p>
+    <p class="h5 mx-5 mt-2"> Modificar Estudio Socioeconomico</p>
+
+    <form method="post" id="orderingForm">
+        {% csrf_token %}
+        <p><input type="submit" value="Save"></p>
+        <div id="secciones">
+            {{seccionFormset.management_form}}
+            {% for seccion in seccionFormset %}
+            {% with pDiv=forloop.counter0 %}
+                <div id="parentDiv-{{ pDiv }}" class="border border-2 rounded-2 p-3 pt-1 mx-3 mb-3 borde-pagina-principal">
+                    
+                    <div class="text-center"> 
+                        <i class="handle fa fa-bars" aria-hidden="true"></i>
+                    </div>          
+                    <div class="row mb-4 align-items-center">    
+                        {% for hidden in seccion.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}                           
+                        <div class="col pe-0"> 
+                            {{ seccion.nombre.label }}    
+                            {{ seccion.nombre }}                                                       
+                        </div>
+                        <div class="col-auto text-center">
+                            <div class="font-semi-bold">
+                                {{ seccion.tipo.label }}   
+                            </div>                            
+                            <div >
+                                {% for choice in seccion.tipo %}
+                                    {{ choice }}                                    
+                                {% endfor %}  
+                            </div>                                                                                                                                                                      
+                        </div>
+                        <div class="col-auto p-0 m-0 text-center">                            
+                            <button id="btnEliminar" type="button" onclick="eliminarSeccion('parentDiv-{{ pDiv }}', '{{ forloop.counter0 }}')" class="btn btn-warning px-2 me-2 ms-2">
+                                <i class="fa fa-trash-o" style="font-size: 20px;"></i>
+                            </button>  
+                        </div>
+                    </div> 
+                    <div class="text-danger">
+                        {{ seccion.errors }}  
+                    </div> 
+                    
+                    {% with spk=seccion.instance.pk|stringformat:'s' %}                                  
+                        {% with elementoFormSet=dictElemForm|hashD:spk %}  
+                            {% if elementoFormSet %}
+                                {{ elementoFormSet.management_form}}
+
+                                {% with first=elementoFormSet.0 %}
+                                    {% if first %}
+                                        <div id="elementos-{{ spk }}-{{ first.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
+                                            <script></script>                                
+                                            
+                                            {% for elemento in  elementoFormSet%}
+                                                {% with epk=elemento.instance.pk|stringformat:'s' %}                                                                                                  
+                                                    
+                                                    <div id="elem-{{ spk }}-{{ forloop.counter0 }}" class="col cont-elem p-0 pagina-blanco" >
+                                                        <div class="border border-3 rounded-2 p-3 pt-1 mx-1 my-2 borde-pagina-gris">
+                                                            <div class="row text-center"> 
+                                                                <i class="col handle2 fa fa-bars" aria-hidden="true"></i>                                                    
+                                                            </div>    
+                                                            {% for hidden in elemento.hidden_fields %}
+                                                                {{ hidden }}
+                                                            {% endfor %}                                                                                                                  
+                                                            <div class="row align-items-center">
+                                                                <div class="col p-0 m-0 ms-1">                                                                    
+                                                                    {{ elemento.nombre }}                                                                                                             
+                                                                </div>     
+                                                                <div class="col-auto p-0 m-0">                                                                    
+                                                                    <button id="btnEliminar" type="button" onclick="eliminarElemento('elem-{{ spk }}-{{ forloop.counter0 }}', '{{ spk }}', '{{ forloop.counter0 }}')" class="btn btn-danger px-2 me-1 ms-2">
+                                                                        <i class="fa fa-trash-o" style="font-size: 20px;"></i>
+                                                                    </button>                                                                                                           
+                                                                </div>                                                  
+                                                            </div>  
+                                                            <div class="row my-1 align-items-center">                                                    
+                                                                <div class="col p-0 m-0 ms-1">
+                                                                    {{ elemento.tipo }}
+                                                                </div>            
+                                                                <div class="col-2 p-0 m-0 ms-2 text-center"> 
+                                                                    {{ elemento.obligatorio.label }}   
+                                                                    <div >
+                                                                        {% for choice in elemento.obligatorio %}
+                                                                            {{ choice }}                                    
+                                                                        {% endfor %}  
+                                                                    </div>                                                                                                                                       
+                                                                </div>                           
+                                                                <div class="col-2 p-0 m-0 ms-2">                                                                     
+                                                                    [insertar agregar opcion aqui]
+                                                                </div>           
+                                                            </div>
+                                                            <div class="text-danger">
+                                                                {{ elemento.errors }}
+                                                            </div>                                                                                                                                          
+                                                        </div>
+                                                        
+                                                    </div>                                        
+                                                    
+                                                    {% with c=elementoFormSet|hashD:forloop.counter %}
+                                                    {% with cb=elementoFormSet|hashD:forloop.counter0 %}
+                                                        {% if c.row.value != cb.row.value and c is not None %}
+                                                        </div>
+                                                        <div id="elementos-{{ spk }}-{{ c.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
+                                                        <script>
+                                                            initializeSortable('elementos-{{ spk }}-{{ cb.row.value }}', '{{ spk}}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
+                                                        </script>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                    {% endwith %}
+                                                
+                                                {% endwith %}
+                                            {% endfor %}                                
+                                        </div>
+                                        {% with ultimo=elementoFormSet|last %}                                
+                                            <script>
+                                                initializeSortable('elementos-{{ spk }}-{{ ultimo.row.value }}', '{{ spk }}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
+                                            </script>
+                                        {% endwith %}
+                                        <script>  
+                                            ocultarElementoExtra('parentDiv-{{ pDiv }}')
+                                            revisarFilasVacias('parentDiv-{{ pDiv }}')
+                                        </script>                                        
+                                        <button type="button" onclick="agregarNuevoElemento('parentDiv-{{ pDiv }}', '{{ spk }}')">Agregar nueva pregunta</button>
+                                    {% else %}                                        
+                                        <button type="button" onclick="agregarNuevoElemento('parentDiv-{{ pDiv }}', '{{ spk }}')">Agregar nueva pregunta</button>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}                                                                                       
+                        {% endwith %}                        
+                    {% endwith %}                       
+                </div>   
+            {% endwith%}
+            {% endfor %}
+        </div>
+    </form>
+
+    
+    <script>
+
+        initializeSortable('secciones', '', '.handle', 150, 'ghost');
+        
+    </script>
 
 {% endblock body %}
