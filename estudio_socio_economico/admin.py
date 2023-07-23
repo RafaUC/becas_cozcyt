@@ -2,6 +2,9 @@ from django.contrib import admin
 from .models import Seccion, Opcion, Respuesta, RTextoCorto, RTextoParrafo, ROpcionMultiple, RCasillas, RDesplegable, Elemento
 # Register your models here.
 
+class ElementoAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'tipo', 'row', 'col')
+
 admin.site.register(Seccion)
 admin.site.register(Opcion)
 admin.site.register(Respuesta)
@@ -10,4 +13,4 @@ admin.site.register(RTextoParrafo)
 admin.site.register(ROpcionMultiple)
 admin.site.register(RCasillas)
 admin.site.register(RDesplegable)
-admin.site.register(Elemento)
+admin.site.register(Elemento, ElementoAdmin)
