@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Configuración Modalidades
+{% endblock titulo %}
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+    <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
+    <hr> -->
+    <div class="rounded-2 p-1 mx-4" style="color: #676767;">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h5" style="font-weight: bold;">Modalidades</p>
+                <hr>
+            </div>
+        </div>
+        <div class="rounded-2 mx-4">          
+            <div class="row">
+                <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
+                    <a href="/administracion/configuracion/modalidades/agregar_modalidad" class = "btn" style="padding: 6px 0 6px; text-align: center; color: #676767; text-decoration: none; background-color: #D5F5E2; font-size: medium; border-radius: 10px;">
+                        Agregar
+                    </a>    
+                </div>   
+            </div>
+            <div class="row">
+                <!-- ciclo for que muestre una card por cada modalidad que haya -->
+                <div class="col-sm-4" style="padding-top: 20px;">
+                    <div class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <h5 class="card-title">Ej card modalidad</h5>
+                            <img class="imagen-modalidad" src="/static/images/img_talento.png" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
+                            <br>
+                            <a href="#" class="btn" style="background-color: #D5F5E2; color: #676767;">Editar</a>
+                            <a href="#" class="btn" style="background-color: #E9C3C1; color: #676767;">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="padding-top: 20px;">
+                    <div class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <h5 class="card-title">Ej card modalidad</h5>
+                            <img class="imagen-modalidad" src="/static/images/img_talento.png" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
+                            <br>
+                            <a href="#" class="btn" style="background-color: #D5F5E2; color: #676767;">Editar</a>
+                            <a href="#" class="btn" style="background-color: #E9C3C1; color: #676767;">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

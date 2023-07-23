@@ -1,0 +1,23 @@
+<p class="mx-4 my-4 h3" >Configuración</p>
+
+<nav class="navbar navbar-expand-lg navbar bg-white mx-3">          
+    {% with url_name=request.resolver_match.url_name %}
+    <ul class="navbar-nav nav-pills ml-auto confpage-ul">
+        <li class="nav-item">
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigGeneral' %}active{% endif %} h6" href="#">General</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigPuntajes' %}active{% endif %} h6" href="#">Puntajes</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigModalidades' %}active{% endif %} h6" href="{% url 'modalidades:AConfigModalidades' %}">Modalidades</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigEstudio' %}active{% endif %} h6" href="#">Estudio socioeconómico</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigAparencia' %}active{% endif %} h6" href="#">Apariencia</a>
+        </li>
+    </ul>
+    {% endwith %}
+</nav>

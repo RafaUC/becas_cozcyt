@@ -60,7 +60,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'usuarios:AConfiguracion' %}" class="nav-link d-flex link-dark {% if url_name == 'AConfiguracion' %}active{% endif %} h4">
+                <a href="{% url 'usuarios:AConfiguracion' %}" class="nav-link d-flex link-dark {% if 'onfig' in url_name %}active{% endif %} h4">
                   <i class="fa fa-cog px-2 align-self-center" aria-hidden="true"> </i>
                   Configuracion
                 </a>
@@ -110,8 +110,13 @@
           </div>
         </div>
         <div class="col nopadding nomargin d-flex flex-column justify-content-between">
-          {% block body %}
-          {% endblock body %}
+          <div class="mb-auto ">
+
+            {% block body %}
+            {% endblock body %}
+
+          </div>
+
           
           <!-- Pie de pagina -->
           <footer>
