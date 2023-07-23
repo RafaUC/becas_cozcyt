@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Configuración Modalidades
+{% endblock titulo %}
+
+{% block body %}
+    <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
+    <hr> -->
+    <div class="rounded-2 p-1 mx-4" style="color: #676767;">
+        <div class="row">
+            <p class="col h3" style="font-weight: 400; padding-top: 40px;">Modalidades</p>
+        </div>
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h5" style="font-weight: bold;">Agregar nueva modalidad</p>
+                <hr>
+            </div>
+        </div>
+        <div class="border rounded-2 p-4 mx-4 mb-4">         
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}    
+                <div class="row">
+                    <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
+                        <button type="submit" class="btn btn-guardar" name="guardar">Guardar</button>    
+                    </div>   
+                </div>
+                <div class="child col-4" style="display: inline-block;">
+                    <p class="titulo-mods" style="font-weight: 400; font-size: 17px;"> Titulo de la modalidad </p>
+                    {{ form.nombre }}
+                </div>
+                <div class="child col-1" style="display: inline-block; padding: 0 20%; ">
+                    <p class="imagen-mods" style="padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Imagen </p>
+                    {{ form.imagen}}
+                </div>
+                <div class="row" style="padding-top: 40px; ">
+                    <p class="documento-mods" style="display: inline-block; font-weight: 400; font-size: 17px; width:auto"> Documentos </p>
+                    <div class=" col-1 mx-auto" style="display: inline-block;margin-right: 0 !important;">
+                        <img src="/static/images/plus-circle.png" width="60px" class="btn btn-agregar" name="agregar">
+                    </div>
+                </div>
+            </form> 
+        </div>
+    </div>
+    
+{% endblock body %}
