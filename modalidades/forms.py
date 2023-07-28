@@ -13,12 +13,14 @@ class ModalidadForm(ModelForm):
         labels = {
             'nombre': '',
             'imagen' : '',
+            'descripcion': '',
         }
         widgets = {
-            'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Talento especial, LABSOL...'}) 
+            'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Talento especial, LABSOL...'}),
+            'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Modalidad que se le otorga a los estudiantes que...', 'rows':3, 'cols':1})
         }
 
-# class DocumentoForm(ModelForm):
-#     class Meta:
-#         model = Documento
-#         fields = ('',)
+class DocumentoForm(ModelForm):
+    class Meta:
+        model = Documento
+        fields = ('modalidad', 'nombre', 'descripcion', 'lookup_id', 'order')
