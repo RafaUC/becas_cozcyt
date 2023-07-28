@@ -21,7 +21,7 @@ def ciclo_actual():
 def modalidadMediaPath(instance, filename):
     ext = filename.split('.')[-1]  # Obtiene la extensión del archivo
     filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
-    return os.path.join(settings.MEDIA_ROOT, filename)  # Ruta de almacenamiento deseada
+    return os.path.join('media/', filename)  # Ruta de almacenamiento deseada
 
 
 class Modalidad(models.Model):
