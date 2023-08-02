@@ -5,26 +5,26 @@
 {% endblock titulo %}
 
 {% block body %}
-    {% load custom_filters %}
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    {% load custom_filters %}    
     <script>
 
-        function eliminarSeccion(parentDiv, seccionCont) {
-            const divPadre = document.getElementById(parentDiv);            
+        function eliminarSeccion(elimBtn) {
+            const divSeccion = elimBtn.closest('.cont-seccion');              
             // Obtener el número de formularios presentes en el formset    
             
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta Seccion y todas sus preguntas?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
+                const idParts = divSeccion.id.split('-');       
                 const inputEliminar = document.createElement("input");
                 inputEliminar.type = "hidden";
-                inputEliminar.name = `seccion_formset-${seccionCont}-DELETE`;
-                inputEliminar.id = `id_seccion_formset-${seccionCont}-DELETE`;
+                inputEliminar.name = `seccion_formset-${idParts[1]}-DELETE`;
+                inputEliminar.id = `id_seccion_formset-${idParts[1]}-DELETE`;
                 inputEliminar.value = "on";                
-                divPadre.appendChild(inputEliminar);
+                divSeccion.appendChild(inputEliminar);
 
                 // Ocultar el divPadre del formset                
-                divPadre.style.display = "none";
+                divSeccion.style.display = "none";
 
             }
             
@@ -33,38 +33,51 @@
 
         function ocultarElementoExtra(parentDiv) {
             const divPadre = document.getElementById(parentDiv);  
+            const idParts = divPadre.id.split('-');                 
             const divElementos = divPadre.getElementsByClassName("cont-elem");   
-            const divElemento = divElementos[divElementos.length-1]
-            divElemento.id = `${parentDiv}-baseElemForm`
+            const divElemento = divElementos[divElementos.length-1];
+            divElemento.id = `${divElemento.id}-baseElemForm`;
             // Obtener el número de formularios presentes en el formset    
                                                     
             // Ocultar el divPadre del formset            
             divPadre.appendChild(divElemento);
-            divElemento.style.display = "none";                              
+            //divElemento.style.display = "none";                              
+        }
+
+        function ocultarSeccionExtra() {
+            const divPadre = document.getElementById('secciones');  
+            const divSecciones = divPadre.getElementsByClassName("cont-seccion");   
+            const divSeccion = divSecciones[divSecciones.length-1];
+            divSeccion.id = `${divSeccion.id}-baseSeccionForm`;
+            // Obtener el número de formularios presentes en el formset    
+                                                    
+            // Ocultar el divPadre del formset                        
+            //divSeccion.style.display = "none";                              
         }
         
 
-        function eliminarElemento(parentDiv, seccionID, elementCont) {
-            const divPadre = document.getElementById(parentDiv);            
+        function eliminarElemento(elimBtn) {
+            const divElement = elimBtn.closest('.cont-elem');         
             // Obtener el número de formularios presentes en el formset    
             
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
+                const idParts = divElement.id.split('-');                
                 const inputEliminar = document.createElement("input");
                 inputEliminar.type = "hidden";
-                inputEliminar.name = `elemento_formset_${seccionID}-${elementCont}-DELETE`;
-                inputEliminar.id = `id_elemento_formset_${seccionID}-${elementCont}-DELETE`;
+                inputEliminar.name = `elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
+                inputEliminar.id = `id_elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
                 inputEliminar.value = "on";                
-                divPadre.appendChild(inputEliminar);
+                divElement.appendChild(inputEliminar);
 
                 // Ocultar el divPadre del formset
-                const divAbuelo = divPadre.parentNode.parentNode;
-                divAbuelo.appendChild(divPadre);
-                divPadre.style.display = "none";
+                const divParentDiv = divElement.closest('.cont-seccion'); 
+                divParentDiv.appendChild(divElement);
+                divElement.style.display = "none";
 
-                revisarFilasVacias(divAbuelo.id)
-                updateRowColValues(divAbuelo.id)
+                revisarFilasVacias(divParentDiv.id)
+                updateRowColValues(divParentDiv.id)
             }
             
         }
@@ -116,15 +129,22 @@
         function agregarNuevoConteSort(parentDiv) {
             const divPadre = document.getElementById(parentDiv);
             const filas = divPadre.getElementsByClassName('conte-sort');
+            const botonAElem = divPadre.querySelector('.btn-a-elem');     
 
             // Obtener el último row y su id
             const ultimoRow = filas[filas.length - 1];
-            const ultimoId = ultimoRow.id.split('-').pop(); // Extraer el número después del último guion
+            let ultimoId;
+            if (ultimoRow !== undefined){
+                ultimoId = ultimoRow.id.split('-').pop(); // Extraer el número después del último guion
+            } else {
+                ultimoId = '1';
+            }
+            
             
             // Crear un nuevo elemento row
             const nuevoId = parseInt(ultimoId) + 1;
             const nuevoRow = document.createElement('div');
-            const rowid = ultimoRow.id.split('-')[1];
+            const rowid = parentDiv.split('-').pop();
             nuevoRow.id = `elementos-${rowid}-${nuevoId}`;       
             nuevoRow.classList.add('row', 'conte-sort', 'pagina-fondo', 'altura-min-100px');
                              
@@ -133,7 +153,7 @@
             nuevoRow.appendChild(document.createElement('script'));
 
             // Insertar el nuevo row dentro del divPadre            
-            divPadre.insertBefore(nuevoRow, ultimoRow.nextSibling);            
+            divPadre.insertBefore(nuevoRow, botonAElem);            
             initializeSortable(nuevoRow.id, rowid, '.handle2', 150, 'ghost', parentDiv);            
         }
 
@@ -176,31 +196,103 @@
         }
 
         
-        function agregarNuevoElemento(parentDiv, seccionID) {
+        function agregarNuevaSeccion() {
             // Obtener el div padre que contiene los formularios
-            const divPadre = document.getElementById(parentDiv);
-            const filas = divPadre.getElementsByClassName('conte-sort');
-            const ultimaFila = filas[filas.length-1];
-               
+            const divPadre = document.getElementById('secciones');    
+            const botonASeccion = document.getElementById('botonASeccion');    
 
             // Obtener el total de formularios existentes en el formset
-            const total_elementos = document.getElementById(`id_elemento_formset_${seccionID}-TOTAL_FORMS`);
-            const elemnto_form_count = parseInt(total_elementos.value);
-            total_elementos.value = elemnto_form_count + 1;                      
+            const total_elementos = document.getElementById(`id_seccion_formset-TOTAL_FORMS`);
+            const seccion_form_count = parseInt(total_elementos.value);
+            total_elementos.value = seccion_form_count + 1;                      
             
             // Obtener el formulario original que será clonado   
 
-            const formularioOriginal = document.getElementById(`${parentDiv}-baseElemForm`);            
+            const formularioOriginal = divPadre.querySelector(`[id^="parentDiv-"][id$="-baseSeccionForm"]`);     
 
             // Clonar el formulario original y cambiar su id y otros atributos para que sea único
             const nuevoFormulario = formularioOriginal.cloneNode(true);
+            nuevoFormulario.style.display = "block";
+            nuevoFormulario.id = `parentDiv-${seccion_form_count}`;
+
+            // Agregar el nuevo formulario al div padre
+            divPadre.insertBefore(nuevoFormulario, botonASeccion);          
+
+            nuevoFormulario.querySelectorAll("input, select").forEach((elemento) => {
+                const name = elemento.getAttribute("name");
+                const partes = name.split('-');                
+                partes[1] = seccion_form_count;
+                const nuevoName = partes.join('-');                
+                elemento.setAttribute("name", nuevoName);
+
+                const id = elemento.getAttribute("id");
+                const partes2 = id.split('-');                
+                partes2[1] = seccion_form_count;
+                const nuevoId = partes2.join('-');                                
+                elemento.setAttribute("id", nuevoId);
+
+                if (elemento.getAttribute("type") === "checkbox") {
+                elemento.checked = true;
+                } else if (elemento.getAttribute("type") === "text") {
+                elemento.value = "";
+                }
+            });
+            nuevoFormulario.querySelectorAll(".conte-sort, .cont-elem").forEach((elemento) => {
+                const id = elemento.getAttribute("id");
+
+                const partes = id.split('-');                
+                partes[1] = seccion_form_count;
+                const nuevoId = partes.join('-');                
+                
+                elemento.setAttribute("id", nuevoId);
+                if (elemento.classList.contains("conte-sort")) {
+                    const parentDiv = elemento.closest('.cont-seccion');    
+                    console.log('a')
+                    console.log(elemento.id)
+                    initializeSortable(elemento.id, partes[1], '.handle2', 150, 'ghost', parentDiv);      
+                } 
+            });
+            nuevoFormulario.querySelectorAll("[for]").forEach((elemento) => {
+                const id = elemento.getAttribute("for");
+
+                const partes = id.split('-');                
+                partes[1] = seccion_form_count;
+                const nuevoId = partes.join('-');                
+                
+                elemento.setAttribute("for", nuevoId);                
+            });
+                             
+        }
+
+
+        function agregarNuevoElemento(btnAgregar) {
+            // Obtener el div padre que contiene los formularios
+            
+            const divSeccion = btnAgregar.closest('.cont-seccion');                 
+            const filas = divSeccion.getElementsByClassName('conte-sort');
+            const ultimaFila = filas[filas.length-1];
+            
+            
+            const idParts = divSeccion.id.split('-');     
+            // Obtener el total de formularios existentes en el formset
+            const total_elementos = document.getElementById(`id_elemento_formset-${idParts[1]}-TOTAL_FORMS`);            
+            const elemnto_form_count = parseInt(total_elementos.value);
+            total_elementos.value = elemnto_form_count + 1;       
+            console.log(elemnto_form_count);          
+            
+            // Obtener el formulario original que será clonado   
+            
+            const formularioOriginal = divSeccion.querySelector(`[id^="elem-${idParts[1]}"][id$="-baseElemForm"]`);
+            console.log(formularioOriginal);
+            // Clonar el formulario original y cambiar su id y otros atributos para que sea único
+            const nuevoFormulario = formularioOriginal.cloneNode(true);
             nuevoFormulario.style.display = "inline-block";
-            nuevoFormulario.id = `${parentDiv}-${elemnto_form_count+1}`;
+            nuevoFormulario.id = `elem-${idParts[1]}-${elemnto_form_count}`;
             nuevoFormulario.querySelectorAll("input, select").forEach((elemento) => {
                 const name = elemento.getAttribute("name");
 
                 const partes = name.split('-');                
-                partes[1] = elemnto_form_count;
+                partes[2] = elemnto_form_count;
                 const nuevoName = partes.join('-');                
 
 
@@ -214,12 +306,14 @@
             });
 
             // Agregar el nuevo formulario al div padre
+            console.log(nuevoFormulario);
             ultimaFila.appendChild(nuevoFormulario);   
-            revisarFilasVacias(parentDiv)         
+            revisarFilasVacias(divSeccion.id)    
+            //updateRowColValues(parentDiv)      //si esta desactivado omite validar el nuevo si esta vacio
         }
 
 
-        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass, parentDiv) {
+        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass, parentDiv) {            
             const element = document.getElementById(elementId);
             let sortable = Sortable.create(element, {
             group: groupName,
@@ -250,19 +344,61 @@
             },
             });
         }
+
+        function toggleElementoOpciones(selectObject) {
+            const divElement = selectObject.closest('.cont-elem');          
+            const boton = divElement.querySelector('.btn-a-opcion');            
+            const obligCh = divElement.querySelector('.obligatorio-check');  
+            const optionValue = selectObject.value;            
+
+            // Si el valor seleccionado es 'opcion_multiple', 'casillas' o 'desplegable', mostramos el botón; de lo contrario, lo ocultamos
+            if (optionValue === 'opcion_multiple' || optionValue === 'casillas' || optionValue === 'desplegable') {
+                boton.style.display = 'inline-block'; // Mostrar el botón
+            } else {
+                boton.style.display = 'none'; // Ocultar el botón
+            }
+
+            if (optionValue === 'separador'){
+                obligCh.style.display = 'none'; 
+            } else {
+                obligCh.style.display = 'block'; 
+            }
+
+            const selectedValue = $(selectObject).val(); 
+            const selectedText = $(selectObject).find('option[value="' + selectedValue + '"]').text();
+            $(selectObject).attr('data-bs-original-title', selectedText);                                           
+            $(selectObject).tooltip('hide');
+        }
+
+        function updateOpcionInputSize(textInput) {
+            const lenght = textInput.value.length || 1;
+            
+            textInput.size = lenght; 
+            /*
+            const style = window.getComputedStyle(textInput, null).getPropertyValue('font-size');
+            const fontSize = parseFloat(style); 
+            console.log(fontSize);
+            textInput.style.width = `${(fontSize*0.5*lenght)+10}px`;
+            console.log(fontSize*0.7);
+            */
+        }
     </script>
 
-    {% include 'admin/config_nav.html' %}
-    <p class="h5 mx-5 mt-2"> Modificar Estudio Socioeconomico</p>
+    
 
-    <form method="post" id="orderingForm">
+    {% include 'admin/config_nav.html' %}
+    <p class="h4 mx-5 mt-2 mb-0"> Modificar Estudio Socioeconomico</p>
+
+    <form method="post" id="orderingForm" class="hidden-ready">
         {% csrf_token %}
-        <p><input type="submit" value="Save"></p>
-        <div id="secciones">
+        <button type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>
+        <div id="secciones" >
+            
             {{seccionFormset.management_form}}
             {% for seccion in seccionFormset %}
-            {% with pDiv=forloop.counter0 %}
-                <div id="parentDiv-{{ pDiv }}" class="border border-2 rounded-2 p-3 pt-1 mx-3 mb-3 borde-pagina-principal">
+            {% with pDiv=seccion.prefix|splitPop:'-' %}
+                <div id="parentDiv-{{ pDiv }}" class=" cont-seccion border border-2 rounded-2 p-3 pt-1 mx-3 mb-5  borde-pagina-principal text-center">
+                    
                     
                     <div class="text-center"> 
                         <i class="handle fa fa-bars" aria-hidden="true"></i>
@@ -281,12 +417,14 @@
                             </div>                            
                             <div >
                                 {% for choice in seccion.tipo %}
-                                    {{ choice }}                                    
+                                    {% if forloop.counter0 > 0 %}
+                                        {{ choice }}                                    
+                                    {% endif %}
                                 {% endfor %}  
                             </div>                                                                                                                                                                      
                         </div>
                         <div class="col-auto p-0 m-0 text-center">                            
-                            <button id="btnEliminar" type="button" onclick="eliminarSeccion('parentDiv-{{ pDiv }}', '{{ forloop.counter0 }}')" class="btn btn-warning px-2 me-2 ms-2">
+                            <button id="btnEliminar" type="button" title="Eliminar Sección" onclick="eliminarSeccion(this)" class="btn pagina-fondo px-2 me-2 ms-2 " data-bs-original-title="Eliminar Sección">
                                 <i class="fa fa-trash-o" style="font-size: 20px;"></i>
                             </button>  
                         </div>
@@ -294,103 +432,144 @@
                     <div class="text-danger">
                         {{ seccion.errors }}  
                     </div> 
-                    
-                    {% with spk=seccion.instance.pk|stringformat:'s' %}                                  
-                        {% with elementoFormSet=dictElemForm|hashD:spk %}  
-                            {% if elementoFormSet %}
-                                {{ elementoFormSet.management_form}}
+                                                                       
+                        {% with elementoFormSet=dictElemForm|hashD:seccion.prefix %}  
+                            {% if elementoFormSet %}                                                        
+                                {{ elementoFormSet.management_form}}                                
 
                                 {% with first=elementoFormSet.0 %}
                                     {% if first %}
-                                        <div id="elementos-{{ spk }}-{{ first.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
+                                        <div id="elementos-{{ pDiv }}-{{ first.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
                                             <script></script>                                
                                             
                                             {% for elemento in  elementoFormSet%}
-                                                {% with epk=elemento.instance.pk|stringformat:'s' %}                                                                                                  
+                                                                                                                                                                            
+                                                <div id="elem-{{ pDiv }}-{{ forloop.counter0 }}" class="col cont-elem p-0 pagina-fondo" >
                                                     
-                                                    <div id="elem-{{ spk }}-{{ forloop.counter0 }}" class="col cont-elem p-0 pagina-blanco" >
-                                                        <div class="border border-3 rounded-2 p-3 pt-1 mx-1 my-2 borde-pagina-gris">
-                                                            <div class="row text-center"> 
-                                                                <i class="col handle2 fa fa-bars" aria-hidden="true"></i>                                                    
-                                                            </div>    
-                                                            {% for hidden in elemento.hidden_fields %}
-                                                                {{ hidden }}
-                                                            {% endfor %}                                                                                                                  
-                                                            <div class="row align-items-center">
-                                                                <div class="col p-0 m-0 ms-1">                                                                    
-                                                                    {{ elemento.nombre }}                                                                                                             
-                                                                </div>     
-                                                                <div class="col-auto p-0 m-0">                                                                    
-                                                                    <button id="btnEliminar" type="button" onclick="eliminarElemento('elem-{{ spk }}-{{ forloop.counter0 }}', '{{ spk }}', '{{ forloop.counter0 }}')" class="btn btn-danger px-2 me-1 ms-2">
-                                                                        <i class="fa fa-trash-o" style="font-size: 20px;"></i>
-                                                                    </button>                                                                                                           
-                                                                </div>                                                  
-                                                            </div>  
-                                                            <div class="row my-1 align-items-center">                                                    
-                                                                <div class="col p-0 m-0 ms-1">
-                                                                    {{ elemento.tipo }}
-                                                                </div>            
-                                                                <div class="col-2 p-0 m-0 ms-2 text-center"> 
-                                                                    {{ elemento.obligatorio.label }}   
-                                                                    <div >
-                                                                        {% for choice in elemento.obligatorio %}
-                                                                            {{ choice }}                                    
-                                                                        {% endfor %}  
-                                                                    </div>                                                                                                                                       
-                                                                </div>                           
-                                                                <div class="col-2 p-0 m-0 ms-2">                                                                     
-                                                                    [insertar agregar opcion aqui]
-                                                                </div>           
+                                                    <div class="border border-3 rounded-2 p-3 pt-1 m-1 pagina-blanco borde-pagina-fondo">
+                                                        <div class="row text-center"> 
+                                                            <i class="col handle2 fa fa-bars" aria-hidden="true"></i>                                                    
+                                                        </div>    
+                                                        {% for hidden in elemento.hidden_fields %}
+                                                            {{ hidden }}
+                                                        {% endfor %}                                                                                                                  
+                                                        <div class="row align-items-center">
+                                                            <div class="col p-0 m-0 ms-1">                                                                    
+                                                                {{ elemento.nombre }}                                                                                                             
+                                                            </div>     
+                                                            <div class="col-auto p-0 m-0">                                                                    
+                                                                <button id="btnEliminar" type="button" title="Eliminar" onclick="eliminarElemento(this)" class="btn px-2 me-1 ms-2" data-bs-original-title="Eliminar Elemento">
+                                                                    <i class="fa fa-trash-o" style="font-size: 20px;"></i>
+                                                                </button>                                                                                                           
+                                                            </div>                                                  
+                                                        </div>  
+                                                        <div class="row my-1 align-items-center">                                                    
+                                                            <div class="col p-0 m-0 ms-1">
+                                                                {{ elemento.tipo }}
+                                                            </div>            
+                                                            <div class="obligatorio-check col-auto p-0 m-0 ms-2 text-center font-xs"> 
+                                                                {{ elemento.obligatorio.label }}   
+                                                                <div >
+                                                                    {% for choice in elemento.obligatorio %}
+                                                                        {{ choice }}                                    
+                                                                    {% endfor %}  
+                                                                </div>                                                                                                                                       
+                                                            </div>                           
+                                                            <div class="col-auto p-0 m-0 ms-2">                                                                     
+                                                                <button type="button" onclick="" class="btn btn-pagina-tenue btn-a-opcion font-semi-bold font-xs p-1" style="display: none;">+ Opción</button>
+                                                            </div>           
+                                                        </div>
+                                                        <div id="opciones-{{ pDiv }}-{{ forloop.counter0 }}" class="cont-opc">
+                                                            <p class="m-1">Opciones</p>
+                                                            <div id="opcSort-{{ pDiv }}-{{ forloop.counter0 }}" class="conte-opc-sort row row-cols-auto align-items-center">
+                                                                {% with opcionFormSet=dictOpcionForm|hashD:elemento.prefix %}
+                                                                    {% if opcionFormSet %}
+                                                                        
+                                                                        {{ opcionFormSet.management_form}}  
+                                                                        {% for opcion in  opcionFormSet%}
+                                                                            <div class="cont-opcion col pagina-blanco borde-pagina-fondo border border-1 rounded-2 p-1">
+                                                                                {% for hidden in opcion.hidden_fields %}
+                                                                                    {{ hidden }}
+                                                                                {% endfor %}     
+                                                                                {{ opcion.nombre }}
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                {% endwith %} 
                                                             </div>
-                                                            <div class="text-danger">
-                                                                {{ elemento.errors }}
-                                                            </div>                                                                                                                                          
-                                                        </div>
+                                                        </div>                                                        
+                                                        <div class="text-danger">
+                                                            {{ elemento.errors }}
+                                                        </div>                                                                                                                                          
+                                                    </div>
                                                         
-                                                    </div>                                        
-                                                    
-                                                    {% with c=elementoFormSet|hashD:forloop.counter %}
-                                                    {% with cb=elementoFormSet|hashD:forloop.counter0 %}
-                                                        {% if c.row.value != cb.row.value and c is not None %}
-                                                        </div>
-                                                        <div id="elementos-{{ spk }}-{{ c.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
-                                                        <script>
-                                                            initializeSortable('elementos-{{ spk }}-{{ cb.row.value }}', '{{ spk}}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
-                                                        </script>
-                                                        {% endif %}
-                                                    {% endwith %}
-                                                    {% endwith %}
+                                                </div>                                        
                                                 
+                                                {% with c=elementoFormSet|hashD:forloop.counter %}
+                                                {% with cb=elementoFormSet|hashD:forloop.counter0 %}
+                                                    {% if c.row.value != cb.row.value and c is not None %}
+                                                    </div>
+                                                    <div id="elementos-{{ pDiv }}-{{ c.row.value }}" class="row conte-sort pagina-fondo altura-min-100px"> 
+                                                    <script>
+                                                        initializeSortable('elementos-{{ pDiv }}-{{ cb.row.value }}', '{{ pDiv }}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
+                                                    </script>
+                                                    {% endif %}
                                                 {% endwith %}
+                                                {% endwith %}
+                                                                                                       
                                             {% endfor %}                                
                                         </div>
                                         {% with ultimo=elementoFormSet|last %}                                
                                             <script>
-                                                initializeSortable('elementos-{{ spk }}-{{ ultimo.row.value }}', '{{ spk }}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
+                                                initializeSortable('elementos-{{ pDiv }}-{{ ultimo.row.value }}', '{{ pDiv }}', '.handle2', 150, 'ghost', "parentDiv-{{ pDiv }}");        
                                             </script>
                                         {% endwith %}
                                         <script>  
                                             ocultarElementoExtra('parentDiv-{{ pDiv }}')
                                             revisarFilasVacias('parentDiv-{{ pDiv }}')
                                         </script>                                        
-                                        <button type="button" onclick="agregarNuevoElemento('parentDiv-{{ pDiv }}', '{{ spk }}')">Agregar nueva pregunta</button>
+                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-a-elem btn-aceptado mt-3 p-2">+ Agregar nueva pregunta</button>
                                     {% else %}                                        
-                                        <button type="button" onclick="agregarNuevoElemento('parentDiv-{{ pDiv }}', '{{ spk }}')">Agregar nueva pregunta</button>
+                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-a-elem btn-aceptado mt-3 p-2">+ Agregar nueva pregunta</button>
                                     {% endif %}
                                 {% endwith %}
                             {% endif %}                                                                                       
-                        {% endwith %}                        
-                    {% endwith %}                       
+                        {% endwith %}                                                                
                 </div>   
             {% endwith%}
             {% endfor %}
+            <div id="botonASeccion" class="row px-5 element-fixed">
+                <button  type="button" onclick="agregarNuevaSeccion()" class="btn btn-a-seccion btn-aceptado element-fixed mb-4 p-3 ps-2 font-xxl">+ Agregar Seccion</button>
+            </div>            
         </div>
     </form>
 
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
+        
 
         initializeSortable('secciones', '', '.handle', 150, 'ghost');
+        ocultarSeccionExtra();
+        
+        // Document Ready de jQuery
+        $(document).ready(function() {
+            // Seleccionar todos los elementos con la clase "elem-tipo-select" y llamar a la función
+            $(".elem-tipo-select").each(function() {
+                toggleElementoOpciones(this);
+            });
+
+            $(".opcion-text ").each(function() {
+                updateOpcionInputSize(this);
+            });
+            
+            $('[data-bs-original-title]').each(function(){
+                $(this).tooltip();
+            });
+            
+            $('.hidden-ready').removeClass('hidden-ready');
+            
+            
+        });
         
     </script>
 
