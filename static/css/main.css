@@ -74,6 +74,54 @@ body {
   background-color: var(--pagina-gris) !important;
 }
 
+.texto-pagina-blanco {
+  color: var(--pagina-blanco);
+}
+
+.texto-pagina-fuerte {
+  color: var(--pagina-fuerte);
+}
+
+.texto-pagina-principal {
+  color: var(--pagina-principal);
+}
+
+.texto-pagina-tenue {
+  color: var(--pagina-tenue);
+}
+
+.texto-pagina-tenue-claro {
+  color: var(--pagina-tenue-claro);
+}
+
+.texto-aceptado-desactivado {
+  background-color: var(--aceptado-desactivado);
+}
+
+.texto-aceptado-activado {
+  background-color: var(--aceptado-activado);
+}
+
+.texto-aceptado-hover {
+  background-color: var(--aceptado-hover);
+}
+
+.texto-cancelar-desactivado {
+  background-color: var(--cancelar-desactivado);
+}
+
+.texto-cancelar-activado {
+  background-color: var(--cancelar-activado);
+}
+
+.texto-pagina-fondo {
+  background-color: var(--pagina-fondo);
+}
+
+.texto-pagina-gris {
+  color: var(--pagina-gris);
+}
+
 .borde-pagina-blanco {
   border-color: var(--pagina-blanco) !important;
 }
@@ -143,8 +191,8 @@ body {
 
 .btn-aceptado {
   color: #fff;
-  background-color: var(--aceptado-desactivado);
-  border-color: var(--aceptado-desactivado);
+  background-color: var(--aceptado-activado);
+  border-color: var(--aceptado-activado);
   font-weight: bold;
   border-radius: 10px;
   font-size: 17px; 
@@ -193,6 +241,7 @@ body {
   /* Estilos para el estado hover (al pasar el cursor sobre el botón) */
   background-color: var(--pagina-principal);
   border-color: var(--pagina-principal);
+  color: #fff; 
 }
 
 .btn-pagina-tenue:focus,
@@ -333,4 +382,35 @@ input[type=text], input[type=password], [type=email]{
   font-weight: 700; /* Cambia el valor a tu preferencia */
 }
 
+.font-xs {
+  font-size: 12px;
+}
+
+.font-sm {
+  font-size: 14px;
+}
+
+.font-md {
+  font-size: 16px;
+}
+
+.font-lg {
+  font-size: 18px;
+}
+
+.font-xl {
+  font-size: 20px;
+}
+
+.font-xxl {
+  font-size: 26px;
+}
+
+.hidden-ready {  
+  display:none;
+}
+
+.opcion-text {    
+  text-align: center;
+}
 

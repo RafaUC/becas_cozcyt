@@ -14,15 +14,20 @@ class Seccion(models.Model):
     )
 
     nombre = models.CharField(max_length=255)
-    tipo = models.CharField(max_length=10, choices=TIPOS_CHOICES, default=TIPOS_CHOICES[0])
+    tipo = models.CharField(max_length=10, choices=TIPOS_CHOICES)
+    orden = models.IntegerField(verbose_name='orden', default=100_000)
 
     def __str__(self):
         return self.nombre
+    
+    class Meta:        
+        ordering = ['orden' ]
 
 
 class Opcion(models.Model):    
     elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255, verbose_name='Nombre Opción')
+    orden = models.IntegerField(verbose_name='orden', default=100_000)
 
     def __str__(self):
         return self.nombre
@@ -30,6 +35,7 @@ class Opcion(models.Model):
     class Meta:
         verbose_name = 'Opción'
         verbose_name_plural = 'Opciones'
+        ordering = ['elemento','orden' ]
 
 
 #----------Respuestas-------------
