@@ -43,12 +43,12 @@ class ElementoForm(forms.ModelForm):
         model = Elemento
         fields = ['seccion', 'nombre', 'obligatorio', 'row', 'col', 'tipo',]
         widgets = {
-            'seccion': forms.Select(attrs={'class': 'form-control border-3', 'placeholder': 'Selecciona una sección'}),
-            'nombre': forms.TextInput(attrs={'class': 'form-control font-semi-bold border-3 ', 'placeholder': 'Nombre de la pregunta'}),
+            'seccion': forms.Select(attrs={'class': 'form-control form-control-sm border-3', 'placeholder': 'Selecciona una sección'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control form-control-sm font-semi-bold border-3 ', 'placeholder': 'Nombre de la pregunta'}),
             'obligatorio': forms.CheckboxInput(attrs={'class': 'checkbox-principal form-check-input'}),            
-            'row': forms.NumberInput(attrs={'class': 'form-control border-3', 'type': 'hidden'}),
-            'col': forms.NumberInput(attrs={'class': 'form-control border-3', 'type': 'hidden'}),
-            'tipo': forms.Select(attrs={'class': 'form-select border-3 elem-tipo-select', 'onchange': 'toggleElementoOpciones(this)', 'onload': 'toggleElementoOpciones(this)', 'placeholder': 'Tipo de pregunta'}),
+            'row': forms.NumberInput(attrs={'class': 'form-control form-control-sm border-3', 'type': 'hidden'}),
+            'col': forms.NumberInput(attrs={'class': 'form-control form-control-sm border-3', 'type': 'hidden'}),
+            'tipo': forms.Select(attrs={'class': 'form-select form-select-sm border-3 elem-tipo-select', 'onchange': 'toggleElementoOpciones(this)', 'onload': 'toggleElementoOpciones(this)', 'placeholder': 'Tipo de pregunta'}),
         }
         labels = {
             'seccion': 'Sección',
