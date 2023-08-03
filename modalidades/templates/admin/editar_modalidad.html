@@ -5,6 +5,11 @@
 {% endblock titulo %}
 
 {% block body %}
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
     <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
     <hr> -->
     <div class="rounded-2 p-1 mx-4" style="color: #676767;">
@@ -17,8 +22,8 @@
                 <hr>
             </div>
         </div>
-        <div class="border rounded-2 p-4 mx-4 mb-4">         
-            <form method="POST" enctype="multipart/form-data">
+        <div class="border rounded-2 p-4 mx-4 mb-4">  
+            <form action = '' method="POST" enctype="multipart/form-data">
                 {% csrf_token %}    
                 <div class="row">
                     <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
@@ -39,14 +44,64 @@
                     <p class="imagen-mods" style="padding-top: 5px; padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Descripción </p>
                     {{ form.descripcion}}
                 </div>
+            
                 <div class="row" style="padding-top: 40px; ">
                     <p class="documento-mods" style="display: inline-block; font-weight: 400; font-size: 17px; width:auto"> Documentos </p>
-                    <div class=" col-1 mx-auto" style="display: inline-block;margin-right: 0 !important;">
-                        <img src="/static/images/plus-circle.png" width="60px" class="btn btn-agregar" name="agregar">
+                    <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
+                        <button id = 'add-more' type="button" class="btn btn-guardar" name="agregar">Agregar</button>    
+                    </div>   
+                    <div class="row" id = 'documentos-list'>
+                        {% if formset %}
+                        {{ formset.management_form}}
+                        {% for documento in formset %}
+                        <div class="documento-form col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                            <div class="card">
+                                <div class="card-body" style="text-align: right; height: 230px;">
+                                    <a href=""  class="btn" style="background-color: #E9C3C1; color: #676767;">X</a>
+                                    <p class="card-title">{{ documento}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                            <div class="card">
+                                <div class="card-body" style="text-align: right; height: 230px;">
+                                    <a href="{% url 'modalidades:AConfigEditarModalidades' modalidad.id %}"  class="btn" style="background-color: #E9C3C1; color: #676767;">X</a>
+                                    <p class="card-title">{{ formset.empty_form.as_p }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
-            </form> 
+            </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('click', (event)=>{
+            if(event.target.id == 'add-more'){
+                add_new_form(event)
+            }
+        })
+
+        function add_new_form(event) {
+            if(event){ 
+                event.preventDefault() 
+            }
+            const totalNewForm = document.getElementById('id_form-TOTAL_FORMS')
+            const currentDocumentoForms = document.getElementsByClassName('documento-form')
+            const currenFormCount = currentDocumentoForms.length // + 1
+            const formCopyTarget = document.getElementById('documentos-list')
+            const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+            copyEmptyFormEl.setAttribute('class', 'documento-form col-sm-4')
+            copyEmptyFormEl.setAttribute('id', `form-${currenFormCount}`)
+            const regex = new RegExp('__prefix__', 'g')
+            copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currenFormCount)
+            totalNewForm.setAttribute('value', currenFormCount + 1)
+            //add the new empty form element to our html form
+            formCopyTarget.append(copyEmptyFormEl)
+        }
+    </script>
     
-{% endblock body %}
+{% endblock body %} 

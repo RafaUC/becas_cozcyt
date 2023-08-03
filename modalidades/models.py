@@ -32,12 +32,15 @@ class Modalidad(models.Model):
     def __str__(self):
         return self.nombre
     
+    def get_documentos_children(self):
+        return self.documento_set.all()
+    
 class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
     descripcion = models.CharField(max_length=255, verbose_name=_("Descripción"), null=False)
-    lookup_id = models.UUIDField(verbose_name=_("Lookup ID"), null=False)
-    order = models.IntegerField(verbose_name=_("Orden"), null=False)
+    lookup_id = models.UUIDField(verbose_name=_("Lookup ID"), null=True)
+    order = models.IntegerField(verbose_name=_("Orden"), null=True)
 
     class Meta:
         verbose_name = _("Documento")
