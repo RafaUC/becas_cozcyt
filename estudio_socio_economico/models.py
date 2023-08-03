@@ -5,6 +5,7 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from model_utils.managers import InheritanceManager
 from usuarios.models import Solicitante
+import uuid
 
 class Seccion(models.Model):
     TIPOS_CHOICES = (
@@ -14,13 +15,19 @@ class Seccion(models.Model):
 
     nombre = models.CharField(max_length=255)
     tipo = models.CharField(max_length=10, choices=TIPOS_CHOICES)
+    orden = models.IntegerField(verbose_name='orden', default=100_000)
 
     def __str__(self):
         return self.nombre
+    
+    class Meta:        
+        ordering = ['orden' ]
 
 
 class Opcion(models.Model):    
+    elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255, verbose_name='Nombre Opción')
+    orden = models.IntegerField(verbose_name='orden', default=100_000)
 
     def __str__(self):
         return self.nombre
@@ -28,6 +35,7 @@ class Opcion(models.Model):
     class Meta:
         verbose_name = 'Opción'
         verbose_name_plural = 'Opciones'
+        ordering = ['elemento','orden' ]
 
 
 #----------Respuestas-------------
@@ -87,11 +95,10 @@ class Elemento(models.Model):
 
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255, verbose_name='Nombre')
-    obligatorio = models.BooleanField(default=True, verbose_name='Obligatorio')
-    lookup_id = models.UUIDField(verbose_name='Lookup ID')
-    order = models.IntegerField(verbose_name='Orden')
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo')
-    opciones = models.ManyToManyField(Opcion)
+    obligatorio = models.BooleanField(default=True, verbose_name='Obligatorio')    
+    row = models.IntegerField(verbose_name='row', default=100_000)
+    col = models.IntegerField(verbose_name='col', default=100_000)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo')    
 
     def __str__(self):
         return self.nombre
@@ -112,4 +119,5 @@ class Elemento(models.Model):
 
     class Meta:
         verbose_name = 'Elemento'
-        verbose_name_plural = 'Elementos'
+        verbose_name_plural = 'Elementos'        
+        ordering = ['seccion','row', 'col', ]

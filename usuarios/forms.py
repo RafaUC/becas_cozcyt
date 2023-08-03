@@ -82,7 +82,7 @@ class SolicitanteForm(forms.ModelForm):
             'colonia': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la colonia'}),
             'calle': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la calle'}),
             'numero': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el número'}),
-            'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeydown': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
             'tel_cel': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
             'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
             'grado': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
