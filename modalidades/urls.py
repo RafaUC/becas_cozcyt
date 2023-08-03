@@ -13,6 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.urls import path
+from . import views, viewsAdmin
 
 app_name = 'modalidades'
-urlpatterns = []
+urlpatterns = [
+    path('administracion/configuracion/modalidades', viewsAdmin.configModalidades, name = 'AConfigModalidades'),
+    path('administracion/configuracion/modalidades/agregar_modalidad', viewsAdmin.agregarModalidad, name = 'AConfigAgregarModalidad'),
+    path('eliminar_modalidad/<modalidad_id>', viewsAdmin.eliminarModalidad, name = 'AConfigEliminarModalidades'),
+    path('editar_modalidad/<modalidad_id>', viewsAdmin.editarModalidad, name = 'AConfigEditarModalidades'),
+    path('editar_modalidad/<documento_id>', viewsAdmin.eliminarDocumento, name = 'AConfigEliminarDocumento'),
+]

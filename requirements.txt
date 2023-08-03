@@ -6,3 +6,4 @@ mysqlclient==2.1.0
 sqlparse ==0.4.2
 django-filter==21.1
 django-model-utils==4.3.1
+django-htmx
