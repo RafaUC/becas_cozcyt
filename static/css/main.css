@@ -290,6 +290,10 @@ body {
   cursor: move;  
 }
 
+.handle3 {
+  cursor: move;  
+}
+
 .nav .nav-link.active {
   border-left: 12px solid var(--pagina-principal); 
   background-color: var(--pagina-fuerte);
