@@ -160,4 +160,4 @@ EMAIL_HOST_PASSWORD = 'osrruvryhaqpmegi'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-PASSWORD_RESET_TIMEOUT = 14400
+PASSWORD_RESET_TIMEOUT = 86400 #El usuario cuenta con 24 horas para confirmar su cuenta.
