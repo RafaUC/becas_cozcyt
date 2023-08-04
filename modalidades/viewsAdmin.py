@@ -54,12 +54,10 @@ def editarModalidad(request, modalidad_id):
         return redirect(url)
 
     obj = Modalidad.objects.get(pk = modalidad_id)
-    print('modalidadID', modalidad_id)
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
     #formset = modelformset_factory(Model, form=ModelForm, extra=0)
     DocumetoModalidadFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=0)
     qs = obj.get_documentos_children()
-    print('cm,dcm', qs)
     formset = DocumetoModalidadFormSet(request.POST or None, queryset = qs)
     context = {
         'modalidad' : obj , 
