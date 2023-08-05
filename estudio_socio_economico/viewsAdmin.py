@@ -28,10 +28,51 @@ def configEstudio(request):
             newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
             dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
 
-    if request.method == 'POST':                       
-        seccionFormset = SeccionFormSet(request.POST, prefix='seccion_formset')  
-        seccionFormset.is_valid()
+
+    if request.method == 'POST':  
+        todoValido = True  
+        dictElemForm = {}   #diccionario que contiene todos los formset de elementos
+        dictOpcionForm = {}   #diccionario que contiene todos los formset de objetos             
         
+        #obtenemos los formset de secciones, elementos y opciones y hacemos todas las validaciones
+        seccionFormset = SeccionFormSet(request.POST, prefix='seccion_formset')  
+        if not seccionFormset.is_valid():
+            todoValido = False
+        for seccion in seccionFormset.forms:
+            seccionInstancia = seccion.instance     
+            seccionFormsetId = (seccion.prefix.split('-').pop())
+            elementoFormset = ElementoFormSet(request.POST, instance=seccionInstancia, prefix='elemento_formset-%s' % seccionFormsetId)                                                     
+            if not elementoFormset.is_valid(): #generamos el cleaned data
+                todoValido = False
+            dictElemForm[seccion.prefix] = elementoFormset    
+
+            #obtenemos el opcionformset  de cada elemento
+            for elemento in elementoFormset.forms: 
+                elemInstancia = elemento.instance
+                elemFormsetId = elemento.prefix.split('-') 
+                newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
+                opcionFormset = OpcionFormSet(request.POST, instance=elemInstancia, prefix='opcion_formset-%s' % newId)     
+                if not opcionFormset.is_valid(): #generamos el cleaned data
+                    todoValido = False
+                dictOpcionForm[elemento.prefix] = opcionFormset   #añadimos el opcionFormset a el diccionario de opcionesformset
+
+                #verificamos que un formulario vacio no tenga formularios dependientes de el con datos
+                #si es asi, no es valido, y agregamos los errores manualmente
+                if (elemento.cleaned_data and not seccion.cleaned_data and not elemento.cleaned_data['DELETE']):
+                    todoValido = False  
+                    seccion.cleaned_data['error'] = 'Los campos de la sección son obligatorios'
+                    seccion.add_error(None, seccion.cleaned_data['error'])
+                for opcionForm in opcionFormset:
+                    if (opcionForm.cleaned_data and not elemento.cleaned_data and not opcionForm.cleaned_data['DELETE']):
+                        todoValido = False  
+                        elemento.cleaned_data['error'] = 'Los campos de la pregunta son obligatorios'
+                        elemento.add_error(None, elemento.cleaned_data['error'])
+                    if (opcionForm.cleaned_data and not seccion.cleaned_data and not opcionForm.cleaned_data['DELETE']):
+                        todoValido = False              
+                        seccion.cleaned_data['error'] = 'Los campos de la sección son obligatorios'
+                        seccion.add_error(None, seccion.cleaned_data['error'])
+        
+        #los formularios de los formset se reordenan para que el formulario extra default quede ultimo        
         non_empty_forms = []
         empty_forms = []
         for form in seccionFormset.forms:                    
@@ -39,117 +80,50 @@ def configEstudio(request):
                 non_empty_forms.append(form)
             else:
                 form.childAsinfo = 'on'
-                empty_forms.append(form)
-        # Unir ambas listas para tener los formularios no vacíos al principio y los vacíos al final
-        ordered_forms = non_empty_forms + empty_forms                
-        # Actualizar el formset con la nueva lista de formularios
-        seccionFormset.forms = ordered_forms                        
+                empty_forms.append(form)        
+        ordered_forms = non_empty_forms + empty_forms                        
+        seccionFormset.forms = ordered_forms     
+                   
+        for elementoFormset in dictElemForm.values():             
+           
+            non_empty_forms = []
+            empty_forms = []
+            for form in elementoFormset.forms:                    
+                if form.cleaned_data:
+                    non_empty_forms.append(form)
+                else:
+                    empty_forms.append(form)            
+            ordered_forms = non_empty_forms + empty_forms                            
+            elementoFormset.forms = ordered_forms    
 
-        seccionFormset.is_valid()
+        for opcionFormset in dictOpcionForm.values():           
+                    
+            non_empty_forms = []
+            empty_forms = []
+            for form in opcionFormset.forms:                    
+                if form.cleaned_data:
+                    non_empty_forms.append(form)
+                else:
+                    empty_forms.append(form)            
+            ordered_forms = non_empty_forms + empty_forms                            
+            opcionFormset.forms = ordered_forms                                                                       
+
+        #imprimir datos para debug 
+        #'''
+        print('\n\n\n\n\nInicio Debug')
         for seccion in seccionFormset:
+            print('\n-----seccion '+seccion.prefix+' -----')
             print(seccion.cleaned_data)
+            for elemento in dictElemForm[seccion.prefix]:
+                print('\n'+elemento.prefix)
+                print(elemento.cleaned_data)
+                for opcion in dictOpcionForm[elemento.prefix]:
+                    print(opcion.prefix)
+                    print(opcion.cleaned_data) #'''
 
-        if seccionFormset.is_valid(): # and elementoFormset.is_valid():
-            print('secciones es valida')
-            todoValido = True                                
-        dictElemForm = {}
-        dictOpcionForm = {}
-        
-        for seccion in seccionFormset.forms: 
-            seccionInstancia = seccion.instance
-            print(seccion.cleaned_data)    
-
-            if (seccion.cleaned_data and seccion.cleaned_data['DELETE']):
-                if seccionInstancia.id is not None:
-                    seccionInstancia.delete()
-            else :
-                
-                print('dentro de seccion : ')                                       
-                print(seccion.cleaned_data)                    
-                seccionFormsetId = (seccion.prefix.split('-').pop())
-                elementoFormset = ElementoFormSet(request.POST, prefix='elemento_formset-%s' % seccionFormsetId, instance=seccionInstancia)                                                     
-                elementoFormset.is_valid()
-                
-                print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-                print(elementoFormset.cleaned_data)
-
-                non_empty_forms = []
-                empty_forms = []
-                for form in elementoFormset.forms:                    
-                    if form.cleaned_data:
-                        non_empty_forms.append(form)
-                    else:
-                        empty_forms.append(form)
-                # Unir ambas listas para tener los formularios no vacíos al principio y los vacíos al final
-                ordered_forms = non_empty_forms + empty_forms                
-                # Actualizar el formset con la nueva lista de formularios
-                elementoFormset.forms = ordered_forms               
-                dictElemForm[seccion.prefix] = elementoFormset    
-
-                if elementoFormset.is_valid() and seccion.is_valid(): 
-                    if (seccion.cleaned_data ): #La seccion no esta en blanco
-                        #seccion.save()
-                        pass
-                    print('elementos es valida')                                       
-                else:   
-                    print('elemntos no valido')
-                    print(elementoFormset.errors)
-                    todoValido = False  
-                
-                
-                for elemento in elementoFormset.forms: 
-                    elementoInstancia = elemento.instance
-                    print(elemento.cleaned_data)                        
-
-                    if (elemento.cleaned_data and elemento.cleaned_data['DELETE']):
-                        if elementoInstancia.id is not None:
-                            elementoInstancia.delete()
-                    else :
-                        print('dentro de elemento : ')   
-                        print(elemento.cleaned_data)    
-                        elemFormsetId = elemento.prefix.split('-') 
-                        newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
-                        opcionFormset = OpcionFormSet(request.POST, instance=elementoInstancia, prefix='opcion_formset-%s' % newId)     
-                        opcionFormset.is_valid()
-
-                        for opcion in opcionFormset:
-                            print(opcion.cleaned_data)
-
-                        non_empty_forms = []
-                        empty_forms = []
-                        for form in opcionFormset.forms:                    
-                            if form.cleaned_data:
-                                non_empty_forms.append(form)
-                            else:
-                                empty_forms.append(form)
-                        # Unir ambas listas para tener los formularios no vacíos al principio y los vacíos al final
-                        ordered_forms = non_empty_forms + empty_forms                
-                        # Actualizar el formset con la nueva lista de formularios
-                        opcionFormset.forms = ordered_forms               
-                        dictOpcionForm[elemento.prefix] = opcionFormset    
-
-                        if opcionFormset.is_valid() and elemento.is_valid() and seccion.is_valid(): 
-                            if (elemento.cleaned_data and seccion.cleaned_data ):
-                                print('elementos es valida')     
-                                #elemento.save()   
-                                #opcionFormset.save()        
-                                                      
-                        else:   
-                            print('opciones no valido')
-                            print(opcionFormset.errors)
-                            todoValido = False  
-
-                        if (elemento.cleaned_data and not seccion.cleaned_data):
-                            todoValido = False  
-                        for opcionForm in opcionFormset:
-                            if (opcionForm.cleaned_data and not elemento.cleaned_data):
-                                todoValido = False  
-  
-        #error se crean duplicados de los items validos si es que falla la rutina de validacion para el hijo de otro item
-        print("todo valido: ")
-        print(todoValido)
-
-        if todoValido:     
+        if todoValido: 
+            #'''    
+            print('=============== Todo es valido ===============\n') #'''
             seccionFormset.save()           
             for elemFormset in dictElemForm.values():                
                 if elemFormset.instance.id is not None:
@@ -159,8 +133,18 @@ def configEstudio(request):
                     OpcionFormset.save()
             return redirect('estudioSE:AConfigEstudio')  
         else:
-            print('seccion no valid')
+            #imprimir datos pra debug
+            #'''
+            print('\n--------------- Todo no valido ---------------\n')     
+            print(seccionFormset.prefix)
             print(seccionFormset.errors)
+            for elemFormset in dictElemForm.values():                                
+                print(elemFormset.prefix)
+                print(elemFormset.errors)
+            for OpcionFormset in dictOpcionForm.values():      
+                print(OpcionFormset.prefix)          
+                print(OpcionFormset.errors) #'''
+            print('--------------- Todo no valido ---------------\n')     
             
         
 

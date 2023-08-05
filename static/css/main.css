@@ -170,8 +170,8 @@ body {
   border: 1px dashed #000; /* Puedes ajustar el color y el grosor según tus necesidades */
 }
 
-.altura-min-100px {
-  min-height: 30px;
+.conte-sort {
+  min-height: 15px;
 }
 
 /* Login */
