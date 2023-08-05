@@ -38,6 +38,7 @@ def configEstudio(request):
             if form.cleaned_data:
                 non_empty_forms.append(form)
             else:
+                form.childAsinfo = 'on'
                 empty_forms.append(form)
         # Unir ambas listas para tener los formularios no vacíos al principio y los vacíos al final
         ordered_forms = non_empty_forms + empty_forms                
@@ -69,8 +70,8 @@ def configEstudio(request):
                 elementoFormset = ElementoFormSet(request.POST, prefix='elemento_formset-%s' % seccionFormsetId, instance=seccionInstancia)                                                     
                 elementoFormset.is_valid()
                 
-                for elemento in elementoFormset:
-                    print(elemento.cleaned_data)
+                print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+                print(elementoFormset.cleaned_data)
 
                 non_empty_forms = []
                 empty_forms = []
@@ -87,7 +88,8 @@ def configEstudio(request):
 
                 if elementoFormset.is_valid() and seccion.is_valid(): 
                     if (seccion.cleaned_data ): #La seccion no esta en blanco
-                        seccion.save()
+                        #seccion.save()
+                        pass
                     print('elementos es valida')                                       
                 else:   
                     print('elemntos no valido')
@@ -129,20 +131,32 @@ def configEstudio(request):
                         if opcionFormset.is_valid() and elemento.is_valid() and seccion.is_valid(): 
                             if (elemento.cleaned_data and seccion.cleaned_data ):
                                 print('elementos es valida')     
-                                elemento.save()   
-                                opcionFormset.save()                                  
+                                #elemento.save()   
+                                #opcionFormset.save()        
+                                                      
                         else:   
                             print('opciones no valido')
                             print(opcionFormset.errors)
                             todoValido = False  
-                            
 
-                
-        
+                        if (elemento.cleaned_data and not seccion.cleaned_data):
+                            todoValido = False  
+                        for opcionForm in opcionFormset:
+                            if (opcionForm.cleaned_data and not elemento.cleaned_data):
+                                todoValido = False  
+  
+        #error se crean duplicados de los items validos si es que falla la rutina de validacion para el hijo de otro item
         print("todo valido: ")
         print(todoValido)
 
-        if todoValido:                
+        if todoValido:     
+            seccionFormset.save()           
+            for elemFormset in dictElemForm.values():                
+                if elemFormset.instance.id is not None:
+                    elemFormset.save()
+            for OpcionFormset in dictOpcionForm.values():
+                if OpcionFormset.instance.id is not None:
+                    OpcionFormset.save()
             return redirect('estudioSE:AConfigEstudio')  
         else:
             print('seccion no valid')

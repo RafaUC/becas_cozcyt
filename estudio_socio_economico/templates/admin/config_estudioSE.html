@@ -78,18 +78,15 @@
                 divOpcion.appendChild(inputEliminar);
 
                 // Ocultar el divPadre del formset                
-                divOpcion.style.display = "none";
-                console.log(divOpcion)
+                divOpcion.style.display = "none";                
             }
             
         }
 
 
         function ocultarOpcionExtra(elemntoDiv) {
-            const divPadre = document.getElementById(elemntoDiv);               
-            console.log(divPadre)
-            const divOpciones = divPadre.getElementsByClassName("cont-opcion");   
-            console.log(divOpciones)                     
+            const divPadre = document.getElementById(elemntoDiv);                           
+            const divOpciones = divPadre.getElementsByClassName("cont-opcion");                          
             const divOpcion = divOpciones[divOpciones.length-1];
             divOpcion.id = `${divOpcion.id}-baseOpcionForm`;
             // Obtener el número de formularios presentes en el formset    
@@ -118,21 +115,18 @@
             // Obtener el número de formularios presentes en el formset    
                                                     
             // Ocultar el divPadre del formset                        
-            divSeccion.style.display = "none";                              
+            //divSeccion.style.display = "none";                              
         }
             
         
 
-        function updateOpcionOrden(elemento){
-            console.log('updateOpcionOrden')
+        function updateOpcionOrden(elemento){            
             //obtiene todos los divs contenedores de opciones
             const opciones = elemento.getElementsByClassName("cont-opcion");
             for (let i = 0; i < opciones.length; i++) {
                 const contOpcion = opciones[i];
                 const nombreInput = contOpcion.querySelector("input[id^='id_opcion_formset-'][id$='-nombre']");                    
-                const ordenInput = contOpcion.querySelector("input[id^='id_opcion_formset-'][id$='-orden']");                    
-                console.log(nombreInput)
-                console.log(ordenInput)
+                const ordenInput = contOpcion.querySelector("input[id^='id_opcion_formset-'][id$='-orden']");                                   
                 
                 if (nombreInput.value.trim() !== "") {
                     ordenInput.value = i + 1; // El número de elemento cont-opcion
@@ -141,8 +135,7 @@
             }
         }
 
-        function updateRowColValues(divPadre){
-            console.log('updateRowColValues')
+        function updateRowColValues(divPadre){            
             // Obtener el elemento padre (parentDiv)            
             const parentDiv = document.getElementById(divPadre);
 
@@ -165,13 +158,7 @@
                     const nombre = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-nombre']");
                     const obligatorio = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-obligatorio']");
                     const opcOtro = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-opcionOtro']");
-                    const tipo = contElemDiv.querySelector("select[id^='id_elemento_formset-'][id$='-tipo']");                    
-                    console.log(rowInput)
-                    console.log(colInput)
-                    console.log(nombre)
-                    console.log(obligatorio)
-                    console.log(opcOtro)
-                    console.log(tipo)
+                    const tipo = contElemDiv.querySelector("select[id^='id_elemento_formset-'][id$='-tipo']");                                      
 
                     if (nombre.value.trim() !== "" || tipo.value.trim() !== "" || obligatorio.checked !== true || opcOtro.checked !== true ) {
                         // Actualizar los valores de los campos hidden
@@ -183,8 +170,7 @@
             }
         }
 
-        function updateSeccionOrden(){
-            console.log('updateSeccionOrden')
+        function updateSeccionOrden(){            
             //obtiene todos los divs contenedores de opciones            
             const secciones = document.getElementsByClassName("cont-seccion");
             for (let i = 0; i < secciones.length; i++) {
@@ -192,10 +178,7 @@
                 const ordenInput = contSeccion.querySelector("input[id^='id_seccion_formset-'][id$='-orden']");                    
 
                 const nombre = contSeccion.querySelector("input[id^='id_seccion_formset-'][id$='-nombre']");                
-                const tipo = contSeccion.querySelector("input[type='radio'][name^='seccion_formset-'][name$='-tipo']:checked");    
-                console.log(ordenInput)
-                console.log(nombre)
-                console.log(tipo)
+                const tipo = contSeccion.querySelector("input[type='radio'][name^='seccion_formset-'][name$='-tipo']:checked");                 
                 
                 if (nombre.value.trim() !== "" || tipo.value.trim() !== "" ) {
                     ordenInput.value = i + 1; // El número de elemento cont-opcion
@@ -367,14 +350,13 @@
             // Obtener el total de formularios existentes en el formset
             const total_elementos = divSeccion.querySelector(`[id^="id_elemento_formset-"][id$="-TOTAL_FORMS"]`);            
             const elemnto_form_count = parseInt(total_elementos.value);
-            total_elementos.value = elemnto_form_count + 1;       
-            console.log(elemnto_form_count);          
+            total_elementos.value = elemnto_form_count + 1;                       
             
             // Obtener el formulario original que será clonado   
             
             const formularioOriginal = divSeccion.querySelector(`[id^="elem-"][id$="-baseElemForm"]`);
             const idParts = total_elementos.id.split('-');     
-            console.log(formularioOriginal);
+            
             // Clonar el formulario original y cambiar su id y otros atributos para que sea único
             const nuevoFormulario = formularioOriginal.cloneNode(true);
             nuevoFormulario.style.display = "inline-block";
@@ -418,16 +400,14 @@
                 elemento.setAttribute("for", nuevoId);                
             });
 
-            // Agregar el nuevo formulario al div padre
-            console.log(nuevoFormulario);
+            // Agregar el nuevo formulario al div padre            
             ultimaFila.appendChild(nuevoFormulario);   
             revisarFilasVacias(divSeccion.id)    
-            const contOPciones = nuevoFormulario.querySelector('.conte-opc-sort');   
-            console.log(contOPciones)
+            const contOPciones = nuevoFormulario.querySelector('.conte-opc-sort');               
             //new Sortable(contOPciones, {animation: 150});
             initializeSortable(contOPciones.id, `${idParts[1]}-${elemnto_form_count}`, '.handle3', 150, 'ghost'); 
             updateTooltips();
-            //updateRowColValues(parentDiv)      //si esta desactivado omite validar el nuevo si esta vacio
+            updateRowColValues(divSeccion.id)      //si esta desactivado omite validar el nuevo si esta vacio
         }
 
 
@@ -441,15 +421,12 @@
             // Obtener el total de formularios existentes en el formset                                                
             const total_elementos = divElemento.querySelector(`[id^="id_opcion_formset-"][id$="-TOTAL_FORMS"]`);
             const elemnto_form_count = parseInt(total_elementos.value);
-            total_elementos.value = elemnto_form_count + 1;       
-            console.log(total_elementos);  
-            console.log(elemnto_form_count);          
+            total_elementos.value = elemnto_form_count + 1;                         
             
             // Obtener el formulario original que será clonado   
             
             const formularioOriginal = divElemento.querySelector(`[id^="opcion-"][id$="-baseOpcionForm"]`);
-            const idParts = total_elementos.id.split('-');                 
-            console.log(formularioOriginal);
+            const idParts = total_elementos.id.split('-');                             
             // Clonar el formulario original y cambiar su id y otros atributos para que sea único
             const nuevoFormulario = formularioOriginal.cloneNode(true);
             nuevoFormulario.style.display = "inline-block";
@@ -471,17 +448,12 @@
                 }
             });
 
-            // Agregar el nuevo formulario al div padre
-            console.log(nuevoFormulario);
+            // Agregar el nuevo formulario al div padre            
             contOPciones.appendChild(nuevoFormulario);                           
         }
 
 
-        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass) {  
-            const eprueba = document.querySelectorAll(`#${elementId}`);
-            console.log('prueba initialize mismo id:' + eprueba.length)       
-            console.log(elementId)  
-            console.log(eprueba)                      
+        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass) {                                     
             const element = document.getElementById(elementId);
             let sortable = Sortable.create(element, {
             group: groupName,
@@ -496,8 +468,7 @@
                 
             },
             onEnd: function(evt){    
-                const clist = evt.item.classList;   
-                console.log(clist)                   
+                const clist = evt.item.classList;                   
                 if (clist.contains('cont-elem') ) {    
                     console.log("Actualizando posicion Elemnto:", evt.newIndex);                                 
                     const pDiv = evt.item.closest('.cont-seccion');   
@@ -529,6 +500,7 @@
 
         function toggleElementoOpciones(selectObject) {
             const divElement = selectObject.closest('.cont-elem');          
+            const divSeccion = divElement.closest('.cont-seccion');      
             const boton = divElement.querySelector('.btn-a-opcion');            
             const obligCh = divElement.querySelector('.obligatorio-check');  
             const opcOtroCh = divElement.querySelector('.opcOtro-check');  
@@ -556,6 +528,7 @@
             const selectedText = $(selectObject).find('option[value="' + selectedValue + '"]').text();
             $(selectObject).attr('data-bs-original-title', selectedText);                                           
             $(selectObject).tooltip('hide');
+            updateRowColValues(divSeccion.id)
         }
 
         function updateTooltips(){
@@ -597,7 +570,7 @@
                     <div class="row m-0 pt-2 text-center pagina-blanco"> 
                         <i class="handle fa fa-bars" aria-hidden="true"></i>
                     </div>          
-                    <div class="row m-0 mb-2 pb-3 align-items-center pagina-blanco">    
+                    <div class="row m-0 pb-3 align-items-center pagina-blanco">    
                         {% for hidden in seccion.hidden_fields %}
                             {{ hidden }}
                             <div class="text-danger">
@@ -620,7 +593,7 @@
                                     {% if forloop.counter0 > 0 %}
                                         {{ choice }}                                    
                                     {% else %}
-                                        <div style="display: inline-block;">
+                                        <div style="display: none;">
                                             {{ choice }}    
                                         </div>
                                     {% endif %}
