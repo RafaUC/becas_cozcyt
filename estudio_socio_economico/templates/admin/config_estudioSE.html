@@ -28,16 +28,27 @@
                 // Ocultar el divPadre del formset                
                 divSeccion.style.display = "none";
 
+                //marcar para eliminacion sus secciones dependientes
+                const elementos = divSeccion.getElementsByClassName('cont-elem');
+                for (let i = 0; i < elementos.length; i++) {
+                    eliminarElemento(elementos[i],true);
+                }
+
             }
             
         }
 
-        function eliminarElemento(elimBtn) {
+        function eliminarElemento(elimBtn, force) {
             //error reorden done
             const divElement = elimBtn.closest('.cont-elem');         
             // Obtener el número de formularios presentes en el formset    
+            let confirmacion;
+            if (force === undefined){
+                confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
+            }else {
+                confirmacion = true;
+            }
             
-            const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
                 const idElemento = divElement.querySelector(`[id^="id_elemento_formset-"][id$="-id"]`);
@@ -57,15 +68,24 @@
                 revisarFilasVacias(divParentDiv.id)
                 updateRowColValues(divParentDiv.id)
             }
+
+            const opciones = divElement.getElementsByClassName('cont-opcion');
+            for (let i = 0; i < opciones.length; i++) {
+                eliminarOpcion(opciones[i],true);
+            }
             
         }
 
-        function eliminarOpcion(elimBtn) {
+        function eliminarOpcion(elimBtn, force) {
             //error reorden done
             const divOpcion = elimBtn.closest('.cont-opcion');         
             // Obtener el número de formularios presentes en el formset    
-            
-            const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta opción?");
+            let confirmacion;
+            if (force === undefined){
+                confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta opción?");
+            }else {
+                confirmacion = true;
+            }
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
                 const idOpcion = divOpcion.querySelector(`[id^="id_opcion_formset-"][id$="-id"]`);
@@ -115,7 +135,7 @@
             // Obtener el número de formularios presentes en el formset    
                                                     
             // Ocultar el divPadre del formset                        
-            //divSeccion.style.display = "none";                              
+            divSeccion.style.display = "none";                              
         }
             
         
@@ -215,24 +235,29 @@
             if (ultimoRow !== undefined){
                 ultimoId = ultimoRow.id.split('-').pop(); // Extraer el número después del último guion
             } else {
-                ultimoId = '1';
+                ultimoId = '0';
             }
-            
-            
+                        
             // Crear un nuevo elemento row
             const nuevoId = parseInt(ultimoId) + 1;
             const nuevoRow = document.createElement('div');
+            const nuevoRow2 = document.createElement('div');
             const rowid = parentDiv.split('-').pop();
             nuevoRow.id = `elementos-${rowid}-${nuevoId}`;       
+            nuevoRow2.id = `elementos-${rowid}-${nuevoId+1}`;   
             nuevoRow.classList.add('row', 'conte-sort', 'px-1', 'm-0', 'pagina-fondo', 'altura-min-100px');
+            nuevoRow2.classList.add('row', 'conte-sort', 'px-1', 'm-0', 'pagina-fondo', 'altura-min-100px');
                              
-
             // Insertar el nuevo script dentro del nuevoRow
             nuevoRow.appendChild(document.createElement('script'));
+            nuevoRow2.appendChild(document.createElement('script'));
 
             // Insertar el nuevo row dentro del divPadre            
-            divPadre.insertBefore(nuevoRow, botonAElem);            
+            divPadre.insertBefore(nuevoRow, botonAElem);   
+            const newfilas = divPadre.getElementsByClassName('conte-sort');         
+            divPadre.insertBefore(nuevoRow2, newfilas[0]);    
             initializeSortable(nuevoRow.id, rowid, '.handle2', 150, 'ghost');            
+            initializeSortable(nuevoRow2.id, rowid, '.handle2', 150, 'ghost');            
         }
 
         function revisarFilasVacias(parentDiv) {           
@@ -335,6 +360,7 @@
             divPadre.insertBefore(nuevoFormulario, botonASeccion);       
             revisarFilasVacias(nuevoFormulario.id);
             updateTooltips();
+            updateSeccionOrden();
         }
 
 
@@ -581,7 +607,8 @@
                             {{ seccion.nombre.label }}    
                             {{ seccion.nombre }}      
                             <div class="text-danger">
-                                {{ seccion.nombre.errors }}  
+                                {{ seccion.nombre.errors }} 
+                                {{ seccion.non_field_errors }}
                             </div>                                                  
                         </div>
                         <div class="col-auto text-center">
@@ -640,6 +667,7 @@
                                                                     {{ elemento.nombre }}  
                                                                     <div class="text-danger">
                                                                         {{ elemento.nombre.errors }}
+                                                                        {{ elemento.non_field_errors }}
                                                                     </div>                                                                                                             
                                                                 </div>     
                                                                 <div class="col-auto p-0 m-0">                                                                    
@@ -703,6 +731,7 @@
                                                                                                 {{ opcion.nombre }}
                                                                                                 <div class="text-danger font-xs font-bold">
                                                                                                     {{ opcion.nombre.errors }}
+                                                                                                    {{ opcion.non_field_errors }}
                                                                                                 </div>   
                                                                                             </div>          
                                                                                             <button type="button" onclick="eliminarOpcion(this)" class="btn col-auto p-0 m-0 ms-1 fa fa-times font-xs" title="Eliminar" data-bs-original-title="Eliminar" aria-hidden="true"></button>                                                                                      
