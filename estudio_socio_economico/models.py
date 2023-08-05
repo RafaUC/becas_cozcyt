@@ -96,6 +96,7 @@ class Elemento(models.Model):
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255, verbose_name='Nombre')
     obligatorio = models.BooleanField(default=True, verbose_name='Obligatorio')    
+    opcionOtro = models.BooleanField(default=True, verbose_name='Opcion Otro')    
     row = models.IntegerField(verbose_name='row', default=100_000)
     col = models.IntegerField(verbose_name='col', default=100_000)
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo')    

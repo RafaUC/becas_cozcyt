@@ -41,11 +41,12 @@ class OpcionForm(forms.ModelForm):
 class ElementoForm(forms.ModelForm):
     class Meta:
         model = Elemento
-        fields = ['seccion', 'nombre', 'obligatorio', 'row', 'col', 'tipo',]
+        fields = ['seccion', 'nombre', 'obligatorio', 'opcionOtro', 'row', 'col', 'tipo',]
         widgets = {
             'seccion': forms.Select(attrs={'class': 'form-control form-control-sm border-3', 'placeholder': 'Selecciona una sección'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control form-control-sm font-semi-bold border-3 ', 'placeholder': 'Nombre de la pregunta'}),
             'obligatorio': forms.CheckboxInput(attrs={'class': 'checkbox-principal form-check-input'}),            
+            'opcionOtro': forms.CheckboxInput(attrs={'class': 'checkbox-principal form-check-input', 'title': 'Habilitar Opción Otro', 'data-bs-original-title': 'Habilitar Opción Otro'}),            
             'row': forms.NumberInput(attrs={'class': 'form-control form-control-sm border-3', 'type': 'hidden'}),
             'col': forms.NumberInput(attrs={'class': 'form-control form-control-sm border-3', 'type': 'hidden'}),
             'tipo': forms.Select(attrs={'class': 'form-select form-select-sm border-3 elem-tipo-select', 'onchange': 'toggleElementoOpciones(this)', 'onload': 'toggleElementoOpciones(this)', 'placeholder': 'Tipo de pregunta'}),
@@ -53,7 +54,8 @@ class ElementoForm(forms.ModelForm):
         labels = {
             'seccion': 'Sección',
             'nombre': 'Nombre de la Pregunta',
-            'obligatorio': 'Obligatorio',            
+            'obligatorio': 'Obligatorio',        
+            'opcionOtro': 'Opc. Otro',
             'row': 'row',
             'col': 'col',
             'tipo': 'Tipo de Pregunta',            

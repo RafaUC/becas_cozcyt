@@ -9,14 +9,15 @@
     <script>
 
         function eliminarSeccion(elimBtn) {
-            //error reorden
+            //error reorden done
             const divSeccion = elimBtn.closest('.cont-seccion');              
             // Obtener el número de formularios presentes en el formset    
             
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta Seccion y todas sus preguntas?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
-                const idParts = divSeccion.id.split('-');       
+                const idSeccion = divSeccion.querySelector(`[id^="id_seccion_formset-"][id$="-id"]`);
+                const idParts = idSeccion.id.split('-');       
                 const inputEliminar = document.createElement("input");
                 inputEliminar.type = "hidden";
                 inputEliminar.name = `seccion_formset-${idParts[1]}-DELETE`;
@@ -32,14 +33,15 @@
         }
 
         function eliminarElemento(elimBtn) {
-            //error reorden
+            //error reorden done
             const divElement = elimBtn.closest('.cont-elem');         
             // Obtener el número de formularios presentes en el formset    
             
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
-                const idParts = divElement.id.split('-');                
+                const idElemento = divElement.querySelector(`[id^="id_elemento_formset-"][id$="-id"]`);
+                const idParts = idElemento.id.split('-');                
                 const inputEliminar = document.createElement("input");
                 inputEliminar.type = "hidden";
                 inputEliminar.name = `elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
@@ -59,14 +61,15 @@
         }
 
         function eliminarOpcion(elimBtn) {
-            //error reorden
+            //error reorden done
             const divOpcion = elimBtn.closest('.cont-opcion');         
             // Obtener el número de formularios presentes en el formset    
             
             const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta opción?");
             if (confirmacion) {
                 // Crear el input para marcar el elemento para eliminar
-                const idParts = divOpcion.id.split('-');                
+                const idOpcion = divOpcion.querySelector(`[id^="id_opcion_formset-"][id$="-id"]`);
+                const idParts = idOpcion.id.split('-');                
                 const inputEliminar = document.createElement("input");
                 inputEliminar.type = "hidden";
                 inputEliminar.name = `opcion_formset-${idParts[1]}-${idParts[2]}-${idParts[3]}-DELETE`;
@@ -117,16 +120,20 @@
             // Ocultar el divPadre del formset                        
             divSeccion.style.display = "none";                              
         }
-                
+            
+        
+
         function updateOpcionOrden(elemento){
             console.log('updateOpcionOrden')
             //obtiene todos los divs contenedores de opciones
             const opciones = elemento.getElementsByClassName("cont-opcion");
             for (let i = 0; i < opciones.length; i++) {
                 const contOpcion = opciones[i];
-                const nombreInput = contOpcion.querySelector("input[id$='-nombre']");                    
-                const ordenInput = contOpcion.querySelector("input[id$='-orden']");                    
-                console.log(nombreInput.value)
+                const nombreInput = contOpcion.querySelector("input[id^='id_opcion_formset-'][id$='-nombre']");                    
+                const ordenInput = contOpcion.querySelector("input[id^='id_opcion_formset-'][id$='-orden']");                    
+                console.log(nombreInput)
+                console.log(ordenInput)
+                
                 if (nombreInput.value.trim() !== "") {
                     ordenInput.value = i + 1; // El número de elemento cont-opcion
                 }
@@ -135,6 +142,7 @@
         }
 
         function updateRowColValues(divPadre){
+            console.log('updateRowColValues')
             // Obtener el elemento padre (parentDiv)            
             const parentDiv = document.getElementById(divPadre);
 
@@ -151,20 +159,48 @@
                 // Actualizar los valores de los campos hidden dentro de cada "cont-elem" div
                 for (let j = 0; j < contElemDivs.length; j++) {
                     const contElemDiv = contElemDivs[j];
-                    const rowInput = contElemDiv.querySelector("input[id$='-row']");
-                    const colInput = contElemDiv.querySelector("input[id$='-col']");
+                    const rowInput = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-row']");
+                    const colInput = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-col']");
 
-                    const nombre = contElemDiv.querySelector("input[id$='-nombre']");
-                    const obligatorio = contElemDiv.querySelector("input[id$='-obligatorio']");
-                    const tipo = contElemDiv.querySelector("select[id$='-tipo']");                    
+                    const nombre = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-nombre']");
+                    const obligatorio = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-obligatorio']");
+                    const opcOtro = contElemDiv.querySelector("input[id^='id_elemento_formset-'][id$='-opcionOtro']");
+                    const tipo = contElemDiv.querySelector("select[id^='id_elemento_formset-'][id$='-tipo']");                    
+                    console.log(rowInput)
+                    console.log(colInput)
+                    console.log(nombre)
+                    console.log(obligatorio)
+                    console.log(opcOtro)
+                    console.log(tipo)
 
-                    if (nombre.value.trim() !== "" || tipo.value.trim() !== "" || obligatorio.checked !== true) {
+                    if (nombre.value.trim() !== "" || tipo.value.trim() !== "" || obligatorio.checked !== true || opcOtro.checked !== true ) {
                         // Actualizar los valores de los campos hidden
                         rowInput.value = i + 1; // El número de elemento conte-sort
                         colInput.value = j + 1; // La posición dentro de los que tienen el mismo row
                     }
                     
                 }
+            }
+        }
+
+        function updateSeccionOrden(){
+            console.log('updateSeccionOrden')
+            //obtiene todos los divs contenedores de opciones            
+            const secciones = document.getElementsByClassName("cont-seccion");
+            for (let i = 0; i < secciones.length; i++) {
+                const contSeccion = secciones[i];                                 
+                const ordenInput = contSeccion.querySelector("input[id^='id_seccion_formset-'][id$='-orden']");                    
+
+                const nombre = contSeccion.querySelector("input[id^='id_seccion_formset-'][id$='-nombre']");                
+                const tipo = contSeccion.querySelector("input[type='radio'][name^='seccion_formset-'][name$='-tipo']:checked");    
+                console.log(ordenInput)
+                console.log(nombre)
+                console.log(tipo)
+                
+                if (nombre.value.trim() !== "" || tipo.value.trim() !== "" ) {
+                    ordenInput.value = i + 1; // El número de elemento cont-opcion
+                }
+                
             }
         }
 
@@ -273,9 +309,7 @@
             const nuevoFormulario = formularioOriginal.cloneNode(true);
             nuevoFormulario.style.display = "block";
             nuevoFormulario.id = `parentDiv-${seccion_form_count}`;
-
-            // Agregar el nuevo formulario al div padre
-            divPadre.insertBefore(nuevoFormulario, botonASeccion);          
+              
 
             nuevoFormulario.querySelectorAll("input, select").forEach((elemento) => {
                 const name = elemento.getAttribute("name");
@@ -296,17 +330,14 @@
                 elemento.value = "";
                 }
             });
-            nuevoFormulario.querySelectorAll(".conte-sort, .cont-elem").forEach((elemento) => {
+            nuevoFormulario.querySelectorAll(".conte-sort, .cont-elem, .cont-opc, .conte-opc-sort, .cont-opcion").forEach((elemento) => {
                 const id = elemento.getAttribute("id");
 
                 const partes = id.split('-');                
                 partes[1] = seccion_form_count;
                 const nuevoId = partes.join('-');                
                 
-                elemento.setAttribute("id", nuevoId);
-                if (elemento.classList.contains("conte-sort")) {
-                    const parentDiv = elemento.closest('.cont-seccion');                                         
-                } 
+                elemento.setAttribute("id", nuevoId);                
             });
             nuevoFormulario.querySelectorAll("[for]").forEach((elemento) => {
                 const id = elemento.getAttribute("for");
@@ -317,7 +348,10 @@
                 
                 elemento.setAttribute("for", nuevoId);                
             });
+            // Agregar el nuevo formulario al div padre
+            divPadre.insertBefore(nuevoFormulario, botonASeccion);       
             revisarFilasVacias(nuevoFormulario.id);
+            updateTooltips();
         }
 
 
@@ -328,43 +362,71 @@
             const filas = divSeccion.getElementsByClassName('conte-sort');
             const ultimaFila = filas[filas.length-1];
             
-            //error reorden
-            const idParts = divSeccion.id.split('-');     
+            //error reorden done
+            
             // Obtener el total de formularios existentes en el formset
-            const total_elementos = document.getElementById(`id_elemento_formset-${idParts[1]}-TOTAL_FORMS`);            
+            const total_elementos = divSeccion.querySelector(`[id^="id_elemento_formset-"][id$="-TOTAL_FORMS"]`);            
             const elemnto_form_count = parseInt(total_elementos.value);
             total_elementos.value = elemnto_form_count + 1;       
             console.log(elemnto_form_count);          
             
             // Obtener el formulario original que será clonado   
             
-            const formularioOriginal = divSeccion.querySelector(`[id^="elem-${idParts[1]}"][id$="-baseElemForm"]`);
+            const formularioOriginal = divSeccion.querySelector(`[id^="elem-"][id$="-baseElemForm"]`);
+            const idParts = total_elementos.id.split('-');     
             console.log(formularioOriginal);
             // Clonar el formulario original y cambiar su id y otros atributos para que sea único
             const nuevoFormulario = formularioOriginal.cloneNode(true);
             nuevoFormulario.style.display = "inline-block";
             nuevoFormulario.id = `elem-${idParts[1]}-${elemnto_form_count}`;
+
             nuevoFormulario.querySelectorAll("input, select").forEach((elemento) => {
                 const name = elemento.getAttribute("name");
-
                 const partes = name.split('-');                
                 partes[2] = elemnto_form_count;
                 const nuevoName = partes.join('-');                
-
-
                 elemento.setAttribute("name", nuevoName);
-                elemento.setAttribute("id", `id_${nuevoName}`);
+
+                const id = elemento.getAttribute("id");
+                const partes2 = id.split('-');                
+                partes2[2] = elemnto_form_count;
+                const nuevoId = partes2.join('-');                                
+                elemento.setAttribute("id", nuevoId);
+
                 if (elemento.getAttribute("type") === "checkbox") {
                 elemento.checked = true;
                 } else if (elemento.getAttribute("type") === "text") {
                 elemento.value = "";
                 }
             });
+            nuevoFormulario.querySelectorAll(".cont-opc, .conte-opc-sort, .cont-opcion").forEach((elemento) => {
+                const id = elemento.getAttribute("id");
+
+                const partes = id.split('-');                
+                partes[2] = elemnto_form_count;
+                const nuevoId = partes.join('-');                
+                
+                elemento.setAttribute("id", nuevoId);                
+            });
+            nuevoFormulario.querySelectorAll("[for]").forEach((elemento) => {
+                const id = elemento.getAttribute("for");
+
+                const partes = id.split('-');                
+                partes[2] = elemnto_form_count;
+                const nuevoId = partes.join('-');                
+                
+                elemento.setAttribute("for", nuevoId);                
+            });
 
             // Agregar el nuevo formulario al div padre
             console.log(nuevoFormulario);
             ultimaFila.appendChild(nuevoFormulario);   
             revisarFilasVacias(divSeccion.id)    
+            const contOPciones = nuevoFormulario.querySelector('.conte-opc-sort');   
+            console.log(contOPciones)
+            //new Sortable(contOPciones, {animation: 150});
+            initializeSortable(contOPciones.id, `${idParts[1]}-${elemnto_form_count}`, '.handle3', 150, 'ghost'); 
+            updateTooltips();
             //updateRowColValues(parentDiv)      //si esta desactivado omite validar el nuevo si esta vacio
         }
 
@@ -375,17 +437,18 @@
             const divElemento = btnAgregar.closest('.cont-elem');                 
             const contOPciones = divElemento.querySelector('.conte-opc-sort');            
             
-            //error reorden
-            const idParts = divElemento.id.split('-');     
-            // Obtener el total de formularios existentes en el formset
-            const total_elementos = document.getElementById(`id_opcion_formset-${idParts[1]}-${idParts[2]}-TOTAL_FORMS`);            
+            //error reorden done          
+            // Obtener el total de formularios existentes en el formset                                                
+            const total_elementos = divElemento.querySelector(`[id^="id_opcion_formset-"][id$="-TOTAL_FORMS"]`);
             const elemnto_form_count = parseInt(total_elementos.value);
             total_elementos.value = elemnto_form_count + 1;       
+            console.log(total_elementos);  
             console.log(elemnto_form_count);          
             
             // Obtener el formulario original que será clonado   
             
-            const formularioOriginal = divElemento.querySelector(`[id^="opcion-${idParts[1]}-${idParts[2]}-"][id$="-baseOpcionForm"]`);
+            const formularioOriginal = divElemento.querySelector(`[id^="opcion-"][id$="-baseOpcionForm"]`);
+            const idParts = total_elementos.id.split('-');                 
             console.log(formularioOriginal);
             // Clonar el formulario original y cambiar su id y otros atributos para que sea único
             const nuevoFormulario = formularioOriginal.cloneNode(true);
@@ -414,7 +477,11 @@
         }
 
 
-        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass) {                        
+        function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass) {  
+            const eprueba = document.querySelectorAll(`#${elementId}`);
+            console.log('prueba initialize mismo id:' + eprueba.length)       
+            console.log(elementId)  
+            console.log(eprueba)                      
             const element = document.getElementById(elementId);
             let sortable = Sortable.create(element, {
             group: groupName,
@@ -436,10 +503,14 @@
                     const pDiv = evt.item.closest('.cont-seccion');   
                     updateRowColValues(pDiv.id);
                 } else if (clist.contains('cont-opcion') ){
-                    console.log("Actualizando posicion Elemnto:", evt.newIndex);                                 
+                    console.log("Actualizando posicion Opcion:", evt.newIndex);                                 
                     const eDiv = evt.item.closest('.cont-elem');   
                     updateOpcionOrden(eDiv);
-                }                                  
+                } else if (clist.contains('cont-seccion') ){
+                    console.log("Actualizando posicion Seccion:", evt.newIndex);                                 
+                    const eDiv = evt.item.closest('.cont-elem');   
+                    updateSeccionOrden();
+                }                                     
             },
             onMove: function(evt) {                 
                 if(evt.related.classList.contains('element-fixed')) {                     
@@ -453,13 +524,14 @@
                     revisarFilasVacias(pDiv.id);
                 }                
             },
-            });
+            });            
         }
 
         function toggleElementoOpciones(selectObject) {
             const divElement = selectObject.closest('.cont-elem');          
             const boton = divElement.querySelector('.btn-a-opcion');            
             const obligCh = divElement.querySelector('.obligatorio-check');  
+            const opcOtroCh = divElement.querySelector('.opcOtro-check');  
             const contOpciones = divElement.querySelector('.cont-opc');    
             const optionValue = selectObject.value;            
 
@@ -467,9 +539,11 @@
             if (optionValue === 'opcion_multiple' || optionValue === 'casillas' || optionValue === 'desplegable') {
                 boton.style.display = 'inline-block'; // Mostrar el botón
                 contOpciones.style.display = 'inline-block';
+                opcOtroCh.style.display = 'inline-block';
             } else {
                 boton.style.display = 'none'; // Ocultar el botón
                 contOpciones.style.display = 'none';
+                opcOtroCh.style.display = 'none';
             }
 
             if (optionValue === 'separador'){
@@ -482,6 +556,12 @@
             const selectedText = $(selectObject).find('option[value="' + selectedValue + '"]').text();
             $(selectObject).attr('data-bs-original-title', selectedText);                                           
             $(selectObject).tooltip('hide');
+        }
+
+        function updateTooltips(){
+            $('[data-bs-original-title]').each(function(){
+                $(this).tooltip('update');
+            });
         }
 
         function updateOpcionInputSize(textInput) {
@@ -520,10 +600,16 @@
                     <div class="row m-0 mb-2 pb-3 align-items-center pagina-blanco">    
                         {% for hidden in seccion.hidden_fields %}
                             {{ hidden }}
+                            <div class="text-danger">
+                                {{ hidden.errors }}  
+                            </div> 
                         {% endfor %}                           
                         <div class="col pe-0"> 
                             {{ seccion.nombre.label }}    
-                            {{ seccion.nombre }}                                                       
+                            {{ seccion.nombre }}      
+                            <div class="text-danger">
+                                {{ seccion.nombre.errors }}  
+                            </div>                                                  
                         </div>
                         <div class="col-auto text-center">
                             <div class="font-semi-bold">
@@ -533,9 +619,16 @@
                                 {% for choice in seccion.tipo %}
                                     {% if forloop.counter0 > 0 %}
                                         {{ choice }}                                    
+                                    {% else %}
+                                        <div style="display: inline-block;">
+                                            {{ choice }}    
+                                        </div>
                                     {% endif %}
                                 {% endfor %}  
-                            </div>                                                                                                                                                                      
+                            </div>            
+                            <div class="text-danger">
+                                {{ seccion.tipo.errors }}  
+                            </div>                                                                                                                                                           
                         </div>
                         <div class="col-auto p-0 m-0 text-center">                            
                             <button id="btnEliminar" type="button" title="Eliminar Sección" onclick="eliminarSeccion(this)" class="btn pagina-fondo px-2 me-2 ms-2 " data-bs-original-title="Eliminar Sección">
@@ -543,9 +636,7 @@
                             </button>  
                         </div>
                     </div> 
-                    <div class="text-danger">
-                        {{ seccion.errors }}  
-                    </div> 
+                    
                                                                        
                         {% with elementoFormSet=dictElemForm|hashD:seccion.prefix %}  
                             {% if elementoFormSet %}                                                        
@@ -567,10 +658,16 @@
                                                             </div>    
                                                             {% for hidden in elemento.hidden_fields %}
                                                                 {{ hidden }}
+                                                                <div class="text-danger">
+                                                                    {{ hidden.errors }}
+                                                                </div>  
                                                             {% endfor %}                                                                                                                  
                                                             <div class="row align-items-center">
                                                                 <div class="col p-0 m-0 ms-1">                                                                    
-                                                                    {{ elemento.nombre }}                                                                                                             
+                                                                    {{ elemento.nombre }}  
+                                                                    <div class="text-danger">
+                                                                        {{ elemento.nombre.errors }}
+                                                                    </div>                                                                                                             
                                                                 </div>     
                                                                 <div class="col-auto p-0 m-0">                                                                    
                                                                     <button id="btnEliminar" type="button" title="Eliminar" onclick="eliminarElemento(this)" class="btn px-2 me-1 ms-2" data-bs-original-title="Eliminar Elemento">
@@ -581,6 +678,9 @@
                                                             <div class="row my-1 align-items-center">                                                    
                                                                 <div class="col p-0 m-0 ms-1">
                                                                     {{ elemento.tipo }}
+                                                                    <div class="text-danger">
+                                                                        {{ elemento.tipo.errors }}
+                                                                    </div>  
                                                                 </div>            
                                                                 <div class="obligatorio-check col-auto p-0 m-0 ms-2 text-center font-xs"> 
                                                                     {{ elemento.obligatorio.label }}   
@@ -588,15 +688,29 @@
                                                                         {% for choice in elemento.obligatorio %}
                                                                             {{ choice }}                                    
                                                                         {% endfor %}  
+                                                                    </div>  
+                                                                    <div class="text-danger">
+                                                                        {{ elemento.obligatorio.errors }}
                                                                     </div>                                                                                                                                       
-                                                                </div>                           
+                                                                </div>    
+                                                                <div class="opcOtro-check col-auto p-0 m-0 ms-2 text-center font-xs"> 
+                                                                    {{ elemento.opcionOtro.label }}   
+                                                                    <div >
+                                                                        {% for choice in elemento.opcionOtro %}
+                                                                            {{ choice }}                                    
+                                                                        {% endfor %}  
+                                                                    </div>  
+                                                                    <div class="text-danger">
+                                                                        {{ elemento.opcionOtro.errors }}
+                                                                    </div>                                                                                                                                       
+                                                                </div>                          
                                                                 <div class="col-auto p-0 m-0 ms-2">                                                                     
-                                                                    <button type="button" onclick="agregarNuevaOpcion(this)" class="btn-a-opcion btn btn-pagina-tenue font-semi-bold font-xs p-1" style="display: none;">+ Opción</button>
+                                                                    <button type="button" onclick="agregarNuevaOpcion(this)" class="btn-a-opcion btn btn-pagina-tenue font-semi-bold font-xs p-1" >+ Opción</button>
                                                                 </div>           
                                                             </div>
                                                             <div id="opciones-{{ pDiv }}-{{ eID }}" class="cont-opc">
                                                                 <p class="m-1 mb-0">Opciones</p>
-                                                                <div id="opcSort-{{ pDiv }}-{{ eID }}" class="conte-opc-sort row row-cols-auto align-items-center">
+                                                                <div id="opcSort-{{ pDiv }}-{{ eID }}" class="conte-opc-sort row row-cols-auto altura-min-100px align-items-center">
                                                                     {% with opcionFormSet=dictOpcionForm|hashD:elemento.prefix %}
                                                                         {% if opcionFormSet %}
                                                                             
@@ -609,14 +723,17 @@
                                                                                             <div class="col p-0 m-0">
                                                                                                 {% for hidden in opcion.hidden_fields %}
                                                                                                     {{ hidden }}
+                                                                                                    <div class="text-danger font-xs font-bold">
+                                                                                                        {{ hidden.errors }}
+                                                                                                    </div>   
                                                                                                 {% endfor %}     
                                                                                                 {{ opcion.nombre }}
+                                                                                                <div class="text-danger font-xs font-bold">
+                                                                                                    {{ opcion.nombre.errors }}
+                                                                                                </div>   
                                                                                             </div>          
                                                                                             <button type="button" onclick="eliminarOpcion(this)" class="btn col-auto p-0 m-0 ms-1 fa fa-times font-xs" title="Eliminar" data-bs-original-title="Eliminar" aria-hidden="true"></button>                                                                                      
-                                                                                        </div>                  
-                                                                                        <div class="text-danger font-xs font-bold">
-                                                                                            {{ opcion.errors }}
-                                                                                        </div>                                                                            
+                                                                                        </div>                                                                                                                                                                                   
                                                                                     </div>                                                                                    
                                                                                 {% endwith %}
                                                                             {% endfor %}                                                                                                                                                      
@@ -627,10 +744,7 @@
                                                                     initializeSortable('opcSort-{{ pDiv }}-{{ eID }}', '{{ pDiv }}-{{ eID }}', '.handle3', 150, 'ghost');
                                                                     ocultarOpcionExtra('elem-{{ pDiv }}-{{ eID }}')
                                                                 </script>
-                                                            </div>                                                        
-                                                            <div class="text-danger font-md font-bold">
-                                                                {{ elemento.errors }}
-                                                            </div>                                                                                                                                          
+                                                            </div>                                                                                                                                                                                                                                                            
                                                         </div>
                                                             
                                                     </div>                                        
@@ -695,10 +809,8 @@
             $(".opcion-text ").each(function() {
                 updateOpcionInputSize(this);
             });
-            
-            $('[data-bs-original-title]').each(function(){
-                $(this).tooltip();
-            });
+                        
+            updateTooltips();
             
             $('.hidden-ready').removeClass('hidden-ready');
             
