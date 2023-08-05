@@ -126,8 +126,8 @@ def configEstudio(request):
                         opcionFormset.forms = ordered_forms               
                         dictOpcionForm[elemento.prefix] = opcionFormset    
 
-                        if opcionFormset.is_valid() and elemento.is_valid(): 
-                            if (elemento.cleaned_data ):
+                        if opcionFormset.is_valid() and elemento.is_valid() and seccion.is_valid(): 
+                            if (elemento.cleaned_data and seccion.cleaned_data ):
                                 print('elementos es valida')     
                                 elemento.save()   
                                 opcionFormset.save()                                  
