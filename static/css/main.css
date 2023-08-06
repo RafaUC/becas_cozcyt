@@ -332,46 +332,6 @@ body {
   margin: 0 !important;
 }
 
-a{
-  color: #C9B0B0;
-}
-
-a:hover{
-  color: #9a8a8a;
-}
-
-.float-child {
-  width: 50%;
-  float: left;
-  padding: 20px;
-  text-align: center;
-}  
-
-.mb-3{
-  margin-bottom: 15px !important;
-}
-
-.fieldWrapper{
-
-}
-
-
-
-/*
-input[type=text], input[type=password], [type=email]{
-  border: 1px solid #676767;    
-  color:#676767;
-  font-size: 17px;
-  text-align: left;
-  margin-bottom: 5%;
-  border-radius: 0px;
-  padding: 15px 0 15px 15px;
-  
-} 
-/* 
-.errorlist {
-  color: red;
-} */
 
 /* Clase para fuente normal */
 .font-normal {

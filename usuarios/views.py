@@ -61,7 +61,7 @@ def loginSistema(request):
                         succes_url = settings.LOGIN_REDIRECT_URL
                 return redirect(succes_url)
         else:            
-            messages.error(request, "CURP o contraseña incorrectos.")            
+            messages.error(request, "CURP o contraseña incorrectos.")                        
     context = {'form' : form}
     return render(request, "login.html", context)
 
@@ -98,7 +98,7 @@ def register(request):
         else:
             #print('not valid')
             #for error in list (form.errors.values()):
-            messages.error(request, " ")
+            messages.error(request, form.errors)
     context = {'form' : form}
     return render(request, 'register.html', context)
 

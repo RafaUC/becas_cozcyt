@@ -3,7 +3,7 @@ from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
 from .models import Seccion, Elemento, Opcion
 from.forms import SeccionFormSet, ElementoFormSet, OpcionFormSet
-
+from django.contrib import messages
 # Create your views here.
 
 # Crear el inline formset para Elemento    
@@ -131,8 +131,21 @@ def configEstudio(request):
             for OpcionFormset in dictOpcionForm.values():
                 if OpcionFormset.instance.id is not None:
                     OpcionFormset.save()
-            return redirect('estudioSE:AConfigEstudio')  
+            messages.success(request, 'Cambios guardados con éxito')
+            return redirect('estudioSE:AConfigEstudio')              
         else:
+            #generamos mensajes de error
+            messages.warning(request, 'No se pudieron guardar los cambios: Formularios no validos')
+            for i, seccion in enumerate(seccionFormset):            
+                if seccion.errors:                    
+                    messages.error(request, [f'Seccion {i+1}', seccion.errors])
+                for j, elemento in enumerate(dictElemForm[seccion.prefix]):                  
+                    if elemento.errors:                    
+                        messages.error(request, [f'Seccion {i+1}: Elmento {j+1}', elemento.errors])
+                    for k, opcion in enumerate(dictOpcionForm[elemento.prefix]):
+                        if opcion.errors:                    
+                            messages.error(request, [f'Seccion {i+1}: Elmento {j+1}: Opcion {k+1}', opcion.errors]) #'''
+
             #imprimir datos pra debug
             #'''
             print('\n--------------- Todo no valido ---------------\n')     
