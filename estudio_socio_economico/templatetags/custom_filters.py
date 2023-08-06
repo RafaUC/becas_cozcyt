@@ -20,3 +20,7 @@ def splitPop(s,str):
     except Exception as e:
         #logger.exception("Ocurrió una excepción al usar filtro: %s", str(e))
         return None
+    
+@register.filter(name='is_list')
+def is_list(value):
+    return isinstance(value, list)

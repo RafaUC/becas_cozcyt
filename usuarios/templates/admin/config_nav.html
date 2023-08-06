@@ -6,7 +6,7 @@
     {% with url_name=request.resolver_match.url_name %}
     <ul class="navbar-nav nav-pills nav-pills-opciones ml-auto confpage-ul">
         <li class="nav-item">
-        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigGeneral' %}active{% endif %} h6" href="#">General</a>
+        <a class="nav-link d-flex link-dark {% if url_name == 'AConfigGeneral' %}active{% endif %} h6" href="{% url 'usuarios:AConfigGeneral' %}">General</a>
         </li>
         <li class="nav-item">
         <a class="nav-link d-flex link-dark {% if url_name == 'AConfigPuntajes' %}active{% endif %} h6" href="#">Puntajes</a>
