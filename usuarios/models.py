@@ -80,7 +80,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         verbose_name="Nombre", max_length=191, blank=False, null=True)    
     curp = models.CharField(
         verbose_name="CURP", max_length=18, 
-        validators=[RegexValidator(CURP_REGEX,'Debe tener ser un CURP valido.')],
+        validators=[RegexValidator(CURP_REGEX,'Debe ser un CURP valido.')],
         blank=False, null=False, unique=True)
     email = models.EmailField(verbose_name="E-mail", blank=False, null=False, unique=True)
     is_staff = models.BooleanField(default=False)    

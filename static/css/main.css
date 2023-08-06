@@ -11,6 +11,7 @@
   --cancelar-desactivado: rgba(233, 195, 193, 1);
   --cancelar-activado: rgba(234, 94, 94, 1);
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
+  --pagina-gris: #b9b4b4;
 }
 
 * {
@@ -23,6 +24,10 @@ body {
 /*Clases de estolo de Colores*/
 .pagina-blanco {
   background-color: var(--pagina-blanco) !important;
+}
+
+.pagina-fondo {
+  background-color: var(--pagina-fondo) !important;
 }
 
 .pagina-fuerte {
@@ -65,8 +70,64 @@ body {
   background-color: var(--cancelar-activado) !important;
 }
 
+.pagina-gris {
+  background-color: var(--pagina-gris) !important;
+}
+
+.texto-pagina-blanco {
+  color: var(--pagina-blanco);
+}
+
+.texto-pagina-fuerte {
+  color: var(--pagina-fuerte);
+}
+
+.texto-pagina-principal {
+  color: var(--pagina-principal);
+}
+
+.texto-pagina-tenue {
+  color: var(--pagina-tenue);
+}
+
+.texto-pagina-tenue-claro {
+  color: var(--pagina-tenue-claro);
+}
+
+.texto-aceptado-desactivado {
+  background-color: var(--aceptado-desactivado);
+}
+
+.texto-aceptado-activado {
+  background-color: var(--aceptado-activado);
+}
+
+.texto-aceptado-hover {
+  background-color: var(--aceptado-hover);
+}
+
+.texto-cancelar-desactivado {
+  background-color: var(--cancelar-desactivado);
+}
+
+.texto-cancelar-activado {
+  background-color: var(--cancelar-activado);
+}
+
+.texto-pagina-fondo {
+  background-color: var(--pagina-fondo);
+}
+
+.texto-pagina-gris {
+  color: var(--pagina-gris);
+}
+
 .borde-pagina-blanco {
   border-color: var(--pagina-blanco) !important;
+}
+
+.borde-pagina-gris {
+  border-color: var(--pagina-gris) !important;
 }
 
 .borde-pagina-fuerte {
@@ -105,6 +166,14 @@ body {
   border-color: var(--cancelar-activado) !important;
 }
 
+.borde-punteado {
+  border: 1px dashed #000; /* Puedes ajustar el color y el grosor según tus necesidades */
+}
+
+.conte-sort {
+  min-height: 15px;
+}
+
 /* Login */
 .login-contenedor {  
   max-width: 500px;
@@ -120,10 +189,19 @@ body {
 }
 /* Componenetes */
 
+.btn-guardar{
+  width: auto; 
+  font-size: medium; 
+  color: #676767; 
+  font-weight: 400; 
+  background-color: #D5F5E2;
+  border-radius: 10px;
+}
+
 .btn-aceptado {
   color: #fff;
-  background-color: var(--aceptado-desactivado);
-  border-color: var(--aceptado-desactivado);
+  background-color: var(--aceptado-activado);
+  border-color: var(--aceptado-activado);
   font-weight: bold;
   border-radius: 10px;
   font-size: 17px; 
@@ -172,6 +250,7 @@ body {
   /* Estilos para el estado hover (al pasar el cursor sobre el botón) */
   background-color: var(--pagina-principal);
   border-color: var(--pagina-principal);
+  color: #fff; 
 }
 
 .btn-pagina-tenue:focus,
@@ -187,10 +266,62 @@ body {
   border-color: var(--pagina-tenue); 
 }
 
+/* Estilo para el checkbox principal */
+.checkbox-principal.form-check-input:checked {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:checked:focus {
+  box-shadow: 0 0 0 0.25rem var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:checked:hover {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-principal);
+}
+
+/* Estilo para el label (etiqueta) del checkbox principal */
+.checkbox-principal.form-check-label {
+  color: var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:disabled {
+  background-color: var(--pagina-principal);
+  opacity: 0.65;
+}
+
+.handle {
+  cursor: move;  
+}
+
+.handle2 {
+  cursor: move;  
+}
+
+.handle3 {
+  cursor: move;  
+}
 
 .nav .nav-link.active {
   border-left: 12px solid var(--pagina-principal); 
   background-color: var(--pagina-fuerte);
+}
+
+
+
+.nav-pills-opciones .nav-link.active{
+  /* border-left: 12px solid var(--pagina-principal);  */
+  background-color: #F9EDEB;
+  color: #676767;
+  box-shadow: 0px 2px 1px #e1e1e1;
+
+}
+
+.confpage-ul a {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-bottom: 0.7rem;
 }
 
 .nopadding {
@@ -201,41 +332,66 @@ body {
   margin: 0 !important;
 }
 
-a{
-  color: #C9B0B0;
+
+/* Clase para fuente normal */
+.font-normal {
+  font-weight: normal;
 }
 
-a:hover{
-  color: #9a8a8a;
+/* Clase para fuente en negrita */
+.font-bold {
+  font-weight: bold;
 }
 
-.float-child {
-  width: 50%;
-  float: left;
-  padding: 20px;
+/* Clase para fuente semi-bold */
+.font-semi-bold {
+  font-weight: 600;
+}
+
+/* Clase para fuente ligera */
+.font-light {
+  font-weight: lighter;
+}
+
+/* Clase para fuente más negrita */
+.font-bolder {
+  font-weight: bolder;
+}
+
+/* Clase para fuente con peso personalizado */
+.font-custom-weight {
+  font-weight: 700; /* Cambia el valor a tu preferencia */
+}
+
+.font-xs {
+  font-size: 12px;
+}
+
+.font-sm {
+  font-size: 14px;
+}
+
+.font-md {
+  font-size: 16px;
+}
+
+.font-lg {
+  font-size: 18px;
+}
+
+.font-xl {
+  font-size: 20px;
+}
+
+.font-xxl {
+  font-size: 26px;
+}
+
+.hidden-ready {  
+  display:none;
+}
+
+.opcion-text {    
   text-align: center;
-}  
-
-.mb-3{
-  margin-bottom: 15px !important;
 }
 
-.fieldWrapper{
-
-}
-
-/*
-input[type=text], input[type=password], [type=email]{
-  border: 1px solid #676767;    
-  color:#676767;
-  font-size: 17px;
-  text-align: left;
-  margin-bottom: 5%;
-  border-radius: 0px;
-  padding: 15px 0 15px 15px;
-  
-} 
-/* 
-.errorlist {
-  color: red;
-} */
