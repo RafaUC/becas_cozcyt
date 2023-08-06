@@ -32,15 +32,18 @@ def agregarModalidad(request):
     if request.method == "POST":
         form = ModalidadForm(request.POST, request.FILES)
         if form.is_valid():
-            modalidad = form.save(commit=False)
-            modalidad.save() 
             if all([formset.is_valid()]):
+                modalidad = form.save(commit=False)
+                modalidad.save() 
                 for form in formset:
                     documento = form.save(commit=False)
                     documento.modalidad = modalidad
                     documento.save()
-            print('modalidad creada')
-        return redirect("modalidades:AConfigModalidades")
+            # print('modalidad creada')
+            else:
+                messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
+                return redirect("modalidades:AConfigAgregarModalidad")
+            return redirect("modalidades:AConfigModalidades")
     context = {
             'form' : form,
             'formset' : formset
@@ -77,6 +80,10 @@ def editarModalidad(request, modalidad_id):
                 child = form.save(commit=False)
                 child.modalidad = parent
                 child.save()
+            messages.success(request, "Cambios guardados.")
+        else:
+            messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
+            return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
         return redirect("modalidades:AConfigModalidades")
     return render(request, 'admin/editar_modalidad.html', context)
 
@@ -88,7 +95,16 @@ def eliminarModalidad(request, modalidad_id):
     messages.success(request, "Modalidad eliminada correctamente")
     return redirect("modalidades:AConfigModalidades")
 
-def eliminarDocumento(request, documento_id):
+def eliminarDocumento(request, modalidad_id ,documento_id):
+    # print('ID documento',documento_id)
+    # item_id = int(request.POST['modalidad_id'])
+    # order = get_object_or_404(Documento, pk=int(request.POST['documento_id']))
+    # order.remove_item(item_id)
+    # if order.is_empty():                   # if the last item is deleted
+    #     order.untie(request.session)
+    #     order.delete()
+    # return redirect("modalidades:AConfigModalidades")
     documento = Documento.objects.get(pk = documento_id)
     documento.delete()
-    return redirect("modalidades:AConfigEditarModalidades")
+    messages.success(request, "Documento eliminado correctamente.")
+    return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
