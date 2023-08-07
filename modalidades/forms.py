@@ -31,6 +31,6 @@ class DocumentoForm(ModelForm):
             'descripcion': '',
         }
         widgets = {
-            'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Nombre de documento' , 'style': 'text-align: center;'}),
-            'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Descripción del documento', 'rows':3, 'cols':1})
+            'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Nombre de documento*' , 'style': 'text-align: center;'}),
+            'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Descripción del documento*', 'rows':3, 'cols':1})
         }
