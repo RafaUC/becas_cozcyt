@@ -39,7 +39,6 @@ class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
     descripcion = models.CharField(max_length=255, verbose_name=_("Descripción"), null=False)
-    lookup_id = models.UUIDField(verbose_name=_("Lookup ID"), null=True) #No se necita el lookup
     order = models.IntegerField(verbose_name=_("Orden"), null=True)
 
     class Meta:

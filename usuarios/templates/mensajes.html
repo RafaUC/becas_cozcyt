@@ -7,19 +7,19 @@
     <script>
       var toastConfig = {
         'error': {
-          heading: 'Error',
+          heading: '',
           icon: 'error',
         },
         'success': {
-          heading: 'Exito',
+          heading: '',
           icon: 'success',
         },
         'warning': {
-          heading: 'Precaución',
+          heading: '',
           icon: 'warning',
         },
         'info': {
-          heading: 'Info',
+          heading: '',
           icon: 'info',
         },
       };
@@ -39,9 +39,9 @@
         icon: toastConfig['{{ message.tags }}']['icon'],
         position: 'top-right',
         loader: false,
-        hideAfter: 20000, 
-        allowToastClose: true,
-        textColor: 'white',
+        hideAfter: 5000, 
+        allowToastClose: false,
+        textColor: '#676767',
       });
     </script>
     
