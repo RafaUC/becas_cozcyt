@@ -60,9 +60,10 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px; ">
+                        <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
                             <div class="card">
-                                <div class="card-body" style="text-align: right; height: 180px;">
+                                <div class="card-body" style="text-align: right; height: 230px;">
+                                    <button id = 'cancel-document' type="button" class="btn btn-eliminar" onclick="cancel_adding_document('form', this)" style="background-color: #E9C3C1; color: #676767;">X</button>
                                     <p class="card-title">{{ formset.empty_form.as_p }}</p>
                                 </div>
                             </div>
@@ -96,6 +97,36 @@
             //add the new empty form element to our html form
             formCopyTarget.append(copyEmptyFormEl)
         }
+
+        function cancel_adding_document(prefix_tag, cancelBtn){
+            
+            var total = parseInt($('#id_' + prefix_tag + '-TOTAL_FORMS').val());
+            console.log("formlength: ", formlength)
+            cancelBtn.closest('.documento-form').remove();
+            var forms = $('.documento-form');
+            var formlength = forms.length;
+            var idstring = '#id_' + prefix_tag + '-TOTAL_FORMS';
+            $(idstring).val(parseInt(formlength));
+            console.log("formlength: ", formlength)
+            for (var i = 0, formCount = formlength; i < formCount; i++) {
+                $(forms.get(i)).find(':input').each(function () {
+                    updateElementIndex(this, prefix_tag, i);
+                });
+            }
+            return false;
+
+        }
+
+        function updateElementIndex(el, prefix_tag, ndx) {
+            var id_regex = new RegExp('(' + prefix_tag + '-\\d+)');
+            // console.log("updateElementIndex id_regex: ", id_regex)
+            var replacement = prefix_tag + '-' + ndx;
+            // console.log("updateElementIndex replacmenet: ", replacement)
+            // console.log("updateElementIndex el: ", el)
+            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+            if (el.id) el.id = el.id.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);
+        };
     </script>
     
 {% endblock body %}
