@@ -31,7 +31,7 @@ class UsuarioAdmin(UserAdmin):
         ('Login info', {'fields': ('last_login',)}),
     )
     # Campos que se mostrarán en la lista de usuarios en el sitio de administración
-    list_display = ('curp', 'nombre', 'email', 'is_staff')
+    list_display = ('curp', 'nombre', 'email', 'is_staff', 'is_superuser')
     # Campos por los que se puede buscar en la lista de usuarios en el sitio de administración
     search_fields = ('curp', 'nombre', 'email')
     # Muestra el campo de contraseña como un campo de contraseña enmascarado
