@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
@@ -6,10 +6,14 @@ from django.apps import apps
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.db import models
 from .forms import *
 from .models import *
 from .views import verificarRedirect, borrarSelect
 
+@login_required
 def inicio(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -18,7 +22,7 @@ def inicio(request):
 
     return render(request, 'admin/inicio.html')
 
-
+@login_required
 def solicitudes(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -27,7 +31,7 @@ def solicitudes(request):
     
     return render(request, 'admin/solicitudes.html')
 
-
+@login_required
 def estadisticas(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -37,14 +41,71 @@ def estadisticas(request):
     return render(request, 'admin/estadisticas.html')
 
 
+#funcion recursiva para generar los nombres de los campos y los campos relacionados
+def get_related_fields(field, prefix=''):
+    if isinstance(field, models.ForeignKey):
+        related_model = field.related_model
+        related_fields = get_model_fields(related_model, prefix+field.name+'__')
+        return related_fields
+    elif isinstance(field, (models.ManyToOneRel, models.ManyToManyField)):
+        return []
+    else:        
+        return [prefix + field.name]
+
+#funcion recursiva para generar los nombres de los campos y los campos relacionados
+def get_model_fields(model, prefix=''):
+    fields = []
+    for field in model._meta.get_fields():
+        fields.extend(get_related_fields(field, prefix))
+    return fields
+
+#Metodo para filtrar un queryset en base a un string de palabras clave a buscar en sus campos
+def BusquedaEnCamposQuerySet(queryset, search_query):  
+    search_terms = search_query.split()     
+    model = queryset.model 
+    fields = get_model_fields(model)        
+
+    q_objects = Q()
+    for term in search_terms:
+        for field in fields:            
+            q_objects |= Q(**{f'{field}__icontains': term})
+    queryset = queryset.filter(q_objects)         
+    return queryset
+
+@login_required
 def listaUsuarios(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
     
-    return render(request, 'admin/usuarios.html')
+    request.session['anterior'] = request.build_absolute_uri()
+    usuarios = Usuario.objects.filter(is_superuser=True)
+    solicitantes = Solicitante.objects.all()
 
+    if (request.method == 'GET'):
+        search_query = request.GET.get('search', '')    
+        #Si se hizo una busqueda de filtrado     
+        if search_query:                                      
+            solicitantes = BusquedaEnCamposQuerySet(solicitantes, search_query)
+            usuarios = BusquedaEnCamposQuerySet(usuarios, search_query)                             
+
+    paginator = Paginator(usuarios, 10)  # Mostrar 10 usuarios por página
+    page_number = request.GET.get('pageA')
+    page_admin= paginator.get_page(page_number)
+    
+    paginator = Paginator(solicitantes, 10)  # Mostrar 10 usuarios por página
+    page_number = request.GET.get('pageS')
+    page_soli= paginator.get_page(page_number)
+
+    context = {
+        'page_admin': page_admin,
+        'page_soli': page_soli,
+    }
+    return render(request, 'admin/usuarios.html', context)
+
+
+@login_required
 def editarUsuario(request, pk):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -111,7 +172,7 @@ def editarUsuario(request, pk):
                'formEscolar': formEscolar}
     return render(request, 'admin/editar_usuario.html', context)
 
-
+@login_required
 def configuracion(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -119,3 +180,16 @@ def configuracion(request):
         return redirect(url)
     
     return render(request, 'admin/configuracion.html')
+
+@login_required
+def eliminarUsuario(request, user_id):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
+    user_to_delete = User.objects.get(pk=user_id)
+    user_to_delete.delete()
+    #print('usuario '+ str(user_to_delete) + ' eliminado')    
+    anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
+    return redirect(anterior_url)

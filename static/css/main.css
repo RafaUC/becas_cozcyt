@@ -14,12 +14,18 @@
   --pagina-gris: #b9b4b4;
 }
 
-* {
-  box-sizing: border-box;
+:root {
+  font-size: 14px; /* Establecer la fuente base */
 }
+
 body {
   font-size: 14px;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 
 /*Clases de estolo de Colores*/
 .pagina-blanco {
@@ -95,27 +101,27 @@ body {
 }
 
 .texto-aceptado-desactivado {
-  background-color: var(--aceptado-desactivado);
+  color: var(--aceptado-desactivado);
 }
 
 .texto-aceptado-activado {
-  background-color: var(--aceptado-activado);
+  color: var(--aceptado-activado);
 }
 
 .texto-aceptado-hover {
-  background-color: var(--aceptado-hover);
+  color: var(--aceptado-hover);
 }
 
 .texto-cancelar-desactivado {
-  background-color: var(--cancelar-desactivado);
+  color: var(--cancelar-desactivado);
 }
 
 .texto-cancelar-activado {
-  background-color: var(--cancelar-activado);
+  color: var(--cancelar-activado);
 }
 
 .texto-pagina-fondo {
-  background-color: var(--pagina-fondo);
+  color: var(--pagina-fondo);
 }
 
 .texto-pagina-gris {
@@ -332,6 +338,14 @@ body {
   margin: 0 !important;
 }
 
+.line-height-normal {
+  line-height: normal; /* O el valor que desees para el line-height */
+}
+
+a {
+  color: #007bff; /* Color del enlace normal */
+  text-decoration: none; /* Eliminar subrayado de los enlaces */  
+}
 
 /* Clase para fuente normal */
 .font-normal {
@@ -364,6 +378,30 @@ body {
 }
 
 .font-xs {
+  font-size: 0.857rem; /* 12px / 14px */
+}
+
+.font-sm {
+  font-size: 1rem; /* 14px / 14px */
+}
+
+.font-md {
+  font-size: 1.143rem; /* 16px / 14px */
+}
+
+.font-lg {
+  font-size: 1.286rem; /* 18px / 14px */
+}
+
+.font-xl {
+  font-size: 1.429rem; /* 20px / 14px */
+}
+
+.font-xxl {
+  font-size: 1.857rem; /* 26px / 14px */
+}
+/*
+.font-xs {
   font-size: 12px;
 }
 
@@ -386,6 +424,8 @@ body {
 .font-xxl {
   font-size: 26px;
 }
+*/
+
 
 .hidden-ready {  
   display:none;
@@ -395,3 +435,43 @@ body {
   text-align: center;
 }
 
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse; /* Combina los bordes de las celdas */
+}
+
+/* Estilo para las celdas en el cuerpo de la tabla */
+td {    
+  padding: 5px; /* Agrega relleno para separar contenido de bordes */  
+  overflow: hidden; /* Ocultar el contenido que desborda */
+  white-space: nowrap; /* Evitar saltos de línea */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si se corta el texto */
+}
+
+th {    
+  padding: 5px; /* Agrega relleno para separar contenido de bordes */  
+  overflow: hidden; /* Ocultar el contenido que desborda */
+  white-space: nowrap; /* Evitar saltos de línea */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si se corta el texto */
+}
+
+.custom-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}

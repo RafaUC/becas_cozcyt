@@ -39,6 +39,7 @@
 
   <body class="pagina-fondo">
     {% include "mensajes.html" %}   
+    {% include "custom_confirm.html" %}
     <!-- Seccion de la barra lateral  -->
     <div class="container-fluid p-5 " >
          
@@ -64,6 +65,15 @@
           return false;
         return true;
       }
+
+      $(document).ready(function() {
+        $('[data-bs-original-title]').each(function(){
+          $(this).tooltip('update');
+        });
+            
+        $('.hidden-ready').removeClass('hidden-ready');
+            
+      });
     </script>
 
   </body>

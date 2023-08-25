@@ -1,5 +1,127 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <p class="h1"> Pagina Lista Usuarios (implementacion pendiente)</p>
+    <div class="row align-items-center m-0">
+        <p class="col-4 h2 mx-3 mt-3">Lista de Usuarios</p>
+        <div class="col mt-5 mx-3">
+            <form class="d-flex" role="search" method="GET">                
+                <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
+                name="search"
+                aria-label="Search"
+                value="{{ request.GET.search}}"
+                >
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        </div>
+    </div>
+    
+    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal">            
+        <table class="table">
+            <p class="h4 mx-3">Administradores</p>
+            <thead>
+                <tr>
+                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
+                    <th class="borde-pagina-gris" style="width: 42%; border-bottom: 2px solid;"> Nombre</th>
+                    <th class="borde-pagina-gris" style="width: 11rem; border-bottom: 2px solid;"> CURP</th>
+                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Correo Electrónico</th>
+                    <th class="borde-pagina-gris" style="width: 30px; border-bottom: 2px solid;"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in page_admin %}
+                <tr>
+                    <td class="text-center">{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}
+                        {% if usuario.is_superuser %}
+                            <span class="badge bg-success">Admin</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ usuario.curp }} </td>
+                    <td>{{ usuario.email }}</td>
+                    <td  style="text-align: right;">                        
+                        <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                            </button>                                
+                        </form>
+                    </td>  
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
+            <span class="step-links">                                
+                <span class="current font-xs me-1">
+                    Página {{ page_admin.number }} / {{ page_admin.paginator.num_pages }}.
+                </span>                
+                {% if page_admin.has_previous %}                    
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                {% endif %}
+                {% if page_admin.has_next %}
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal">    
+        
+        <table class="table">
+            <p class="h4 mx-3">Solicitantes</p>
+            <thead>
+                <tr>
+                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
+                    <th class="borde-pagina-gris" style="width: 42%; border-bottom: 2px solid;"> Nombre</th>
+                    <th class="borde-pagina-gris" style="width: 11rem; border-bottom: 2px solid;"> CURP</th>
+                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Correo Electrónico</th>
+                    <th class="borde-pagina-gris" style="width: 60px; border-bottom: 2px solid;"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in page_soli %}                
+                <tr>                    
+                    <td class="text-center">{{ usuario.id }}</td>
+                    <td>{{ usuario.ap_paterno }} {{ usuario.ap_materno }} {{ usuario.nombre }}
+                        {% if usuario.is_superuser %}
+                            <span class="badge bg-success">Admin</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ usuario.curp }}</td>
+                    <td >{{ usuario.email }}</td>
+                    <td class="d-flex align-items-center" style="text-align: right;">
+                        <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
+                            <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
+                        </a>
+                        <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                            </button>                                
+                        </form>
+                    </td>               
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
+            <span class="step-links">                                
+                <span class="current font-xs me-1">
+                    Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
+                </span>                
+                {% if page_soli.has_previous %}                    
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                {% endif %}
+                {% if page_soli.has_next %}
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                {% endif %}                
+            </span>
+        </div>
+    </div>
 {% endblock body %}
