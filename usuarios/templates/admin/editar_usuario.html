@@ -6,4 +6,9 @@
 
     {% block nombreUsuario %}
     <p class="mx-5 my-4 h3" > Editar {{ curp }}</p>
+
+    {% if request.session.anterior %}
+    <a href="{{ request.session.anterior }}" class="btn btn-aceptado mx-5 mb-4" role="button">Regresar</a>
+    {% endif %}
+
     {% endblock nombreUsuario %}

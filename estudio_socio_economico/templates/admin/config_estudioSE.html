@@ -11,82 +11,83 @@
         function eliminarSeccion(elimBtn) {
             //error reorden done
             const divSeccion = elimBtn.closest('.cont-seccion');              
-            // Obtener el número de formularios presentes en el formset    
             
-            const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta Seccion y todas sus preguntas?");
-            if (confirmacion) {
-                // Crear el input para marcar el elemento para eliminar
-                const idSeccion = divSeccion.querySelector(`[id^="id_seccion_formset-"][id$="-id"]`);
-                const idParts = idSeccion.id.split('-');       
-                const inputEliminar = document.createElement("input");
-                inputEliminar.type = "hidden";
-                inputEliminar.name = `seccion_formset-${idParts[1]}-DELETE`;
-                inputEliminar.id = `id_seccion_formset-${idParts[1]}-DELETE`;
-                inputEliminar.value = "on";                
-                divSeccion.appendChild(inputEliminar);
+            
+            showCustomConfirm("¿Estás seguro de que deseas eliminar esta Sección?").then(function(confirmacion) { 
+                if (confirmacion) {
+                    // Crear el input para marcar el elemento para eliminar
+                    const idSeccion = divSeccion.querySelector(`[id^="id_seccion_formset-"][id$="-id"]`);
+                    const idParts = idSeccion.id.split('-');       
+                    const inputEliminar = document.createElement("input");
+                    inputEliminar.type = "hidden";
+                    inputEliminar.name = `seccion_formset-${idParts[1]}-DELETE`;
+                    inputEliminar.id = `id_seccion_formset-${idParts[1]}-DELETE`;
+                    inputEliminar.value = "on";                
+                    divSeccion.appendChild(inputEliminar);
 
-                // Ocultar el divPadre del formset                
-                divSeccion.style.display = "none";
+                    // Ocultar el divPadre del formset                
+                    divSeccion.style.display = "none";
 
-                //marcar para eliminacion sus secciones dependientes
-                const elementos = divSeccion.getElementsByClassName('cont-elem');
-                for (let i = 0; i < elementos.length; i++) {
-                    eliminarElemento(elementos[i],true);
+                    //marcar para eliminacion sus secciones dependientes
+                    const elementos = divSeccion.getElementsByClassName('cont-elem');
+                    for (let i = 0; i < elementos.length; i++) {
+                        eliminarElemento(elementos[i],true);
+                    }
+
                 }
-
-            }
+            });
+            
             
         }
 
         function eliminarElemento(elimBtn, force) {
             //error reorden done
             const divElement = elimBtn.closest('.cont-elem');         
-            // Obtener el número de formularios presentes en el formset    
-            let confirmacion;
-            if (force === undefined){
-                confirmacion = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
-            }else {
-                confirmacion = true;
-            }
             
-            if (confirmacion) {
-                // Crear el input para marcar el elemento para eliminar
-                const idElemento = divElement.querySelector(`[id^="id_elemento_formset-"][id$="-id"]`);
-                const idParts = idElemento.id.split('-');                
-                const inputEliminar = document.createElement("input");
-                inputEliminar.type = "hidden";
-                inputEliminar.name = `elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
-                inputEliminar.id = `id_elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
-                inputEliminar.value = "on";                
-                divElement.appendChild(inputEliminar);
+            function logicaEliminarElemento(conf){
+                if (conf) {
+                    // Crear el input para marcar el elemento para eliminar
+                    const idElemento = divElement.querySelector(`[id^="id_elemento_formset-"][id$="-id"]`);
+                    const idParts = idElemento.id.split('-');                
+                    const inputEliminar = document.createElement("input");
+                    inputEliminar.type = "hidden";
+                    inputEliminar.name = `elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
+                    inputEliminar.id = `id_elemento_formset-${idParts[1]}-${idParts[2]}-DELETE`;
+                    inputEliminar.value = "on";                
+                    divElement.appendChild(inputEliminar);
 
-                // Ocultar el divPadre del formset
-                const divParentDiv = divElement.closest('.cont-seccion'); 
-                divParentDiv.appendChild(divElement);
-                divElement.style.display = "none";
+                    // Ocultar el divPadre del formset
+                    const divParentDiv = divElement.closest('.cont-seccion'); 
+                    divParentDiv.appendChild(divElement);
+                    divElement.style.display = "none";
 
-                revisarFilasVacias(divParentDiv.id)
-                updateRowColValues(divParentDiv.id)
+                    revisarFilasVacias(divParentDiv.id)
+                    updateRowColValues(divParentDiv.id)
+                }
+
+                const opciones = divElement.getElementsByClassName('cont-opcion');
+                for (let i = 0; i < opciones.length; i++) {
+                    eliminarOpcion(opciones[i],true);
+                }
             }
 
-            const opciones = divElement.getElementsByClassName('cont-opcion');
-            for (let i = 0; i < opciones.length; i++) {
-                eliminarOpcion(opciones[i],true);
-            }
+            if (force !== undefined){
+                logicaEliminarElemento(true)
+            }else {
+                showCustomConfirm("¿Estás seguro de que deseas eliminar este elemento?").then(function(confirmacion) {                
+                    logicaEliminarElemento(confirmacion)
+                }); 
+            }            
+            
+            
             
         }
 
         function eliminarOpcion(elimBtn, force) {
             //error reorden done
             const divOpcion = elimBtn.closest('.cont-opcion');         
-            // Obtener el número de formularios presentes en el formset    
-            let confirmacion;
-            if (force === undefined){
-                confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta opción?");
-            }else {
-                confirmacion = true;
-            }
-            if (confirmacion) {
+            
+            function logicaEliminarOpcion(){
                 // Crear el input para marcar el elemento para eliminar
                 const idOpcion = divOpcion.querySelector(`[id^="id_opcion_formset-"][id$="-id"]`);
                 const idParts = idOpcion.id.split('-');                
@@ -98,8 +99,19 @@
                 divOpcion.appendChild(inputEliminar);
 
                 // Ocultar el divPadre del formset                
-                divOpcion.style.display = "none";                
+                divOpcion.style.display = "none";   
             }
+
+            let confirmacion;
+            if (force !== undefined){
+                logicaEliminarOpcion();
+            }else {
+                showCustomConfirm("¿Estás seguro de que deseas eliminar esta Sección?").then(function(confirmacion) { 
+                    if (confirmacion) {
+                        logicaEliminarOpcion();
+                    }
+                });
+            }            
             
         }
 
@@ -789,7 +801,7 @@
             {% endwith%}
             {% endfor %}
             <div id="botonASeccion" class="row px-5 element-fixed mx-0">
-                <button  type="button" onclick="agregarNuevaSeccion()" class="btn btn-a-seccion btn-aceptado element-fixed mb-4 p-3 ps-2 font-xxl">+ Agregar Seccion</button>
+                <button  type="button" onclick="agregarNuevaSeccion()" class="btn btn-a-seccion btn-aceptado element-fixed mb-4 p-3 ps-2 font-xxl">+ Agregar Sección</button>
             </div>            
         </div>
     </form>

@@ -39,6 +39,7 @@
 
   <body>
     {% include "mensajes.html" %}
+    {% include "custom_confirm.html" %}
 
     <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">
@@ -165,6 +166,16 @@
           return false;
         return true;
       }
+
+      $(document).ready(function() {
+        $('[data-bs-original-title]').each(function(){
+          $(this).tooltip('update');
+        });
+            
+        $('.hidden-ready').removeClass('hidden-ready');
+            
+      });
+
     </script>
 
   </body>
