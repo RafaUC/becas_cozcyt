@@ -98,6 +98,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         if self.is_staff:
             str = str + "Staff "
         return str + self.curp
+    
+    class Meta:        
+        ordering = ['-is_superuser', 'id' ]
 
 def only_int(value): 
     if value.isdigit()==False:
@@ -115,7 +118,7 @@ class Solicitante(Usuario):
     GRADO_REGEX = r'^\d{1,2}$'
 
     folio = models.CharField(
-        verbose_name="Folio" ,max_length=8, null=True,
+        verbose_name="Folio" ,max_length=8, null=True, blank=True,
         validators=[
             RegexValidator(FOLIO_REGEX,'El folio debe tener 4 letras seguidas de 4 números.')])
     rfc = models.CharField(

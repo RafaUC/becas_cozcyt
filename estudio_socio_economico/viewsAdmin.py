@@ -109,7 +109,7 @@ def configEstudio(request):
             opcionFormset.forms = ordered_forms                                                                       
 
         #imprimir datos para debug 
-        #'''
+        '''
         print('\n\n\n\n\nInicio Debug')
         for seccion in seccionFormset:
             print('\n-----seccion '+seccion.prefix+' -----')
@@ -146,8 +146,8 @@ def configEstudio(request):
                         if opcion.errors:                    
                             messages.error(request, [f'Seccion {i+1}: Elmento {j+1}: Opcion {k+1}', opcion.errors]) #'''
 
-            #imprimir datos pra debug
-            #'''
+            #imprimir datos error pra debug
+            '''
             print('\n--------------- Todo no valido ---------------\n')     
             print(seccionFormset.prefix)
             print(seccionFormset.errors)
@@ -157,7 +157,7 @@ def configEstudio(request):
             for OpcionFormset in dictOpcionForm.values():      
                 print(OpcionFormset.prefix)          
                 print(OpcionFormset.errors) #'''
-            print('--------------- Todo no valido ---------------\n')     
+            print('--------------- Error Invalido ---------------\n')     
             
         
 

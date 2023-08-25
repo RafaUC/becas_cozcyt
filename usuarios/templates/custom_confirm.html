@@ -1,0 +1,54 @@
+<div class="modal fade" id="custom-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="custom-confirm-modal-titulo">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+        </div>
+        <div id="custom-confirm-modal-dialogo" class="modal-body font-md">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button id="custom-confirm-no" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button id="custom-confirm-yes" type="button" class="btn btn-success" data-bs-dismiss="modal">Confirmar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>    
+    function showCustomConfirm(dialogo, titulo) {        
+        // Mostrar la ventana de confirmación personalizada
+        $('#custom-confirm-modal').modal('show');
+        if (dialogo !== undefined){
+            $('#custom-confirm-modal-dialogo').text(dialogo);
+        }else{
+            $('#custom-confirm-modal-dialogo').text('Porfavor confirme la accion');
+        }
+        if (dialogo !== undefined){
+            $('#custom-confirm-modal-titulo').text(titulo);
+        }else{
+            $('#custom-confirm-modal-titulo').text('Confirmación');
+        }
+        
+        // Crear promesa para controlar el resultado de la confirmación
+        return new Promise((resolve) => {
+            $('#custom-confirm-yes').off('click').on('click', function() {                
+                resolve(true); // Resuelve la promesa con verdadero
+            });
+
+            $('#custom-confirm-no').off('click').on('click', function() {                
+                resolve(false); // Resuelve la promesa con falso
+            });
+        });
+    }
+
+    function confrimSubmit(source, dialogo, titulo){
+        const formulario = source.closest("form");
+        showCustomConfirm(dialogo, titulo).then(function(val) {            
+            if (val) {
+                formulario.submit();
+            }
+        });        
+    }
+</script>
