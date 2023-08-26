@@ -86,6 +86,7 @@ class RDesplegable(Respuesta):
 class Elemento(models.Model):
     TIPO_CHOICES = (
         ('separador', 'Separador'),
+        ('numerico', 'Numérico'),
         ('texto_corto', 'Texto Corto'),
         ('texto_parrafo', 'Texto Párrafo'),
         ('opcion_multiple', 'Opción Múltiple'),
