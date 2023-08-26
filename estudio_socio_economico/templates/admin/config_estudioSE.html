@@ -238,18 +238,63 @@
 
         function agregarNuevoConteSort(parentDiv) {
             const divPadre = document.getElementById(parentDiv);
-            const filas = divPadre.getElementsByClassName('conte-sort');
+            const filasExistentes = divPadre.getElementsByClassName('conte-sort');
             const botonAElem = divPadre.querySelector('.btn-a-elem');     
 
             // Obtener el último row y su id
-            const ultimoRow = filas[filas.length - 1];
+            const ultimoRow = filasExistentes[filasExistentes.length - 1];
             let ultimoId;
             if (ultimoRow !== undefined){
                 ultimoId = ultimoRow.id.split('-').pop(); // Extraer el número después del último guion
             } else {
                 ultimoId = '0';
             }
-                        
+
+            ////////////////////nuevo codigo /////////////////////
+            // Función para crear y configurar una nueva fila
+            function crearNuevaFila(nuevoId, minHeight) {
+                const nuevoRow = document.createElement('div');
+                const rowid = parentDiv.split('-').pop();
+                nuevoRow.id = `elementos-${rowid}-${nuevoId}`;
+                nuevoRow.classList.add('row', 'conte-sort', 'px-1', 'm-0', 'pagina-fondo');
+                if(minHeight !== undefined){
+                    nuevoRow.classList.add('altura-min-conte-sort-edge');
+                }
+                nuevoRow.appendChild(document.createElement('script'));
+                return nuevoRow;
+            }
+
+            // Insertar nuevas filas al inicio y al final
+            const nuevasFilas = [];                     
+
+            for (let i = 0; i < filasExistentes.length+1; i++) {
+                const nuevoId = parseInt(ultimoId) + i + 1;
+                if (i === 0 || i === filasExistentes.length){
+                    const nuevaFila = crearNuevaFila(nuevoId,15);                
+                    nuevasFilas.push(nuevaFila);                
+                }else {
+                    const nuevaFila = crearNuevaFila(nuevoId);                
+                    nuevasFilas.push(nuevaFila);                
+                }
+                
+            }
+
+            const len = filasExistentes.length;
+            // Insertar nuevas filas entre las filas existentes            
+            for (let i = 0; i < len; i++) {                                                      
+                divPadre.insertBefore(nuevasFilas[i], filasExistentes[i*2]);                
+            }            
+            // Insertar nuevas filas al final                            
+            divPadre.insertBefore(nuevasFilas[nuevasFilas.length-1], botonAElem);            
+
+            // Inicializar los elementos sortable para las nuevas filas
+            nuevasFilas.forEach((fila, index) => {
+                const nuevoId = parseInt(ultimoId) + index + 1;
+                const rowid = parentDiv.split('-').pop();
+                initializeSortable(fila.id, rowid, '.handle2', 150, 'ghost');
+            });            
+            
+            /*
             // Crear un nuevo elemento row
             const nuevoId = parseInt(ultimoId) + 1;
             const nuevoRow = document.createElement('div');
@@ -269,7 +314,7 @@
             const newfilas = divPadre.getElementsByClassName('conte-sort');         
             divPadre.insertBefore(nuevoRow2, newfilas[0]);    
             initializeSortable(nuevoRow.id, rowid, '.handle2', 150, 'ghost');            
-            initializeSortable(nuevoRow2.id, rowid, '.handle2', 150, 'ghost');            
+            initializeSortable(nuevoRow2.id, rowid, '.handle2', 150, 'ghost');   */         
         }
 
         function revisarFilasVacias(parentDiv) {           

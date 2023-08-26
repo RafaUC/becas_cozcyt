@@ -177,7 +177,11 @@ body {
 }
 
 .conte-sort {
-  min-height: 15px;
+  min-height: 0px;
+}
+
+.altura-min-conte-sort-edge{
+  min-height: 3px;
 }
 
 /* Login */

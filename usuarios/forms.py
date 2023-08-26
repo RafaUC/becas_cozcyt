@@ -86,7 +86,7 @@ class SolicitanteForm(forms.ModelForm):
             'tel_cel': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
             'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
             'grado': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
-            'promedio': forms.NumberInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberFloatKey(event)", 'placeholder': 'Ingrese el promedio'}),
+            'promedio': forms.NumberInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberPuntKey(event)", 'placeholder': 'Ingrese el promedio'}),
             'carrera': forms.Select(attrs={'class': 'form-control border-3 form-select'}),        
         }
         labels = {
