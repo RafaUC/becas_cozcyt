@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <p class="h1"> Pagina Estudio Socio Economico (implementacion pendiente)</p>
+
+    <form method="post">
+        {% for form_name, form in forms.items %}
+            <h2>{{ form_name }}</h2>            
+                {% csrf_token %}
+                {{ form.as_p }}                
+        {% endfor %}
+        <button type="submit">Enviar</button>
+    </form>
+
+{% endblock body %}

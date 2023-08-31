@@ -8,9 +8,9 @@ from django.contrib import messages
 # Create your views here.
 
 def configEstudioGetForm(request):    
-    #url = verificarRedirect(request.user, 'permiso_administrador')    
-    #if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-    #    return HttpResponse("", status=401)
+    url = verificarRedirect(request.user, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
 
     context = {}
 
