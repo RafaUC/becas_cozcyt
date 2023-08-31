@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
 from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
 from .models import Seccion, Elemento, Opcion
@@ -6,14 +7,13 @@ from.forms import SeccionFormSet, ElementoFormSet, OpcionFormSet
 from django.contrib import messages
 # Create your views here.
 
-# Crear el inline formset para Elemento    
-# Donde "ElementoForm" es el ModelForm personalizado para el modelo Elemento que definiste anteriormente.
-def configEstudio(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)  
-      
+def configEstudioGetForm(request):    
+    #url = verificarRedirect(request.user, 'permiso_administrador')    
+    #if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+    #    return HttpResponse("", status=401)
+
+    context = {}
+
     if request.method == 'GET':  
         secciones = Seccion.objects.all()
         seccionFormset = SeccionFormSet(queryset=secciones, prefix='seccion_formset')        
@@ -29,7 +29,27 @@ def configEstudio(request):
                 newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
                 dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
 
-    elif request.method == 'POST':  
+        context = {
+                'seccionFormset': seccionFormset,
+                'dictElemForm': dictElemForm,
+                'dictOpcionForm': dictOpcionForm,
+            }            
+
+    return render(request, 'admin/config_estudioSEForm.html', context)
+
+
+
+# Crear el inline formset para Elemento    
+# Donde "ElementoForm" es el ModelForm personalizado para el modelo Elemento que definiste anteriormente.
+def configEstudio(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)  
+      
+    context = {}
+
+    if request.method == 'POST':  
         todoValido = True  
         dictElemForm = {}   #diccionario que contiene todos los formset de elementos
         dictOpcionForm = {}   #diccionario que contiene todos los formset de objetos             
@@ -161,11 +181,11 @@ def configEstudio(request):
             
         
 
-    context = {
-        'seccionFormset': seccionFormset,
-        'dictElemForm': dictElemForm,
-        'dictOpcionForm': dictOpcionForm,
-    }
+        context = {
+            'seccionFormset': seccionFormset,
+            'dictElemForm': dictElemForm,
+            'dictOpcionForm': dictOpcionForm,
+        }
     
     
 

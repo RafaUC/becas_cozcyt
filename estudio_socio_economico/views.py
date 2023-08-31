@@ -19,12 +19,7 @@ def estudioSE(request):
     
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #obtener los formularios del estudio SE
-    secciones = Seccion.objects.all()
-    dictElem = {}
-    dictOpc = {}
-    print(secciones)    
-    for seccion in secciones:        
-        dictElem[seccion.id] = Elemento.objects.filter(seccion = seccion.id)
+    preguntasEstudio = Seccion.objects.prefetch_related('elemento_set__opcion_set').all()
         
     #inicializar los forms de respuestas
 

@@ -21,11 +21,7 @@
         });
     }
 
-    $(document).ready(function() {
-      $('[data-bs-original-title]').each(function(){
-        $(this).tooltip('update');
-      });
-
+    $(document).ready(function() {      
       updateTooltips();
           
       $('.hidden-ready').removeClass('hidden-ready');
