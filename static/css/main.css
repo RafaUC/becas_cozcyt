@@ -439,6 +439,13 @@ a {
   text-align: center;
 }
 
+.opcion-digit {
+  max-width: 3.5rem;
+}
+
+.elem-tipo-select {
+  min-width: 6rem;
+}
 
 table {
   width: 100%;

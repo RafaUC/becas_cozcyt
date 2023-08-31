@@ -74,7 +74,7 @@
             if (force !== undefined){
                 logicaEliminarElemento(true)
             }else {
-                showCustomConfirm("¿Estás seguro de que deseas eliminar este elemento?").then(function(confirmacion) {                
+                showCustomConfirm("¿Estás seguro de que deseas eliminar este Elemento?").then(function(confirmacion) {                
                     logicaEliminarElemento(confirmacion)
                 }); 
             }            
@@ -106,7 +106,7 @@
             if (force !== undefined){
                 logicaEliminarOpcion();
             }else {
-                showCustomConfirm("¿Estás seguro de que deseas eliminar esta Sección?").then(function(confirmacion) { 
+                showCustomConfirm("¿Estás seguro de que deseas eliminar esta Opción?").then(function(confirmacion) { 
                     if (confirmacion) {
                         logicaEliminarOpcion();
                     }
@@ -587,9 +587,9 @@
             const boton = divElement.querySelector('.btn-a-opcion');            
             const obligCh = divElement.querySelector('.obligatorio-check');  
             const opcOtroCh = divElement.querySelector('.opcOtro-check');  
-            const contOpciones = divElement.querySelector('.cont-opc');    
-            const optionValue = selectObject.value;            
-
+            const contDigits = divElement.querySelector('.cont-digits');    
+            const contOpciones = divElement.querySelector('.cont-opc');                
+            const optionValue = selectObject.value;                        
             // Si el valor seleccionado es 'opcion_multiple', 'casillas' o 'desplegable', mostramos el botón; de lo contrario, lo ocultamos
             if (optionValue === 'opcion_multiple' || optionValue === 'casillas' || optionValue === 'desplegable') {
                 boton.style.display = 'inline-block'; // Mostrar el botón
@@ -600,6 +600,12 @@
                 contOpciones.style.display = 'none';
                 opcOtroCh.style.display = 'none';
             }
+            
+            if (optionValue === 'numerico'){                
+                contDigits.style.display = 'inline-block';                 
+            } else {                
+                contDigits.style.display = 'none'; 
+            }            
 
             if (optionValue === 'separador'){
                 obligCh.style.display = 'none'; 
@@ -612,13 +618,7 @@
             $(selectObject).attr('data-bs-original-title', selectedText);                                           
             $(selectObject).tooltip('hide');
             updateRowColValues(divSeccion.id)
-        }
-
-        function updateTooltips(){
-            $('[data-bs-original-title]').each(function(){
-                $(this).tooltip('update');
-            });
-        }
+        }        
 
         function updateOpcionInputSize(textInput) {
             const lenght = textInput.value.length || 1;
@@ -639,9 +639,9 @@
     {% include 'admin/config_nav.html' %}
     <p class="h4 mx-5 mt-2 mb-0"> Modificar Estudio Socioeconomico</p>
 
-    <form method="post" id="orderingForm" class="hidden-ready">
+    <form method="post" id="ESE_Form" class="hidden-ready">
         {% csrf_token %}
-        <button type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>
+        <button id="submitButton" onclick="desactivar(this)" type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>
         <div id="secciones" >
             
             {{seccionFormset.management_form}}
@@ -739,7 +739,21 @@
                                                                     <div class="text-danger">
                                                                         {{ elemento.tipo.errors }}
                                                                     </div>  
-                                                                </div>            
+                                                                </div>    
+                                                                <div class="cont-digits col-auto p-0 m-0 ms-2 text-center font-xs">   
+                                                                    <div class="d-flex">
+                                                                        <div class="me-2">
+                                                                            {{ elemento.numMin.label }}
+                                                                            {{ elemento.numMin }}
+                                                                            {{ elemento.numMin.errors }}
+                                                                        </div>
+                                                                        <div>
+                                                                            {{ elemento.numMax.label }}
+                                                                            {{ elemento.numMax }}
+                                                                            {{ elemento.numMax.errors }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>     
                                                                 <div class="obligatorio-check col-auto p-0 m-0 ms-2 text-center font-xs"> 
                                                                     {{ elemento.obligatorio.label }}   
                                                                     <div >
@@ -852,8 +866,7 @@
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        
+    <script>               
 
         initializeSortable('secciones', '', '.handle', 150, 'ghost');
         ocultarSeccionExtra();
@@ -867,15 +880,18 @@
 
             $(".opcion-text ").each(function() {
                 updateOpcionInputSize(this);
-            });
-                        
-            updateTooltips();
-            
-            $('.hidden-ready').removeClass('hidden-ready');
-            
+            });                                                                    
             
         });
-        
+
+        // Function to handle form submission
+        function desactivar(elem) {
+            // Disable the submit button to prevent multiple submits
+            elem.disabled = true;
+            document.getElementById("ESE_Form").submit();
+            // Submit the form            
+        }
+
     </script>
 
 {% endblock body %}

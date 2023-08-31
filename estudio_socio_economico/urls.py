@@ -19,4 +19,5 @@ from . import views, viewsAdmin
 app_name = 'estudioSE'
 urlpatterns = [
     path('administracion/config/estudio', viewsAdmin.configEstudio, name='AConfigEstudio'),
+    path('estudioSE/',views.estudioSE, name='estudioSE'),
 ]

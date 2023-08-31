@@ -28,6 +28,11 @@ SECRET_KEY = 'django-insecure-%l2!-7+%fqz_(bmjzm=@($a_ys5oq=-t#v%f2=^tt0(8s%1a0&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if False: #if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
 ALLOWED_HOSTS = []
 
 
@@ -45,17 +50,19 @@ INSTALLED_APPS = [
     'modalidades',
     'solicitudes',
     'estudio_socio_economico',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_htmx.middleware.HtmxMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",    
 ]
 
 ROOT_URLCONF = 'becas_cozcyt.urls'
@@ -161,3 +168,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 86400 #El usuario cuenta con 24 horas para confirmar su cuenta.
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 9000
