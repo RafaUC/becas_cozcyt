@@ -116,7 +116,7 @@ class ROpcionMultiple(Respuesta):
         return self.respuesta is None and not ((self.elemento.opcionOtro and self.otro.strip()) or not self.elemento.opcionOtro )
 
 class RCasillas(Respuesta):
-    respuestas = models.ManyToManyField(Opcion)
+    respuesta = models.ManyToManyField(Opcion)
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
 
     def is_blank(self):

@@ -70,43 +70,50 @@ SeccionFormSet = modelformset_factory(Seccion, form=SeccionForm, extra=1, can_de
 ElementoFormSet = inlineformset_factory(Seccion, Elemento, form=ElementoForm, extra=1, can_delete=True)
 OpcionFormSet = inlineformset_factory(Elemento, Opcion, form=OpcionForm, extra=1, can_delete=True)
 
+class RespuestaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        elemento = kwargs.pop("elemento")
+        solicitante = kwargs.pop("solicitante")
+        super(RespuestaForm, self).__init__(*args, **kwargs)
+        self.instance.solicitante = solicitante
+        self.instance.elemento = elemento
 
-class RNumericoForm(forms.ModelForm):
+class RNumericoForm(RespuestaForm):
     class Meta:
         model = RNumerico
         fields = ['texto']
         widgets = {'texto': forms.NumberInput(attrs={'class': 'form-control'}),}
         labels = {'texto': 'Respuesta numérica'}
 
-class RTextoCortoForm(forms.ModelForm):
+class RTextoCortoForm(RespuestaForm):
     class Meta:
         model = RTextoCorto
         fields = ['texto']
         widgets = {'texto': forms.TextInput(attrs={'class': 'form-control'}),}
         labels = {'texto': 'Respuesta texto corto'}
 
-class RTextoParrafoForm(forms.ModelForm):
+class RTextoParrafoForm(RespuestaForm):
     class Meta:
         model = RTextoParrafo
         fields = ['texto']
         widgets = {'texto': forms.Textarea(attrs={'class': 'form-control'}),}
         labels = {'texto': 'Respuesta párrafo'}
 
-class RHoraForm(forms.ModelForm):
+class RHoraForm(RespuestaForm):
     class Meta:
         model = RHora
         fields = ['hora']
         widgets = {'hora': forms.TimeInput(attrs={'class': 'form-control'}),}
         labels = {'hora': 'Hora'}
 
-class RFechaForm(forms.ModelForm):
+class RFechaForm(RespuestaForm):
     class Meta:
         model = RFecha
         fields = ['fecha']
         widgets = {'fecha': forms.DateInput(attrs={'class': 'form-control'}),}
         labels = {'fecha': 'Fecha'}
 
-class ROpcionMultipleForm(forms.ModelForm):
+class ROpcionMultipleForm(RespuestaForm):
     class Meta:
         model = ROpcionMultiple
         fields = ['respuesta', 'otro']
@@ -114,15 +121,15 @@ class ROpcionMultipleForm(forms.ModelForm):
                    'otro': forms.TextInput(attrs={'class': 'form-control'}),}
         labels = {'respuesta': 'Respuesta de opción múltiple', 'otro': 'Otro'}
 
-class RCasillasForm(forms.ModelForm):
+class RCasillasForm(RespuestaForm):
     class Meta:
         model = RCasillas
-        fields = ['respuestas', 'otro']
-        widgets = {'respuestas': forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),
+        fields = ['respuesta', 'otro']
+        widgets = {'respuesta': forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),
                    'otro': forms.TextInput(attrs={'class': 'form-control'}),}
         labels = {'respuestas': 'Casillas', 'otro': 'Otro'}
 
-class RDesplegableForm(forms.ModelForm):
+class RDesplegableForm(RespuestaForm):
     class Meta:
         model = RDesplegable
         fields = ['respuesta', 'otro']
