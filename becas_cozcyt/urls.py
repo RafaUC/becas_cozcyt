@@ -23,9 +23,9 @@ urlpatterns = [
     path('',include('usuarios.urls')),
     path('',include('modalidades.urls')),
     path('',include('solicitudes.urls')),
-    path('',include('estudio_socio_economico.urls')),
+    path('',include('estudio_socio_economico.urls')),    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-#if settings.DEBUG:
-#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if False: #if settings.DEBUG:
+    urlpatterns += path("__debug__/", include("debug_toolbar.urls")),

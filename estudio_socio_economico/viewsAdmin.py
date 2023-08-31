@@ -14,22 +14,22 @@ def configEstudio(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)  
       
-    secciones = Seccion.objects.all()
-    seccionFormset = SeccionFormSet(queryset=secciones, prefix='seccion_formset')        
-    dictElemForm = {}
-    dictOpcionForm = {}
-    for seccionform in seccionFormset:
-        seccionInstancia = seccionform.instance        
-        seccionFormsetId = (seccionform.prefix.split('-').pop())         
-        dictElemForm[seccionform.prefix] = ElementoFormSet(instance=seccionInstancia, prefix='elemento_formset-%s' % seccionFormsetId)
-        for elementoform in dictElemForm[seccionform.prefix]:
-            elemInstancia = elementoform.instance
-            elemFormsetId = elementoform.prefix.split('-') 
-            newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
-            dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
+    if request.method == 'GET':  
+        secciones = Seccion.objects.all()
+        seccionFormset = SeccionFormSet(queryset=secciones, prefix='seccion_formset')        
+        dictElemForm = {}
+        dictOpcionForm = {}
+        for seccionform in seccionFormset:
+            seccionInstancia = seccionform.instance        
+            seccionFormsetId = (seccionform.prefix.split('-').pop())         
+            dictElemForm[seccionform.prefix] = ElementoFormSet(instance=seccionInstancia, prefix='elemento_formset-%s' % seccionFormsetId)
+            for elementoform in dictElemForm[seccionform.prefix]:
+                elemInstancia = elementoform.instance
+                elemFormsetId = elementoform.prefix.split('-') 
+                newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
+                dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
 
-
-    if request.method == 'POST':  
+    elif request.method == 'POST':  
         todoValido = True  
         dictElemForm = {}   #diccionario que contiene todos los formset de elementos
         dictOpcionForm = {}   #diccionario que contiene todos los formset de objetos             

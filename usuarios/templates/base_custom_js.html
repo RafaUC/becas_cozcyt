@@ -15,10 +15,18 @@
       return true;
     }
 
+    function updateTooltips(){
+        $('[data-bs-original-title]').each(function(){
+            $(this).tooltip('update');
+        });
+    }
+
     $(document).ready(function() {
       $('[data-bs-original-title]').each(function(){
         $(this).tooltip('update');
       });
+
+      updateTooltips();
           
       $('.hidden-ready').removeClass('hidden-ready');
           
