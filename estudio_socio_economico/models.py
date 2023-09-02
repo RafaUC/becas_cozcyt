@@ -26,7 +26,7 @@ class Seccion(models.Model):
 
 
 class Opcion(models.Model):    
-    elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE)
+    elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=255, verbose_name='Nombre Opción')
     orden = models.IntegerField(verbose_name='orden', default=100_000)
 
@@ -69,65 +69,39 @@ class Respuesta(models.Model):
         verbose_name_plural = 'Respuestas'
         unique_together = ['elemento', 'solicitante']
 
-    def clean(self):
-        if self.elemento.obligatorio and self.is_blank():
-            raise ValidationError(f"La respuesta para '{self.elemento}' es obligatoria.")
-        super().clean()
-
-    def is_blank(self):
-        raise NotImplementedError("Subclases de Respuesta deben implementar este método.")
-
 
 class RNumerico(Respuesta):
-    texto = models.CharField(max_length=255)
+    valor = models.CharField(max_length=255, null=True,  blank=True)
     
-    def is_blank(self):
-        return not self.texto.strip()
+    
 
 class RTextoCorto(Respuesta):
-    texto = models.CharField(max_length=255)
-
-    def is_blank(self):
-        return not self.texto.strip()
+    texto = models.CharField(max_length=255, null=True,  blank=True)
+   
 
 class RTextoParrafo(Respuesta):
-    texto = models.TextField()
+    texto = models.TextField(null=True,  blank=True)
 
-    def is_blank(self):
-        return not self.texto.strip()
 
 class RHora(Respuesta):
-    hora = models.TimeField()
+    hora = models.TimeField(null=True,  blank=True)
 
-    def is_blank(self):
-        return self.hora is None
 
 class RFecha(Respuesta):
-    fecha = models.DateField()
+    fecha = models.DateField(null=True,  blank=True)
 
-    def is_blank(self):
-        return self.fecha is None
 
 class ROpcionMultiple(Respuesta):
     respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE, null=True, blank=True)
-    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
-
-    def is_blank(self):
-        return self.respuesta is None and not ((self.elemento.opcionOtro and self.otro.strip()) or not self.elemento.opcionOtro )
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
 
 class RCasillas(Respuesta):
-    respuesta = models.ManyToManyField(Opcion)
-    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
-
-    def is_blank(self):
-        return self.respuesta is None and not ((self.elemento.opcionOtro and self.otro.strip()) or not self.elemento.opcionOtro )
+    respuesta = models.ManyToManyField(Opcion,  blank=True)
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=True)
 
 class RDesplegable(Respuesta):
-    respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE)
-    otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=False)
-
-    def is_blank(self):
-        return self.respuesta is None and not ((self.elemento.opcionOtro and self.otro.strip()) or not self.elemento.opcionOtro )
+    respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE, null=True,  blank=True)
+    otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
 
 #---------Elementos-----------
 

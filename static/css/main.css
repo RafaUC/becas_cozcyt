@@ -487,3 +487,7 @@ th {
   border-radius: 5px;
   text-align: center;
 }
+
+.form-check-inline-custom{
+  display: inline-block;
+}
