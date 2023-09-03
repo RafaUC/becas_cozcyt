@@ -19,8 +19,8 @@ def estudioSE(request):
         return redirect(url)
     
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
-    #obtener los formularios del estudio SE
-    preguntasEstudio = Seccion.objects.prefetch_related('elemento_set__opcion_set').all()
+    #obtener los formularios del estudio SE 
+    preguntasEstudio = Seccion.objects.filter(tipo='unico', nombre='Prueba').prefetch_related('elemento_set__opcion_set')
     forms = {}   
     opcOtro = get_object_or_404(Opcion, nombre = "Otro")
     #se obtienen e indexan las respuestas existentes del usuario
@@ -60,8 +60,7 @@ def estudioSE(request):
                     forms[elemento.id].fields['respuesta'].choices = choices
                     #forms[elemento.id].fields['respuesta'].queryset = elemento.opcion_set.all()
     
-    if request.method == 'POST':  
-        print(request.POST)
+    if request.method == 'POST':          
         for seccion in preguntasEstudio:    
             for elemento in seccion.elemento_set.all():            
                 #si la pregunta no es de una opcion de las que se tiene formulario se salta esta iteracion
@@ -85,15 +84,27 @@ def estudioSE(request):
                     forms[elemento.id].fields['respuesta'].choices = choices
                     #forms[elemento.id].fields['respuesta'].queryset = elemento.opcion_set.all()
 
+        todoValido = True
         for form in forms.values():
-            form.is_valid()
-            print(form.instance.elemento_id)
-            print(form.errors)
-        print('aa')
-
+            if not form.is_valid():
+                todoValido = False
+        
+        if todoValido:
+            #for form in forms.values():
+            #    form.save() 
+            messages.success(request, 'Estudio Socioeconómico guardado con éxito')
+            #return redirect(settings.LOGIN_REDIRECT_URL)     
+        else:            
+            for i, seccion in enumerate(preguntasEstudio):                           
+                for j, elemento in enumerate(seccion.elemento_set.all()):                  
+                    if elemento.id in forms and forms[elemento.id].errors:   
+                        for error in forms[elemento.id].errors.values():                                             
+                            messages.error(request, [f'Seccion {seccion.nombre}: Pregunta {elemento.nombre}', error])                    
+            messages.warning(request, 'No se pudieron guardar los cambios: Formularios no validos')
             
 
-    context = {            
+    context = {      
+            'opcOtro': opcOtro,
             'forms': forms,            
             'preguntasEstudio': preguntasEstudio,   
         }

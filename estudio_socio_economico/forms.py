@@ -28,7 +28,7 @@ class OpcionForm(forms.ModelForm):
         fields = ['elemento', 'nombre', 'orden']
         widgets = {
             'elemento': forms.Select(attrs={'class': 'form-control'}),
-            'nombre': forms.TextInput(attrs={'class': 'opcion-text form-control border-3 p-0 m-0', 'onkeyup': 'updateOpcionInputSize(this)', 'onkeydown': 'updateOpcionInputSize(this)'}),
+            'nombre': forms.TextInput(attrs={'class': 'opcion-text form-control border-3 p-0 m-0', 'onkeyup': 'updateOpcionInputSize(this)', 'onkeydown': 'updateOpcionInputSize(this)', 'oninput': 'detectarTerminarEscritura(this)'}),
             'orden': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
         }
         labels = {
@@ -129,7 +129,7 @@ class RTextoCortoForm(RespuestaForm):
     class Meta:
         model = RTextoCorto
         fields = ['texto']
-        widgets = {'texto': forms.TextInput(attrs={'class': 'form-control'}),}
+        widgets = {'texto': forms.TextInput(attrs={'class': 'form-control border-3'}),}
         labels = {'texto': 'Respuesta texto corto'}
 
     def clean_texto(self):
@@ -144,7 +144,7 @@ class RTextoParrafoForm(RespuestaForm):
     class Meta:
         model = RTextoParrafo
         fields = ['texto']
-        widgets = {'texto': forms.Textarea(attrs={'class': 'form-control'}),}
+        widgets = {'texto': forms.Textarea(attrs={'class': 'form-control border-3'}),}
         labels = {'texto': 'Respuesta párrafo'}
 
     def clean_texto(self):
@@ -159,7 +159,7 @@ class RHoraForm(RespuestaForm):
     class Meta:
         model = RHora
         fields = ['hora']
-        widgets = {'hora': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),}
+        widgets = {'hora': forms.TimeInput(attrs={'class': 'form-control border-3', 'type': 'time'}),}
         labels = {'hora': 'Hora'}
 
     def clean_hora(self):
@@ -189,8 +189,8 @@ class ROpcionMultipleForm(RespuestaForm):
     class Meta:
         model = ROpcionMultiple
         fields = ['respuesta', 'otro']
-        widgets = {'respuesta': forms.RadioSelect(attrs={'class': 'form-check-input checkbox-principal'}),
-                   'otro': forms.TextInput(attrs={'class': 'form-control'}),}
+        widgets = {'respuesta': forms.RadioSelect(attrs={'class': 'form-check-input checkbox-principal', 'onchange': 'toggleOtroCampo(this)'}),
+                   'otro': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Otro'}),}
         labels = {'respuesta': 'Respuesta de opción múltiple', 'otro': 'Otro'}
 
     def clean(self):
@@ -221,8 +221,8 @@ class RCasillasForm(RespuestaForm):
     class Meta:
         model = RCasillas
         fields = ['respuesta', 'otro']
-        widgets = {'respuesta': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input checkbox-principal form-check-inline-custom', 'style': 'display: inline-block;'}),
-                   'otro': forms.TextInput(attrs={'class': 'form-control'}),}
+        widgets = {'respuesta': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input checkbox-principal form-check-inline-custom', 'style': 'display: inline-block;', 'onchange': 'toggleOtroCampo(this)'}),
+                   'otro': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Otro'}),}
         labels = {'respuestas': 'Casillas', 'otro': 'Otro'}
 
     def clean(self):
@@ -253,8 +253,8 @@ class RDesplegableForm(RespuestaForm):
     class Meta:
         model = RDesplegable
         fields = ['respuesta', 'otro']
-        widgets = {'respuesta': forms.Select(attrs={'class': 'form-control form-select border-3'}),
-                   'otro': forms.TextInput(attrs={'class': 'form-control'}),}
+        widgets = {'respuesta': forms.Select(attrs={'class': 'form-control form-select border-3', 'onchange': 'toggleOtroCampo(this)'}),
+                   'otro': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Otro'}),}
         labels = {'respuesta': 'Respuesta de desplegable', 'otro': 'Otro'}
     
     def clean(self):
