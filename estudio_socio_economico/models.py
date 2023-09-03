@@ -10,8 +10,8 @@ from django.core.exceptions import ValidationError
 
 class Seccion(models.Model):
     TIPOS_CHOICES = (
-        ('único', 'Único'),
-        ('agregación', 'Agregación'),
+        ('unico', 'Único'),
+        ('agregacion', 'Agregación'),
     )
 
     nombre = models.CharField(max_length=255)

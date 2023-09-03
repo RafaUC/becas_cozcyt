@@ -485,7 +485,7 @@
         initializeSortable(contOPciones.id, `${idParts[1]}-${elemnto_form_count}`, '.handle3', 150, 'ghost'); 
         updateTooltips();
         updateRowColValues(divSeccion.id)      //si esta desactivado omite validar el nuevo si esta vacio
-    }
+    }    
 
 
     function agregarNuevaOpcion(btnAgregar) {
@@ -528,7 +528,23 @@
         // Agregar el nuevo formulario al div padre            
         contOPciones.appendChild(nuevoFormulario);                           
     }
+    
+    let temporizador;
+    function detectarTerminarEscritura(source) {
+        // Cancelar el temporizador anterior si existe
+        clearTimeout(temporizador);
 
+        // Iniciar un nuevo temporizador de 1 segundo (1000 milisegundos)
+        temporizador = setTimeout(function() {
+            // Llamar a tu función cuando el usuario ha dejado de escribir
+            realizarAlgunaAccion(source);
+        }, 1000); // Puedes ajustar el tiempo en milisegundos según tus necesidades
+    }
+
+    function realizarAlgunaAccion(source) {
+        const eDiv = source.closest('.cont-elem');   
+        updateOpcionOrden(eDiv);
+    }
 
     function initializeSortable(elementId, groupName, handleClass, animationTime, ghostClass) {                                     
         const element = document.getElementById(elementId);

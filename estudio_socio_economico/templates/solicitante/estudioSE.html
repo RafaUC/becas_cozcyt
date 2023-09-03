@@ -1,84 +1,139 @@
 {% extends 'base.html' %}
 {% load custom_filters %}    
 
-{% block body %}
-    <p class="h1 m-3"> Estudio Socioeconómico </p>
+{% block body %}   
+    <script>
+        function toggleOtroCampo(source) {                                    
+
+            const contElem = source.closest('.cont-elem');
+            if (contElem) {
+                const campoOtro = contElem.querySelector('.opc-otro');
+                if (campoOtro) {                        
+                    if (source.type === "checkbox"){
+                        if (source.value === '{{opcOtro.id}}'){
+                            if (source.checked){
+                                campoOtro.style.display = "block";
+                            }else {
+                                campoOtro.style.display = "none";
+                            }
+                        }
+                    }else {
+                        if (source.value === '{{opcOtro.id}}'){
+                            campoOtro.style.display = "block";
+                        }else {
+                            campoOtro.style.display = "none";
+                        }
+                    }         
+                }
+            }
+            
+              
+        }
+    </script>
+    
 
     <form method="post">
+        <div id="botonASeccion" class="row px-0 sticky-top mx-0 mb-4 pagina-blanco border-bottom border-2 inline-block">
+            <p class="col-8 h1 m-3 p-0 "> Estudio Socioeconómico </p>
+            <div class="col d-flex align-items-center justify-content-center text-center ">
+                <button  type="submit" class="btn rounded-4 btn-a-seccion btn-aceptado p-3 font-lg" style="width: 10rem;">Guardar</button>
+            </div>            
+        </div>   
         {% csrf_token %}
         {% for seccion in preguntasEstudio %}
-            <div class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 borde-pagina-principal text-center">
-                <h2>{{ seccion.nombre }}</h2>      
-                <div class="row row-elementos px-1 m-0 ">           
+            <div class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 borde-pagina-principal ">
+                <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
+                <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
                     {% for elemento in seccion.elemento_set.all %}
-                        {% with forms|hashD:elemento.id as form %}
-
-                        <div class="col cont-elem p-0 m-1 border border-3 rounded rounded-3" >
-                            <div>
-                                {{ elemento.nombre }}
-                                {% if elemento.obligatorio %}
-                                    *
-                                {% endif %}
+                        {% if elemento.tipo == 'separador' %}
+                            <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" > 
+                                <div class="font-semi-bold font-xl mt-4">
+                                    {{ elemento.nombre }}                                
+                                </div>
                             </div>
-                                {% for field in form %}
-                                                                                                                         
-                                    {% if elemento.opcionOtro and field.label == 'Otro' %}
-                                        <div>{{ elemento.id }} </div>
-                                        {{ field.label }}{{ field }}
-                                    {% elif field.label == 'Otro' %}
-                                        <!--omitir-->
-                                    {% else %} 
-                                        {% if elemento.tipo == 'opcion_multiple' or elemento.tipo == 'casillas' %}                                       
-                                            <div>{{ elemento.id }} </div>
-                                            <div class="d-flex justify-content-center align-items-center mx-3">
-                                                <div class="conte-opc-sort row row-cols-auto text-center  ">
-                                                    {% for choice in field %}                                                
-                                                        {{ choice }}                                                                                    
-                                                    {% endfor %}  
-                                                </div> 
-                                            </div>
-                                            
-                                                                                       
-                                        {% else %}
-                                            <div>{{ elemento.id }} </div>
-                                            {{ field.label }}{{ field }}
-                                        {% endif %}
-                                    {% endif %}  
+                        {% else %}
+                            {% with forms|hashD:elemento.id as form %}
+                            <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" >
+                                <div class="font-semi-bold mb-1">
+                                    {{ elemento.nombre }}
+                                    {% if elemento.obligatorio %}
+                                        *
+                                    {% endif %}
+                                </div>
+                                    {% for field in form %}
+                                                                                                                            
+                                        {% if elemento.opcionOtro and field.label == 'Otro' %}                                                                                    
+                                            <div class="opc-otro " style="display: none;">
+                                                {{ field }}
+                                            </div>                                            
+                                        {% elif field.label == 'Otro' %}
+                                            <!--omitir-->
+                                        {% else %} 
+                                            {% if elemento.tipo == 'opcion_multiple' or elemento.tipo == 'casillas' %}                                                                                   
+                                                <div class="d-flex align-items-center  mb-1">
+                                                    <div class="cont-opc row row-cols-auto text-center  ">
+                                                        {% for choice in field %}                                                
+                                                            <div class="px-auto">
+                                                                {{ choice }}  
+                                                            </div>                                                                                  
+                                                        {% endfor %}  
+                                                    </div> 
+                                                </div>                                          
+                                            {% else %}
+                                                <div class="mb-1">
+                                                    {{ field }}
+                                                </div>                                            
+                                            {% endif %}
+                                        {% endif %}  
+                                        
+                                        <div class="text-danger font-xs font-bold">
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>                                
+                                    
+                                    {% endfor %}
                                     
                                     <div class="text-danger font-xs font-bold">
-                                        {% if field.errors %}
-                                            {% for error in field.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>                                
-                                
-                                {% endfor %}
-                                
-                                <div class="text-danger font-xs font-bold">
-                                    {% for error in form.non_field_errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                        </div>
+                                        {% for error in form.non_field_errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                            </div>
 
-                        {% endwith %}                            
-
+                            {% endwith %}                            
+                        {% endif %} 
                         {% with c=seccion.elemento_set.all|hashD:forloop.counter %}
                         {% with cb=elemento %}                                                  
                             {% if c.row != cb.row and c is not None %}                                               
                                 </div>
-                                <div  class="row row-elementos px-1 m-0 ">                                                                                         
+                                <div  class="row row-elementos ps-4 m-0 mb-4">                                                                                         
                             {% endif %}
                         {% endwith %}
-                        {% endwith %}
+                        {% endwith %}                                               
                     {% endfor %}                
                 </div>
             </div>
-        {% endfor %}
-
-
-        <button type="submit">Enviar</button>
+        {% endfor %}        
+        
     </form>
+
+    <script>
+        $(document).ready(function() {
+            const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            elementos.forEach(function(elemento) {                
+                if (elemento.checked) {
+                    toggleOtroCampo(elemento);
+                }
+            });
+
+            const elementos2 = document.querySelectorAll('select');
+            elementos2.forEach(function(elemento) {                
+                toggleOtroCampo(elemento);
+            });
+        });
+    </script>
 
 {% endblock body %}

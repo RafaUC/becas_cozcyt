@@ -26,21 +26,12 @@ INSERT INTO `estudio_socio_economico_elemento` VALUES (58,'Ocupación',1,1,'text
 UNLOCK TABLES;
 
 --
--- Dumping data for table `estudio_socio_economico_mymodel`
---
-
-LOCK TABLES `estudio_socio_economico_mymodel` WRITE;
-/*!40000 ALTER TABLE `estudio_socio_economico_mymodel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `estudio_socio_economico_mymodel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `estudio_socio_economico_opcion`
 --
 
 LOCK TABLES `estudio_socio_economico_opcion` WRITE;
 /*!40000 ALTER TABLE `estudio_socio_economico_opcion` DISABLE KEYS */;
-INSERT INTO `estudio_socio_economico_opcion` VALUES (26,'Padres',63,2),(27,'Amigos',63,4),(28,'Familiares',63,3),(29,'Esposo(a)',63,5),(30,'Propia',67,100000),(31,'Rentada',67,100000),(32,'Casa de huéspedes',67,100000),(33,'Tierra',68,100000),(34,'Alfombra',68,100000),(35,'Madera',68,100000),(36,'Duela',68,100000),(37,'Cemento',68,100000),(39,'Mosaico',68,100000),(48,'Si',74,100000),(49,'No',74,100000),(50,'Si',75,100000),(51,'No',75,100000),(52,'Agua',77,100000),(53,'Luz',77,100000),(54,'Drenaje',77,100000),(55,'Pavimiento',77,100000),(56,'Télefono',77,100000),(57,'Gas',77,100000),(58,'TV por cable',77,100000),(59,'Internet',77,100000),(60,'DVD',78,100000),(61,'Televisión',78,100000),(62,'Estufa',78,100000),(63,'Licuadora',78,100000),(64,'Lavadora',78,100000),(65,'Estéreo',78,100000),(66,'Microondas',78,100000),(67,'Computadora',78,100000),(68,'Si',79,100000),(69,'No',79,100000),(70,'Auto propio',80,100000),(71,'Auto familiar',80,100000),(72,'Motocicleta',80,100000),(73,'Camión',80,100000),(74,'Taxi',80,100000),(75,'Caminando',80,100000),(76,'Padre',82,100000),(77,'Madre',82,100000),(78,'Hermano(a)',82,100000),(79,'Hijo(a)',82,100000),(80,'Abuelo(a)',82,100000),(81,'Tío(a)',82,100000),(82,'Tutor(a)',82,100000),(83,'Esposo(a)',82,100000),(84,'Soltero(a)',83,100000),(85,'Casado(a)',83,100000),(86,'Divorciado(a)',83,100000),(87,'Viudo(a)',83,100000),(88,'Hombre',85,100000),(89,'Mujer',85,100000),(90,'Ninguno',86,100000),(91,'Primaria',86,100000),(92,'Secuandaria',86,100000),(93,'Preparatoria',86,100000),(94,'Carrera técnica',86,100000),(95,'Licenciatura',86,100000),(96,'Maestria',86,100000),(97,'Posgrado',86,100000),(98,'Si',87,100000),(99,'No',87,100000),(100,'Si',88,100000),(101,'No',88,100000),(102,'Estudiante',89,100000),(103,'Hogar',89,100000),(104,'Comerciante',89,100000),(105,'Jubilado / Pensionado',89,100000),(106,'Obrero',89,100000),(107,'Técnico',89,100000),(108,'Profesionista',89,100000),(109,'Empleado',89,100000);
+INSERT INTO `estudio_socio_economico_opcion` VALUES (1,'Otro',Null,1),(26,'Padres',63,2),(27,'Amigos',63,4),(28,'Familiares',63,3),(29,'Esposo(a)',63,5),(30,'Propia',67,100000),(31,'Rentada',67,100000),(32,'Casa de huéspedes',67,100000),(33,'Tierra',68,100000),(34,'Alfombra',68,100000),(35,'Madera',68,100000),(36,'Duela',68,100000),(37,'Cemento',68,100000),(39,'Mosaico',68,100000),(48,'Si',74,100000),(49,'No',74,100000),(50,'Si',75,100000),(51,'No',75,100000),(52,'Agua',77,100000),(53,'Luz',77,100000),(54,'Drenaje',77,100000),(55,'Pavimiento',77,100000),(56,'Télefono',77,100000),(57,'Gas',77,100000),(58,'TV por cable',77,100000),(59,'Internet',77,100000),(60,'DVD',78,100000),(61,'Televisión',78,100000),(62,'Estufa',78,100000),(63,'Licuadora',78,100000),(64,'Lavadora',78,100000),(65,'Estéreo',78,100000),(66,'Microondas',78,100000),(67,'Computadora',78,100000),(68,'Si',79,100000),(69,'No',79,100000),(70,'Auto propio',80,100000),(71,'Auto familiar',80,100000),(72,'Motocicleta',80,100000),(73,'Camión',80,100000),(74,'Taxi',80,100000),(75,'Caminando',80,100000),(76,'Padre',82,100000),(77,'Madre',82,100000),(78,'Hermano(a)',82,100000),(79,'Hijo(a)',82,100000),(80,'Abuelo(a)',82,100000),(81,'Tío(a)',82,100000),(82,'Tutor(a)',82,100000),(83,'Esposo(a)',82,100000),(84,'Soltero(a)',83,100000),(85,'Casado(a)',83,100000),(86,'Divorciado(a)',83,100000),(87,'Viudo(a)',83,100000),(88,'Hombre',85,100000),(89,'Mujer',85,100000),(90,'Ninguno',86,100000),(91,'Primaria',86,100000),(92,'Secuandaria',86,100000),(93,'Preparatoria',86,100000),(94,'Carrera técnica',86,100000),(95,'Licenciatura',86,100000),(96,'Maestria',86,100000),(97,'Posgrado',86,100000),(98,'Si',87,100000),(99,'No',87,100000),(100,'Si',88,100000),(101,'No',88,100000),(102,'Estudiante',89,100000),(103,'Hogar',89,100000),(104,'Comerciante',89,100000),(105,'Jubilado / Pensionado',89,100000),(106,'Obrero',89,100000),(107,'Técnico',89,100000),(108,'Profesionista',89,100000),(109,'Empleado',89,100000);
 /*!40000 ALTER TABLE `estudio_socio_economico_opcion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +41,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `estudio_socio_economico_seccion` WRITE;
 /*!40000 ALTER TABLE `estudio_socio_economico_seccion` DISABLE KEYS */;
-INSERT INTO `estudio_socio_economico_seccion` VALUES (43,'Datos Socioeconómicos','único',2),(44,'Datos familiares (Deben ser todos con los que vives)','agregación',100000);
+INSERT INTO `estudio_socio_economico_seccion` VALUES (43,'Datos Socioeconómicos','unico',2),(44,'Datos familiares (Deben ser todos con los que vives)','agregacion',100000);
 /*!40000 ALTER TABLE `estudio_socio_economico_seccion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
