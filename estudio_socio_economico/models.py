@@ -67,7 +67,7 @@ class Respuesta(models.Model):
     objects = InheritanceManager()
 
     def __str__(self):
-        return f"Respuesta {type(self)} - Elemento: {self.elemento_id} - Solicitante: {self.solicitante_id}"
+        return f"Respuesta {type(self)} - Elemento: {self.elemento} - Solicitante: {self.solicitante_id}"
     
     def save(self, *args, **kwargs):
         if self._state.adding:
