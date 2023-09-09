@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seccion, Opcion, Respuesta, RTextoCorto, RTextoParrafo, ROpcionMultiple, RCasillas, RDesplegable, RNumerico, RHora, RFecha , Elemento
+from .models import Seccion, Opcion, RAgregacion, Respuesta, RTextoCorto, RTextoParrafo, ROpcionMultiple, RCasillas, RDesplegable, RNumerico, RHora, RFecha , Elemento
 # Register your models here.
 
 class ElementoAdmin(admin.ModelAdmin):
@@ -9,6 +9,7 @@ class ElementoAdmin(admin.ModelAdmin):
 
 admin.site.register(Seccion)
 admin.site.register(Opcion)
+admin.site.register(RAgregacion)
 admin.site.register(Respuesta)
 admin.site.register(RTextoCorto)
 admin.site.register(RTextoParrafo)
