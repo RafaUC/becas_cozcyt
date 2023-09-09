@@ -14,6 +14,11 @@
                             if (source.checked){
                                 campoOtro.style.display = "block";
                             }else {
+                                const campoOtroInput = campoOtro.querySelector('input[type="text"]');
+                                if (campoOtroInput) {
+                                // Deja el campo en blanco
+                                campoOtroInput.value = '';
+                                }
                                 campoOtro.style.display = "none";
                             }
                         }
@@ -21,6 +26,11 @@
                         if (source.value === '{{opcOtro.id}}'){
                             campoOtro.style.display = "block";
                         }else {
+                            const campoOtroInput = campoOtro.querySelector('input[type="text"]');
+                            if (campoOtroInput) {
+                            // Deja el campo en blanco
+                            campoOtroInput.value = '';
+                            }
                             campoOtro.style.display = "none";
                         }
                     }         
@@ -41,6 +51,9 @@
         </div>   
         {% csrf_token %}
         {% for seccion in preguntasEstudio %}
+            {% if seccion.tipo == 'agregacion' %}
+            <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
+            {% endif %}
             <div class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 borde-pagina-principal ">
                 <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
                 <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
@@ -115,7 +128,49 @@
                         {% endwith %}                                               
                     {% endfor %}                
                 </div>
+            
+            {% if seccion.tipo == 'agregacion' %}
+                {% with registrosA|hashD:seccion.id as registros %}
+                    {% if registros %}
+                        
+                        <table class="table">
+                            <p class="h4 mx-3">Registros</p>                            
+                            <thead>
+                                <tr>
+                                    {% for elemento in seccion.elemento_set.all %}                                   
+                                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                    {% endfor %}
+                                    <th class="borde-pagina-gris" style="width: 30px; border-bottom: 2px solid;"> </th>
+                                </tr>
+                            </thead>                            
+                            <tbody>
+                                {% for registro in registros %}
+                                <tr>      
+                                    {% for respuest in registro%}    
+                                    {% with respuest.getStringValue as valor %}                          
+                                    <td title="{{ valor }}">
+                                        {{ valor }}
+                                    </td>    
+                                    {% endwith %}                  
+                                    {% endfor %}              
+                                    <td  style="text-align: right;">                        
+                                        <form class="p-0 m-0" action="{% url 'estudioSE:estudioSE' %}" method="get" >                                                        
+                                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                            </button>                                
+                                        </form>
+                                    </td>  
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endwith %}
             </div>
+            </div>
+            {% else %}
+            </div>
+            {% endif %}
         {% endfor %}        
         
     </form>

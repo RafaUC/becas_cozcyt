@@ -78,7 +78,7 @@ class RespuestaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         elemento = kwargs.pop("elemento", None)
         solicitante = kwargs.pop("solicitante", None)
-        super(RespuestaForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if elemento and solicitante:
             self.instance.solicitante = solicitante
             self.instance.elemento = elemento        
@@ -87,6 +87,14 @@ class RespuestaForm(forms.ModelForm):
             elemento_nombre = self.instance.elemento.nombre
             first_field_name = list(self.fields.keys())[0]
             self.fields[first_field_name].widget.attrs['placeholder'] = elemento_nombre
+
+        '''# Recorre los campos del formulario
+        for field_name, field in self.fields.items():
+            # Verifica si el campo es una ManyToManyField o ForeignKey
+            if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
+                # Establece las opciones como una lista vacía
+                field.choices = [] #'''
+
     
     """def add_prefix(self, field_name):
         field_name = super(RespuestaForm, self).add_prefix(field_name)

@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
@@ -54,7 +54,12 @@ class CustomIntegerField(models.IntegerField):
         if self.max_digits is not None and len(str(value)) > self.max_digits:
             raise ValidationError(f"El valor debe tener a lo mucho {self.max_digits} digitos.")
 
+class RAgregacion(models.Model):
+    # El modelo solo contiene el campo de identificación (ID) de forma predeterminada
+    pass
+
 class Respuesta(models.Model):
+    rAgregacion = models.ForeignKey(RAgregacion, on_delete=models.CASCADE, null=True, blank=True)
     elemento = models.ForeignKey('Elemento', on_delete=models.CASCADE)
     solicitante = models.ForeignKey(Solicitante, on_delete=models.CASCADE)
     otro = None    
@@ -62,46 +67,82 @@ class Respuesta(models.Model):
     objects = InheritanceManager()
 
     def __str__(self):
-        return f"Respuesta - Elemento: {self.elemento} - Solicitante: {self.solicitante}"
+        return f"Respuesta {type(self)} - Elemento: {self.elemento_id} - Solicitante: {self.solicitante_id}"
+    
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            # Solo realiza la verificación si estás creando una respuesta nueva
+            if self.elemento.seccion.tipo == 'unico':
+                # Verificar si ya existe una respuesta para esta combinación
+                if Respuesta.objects.filter(elemento=self.elemento, solicitante=self.solicitante).exists():                    
+                    raise IntegrityError('Ya existe una respuesta para este elemento y solicitante')
+        super().save(*args, **kwargs)
 
-    class Meta:
+    class Meta:        
         verbose_name = 'Respuesta'
-        verbose_name_plural = 'Respuestas'
-        unique_together = ['elemento', 'solicitante']
+        verbose_name_plural = 'Respuestas'   
+    
+    def getStringValue(self):
+        return 'Respuesta no Implementado'
 
 
 class RNumerico(Respuesta):
     valor = models.CharField(max_length=255, null=True,  blank=True)
-    
-    
+
+    def getStringValue(self):
+        return str(self.valor)
+        
 
 class RTextoCorto(Respuesta):
     texto = models.CharField(max_length=255, null=True,  blank=True)
-   
+
+    def getStringValue(self):
+        return str(self.texto)
+
 
 class RTextoParrafo(Respuesta):
     texto = models.TextField(null=True,  blank=True)
+
+    def getStringValue(self):
+        return str(self.texto)
 
 
 class RHora(Respuesta):
     hora = models.TimeField(null=True,  blank=True)
 
+    def getStringValue(self):
+        return str(self.hora)
+
 
 class RFecha(Respuesta):
     fecha = models.DateField(null=True,  blank=True)
 
+    def getStringValue(self):
+        return str(self.fecha)
+    
 
 class ROpcionMultiple(Respuesta):
     respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE, null=True, blank=True)
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
 
+    def getStringValue(self):
+        return str(self.respuesta)
+
 class RCasillas(Respuesta):
     respuesta = models.ManyToManyField(Opcion,  blank=True)
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=True)
 
+    def getStringValue(self):
+        return str(self.respuesta)
+    
+
 class RDesplegable(Respuesta):
     respuesta = models.ForeignKey(Opcion, on_delete=models.CASCADE, null=True,  blank=True)
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
+
+    def getStringValue(self):
+        return str(self.respuesta)
+    
 
 #---------Elementos-----------
 
