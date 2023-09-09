@@ -52,7 +52,7 @@ def estudioSE(request):
     opcOtro = get_object_or_404(Opcion, nombre = "Otro")
     #se obtienen e indexan las respuestas existentes del usuario
     respuestas = {}
-    respuestasExistentes = Respuesta.objects.filter(solicitante = solicitante).select_subclasses().select_related('elemento')
+    respuestasExistentes = Respuesta.objects.filter(solicitante = solicitante).select_subclasses().select_related('elemento__seccion')
     for respuesta in respuestasExistentes:        
         respuestas[respuesta.elemento_id] = respuesta
     
@@ -64,11 +64,13 @@ def estudioSE(request):
     raSeccion = -1
     for ra in rAgregacion:                
         registros = ra.respuesta_set.all().select_subclasses().select_related('elemento__seccion')
-        sID = respuesta.elemento.seccion_id
+        first = registros.first()
+        if first:
+            sID = first.elemento.seccion_id        
         if sID != raSeccion:
             raSeccion = sID
             registrosA[raSeccion] = []
-        registrosA[raSeccion].append(registros)
+        registrosA[raSeccion].append(registros)    
 
     '''        
     for clave, lista in registrosA.items():
@@ -92,17 +94,23 @@ def estudioSE(request):
     if request.method == 'POST':          
         crearForms(forms, opcOtro, request.POST, preguntasEstudio, formModels, formModelsConOpcion, respuestas, solicitante)
                     
-
+        
+        #Solo se validan y guardan las respuestas de secciones de tipo 'unico', las de 'agregacion' se omiten
         todoValido = True
         for form in forms.values():
-            if not form.is_valid():
-                todoValido = False
+            tipo = form.instance.elemento.seccion.tipo
+            if tipo == Seccion.TIPOS_CHOICES[0][0]:
+                if not form.is_valid():
+                    todoValido = False
+            elif tipo == Seccion.TIPOS_CHOICES[1][0]:
+                form.errors.clear()                                
         
         if todoValido:
             for form in forms.values():
-                form.save() 
+                if form.instance.elemento.seccion.tipo == Seccion.TIPOS_CHOICES[0][0]:
+                    form.save() 
             messages.success(request, 'Estudio Socioeconómico guardado con éxito')
-            #return redirect(settings.LOGIN_REDIRECT_URL)     
+            #return redirect('estudioSE:estudioSE')  
         else:            
             for i, seccion in enumerate(preguntasEstudio):                           
                 for j, elemento in enumerate(seccion.elemento_set.all()):                  
@@ -121,3 +129,82 @@ def estudioSE(request):
 
 
     return render(request, 'solicitante/estudioSE.html', context)
+
+
+
+@login_required
+def AgregarR(request, seccionID):
+    url = verificarRedirect(request.user)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
+    #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 
+    preguntasEstudio = Seccion.objects.filter(id = seccionID).prefetch_related('elemento_set__opcion_set')    
+    forms = {}   
+    opcOtro = get_object_or_404(Opcion, nombre = "Otro")
+    #se obtienen e indexan las respuestas existentes del usuario
+    respuestas = {}    
+    
+    rAgregacion =RAgregacion.objects.filter(respuesta__solicitante_id=solicitante, respuesta__elemento__seccion_id=seccionID)\
+        .distinct()\
+        .prefetch_related('respuesta_set')       
+
+    registrosA = {}
+    raSeccion = -1
+    for ra in rAgregacion:                
+        registros = ra.respuesta_set.all().select_subclasses().select_related('elemento__seccion')
+        first = registros.first()
+        if first:
+            sID = first.elemento.seccion_id        
+        if sID != raSeccion:
+            raSeccion = sID
+            registrosA[raSeccion] = []
+        registrosA[raSeccion].append(registros)        
+
+    #generando Forms
+    #se genera un diccionario con los tipos de forms
+    formModels = {}
+    formModelsConOpcion = [ROpcionMultipleForm, RCasillasForm, RDesplegableForm]     
+    for formtype in [RNumericoForm, RTextoCortoForm, RTextoParrafoForm, RHoraForm, RFechaForm, ROpcionMultipleForm, RCasillasForm, RDesplegableForm]:
+        formModels[formtype.Meta.model] = formtype    
+        
+    if request.method == 'GET':  
+        crearForms(forms, opcOtro, None, preguntasEstudio, formModels, formModelsConOpcion, respuestas, solicitante)                        
+
+    if request.method == 'POST':          
+        crearForms(forms, opcOtro, request.POST, preguntasEstudio, formModels, formModelsConOpcion, respuestas, solicitante)
+                    
+        
+        #Solo se validan y guardan las respuestas de secciones de tipo 'unico', las de 'agregacion' se omiten
+        todoValido = True
+        for form in forms.values():            
+            if not form.is_valid():
+                todoValido = False                                        
+        
+        if todoValido:
+            rAgregacionInstance = RAgregacion.objects.create()
+            for form in forms.values():     
+                form.instance.rAgregacion = rAgregacionInstance
+                form.save()                 
+            messages.success(request, 'Registro agregado con éxito')
+            return redirect('estudioSE:AgregarR', seccionID)  
+        else:            
+            for i, seccion in enumerate(preguntasEstudio):                           
+                for j, elemento in enumerate(seccion.elemento_set.all()):                  
+                    if elemento.id in forms and forms[elemento.id].errors:   
+                        for error in forms[elemento.id].errors.values():                                             
+                            messages.error(request, [f'Seccion {seccion.nombre}: Pregunta {elemento.nombre}', error])                    
+            messages.warning(request, 'No se pudo guardar el registro: Formularios no validos')
+            
+
+    context = {     
+            'mensajes' : 'mensajes.html',
+            'opcOtro': opcOtro,
+            'forms': forms,            
+            'preguntasEstudio': preguntasEstudio,   
+            'registrosA': registrosA,
+        }
+
+
+    return render(request, 'solicitante/formularioBase.html', context)

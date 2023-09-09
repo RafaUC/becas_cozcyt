@@ -21,4 +21,5 @@ urlpatterns = [
     path('administracion/config/estudio', viewsAdmin.configEstudio, name='AConfigEstudio'),
     path('administracion/config/getStudioForm', viewsAdmin.configEstudioGetForm, name='AConfigGetEstudioForm'),
     path('estudioSE/',views.estudioSE, name='estudioSE'),
+    path('agregarRegistroSE/<int:seccionID>/',views.AgregarR, name='AgregarR'),
 ]

@@ -39,6 +39,27 @@
             
               
         }
+
+        
+
+        function agregarRegistro(origen){
+            // Obtener los datos de los campos dentro de #miDiv
+            const id = origen.closest('.cont-agregacion').id;
+            const formData = $(`#${id} :input`).serialize();
+            const nUrl = "{% url 'estudioSE:AgregarR' 0 %}".replace('0', id.split('-').pop());
+
+            // Realizar la solicitud AJAX
+            $.ajax({
+                type: "POST",
+                url: nUrl,
+                data: formData,
+                success: function (data) {
+                    // Mostrar la respuesta en el elemento con ID "respuesta"
+                    $(`#${id}`).html(data);
+                }
+            });
+        }
+
     </script>
     
 
@@ -50,128 +71,8 @@
             </div>            
         </div>   
         {% csrf_token %}
-        {% for seccion in preguntasEstudio %}
-            {% if seccion.tipo == 'agregacion' %}
-            <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
-            {% endif %}
-            <div class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 borde-pagina-principal ">
-                <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
-                <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
-                    {% for elemento in seccion.elemento_set.all %}
-                        {% if elemento.tipo == 'separador' %}
-                            <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" > 
-                                <div class="font-semi-bold font-xl mt-4">
-                                    {{ elemento.nombre }}                                
-                                </div>
-                            </div>
-                        {% else %}
-                            {% with forms|hashD:elemento.id as form %}
-                            <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" >
-                                <div class="font-semi-bold mb-1">
-                                    {{ elemento.nombre }}
-                                    {% if elemento.obligatorio %}
-                                        *
-                                    {% endif %}
-                                </div>
-                                    {% for field in form %}
-                                                                                                                            
-                                        {% if elemento.opcionOtro and field.label == 'Otro' %}                                                                                    
-                                            <div class="opc-otro " style="display: none;">
-                                                {{ field }}
-                                            </div>                                            
-                                        {% elif field.label == 'Otro' %}
-                                            <!--omitir-->
-                                        {% else %} 
-                                            {% if elemento.tipo == 'opcion_multiple' or elemento.tipo == 'casillas' %}                                                                                   
-                                                <div class="d-flex align-items-center  mb-1">
-                                                    <div class="cont-opc row row-cols-auto text-center  ">
-                                                        {% for choice in field %}                                                
-                                                            <div class="px-auto">
-                                                                {{ choice }}  
-                                                            </div>                                                                                  
-                                                        {% endfor %}  
-                                                    </div> 
-                                                </div>                                          
-                                            {% else %}
-                                                <div class="mb-1">
-                                                    {{ field }}
-                                                </div>                                            
-                                            {% endif %}
-                                        {% endif %}  
-                                        
-                                        <div class="text-danger font-xs font-bold">
-                                            {% if field.errors %}
-                                                {% for error in field.errors %}
-                                                    {{ error }}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>                                
-                                    
-                                    {% endfor %}
-                                    
-                                    <div class="text-danger font-xs font-bold">
-                                        {% for error in form.non_field_errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                            </div>
-
-                            {% endwith %}                            
-                        {% endif %} 
-                        {% with c=seccion.elemento_set.all|hashD:forloop.counter %}
-                        {% with cb=elemento %}                                                  
-                            {% if c.row != cb.row and c is not None %}                                               
-                                </div>
-                                <div  class="row row-elementos ps-4 m-0 mb-4">                                                                                         
-                            {% endif %}
-                        {% endwith %}
-                        {% endwith %}                                               
-                    {% endfor %}                
-                </div>
-            
-            {% if seccion.tipo == 'agregacion' %}
-                {% with registrosA|hashD:seccion.id as registros %}
-                    {% if registros %}
-                        
-                        <table class="table">
-                            <p class="h4 mx-3">Registros</p>                            
-                            <thead>
-                                <tr>
-                                    {% for elemento in seccion.elemento_set.all %}                                   
-                                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
-                                    {% endfor %}
-                                    <th class="borde-pagina-gris" style="width: 30px; border-bottom: 2px solid;"> </th>
-                                </tr>
-                            </thead>                            
-                            <tbody>
-                                {% for registro in registros %}
-                                <tr>      
-                                    {% for respuest in registro%}    
-                                    {% with respuest.getStringValue as valor %}                          
-                                    <td title="{{ valor }}">
-                                        {{ valor }}
-                                    </td>    
-                                    {% endwith %}                  
-                                    {% endfor %}              
-                                    <td  style="text-align: right;">                        
-                                        <form class="p-0 m-0" action="{% url 'estudioSE:estudioSE' %}" method="get" >                                                        
-                                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                            </button>                                
-                                        </form>
-                                    </td>  
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% endif %}
-                {% endwith %}
-            </div>
-            </div>
-            {% else %}
-            </div>
-            {% endif %}
-        {% endfor %}        
+        
+        {% include 'solicitante/formularioBase.html' %}
         
     </form>
 
@@ -187,6 +88,16 @@
             const elementos2 = document.querySelectorAll('select');
             elementos2.forEach(function(elemento) {                
                 toggleOtroCampo(elemento);
+            });
+
+            const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Solo envía el token CSRF a rutas relativas
+                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    }
+                }
             });
         });
     </script>
