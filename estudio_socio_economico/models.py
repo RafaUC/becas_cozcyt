@@ -126,14 +126,26 @@ class ROpcionMultiple(Respuesta):
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.respuesta)
+        if self.respuesta and self.respuesta.nombre == 'Otro':
+            return str(self.respuesta)+': '+str(self.otro)
+        else :
+            return str(self.respuesta)
 
 class RCasillas(Respuesta):
     respuesta = models.ManyToManyField(Opcion,  blank=True)
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True, blank=True)
 
     def getStringValue(self):
-        return str(self.respuesta)
+        string = ''
+        objs = self.respuesta.all()
+        for i, obj in enumerate(objs):
+            string += str(obj)
+            if obj.nombre == 'Otro':
+                string += ': '+ str(self.otro)
+            if i < len(objs) - 1:
+                string += ', '
+
+        return string
     
 
 class RDesplegable(Respuesta):
@@ -141,7 +153,10 @@ class RDesplegable(Respuesta):
     otro = models.CharField(max_length=255, verbose_name="Otro", null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.respuesta)
+        if self.respuesta and self.respuesta.nombre == 'Otro':
+            return str(self.respuesta)+': '+str(self.otro)
+        else :
+            return str(self.respuesta)
     
 
 #---------Elementos-----------

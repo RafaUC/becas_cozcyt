@@ -8,13 +8,13 @@
     {% if seccion.tipo == 'agregacion' %}
     <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
     {% endif %}
-    <div class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 borde-pagina-principal ">
+    <div class=" cont-seccion border border-2 rounded-2 p-0 pb-2 mx-3 mb-5 borde-pagina-principal ">
         <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
         <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
             {% for elemento in seccion.elemento_set.all %}
                 {% if elemento.tipo == 'separador' %}
                     <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" > 
-                        <div class="font-semi-bold font-xl mt-4">
+                        <div class="font-semi-bold font-xl mt-2 ">
                             {{ elemento.nombre }}                                
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                 <button  type="button" class="btn rounded-4 btn-a-seccion btn-aceptado p-2 px-3 font-md" onclick="agregarRegistro(this)">Agregar Registro</button>
             </div>                  
             <p class="h4 mx-3 mb-2">Registros</p>               
-            <div class="border border-1 rounded-2 p-0 mx-2 mb-5 borde-pagina-principal ">
+            <div class="border border-1 rounded-2 p-0 mx-2 mb-2 borde-pagina-principal ">
                 <table class="table">                                     
                     <thead>
                         <tr>
@@ -110,12 +110,10 @@
                                 </td>    
                                 {% endwith %}                  
                                 {% endfor %}              
-                                <td class="font-xs " style="text-align: right;">                        
-                                    <form class="p-0 m-0" action="{% url 'estudioSE:estudioSE' %}" method="get" >                                                        
-                                        <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                        </button>                                
-                                    </form>
+                                <td class="font-xs " style="text-align: right;">                                                            
+                                    <button id="btnEliminar-{{registro.first.rAgregacion.id}}" type="button" onclick="eliminarRegistro(this)" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                    </button>                                                                    
                                 </td>  
                             </tr>
                             {% endfor %}
@@ -130,3 +128,19 @@
     </div>
     {% endif %}
 {% endfor %}   
+
+<script>
+    $(document).ready(function() {
+        const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+        elementos.forEach(function(elemento) {                
+            if (elemento.checked) {
+                toggleOtroCampo(elemento);
+            }
+        });
+
+        const elementos2 = document.querySelectorAll('select');
+        elementos2.forEach(function(elemento) {                
+            toggleOtroCampo(elemento);
+        });
+    });
+</script>

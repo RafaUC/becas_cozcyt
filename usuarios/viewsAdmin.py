@@ -188,7 +188,7 @@ def eliminarUsuario(request, user_id):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
 
-    user_to_delete = User.objects.get(pk=user_id)
+    user_to_delete = get_object_or_404(User, pk=user_id)    
     user_to_delete.delete()
     #print('usuario '+ str(user_to_delete) + ' eliminado')    
     anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
