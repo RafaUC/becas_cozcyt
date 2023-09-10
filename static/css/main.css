@@ -177,7 +177,11 @@ body {
 }
 
 .conte-sort {
-  min-height: 15px;
+  min-height: 0px;
+}
+
+.altura-min-conte-sort-edge{
+  min-height: 3px;
 }
 
 /* Login */
@@ -428,13 +432,21 @@ a {
 
 
 .hidden-ready {  
-  display:none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out; /* Animación de transición suave */
 }
 
 .opcion-text {    
   text-align: center;
 }
 
+.opcion-digit {
+  max-width: 3.5rem;
+}
+
+.elem-tipo-select {
+  min-width: 6rem;
+}
 
 table {
   width: 100%;
@@ -474,4 +486,8 @@ th {
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+}
+
+.form-check-inline-custom{
+  display: inline-block;
 }

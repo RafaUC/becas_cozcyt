@@ -1,10 +1,43 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
 from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
 from .models import Seccion, Elemento, Opcion
 from.forms import SeccionFormSet, ElementoFormSet, OpcionFormSet
 from django.contrib import messages
 # Create your views here.
+
+def configEstudioGetForm(request):    
+    url = verificarRedirect(request.user, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+
+    context = {}
+
+    if request.method == 'GET':  
+        secciones = Seccion.objects.all()
+        seccionFormset = SeccionFormSet(queryset=secciones, prefix='seccion_formset')        
+        dictElemForm = {}
+        dictOpcionForm = {}
+        for seccionform in seccionFormset:
+            seccionInstancia = seccionform.instance        
+            seccionFormsetId = (seccionform.prefix.split('-').pop())         
+            dictElemForm[seccionform.prefix] = ElementoFormSet(instance=seccionInstancia, prefix='elemento_formset-%s' % seccionFormsetId)
+            for elementoform in dictElemForm[seccionform.prefix]:
+                elemInstancia = elementoform.instance
+                elemFormsetId = elementoform.prefix.split('-') 
+                newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
+                dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
+
+        context = {
+                'seccionFormset': seccionFormset,
+                'dictElemForm': dictElemForm,
+                'dictOpcionForm': dictOpcionForm,
+            }            
+
+    return render(request, 'admin/config_estudioSEForm.html', context)
+
+
 
 # Crear el inline formset para Elemento    
 # Donde "ElementoForm" es el ModelForm personalizado para el modelo Elemento que definiste anteriormente.
@@ -14,20 +47,7 @@ def configEstudio(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)  
       
-    secciones = Seccion.objects.all()
-    seccionFormset = SeccionFormSet(queryset=secciones, prefix='seccion_formset')        
-    dictElemForm = {}
-    dictOpcionForm = {}
-    for seccionform in seccionFormset:
-        seccionInstancia = seccionform.instance        
-        seccionFormsetId = (seccionform.prefix.split('-').pop())         
-        dictElemForm[seccionform.prefix] = ElementoFormSet(instance=seccionInstancia, prefix='elemento_formset-%s' % seccionFormsetId)
-        for elementoform in dictElemForm[seccionform.prefix]:
-            elemInstancia = elementoform.instance
-            elemFormsetId = elementoform.prefix.split('-') 
-            newId = elemFormsetId[1] + '-' + elemFormsetId[2]                    
-            dictOpcionForm[elementoform.prefix] = OpcionFormSet(instance=elemInstancia, prefix='opcion_formset-%s' % newId)                                           
-
+    context = {}
 
     if request.method == 'POST':  
         todoValido = True  
@@ -161,11 +181,11 @@ def configEstudio(request):
             
         
 
-    context = {
-        'seccionFormset': seccionFormset,
-        'dictElemForm': dictElemForm,
-        'dictOpcionForm': dictOpcionForm,
-    }
+        context = {
+            'seccionFormset': seccionFormset,
+            'dictElemForm': dictElemForm,
+            'dictOpcionForm': dictOpcionForm,
+        }
     
     
 

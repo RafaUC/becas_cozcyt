@@ -105,7 +105,7 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="{% url 'usuarios:estudioSE' %}" class="nav-link d-flex link-dark {% if url_name == 'estudioSE' %}active{% endif %} h4" style="text-align: left;">
+                <a href="{% url 'estudioSE:estudioSE' %}" class="nav-link d-flex link-dark {% if url_name == 'estudioSE' %}active{% endif %} h4" style="text-align: left;">
                   <i class="fa fa-id-card-o px-2 align-self-center" aria-hidden="true"> </i>
                   Estudio Socioeconómico
                 </a>
@@ -145,38 +145,8 @@
         </div>                
       </div>
     </div>
-    
-    
-    
-
-    
-    <script> 
-      function isNumberKey(evt) {
-        var charCode = (evt.which) ? evt.which : evt.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-          return false;
-        return true;
-      }
-
-      function isNumberFloatKey(evt) {
-        var charCode = (evt.which) ? evt.which : evt.keyCode
-        if (charCode == 46)
-          return true;
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-          return false;
-        return true;
-      }
-
-      $(document).ready(function() {
-        $('[data-bs-original-title]').each(function(){
-          $(this).tooltip('update');
-        });
-            
-        $('.hidden-ready').removeClass('hidden-ready');
-            
-      });
-
-    </script>
+        
+    {% include 'base_custom_js.html' %}
 
   </body>
 </html>

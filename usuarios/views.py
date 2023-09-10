@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.shortcuts import get_object_or_404
 from django.apps import apps
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -25,7 +24,7 @@ def loginRedirect(request):
     else:
         return redirect("usuarios:convocatorias")
     
-#Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no retorna la url donde deberia ser redirigido
+#Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no, retorna la url donde deberia ser redirigido
 def verificarRedirect(usuario, *permisos):    
     """if not any(usuario.has_perm(perm) for perm in permisos):  #el no usuario tiene permiso de estar en la pagina
         return settings.LOGIN_REDIRECT_URL """    
@@ -239,7 +238,7 @@ def perfil(request):
                'formEscolar': formEscolar}
     return render(request, 'solicitante/perfil.html', context)
 
-
+@login_required
 def sMensajes(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    
@@ -248,7 +247,7 @@ def sMensajes(request):
 
     return render(request, 'solicitante/sMensajes.html')
 
-
+@login_required
 def convocatorias(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    
@@ -258,15 +257,7 @@ def convocatorias(request):
     return render(request, 'solicitante/convocatorias.html')
 
 
-def estudioSE(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'solicitante/estudioSE.html')
-
-
+@login_required
 def historial(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    

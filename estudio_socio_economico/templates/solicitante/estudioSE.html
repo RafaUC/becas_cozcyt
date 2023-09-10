@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load custom_filters %}    
+
+{% block body %}   
+    <script>
+        function toggleOtroCampo(source) {                                    
+
+            const contElem = source.closest('.cont-elem');
+            if (contElem) {
+                const campoOtro = contElem.querySelector('.opc-otro');
+                if (campoOtro) {                        
+                    if (source.type === "checkbox"){
+                        if (source.value === '{{opcOtro.id}}'){
+                            if (source.checked){
+                                campoOtro.style.display = "block";
+                            }else {
+                                const campoOtroInput = campoOtro.querySelector('input[type="text"]');
+                                if (campoOtroInput) {
+                                // Deja el campo en blanco
+                                campoOtroInput.value = '';
+                                }
+                                campoOtro.style.display = "none";
+                            }
+                        }
+                    }else {
+                        if (source.value === '{{opcOtro.id}}'){
+                            campoOtro.style.display = "block";
+                        }else {
+                            const campoOtroInput = campoOtro.querySelector('input[type="text"]');
+                            if (campoOtroInput) {
+                            // Deja el campo en blanco
+                            campoOtroInput.value = '';
+                            }
+                            campoOtro.style.display = "none";
+                        }
+                    }         
+                }
+            }
+            
+              
+        }
+
+        function eliminarRegistro(origen){
+            showCustomConfirm('¿Eliminar Registro?').then(function(val) {            
+                if (val) {
+                    // Obtener los datos de los campos dentro de #miDiv
+                    const idSeccion = origen.closest('.cont-agregacion').id; 
+                    const idRegistro = origen.id;
+                    const nUrl = "{% url 'estudioSE:EliminarR' 0 0 %}".replace('0', idSeccion.split('-').pop()).replace('0', idRegistro.split('-').pop());
+
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        type: "GET",
+                        url: nUrl,                
+                        success: function (data) {
+                            // Mostrar la respuesta en el elemento con ID "respuesta"
+                            $(`#${idSeccion}`).html(data);
+                        }
+                    });
+                }
+            });   
+            
+        }
+
+        function agregarRegistro(origen){
+            // Obtener los datos de los campos dentro de #miDiv
+            const id = origen.closest('.cont-agregacion').id;
+            const formData = $(`#${id} :input`).serialize();
+            const nUrl = "{% url 'estudioSE:AgregarR' 0 %}".replace('0', id.split('-').pop());
+
+            // Realizar la solicitud AJAX
+            $.ajax({
+                type: "POST",
+                url: nUrl,
+                data: formData,
+                success: function (data) {
+                    // Mostrar la respuesta en el elemento con ID "respuesta"
+                    $(`#${id}`).html(data);
+                }
+            });
+        }
+
+    </script>
+    
+
+    <form method="post">
+        <div id="botonASeccion" class="row px-0 sticky-top mx-0 mb-4 pagina-blanco border-bottom border-2 inline-block">
+            <p class="col-8 h1 m-3 p-0 "> Estudio Socioeconómico </p>
+            <div class="col d-flex align-items-center justify-content-center text-center ">
+                <button  type="submit" class="btn rounded-4 btn-a-seccion btn-aceptado p-3 font-lg" style="width: 10rem;">Guardar</button>
+            </div>            
+        </div>   
+        {% csrf_token %}
+        
+        {% include 'solicitante/formularioBase.html' %}
+        
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            elementos.forEach(function(elemento) {                
+                if (elemento.checked) {
+                    toggleOtroCampo(elemento);
+                }
+            });
+
+            const elementos2 = document.querySelectorAll('select');
+            elementos2.forEach(function(elemento) {                
+                toggleOtroCampo(elemento);
+            });
+
+            const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Solo envía el token CSRF a rutas relativas
+                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock body %}
