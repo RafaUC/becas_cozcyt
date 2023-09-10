@@ -40,7 +40,27 @@
               
         }
 
-        
+        function eliminarRegistro(origen){
+            showCustomConfirm('¿Eliminar Registro?').then(function(val) {            
+                if (val) {
+                    // Obtener los datos de los campos dentro de #miDiv
+                    const idSeccion = origen.closest('.cont-agregacion').id; 
+                    const idRegistro = origen.id;
+                    const nUrl = "{% url 'estudioSE:EliminarR' 0 0 %}".replace('0', idSeccion.split('-').pop()).replace('0', idRegistro.split('-').pop());
+
+                    // Realizar la solicitud AJAX
+                    $.ajax({
+                        type: "GET",
+                        url: nUrl,                
+                        success: function (data) {
+                            // Mostrar la respuesta en el elemento con ID "respuesta"
+                            $(`#${idSeccion}`).html(data);
+                        }
+                    });
+                }
+            });   
+            
+        }
 
         function agregarRegistro(origen){
             // Obtener los datos de los campos dentro de #miDiv

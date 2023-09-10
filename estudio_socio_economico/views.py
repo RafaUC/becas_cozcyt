@@ -133,7 +133,7 @@ def estudioSE(request):
 
 
 @login_required
-def AgregarR(request, seccionID):
+def agregarR(request, seccionID):
     url = verificarRedirect(request.user)    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
@@ -208,3 +208,23 @@ def AgregarR(request, seccionID):
 
 
     return render(request, 'solicitante/formularioBase.html', context)
+
+
+
+@login_required
+def eliminarR(request, seccionID, registroID):
+    url = verificarRedirect(request.user)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
+    registroAgregacion = get_object_or_404(RAgregacion, pk=registroID)      
+    respuestas = Respuesta.objects.filter(rAgregacion=registroAgregacion, solicitante=solicitante).select_subclasses()
+    
+    if respuestas.exists() and respuestas.first().elemento.seccion_id == seccionID:
+        print(f'eliminando {seccionID} - {registroID} - {respuestas.first().getStringValue()}')
+        registroAgregacion.delete()
+        messages.success(request, 'Registro eliminado con exito')
+        return redirect('estudioSE:AgregarR', seccionID)  
+    else:
+        messages.error(request, 'No se pudo eliminar el Registro')

@@ -2,11 +2,11 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="custom-confirm-modal-titulo">Modal title</h5>
+            <h5 class="modal-title" id="custom-confirm-modal-titulo">Confirmación</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
         </div>
         <div id="custom-confirm-modal-dialogo" class="modal-body font-md">
-            ...
+            Porfavor confirme la acción
         </div>
         <div class="modal-footer">
             <button id="custom-confirm-no" type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -22,13 +22,9 @@
         $('#custom-confirm-modal').modal('show');
         if (dialogo !== undefined){
             $('#custom-confirm-modal-dialogo').text(dialogo);
-        }else{
-            $('#custom-confirm-modal-dialogo').text('Porfavor confirme la accion');
         }
         if (dialogo !== undefined){
             $('#custom-confirm-modal-titulo').text(titulo);
-        }else{
-            $('#custom-confirm-modal-titulo').text('Confirmación');
         }
         
         // Crear promesa para controlar el resultado de la confirmación
