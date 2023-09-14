@@ -64,6 +64,7 @@
 
         function agregarRegistro(origen){
             // Obtener los datos de los campos dentro de #miDiv
+            origen.disabled = true;
             const id = origen.closest('.cont-agregacion').id;
             const formData = $(`#${id} :input`).serialize();
             const nUrl = "{% url 'estudioSE:AgregarR' 0 %}".replace('0', id.split('-').pop());
@@ -98,6 +99,12 @@
 
     <script>
         $(document).ready(function() {
+
+            {% if descargarPDF and descargarPDF == True %}
+                window.open('{% url "estudioSE:estudioSE_PDF" %}', '_blank');
+                //window.location.href = '{% url "estudioSE:estudioSE_PDF" %}'
+            {% endif %}
+
             const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             elementos.forEach(function(elemento) {                
                 if (elemento.checked) {
