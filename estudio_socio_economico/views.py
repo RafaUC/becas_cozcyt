@@ -15,6 +15,7 @@ from .forms import RNumericoForm, RTextoCortoForm, RTextoParrafoForm, RHoraForm,
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 import io
+import os
 from reportlab.lib.units import cm
 from reportlab.lib import utils
 from django.http import FileResponse
@@ -26,6 +27,12 @@ from reportlab.platypus.flowables import KeepInFrame, Flowable
 from reportlab.lib.styles import getSampleStyleSheet
 
 from reportlab.lib.enums import TA_CENTER
+
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from weasyprint import HTML, CSS
+import logging
 
 
 #logica para crear las instancias de las forms
@@ -465,7 +472,7 @@ def getEstudioPDF(request):
             
 
     contenido.append(Spacer(1, 15))
-    texto = '<font color="red"><b>NOTA:</b></font> El proporcionar información falsa es motivo suficiente para anular el trámite. El COZCyT se reserva el derecho de investigar la veracidad de lo antes declarado.' \
+    textoFinal = '<font color="red"><b>NOTA:</b></font> El proporcionar información falsa es motivo suficiente para anular el trámite. El COZCyT se reserva el derecho de investigar la veracidad de lo antes declarado.' \
         '<br/><br/>' \
         f'<b>{solicitante.nombre} {solicitante.ap_paterno} {solicitante.ap_materno}</b>' \
         '<br/><br/>' \
@@ -486,4 +493,87 @@ def getEstudioPDF(request):
 
     # Construir el PDF
     doc.build(contenido, onFirstPage=agregar_numero_pagina, onLaterPages=agregar_numero_pagina)
+    return response
+
+
+
+
+@login_required
+def getEstudioPDF2(request):        
+    url = verificarRedirect(request.user)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+
+    ###########OBtener informacion ###############
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
+    #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 
+    preguntasEstudio = Seccion.objects.all().prefetch_related('elemento_set__opcion_set')    
+    descargarPDF = False
+    forms = {}   
+    opcOtro = get_object_or_404(Opcion, nombre = "Otro")
+    #se obtienen e indexan las respuestas existentes del usuario
+    respuestas = {}
+    respuestasExistentes = Respuesta.objects.filter(solicitante = solicitante).select_subclasses().select_related('elemento__seccion')
+    for respuesta in respuestasExistentes:        
+        respuestas[respuesta.elemento_id] = respuesta    
+    
+    rAgregacion =RAgregacion.objects.filter(respuesta__solicitante_id=solicitante)\
+        .distinct()\
+        .prefetch_related('respuesta_set')       
+
+    registrosA = {}
+    raSeccion = -1
+    for ra in rAgregacion:                
+        registros = ra.respuesta_set.all().select_subclasses().select_related('elemento__seccion')
+        first = registros.first()
+        if first:
+            sID = first.elemento.seccion_id        
+        if sID != raSeccion:
+            raSeccion = sID
+            registrosA[raSeccion] = []
+        registrosA[raSeccion].append(registros)    
+
+    for seccion in preguntasEstudio:
+        for elemento in seccion.elemento_set.all():
+            pass
+            #print(f'{elemento} --- {any(elemento.tipo == choice[0] for choice in Elemento.TIPO_CHOICES[6:])}')
+
+    '''
+    if formModel in formModelsConOpcion:
+        choices = [(opcion.id, opcion.nombre) for opcion in elemento.opcion_set.all()]                
+        if isinstance(forms[elemento.id].fields['respuesta'].widget, FForms.Select):
+            # Agrega la opción en blanco al comienzo solo si el campo es un 'select'
+            choices.insert(0, ("", "---------"))  
+        if elemento.opcionOtro :
+            choices.append((opcOtro.id, opcOtro.nombre) )
+        forms[elemento.id].fields['respuesta'].choices = choices '''
+
+    template = get_template('solicitante/pdfTemplate.html')
+    context = {               
+            'solicitante': solicitante,
+            'opcOtro': opcOtro,
+            'forms': forms,            
+            'preguntasEstudio': preguntasEstudio,   
+            'registrosA': registrosA,
+            'descargarPDF': descargarPDF,
+        }
+
+    logger = logging.getLogger('weasyprint')
+    logger.addHandler(logging.FileHandler('./weasyprint.log'))
+    # Renderiza el template con los datos
+    html_content = template.render(context)
+
+    css_bootstrap_grid = os.path.join(settings.BASE_DIR, "static/css/bootstrap-grid.css")    
+    css_main = os.path.join(settings.BASE_DIR, "static/css/main.css")   
+    css_FA = os.path.join(settings.BASE_DIR, "static/css/font-awesome.css")   
+    # Crea un objeto HTML a partir del contenido HTML
+    html = HTML(string=html_content, base_url=request.build_absolute_uri())
+    print('aaaaaa')
+    # Genera el PDF
+    pdf_file = html.write_pdf(stylesheets=[CSS(css_bootstrap_grid), CSS(css_main), CSS(css_FA)])
+    print('bbbbbbbbbb')
+    # Devuelve el PDF como una respuesta HTTP
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    #response['Content-Disposition'] = 'filename="mi_pdf.pdf"'
+    response['Content-Disposition'] = 'inline; filename="EstudioSocioeconomico.pdf"'
     return response
