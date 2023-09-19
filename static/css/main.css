@@ -12,6 +12,16 @@
   --cancelar-activado: rgba(234, 94, 94, 1);
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
   --pagina-gris: #b9b4b4;
+
+  --gris-1: #efefef; /* Blanco apagado */
+  --gris-2: #e0e0e0; /* Gris claro */
+  --gris-3: #c0c0c0; /* Gris medio */
+  --gris-4: #a0a0a0; /* Gris */
+  --gris-5: #808080; /* Gris neutro */
+  --gris-6: #606060; /* Gris oscuro */
+  --gris-7: #404040; /* Gris profundo */
+  --gris-8: #202020; /* Gris intenso */
+  --negro: #000000; /* Negro absoluto */
 }
 
 :root {
@@ -28,6 +38,82 @@ body {
 
 
 /*Clases de estolo de Colores*/
+
+
+/* Clases para aplicar colores de fondo */
+.fondo-gris-1 {
+  background-color: var(--gris-1) !important;
+}
+
+.fondo-gris-2 {
+  background-color: var(--gris-2) !important;
+}
+
+.fondo-gris-3 {
+  background-color: var(--gris-3) !important;
+}
+
+.fondo-gris-4 {
+  background-color: var(--gris-4) !important;
+}
+
+.fondo-gris-5 {
+  background-color: var(--gris-5) !important;
+}
+
+.fondo-gris-6 {
+  background-color: var(--gris-6) !important;
+}
+
+.fondo-gris-7 {
+  background-color: var(--gris-7) !important;
+}
+
+.fondo-gris-8 {
+  background-color: var(--gris-8) !important;
+}
+
+.fondo-negro {
+  background-color: var(--negro) !important;
+}
+
+/* Clases para aplicar colores de texto */
+.texto-gris-1 {
+  color: var(--gris-1) !important;
+}
+
+.texto-gris-2 {
+  color: var(--gris-2) !important;
+}
+
+.texto-gris-3 {
+  color: var(--gris-3) !important;
+}
+
+.texto-gris-4 {
+  color: var(--gris-4) !important;
+}
+
+.texto-gris-5 {
+  color: var(--gris-5) !important;
+}
+
+.texto-gris-6 {
+  color: var(--gris-6) !important;
+}
+
+.texto-gris-7 {
+  color: var(--gris-7) !important;
+}
+
+.texto-gris-8 {
+  color: var(--gris-8) !important;
+}
+
+.texto-negro {
+  color: var(--negro) !important;
+}
+
 .pagina-blanco {
   background-color: var(--pagina-blanco) !important;
 }
@@ -356,32 +442,36 @@ a {
 
 /* Clase para fuente normal */
 .font-normal {
-  font-weight: normal;
+  font-weight: normal !important;
 }
 
 /* Clase para fuente en negrita */
 .font-bold {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 /* Clase para fuente semi-bold */
 .font-semi-bold {
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 /* Clase para fuente ligera */
 .font-light {
-  font-weight: lighter;
+  font-weight: lighter !important;
 }
 
 /* Clase para fuente más negrita */
 .font-bolder {
-  font-weight: bolder;
+  font-weight: bolder !important;
 }
 
 /* Clase para fuente con peso personalizado */
 .font-custom-weight {
-  font-weight: 700; /* Cambia el valor a tu preferencia */
+  font-weight: 700 !important; /* Cambia el valor a tu preferencia */
+}
+
+.font-xxs {
+  font-size: 0.714rem; /* 10px / 14px */
 }
 
 .font-xs {
@@ -493,5 +583,50 @@ th {
 
 .form-check-inline-custom{
   display: inline-block;
+}
+
+.horizontal-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Estilo para la tabla */
+.custom-table-se {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;  
+}
+
+/* Estilo para las celdas del encabezado de la tabla */
+.custom-table-se th {  
+  color: var(--negro); /* Color del texto del encabezado */
+  font-weight: normal;
+  padding: 3px; /* Espaciado interno en el encabezado */
+  text-align: center; /* Alineación del texto en el encabezado */
+  border: 1px solid; /* División vertical y borde alrededor de las celdas del encabezado */
+  border-color: var(--gris-5);
+  white-space: normal; 
+  word-wrap: break-word;
+  background-color: #acacac7c; /* Color de fondo del encabezado */
+}
+
+/* Estilo para las celdas de datos de la tabla */
+.custom-table-se td {
+  padding: 3px; /* Espaciado interno en las celdas de datos */  
+  text-align: center; /* Alinea el texto en el centro */
+  border: 1px solid; /* División vertical y borde alrededor de las celdas de datos */
+  border-color: var(--gris-3);
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Estilo para filas alternas (para un efecto de rayas) */
+.custom-table-se tr:nth-child(even) {
+  background-color: var(--gris-1); /* Color de fondo para filas pares */
+}
+
+/* Estilo para filas alternas (para un efecto de rayas) */
+.custom-table-se tr:nth-child(odd) {
+  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
 }
 

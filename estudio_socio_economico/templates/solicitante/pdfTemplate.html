@@ -5,9 +5,12 @@
     {% load custom_filters %}  
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
     
+    <link href="{% static 'css/bootstrap-grid.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">    
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
      
     <title>
         Estudio Socioeconómico
@@ -15,10 +18,13 @@
     <style type="text/css">
         @page {
             size: A4;
-            margin: 1cm;            
+            /*size: landscape;*/
+            margin: 0.5cm;            
+            margin-top: 1cm;    
+            margin-bottom: 2cm;    
             @bottom-right{                
-                margin-bottom: 3cm;     
-                content: "Page " counter(page) " of " counter(pages);
+                margin-bottom: 0cm;     
+                content: "Pagina " counter(page) " de " counter(pages);
             }
         }
     </style>    
@@ -26,122 +32,106 @@
 
   <body>
     <div class="text-center">
-      <img class="img-fluid w-50 mx-auto" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" >  
-      <h2 class="m-0 mb-5">Formato para Estudio Socioeconómico</h2>
-    </div>
+      <img class="img-fluid mx-auto" style="height: 10rem;" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" >  
+      <h2 class="m-0 mb-5">Formato para estudio socioeconómico</h2>
+    </div>    
 
 
     {% for seccion in preguntasEstudio %}
         {% if seccion.tipo == 'agregacion' %}
         <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
         {% endif %}
-        <div class=" cont-seccion border border-2 rounded-2 p-0 pb-2 mx-3 mb-5 borde-pagina-principal ">
-            <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
-            <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
-                {% for elemento in seccion.elemento_set.all %}
-                    {% if elemento.tipo == 'separador' %}
-                        <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" > 
-                            <div class="font-semi-bold font-xl mt-2 ">
-                                {{ elemento.nombre }}                                
-                            </div>
-                        </div>
-                    {% else %}
-                        {% with forms|hashD:elemento.id as form %}
-                        <div class="col cont-elem p-0 pt-2 me-4 rounded rounded-3" >
-                            <div class="font-semi-bold mb-1">
-                                {{ elemento.nombre }}
-                                {% if elemento.obligatorio %}
-                                    *
-                                {% endif %}
-                            </div>
-                                {% for field in form %}
-                                                                                                                        
-                                    {% if elemento.opcionOtro and field.label == 'Otro' %}                                                                                    
-                                        <div class="opc-otro " style="display: none;">
-                                            {{ field }}
-                                        </div>                                            
-                                    {% elif field.label == 'Otro' %}
-                                        <!--omitir-->
-                                    {% else %} 
-                                        {% if elemento.tipo == 'opcion_multiple' or elemento.tipo == 'casillas' %}                                                                                   
-                                            <div class="d-flex align-items-center  mb-1">
-                                                <div class="cont-opc row row-cols-auto text-center  ">
-                                                    {% for choice in field %}                                                
-                                                        <div class="px-auto">
-                                                            {{ choice }}  
-                                                        </div>                                                                                  
-                                                    {% endfor %}  
-                                                </div> 
-                                            </div>                                          
-                                        {% else %}
-                                            <div class="mb-1">
-                                                {{ field }}
-                                            </div>                                            
-                                        {% endif %}
-                                    {% endif %}  
-                                    
-                                    <div class="text-danger font-xs font-bold">
-                                        {% if field.errors %}
-                                            {% for error in field.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>                                
-                                
-                                {% endfor %}
-                                
-                                <div class="text-danger font-xs font-bold">
-                                    {% for error in form.non_field_errors %}
-                                        {{ error }}
-                                    {% endfor %}
+        <div class="cont-seccion container border border-2 rounded-2 p-0 mb-5 borde-pagina-principal ">
+            <h3 class="m-3 mb-3">{{ seccion.nombre }}</h3>                 
+                            
+                {% if seccion.tipo != 'agregacion' %} 
+                <div class="mb-1 mx-1 border-2 border-top border-dark">
+                    <div class="row row-col row-elementos p-0 mx-0 border-2 border-bottom border-start border-dark">                   
+                        {% for elemento in seccion.elemento_set.all %}
+                            {% if elemento.tipo == 'separador' %}
+                                <div class="col cont-elem p-0 rounded rounded-3 border-2 border-end border-dark" > 
+                                    <div style="margin: 0.3px; " class="col p-1 border-2 border-dark font-semi-bold text-center fondo-gris-3 font-md ">
+                                        {{ elemento.nombre }}                                
+                                    </div>                         
                                 </div>
-                        </div>
-
-                        {% endwith %}                            
-                    {% endif %} 
-                    {% with c=seccion.elemento_set.all|hashD:forloop.counter %}
-                    {% with cb=elemento %}                                                  
-                        {% if c.row != cb.row and c is not None %}                                               
-                            </div>
-                            <div  class="row row-elementos ps-4 m-0 mb-4">                                                                                         
-                        {% endif %}
-                    {% endwith %}
-                    {% endwith %}                                               
-                {% endfor %}                
-            </div>
-        
+                            {% else %}
+                                {% with valoresRespuesta|hashD:elemento.id as respuesta %}
+                                <div class="col m-0 cont-elem rounded rounded-3 border-2 border-end border-dark " >
+                                    <div style="margin: 0.3px; " class="row text-center p-2 border-2 border-bottom border-dark font-semi-bold text-center fondo-gris-2">
+                                        <div class="col border-2 border-dark font-semi-bold text-center ">
+                                            {{ elemento.nombre }}                                
+                                        </div>                                    
+                                    </div>
+                                    <div class="row text-center py-2 border-2 text-center">
+                                        <div class="col p-1 text-center mx-auto">
+                                            {% if respuesta|is_list %}
+                                                <div class="row row-cols-auto">
+                                                    {% for opcion in respuesta|slice:"1:" %}                                                    
+                                                        <div class="col mx-auto">
+                                                            <div class="mx-1">
+                                                                {% if opcion|is_list %}
+                                                                    <i class="{{respuesta.0.1}} m-0"></i>
+                                                                    {% for str in opcion %}
+                                                                        {{ str }}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    <i class="{{respuesta.0.0}} m-0"></i>
+                                                                    {{ opcion }}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                {{ respuesta }}
+                                            {% endif %}
+                                        </div>                                    
+                                    </div>                                        
+                                </div>
+    
+                                {% endwith %}                            
+                            {% endif %} 
+    
+                            
+                            
+                            {% with c=seccion.elemento_set.all|hashD:forloop.counter %}
+                            {% with cb=elemento %}                                                  
+                                {% if c.row != cb.row and c is not None %}                                               
+                                    </div>
+                                    <div class="row row-col row-elementos p-0 mx-0 border-2 border-bottom border-start border-dark">                   
+                                {% endif %}
+                            {% endwith %}
+                            {% endwith %}                                               
+                        {% endfor %}      
+                    
+                    </div>
+                </div>
+                
+                {% endif %}
+            
         {% if seccion.tipo == 'agregacion' %}
-            {% with registrosA|hashD:seccion.id as registros %}
-                <div class="col d-flex align-items-center justify-content-center text-center ">
-                    <button  type="button" class="btn rounded-4 btn-a-seccion btn-aceptado p-2 px-3 font-md" onclick="agregarRegistro(this)">Agregar Registro</button>
-                </div>                  
-                <p class="h4 mx-3 mb-2">Registros</p>               
-                <div class="border border-1 rounded-2 p-0 mx-2 mb-2 borde-pagina-principal ">
-                    <table class="table">                                     
-                        <thead>
+            {% with registrosA|hashD:seccion.id as registros %}                                
+                <h5 class="mx-3 mt-0 mb-2">Registros</h5>
+                <div class="p-0 " style="margin: 0.3px;">
+                    <table class="custom-table-se">                                     
+                        <thead >
                             <tr>
                                 {% for elemento in seccion.elemento_set.all %}                                   
-                                <th class="borde-pagina-gris font-xs " style="border-bottom: 2px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
-                                {% endfor %}
-                                <th class="borde-pagina-gris font-xs " style="width: 32px; border-bottom: 2px solid;"> </th>
+                                <th class="font-xs" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                {% endfor %}                                
                             </tr>
                         </thead>                            
                         <tbody>
                             {% if registros %}
                                 {% for registro in registros %}
-                                <tr>      
+                                <tr>                                          
                                     {% for respuest in registro%}    
                                     {% with respuest.getStringValue as valor %}                          
-                                    <td class="font-xs " title="{{ valor }}" style="white-space: normal; word-wrap: break-word;">
+                                    <td class="font-xs " title="{{ valor }}" >
                                         {{ valor }}
                                     </td>    
                                     {% endwith %}                  
-                                    {% endfor %}              
-                                    <td class="font-xs " style="text-align: right;">                                                            
-                                        <button id="btnEliminar-{{registro.first.rAgregacion.id}}" type="button" onclick="eliminarRegistro(this)" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                        </button>                                                                    
-                                    </td>  
+                                    {% endfor %}                                                  
                                 </tr>
                                 {% endfor %}
                             {% endif %}
@@ -157,7 +147,7 @@
     {% endfor %}   
 
 
-    <div class="text-center">
+    <div class="text-center mx-auto" style="width: 60%;">
       <p>
         <span class="font-semi-bold" style="color: red;">NOTA:</span> El proporcionar información falsa es motivo suficiente para anular el trámite. El COZCyT se reserva el derecho de investigar la veracidad de lo antes declarado.
       </p>        

@@ -23,5 +23,5 @@ urlpatterns = [
     path('estudioSE/',views.estudioSE, name='estudioSE'),
     path('agregarRegistroSE/<int:seccionID>/',views.agregarR, name='AgregarR'),
     path('eliminarRegistroSE/<int:seccionID>/<int:registroID>/',views.eliminarR, name='EliminarR'),
-    path('estudioSE_PDF/',views.getEstudioPDF2, name='estudioSE_PDF'),
+    path('estudioSE_PDF/',views.getEstudioPDF, name='estudioSE_PDF'),
 ]
