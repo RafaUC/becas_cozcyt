@@ -47,15 +47,15 @@
                         {% for elemento in seccion.elemento_set.all %}
                             {% if elemento.tipo == 'separador' %}
                                 <div class="col cont-elem p-0 rounded rounded-3 border-2 border-end border-dark" > 
-                                    <div style="margin: 0.3px; " class="col p-1 border-2 border-dark font-semi-bold text-center fondo-gris-3 font-md ">
+                                    <div style="margin: 0.3px; " class="col p-1 border-2 border-dark text-center fondo-gris-3 font-md ">
                                         {{ elemento.nombre }}                                
                                     </div>                         
                                 </div>
                             {% else %}
                                 {% with valoresRespuesta|hashD:elemento.id as respuesta %}
                                 <div class="col m-0 cont-elem rounded rounded-3 border-2 border-end border-dark " >
-                                    <div style="margin: 0.3px; " class="row text-center p-2 border-2 border-bottom border-dark font-semi-bold text-center fondo-gris-2">
-                                        <div class="col border-2 border-dark font-semi-bold text-center ">
+                                    <div style="margin: 0.3px; " class="row text-center p-2 border-2 border-bottom border-dark text-center fondo-gris-2">
+                                        <div class="col border-2 border-dark text-center ">
                                             {{ elemento.nombre }}                                
                                         </div>                                    
                                     </div>

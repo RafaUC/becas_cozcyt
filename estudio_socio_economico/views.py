@@ -290,12 +290,14 @@ def getEstudioPDF(request):
                     multiples = respuestas[elemento.id].respuesta.all()                    
                 else :
                     multiples = None
-                #if opcion.id in respuestas[elemento.id].respuesta:
-                for opcion in elemento.opcion_set.all():                    
+                opciones = list(elemento.opcion_set.all())
+                if elemento.opcionOtro :                        
+                        opciones.append(opcOtro)
+                for opcion in opciones:                    
                         
                     if (multiples and opcion in multiples) or (not multiples and opcion.id == respuestas[elemento.id].respuesta_id):
                         if opcion.nombre == 'Otro' :
-                            choices.append([opcion.nombre, respuestas[elemento.id].otro])
+                            choices.append([f'{opcion.nombre}:', respuestas[elemento.id].otro])
                         else:
                             choices.append([opcion.nombre])
                     else:
@@ -333,6 +335,6 @@ def getEstudioPDF(request):
     #pdf_file = html.write_pdf()    
     # Devuelve el PDF como una respuesta HTTP
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="EstudioSocioeconomico.pdf"'  # Cambia 'inline' a 'attachment'
-    response['Content-Disposition'] = 'inline; filename="EstudioSocioeconomico.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="EstudioSocioeconomico.pdf"'  # Cambia 'inline' a 'attachment'
+    #response['Content-Disposition'] = 'inline; filename="EstudioSocioeconomico.pdf"'
     return response
