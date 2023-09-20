@@ -323,15 +323,16 @@ def getEstudioPDF(request):
     #return render(request, 'solicitante/pdfTemplate.html', context)
     html_content = template.render(context)
 
-    #css_bootstrap_grid = os.path.join(settings.BASE_DIR, "static/css/bootstrap-grid.css")    
-    #css_main = os.path.join(settings.BASE_DIR, "static/css/main.css")       
+    css_bootstrap_grid = os.path.join(settings.BASE_DIR, "static/css/bootstrap-grid.css")    
+    css_main = os.path.join(settings.BASE_DIR, "static/css/main.css")  
+    ruta_carpeta_cache = os.path.join(settings.BASE_DIR, "cachePDF/")     
     # Crea un objeto HTML a partir del contenido HTML
     html = HTML(string=html_content, base_url=request.build_absolute_uri())    
     # Genera el PDF
-    #pdf_file = html.write_pdf(stylesheets=[CSS(css_bootstrap_grid), CSS(css_main)])    
-    pdf_file = html.write_pdf()    
+    pdf_file = html.write_pdf(stylesheets=[CSS(css_bootstrap_grid), CSS(css_main)], image_cache=ruta_carpeta_cache)    
+    #pdf_file = html.write_pdf()    
     # Devuelve el PDF como una respuesta HTTP
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="EstudioSocioeconomico.pdf"'  # Cambia 'inline' a 'attachment'
-    #response['Content-Disposition'] = 'inline; filename="EstudioSocioeconomico.pdf"'
+    #response['Content-Disposition'] = 'attachment; filename="EstudioSocioeconomico.pdf"'  # Cambia 'inline' a 'attachment'
+    response['Content-Disposition'] = 'inline; filename="EstudioSocioeconomico.pdf"'
     return response

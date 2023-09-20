@@ -6,9 +6,7 @@ RUN apt -y upgrade
 RUN apt-get install python3 python3-pip libmariadb-dev \
     python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 \
     nano -y
-#RUN apt-get install apache2 python3 python3-pip libmariadb-dev \
-#    libapache2-mod-wsgi-py3 python3-dev openssh-client nano -y
-
+    
 # Configure timezone
 ENV TZ=America/Mexico_City
 RUN ln -snf  /etc/l/usr/share/zoneinfo/$TZocaltime && echo $TZ > /etc/timezone
