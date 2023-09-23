@@ -76,7 +76,7 @@
                 {% with cb=elemento %}                                                  
                     {% if c.row != cb.row and c is not None %}                                               
                         </div>
-                        <div  class="row row-elementos ps-4 m-0 mb-4">                                                                                         
+                        <div class="row row-col row-elementos ps-4 m-0 mb-4 ">                                                                                   
                     {% endif %}
                 {% endwith %}
                 {% endwith %}                                               
@@ -89,12 +89,12 @@
                 <button  type="button" class="btn rounded-4 btn-a-seccion btn-aceptado p-2 px-3 font-md" onclick="agregarRegistro(this)">Agregar Registro</button>
             </div>                  
             <p class="h4 mx-3 mb-2">Registros</p>               
-            <div class="border border-1 rounded-2 p-0 mx-2 mb-2 borde-pagina-principal ">
-                <table class="table">                                     
+            <div class="border border-1 rounded-2 p-0 mx-2 mb-2 borde-pagina-principal horizontal-scroll ">
+                <table class="custom-table-se">                                     
                     <thead>
                         <tr>
                             {% for elemento in seccion.elemento_set.all %}                                   
-                            <th class="borde-pagina-gris font-xs " style="border-bottom: 2px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                            <th class="borde-pagina-gris font-xs font-semi-bold" style="border-bottom: 2px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
                             {% endfor %}
                             <th class="borde-pagina-gris font-xs " style="width: 32px; border-bottom: 2px solid;"> </th>
                         </tr>
@@ -112,7 +112,7 @@
                                 {% endfor %}              
                                 <td class="font-xs " style="text-align: right;">                                                            
                                     <button id="btnEliminar-{{registro.first.rAgregacion.id}}" type="button" onclick="eliminarRegistro(this)" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                        <i class="fa fa-trash-o texto-cancelar-activado " style="font-size: 20px; margin-left: -23px;"></i>
                                     </button>                                                                    
                                 </td>  
                             </tr>
