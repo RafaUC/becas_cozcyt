@@ -90,35 +90,50 @@ class RNumerico(Respuesta):
     valor = models.CharField(max_length=255, null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.valor)
+        if self.valor is None:
+            return '-----'
+        else :
+            return str(self.valor)         
         
 
 class RTextoCorto(Respuesta):
     texto = models.CharField(max_length=255, null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.texto)
+        if self.texto is None:
+            return '-----'
+        else :
+            return str(self.texto) 
 
 
 class RTextoParrafo(Respuesta):
     texto = models.TextField(null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.texto)
+        if self.texto is None:
+            return '-----'
+        else :
+            return str(self.texto)        
 
 
 class RHora(Respuesta):
     hora = models.TimeField(null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.hora)
+        if self.hora is None:
+            return '-----'
+        else :
+            return str(self.hora)        
 
 
 class RFecha(Respuesta):
     fecha = models.DateField(null=True,  blank=True)
 
     def getStringValue(self):
-        return str(self.fecha)
+        if self.fecha is None:
+            return '-----'
+        else :
+            return str(self.fecha)
     
 
 class ROpcionMultiple(Respuesta):
@@ -129,7 +144,10 @@ class ROpcionMultiple(Respuesta):
         if self.respuesta and self.respuesta.nombre == 'Otro':
             return str(self.respuesta)+': '+str(self.otro)
         else :
-            return str(self.respuesta)
+            if self.respuesta is None:
+                return '-----'
+            else :
+                return str(self.respuesta)
 
 class RCasillas(Respuesta):
     respuesta = models.ManyToManyField(Opcion,  blank=True)
@@ -144,8 +162,10 @@ class RCasillas(Respuesta):
                 string += ': '+ str(self.otro)
             if i < len(objs) - 1:
                 string += ', '
-
-        return string
+        if string is '':
+            return '-----'
+        else :           
+            return string
     
 
 class RDesplegable(Respuesta):
@@ -156,7 +176,10 @@ class RDesplegable(Respuesta):
         if self.respuesta and self.respuesta.nombre == 'Otro':
             return str(self.respuesta)+': '+str(self.otro)
         else :
-            return str(self.respuesta)
+            if self.respuesta is None:
+                return '-----'
+            else :
+                return str(self.respuesta)
     
 
 #---------Elementos-----------

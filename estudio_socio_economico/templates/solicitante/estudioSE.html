@@ -64,6 +64,7 @@
 
         function agregarRegistro(origen){
             // Obtener los datos de los campos dentro de #miDiv
+            origen.disabled = true;
             const id = origen.closest('.cont-agregacion').id;
             const formData = $(`#${id} :input`).serialize();
             const nUrl = "{% url 'estudioSE:AgregarR' 0 %}".replace('0', id.split('-').pop());
@@ -87,7 +88,7 @@
         <div id="botonASeccion" class="row px-0 sticky-top mx-0 mb-4 pagina-blanco border-bottom border-2 inline-block">
             <p class="col-8 h1 m-3 p-0 "> Estudio Socioeconómico </p>
             <div class="col d-flex align-items-center justify-content-center text-center ">
-                <button  type="submit" class="btn rounded-4 btn-a-seccion btn-aceptado p-3 font-lg" style="width: 10rem;">Guardar</button>
+                <button  type="submit" class="btn rounded-4 btn-a-seccion btn-aceptado p-3 font-lg" style="width: 15rem;">Guardar y descargar</button>
             </div>            
         </div>   
         {% csrf_token %}
@@ -98,6 +99,12 @@
 
     <script>
         $(document).ready(function() {
+
+            {% if descargarPDF and descargarPDF == True %}
+                window.open('{% url "estudioSE:estudioSE_PDF" %}', '_blank');
+                //window.location.href = '{% url "estudioSE:estudioSE_PDF" %}'
+            {% endif %}
+
             const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             elementos.forEach(function(elemento) {                
                 if (elemento.checked) {

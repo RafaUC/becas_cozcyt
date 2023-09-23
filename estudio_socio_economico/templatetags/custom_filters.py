@@ -1,4 +1,5 @@
 from django import template
+from estudio_socio_economico.models import Elemento
 import logging
 
 register = template.Library()
@@ -11,6 +12,20 @@ def hashD(d, key):
     except Exception as e:
         #logger.exception("Ocurrió una excepción al usar filtro: %s", str(e))        
         return None
+
+@register.filter
+def enlistarRows(elementos):        
+    rows = []
+    row = []
+    ultimoRow = None
+    for elemento in elementos:
+        if elemento.row != ultimoRow and ultimoRow is not None:
+            rows.append(row)
+            row = []
+        row.append(elemento)        
+        ultimoRow = elemento.row
+    return rows
+
     
 
 @register.filter
