@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load custom_filters %}    
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+
+    <p class="h4 mx-5 mt-2 mb-3"> Modificar Puntajes generales</p>
+
+    <div class="container "> 
+        <form method="post">
+            <button id="submitButton" type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2 font-md"> Guardar cambios </button>
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div class="row row-tipo my-3 justify-content-center">
+                {% with first=formset.0 %}
+                    {% if first %}
+                        {% for choice_value, choice_text in first.tipo.field.choices %}
+                            {% if choice_value == first.tipo.value %}
+                                <p class="h6 font-md">
+                                    {{ choice_text }}
+                                </p>                        
+                            {% endif %}
+                        {% endfor %}                        
+                    {% endif %}
+                {% endwith %}   
+                {% for form in formset %}
+                    <div class="col-3 text-center " >
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                            <div class="text-danger">
+                                {{ hidden.errors }}
+                            </div>  
+                        {% endfor %}            
+                        
+                        {% if form.tipo.value == '3-Municipio' or form.tipo.value == '4-Tipo de solicitud' %}  
+                            <div style="display: none;">
+                                {{ form.nombre }}
+                            </div>
+                            <div class="form-control form-control-sm form-control-label text-center px-0 ">{{ form.nombre.value }}</div>                                              
+                        {% else %}
+                            {{ form.nombre }}
+                        {% endif %}
+
+                        <div class="text-danger">
+                            {{ form.nombre.errors  }}
+                        </div> 
+                        {{ form.puntos }}                
+                        <div class="text-danger">
+                            {{ form.puntos.errors  }}
+                            {{ form.non_field_errors  }}
+                        </div> 
+                    </div>            
+                    {% with c=formset|hashD:forloop.counter %}
+                    {% with cb=form %}            
+                        <script> console.log('{{c.tipo.value}} - {{cb.tipo.value}}') </script>                                      
+                        {% if c.tipo.value != cb.tipo.value and c is not None %}                                                                
+                            </div>
+                            <div class="row row-tipo my-3 justify-content-center">
+                                {% for choice_value, choice_text in c.tipo.field.choices %}
+                                    {% if choice_value == c.tipo.value %}
+                                        <p class="h6 font-md">
+                                            {{ choice_text }}
+                                        </p>                        
+                                    {% endif %}
+                                {% endfor %}                                            
+                        {% endif %}
+                    {% endwith %}
+                    {% endwith %}        
+                {% endfor %}             
+            </div>
+        </form>   
+    </div>
+
+{% endblock body %}

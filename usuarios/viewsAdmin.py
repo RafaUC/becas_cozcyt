@@ -182,6 +182,31 @@ def configuracion(request):
     return render(request, 'admin/configuracion.html')
 
 @login_required
+def puntajes(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
+    if request.method == 'GET':
+        formset = PuntajesGeneralesFormSet(queryset=PuntajeGeneral.objects.all())
+    elif request.method == 'POST':
+        formset = PuntajesGeneralesFormSet(request.POST, queryset=PuntajeGeneral.objects.all())
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Cambios guardados con éxito')
+        else:
+            messages.warning(request, 'No se pudieron guardar los cambios')
+            messages.error(request, formset.errors)
+
+    context = {
+        'formset': formset,
+    }
+    
+    return render(request, 'admin/puntajes.html', context)
+
+
+@login_required
 def eliminarUsuario(request, user_id):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    

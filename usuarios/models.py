@@ -110,6 +110,7 @@ class Solicitante(Usuario):
     GENERO_CHOICES = (
         ('M', 'Masculino'),
         ('F', 'Femenino'),
+        ('O', 'Otro'),
     )
     GRADO_CHOICES = [(f"{i:02d}", f"{i:02d}") for i in range(1, 16)]
     
@@ -162,3 +163,24 @@ class Solicitante(Usuario):
             ('permisos_solicitante', 'Permisos para solicitantes'), ] 
 
 
+class PuntajeGeneral(models.Model):
+    SECCION_CHOICES = (
+        ('1-Genero', 'Género'),
+        ('2-Ingresos', 'Ingresos'),
+        ('3-Municipio', 'Municipio'),
+        ('4-Tipo de solicitud', 'Tipo de solicitud'),
+        ('5-Periodo', 'Periodo'),
+        ('6-Promedio', 'Promedio'),
+    )
+
+    tipo = models.CharField(max_length=50, choices=SECCION_CHOICES, verbose_name='Tipo de Puntaje')
+    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    puntos = models.IntegerField(verbose_name='Puntos', default=0)
+
+    def __str__(self):
+        return f'({self.tipo}) {self.nombre}'
+
+    class Meta:
+        verbose_name = 'Puntaje General'
+        verbose_name_plural = 'Puntajes Generales'
+        ordering = ['tipo', 'id']
