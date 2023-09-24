@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.forms import modelformset_factory
 
 from .models import *
 from django.contrib.auth import get_user_model
@@ -183,3 +184,25 @@ class SolicitanteEscolaresForm(SolicitanteForm):
                   'codigo_postal', 
                   'tel_cel', 
                   'tel_fijo')
+
+class PuntajesGeneralesForm(forms.ModelForm):
+    class Meta:
+        model = PuntajeGeneral
+        fields = ['tipo', 'nombre', 'puntos']
+        labels = {
+            'tipo': 'Tipo de seccion',
+            'nombre': 'Nombre del Puntaje',
+            'puntos': 'Puntos Asignados',
+        }
+        widgets = {
+            'tipo': forms.HiddenInput(), 
+            'nombre': forms.TextInput(attrs={'class': 'form-control form-control-sm form-control-label text-center px-0 fondo-gris-0'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control form-control-sm text-center m-auto', 'style': 'width: 5rem;'}),
+        }
+
+PuntajesGeneralesFormSet = modelformset_factory(
+    PuntajeGeneral,
+    form=PuntajesGeneralesForm,
+    extra=0, 
+    can_delete=True
+)
