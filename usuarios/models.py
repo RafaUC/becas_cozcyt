@@ -22,6 +22,8 @@ class Municipio(models.Model):
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ['estado', 'nombre']
 
 class Institucion(models.Model):
     nombre = models.CharField(verbose_name="Nombre Institución", max_length=191, null=False)
@@ -167,7 +169,7 @@ class PuntajeGeneral(models.Model):
     SECCION_CHOICES = (
         ('1-Genero', 'Género'),
         ('2-Ingresos', 'Ingresos'),
-        ('3-Municipio', 'Municipio'),
+        #('3-Municipio', 'Municipio'),
         ('4-Tipo de solicitud', 'Tipo de solicitud'),
         ('5-Periodo', 'Periodo'),
         ('6-Promedio', 'Promedio'),
@@ -184,3 +186,10 @@ class PuntajeGeneral(models.Model):
         verbose_name = 'Puntaje General'
         verbose_name_plural = 'Puntajes Generales'
         ordering = ['tipo', 'id']
+
+class PuntajeMunicipio(models.Model):
+    municipio = models.OneToOneField(Municipio, on_delete=models.CASCADE, primary_key=True)
+    puntos = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Puntaje de {self.municipio} - {self.puntos} puntos"

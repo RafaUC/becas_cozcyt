@@ -6,10 +6,11 @@
 
     <p class="h4 mx-5 mt-2 mb-3"> Modificar Puntajes generales</p>
 
-    <div class="container "> 
+    <div class="container ">         
+
         <form method="post">
             <button id="submitButton" type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2 font-md"> Guardar cambios </button>
-            {% csrf_token %}
+            {% csrf_token %}        
             {{ formset.management_form }}
             <div class="row row-tipo my-3 justify-content-center">
                 {% with first=formset.0 %}
@@ -51,8 +52,7 @@
                         </div> 
                     </div>            
                     {% with c=formset|hashD:forloop.counter %}
-                    {% with cb=form %}            
-                        <script> console.log('{{c.tipo.value}} - {{cb.tipo.value}}') </script>                                      
+                    {% with cb=form %}                                    
                         {% if c.tipo.value != cb.tipo.value and c is not None %}                                                                
                             </div>
                             <div class="row row-tipo my-3 justify-content-center">
@@ -68,7 +68,35 @@
                     {% endwith %}        
                 {% endfor %}             
             </div>
-        </form>   
+        </form> 
+        
+        <div class="row" id="puntosMunicipio">
+            {% include 'municipio_puntos.html' %}
+        </div>
+        
     </div>
+
+    <script>
+        function cargarMunicipio() {
+            const estado = $('#id_estado').val()
+            const municipio = $('#id_municipio').val()
+            
+            $.ajax({
+                type: 'GET',
+                url: '{% url "usuarios:AConfigPuntajesCargarM" %}',
+                data: {
+                    'estado': estado,
+                    'municipio': municipio
+                },
+                success: function (data) {
+                    // Actualiza el contenido en el div de resultado
+                    $('#puntosMunicipio').html(data);
+                },
+                error: function () {
+                    alert('Ha ocurrido un error al cargar el municipio.');
+                }
+            });
+        }
+    </script>
 
 {% endblock body %}
