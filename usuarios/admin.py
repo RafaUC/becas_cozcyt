@@ -45,6 +45,7 @@ class UsuarioAdmin(UserAdmin):
 admin.site.register(Usuario, UsuarioAdmin)
 
 #admin.site.register(Usuario)
+admin.site.register(PuntajeMunicipio)
 admin.site.register(PuntajeGeneral)
 admin.site.register(Solicitante)
 admin.site.register(Carrera)

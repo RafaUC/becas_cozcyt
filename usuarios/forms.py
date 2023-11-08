@@ -206,3 +206,31 @@ PuntajesGeneralesFormSet = modelformset_factory(
     extra=0, 
     can_delete=True
 )
+
+class PuntajeMunicipioForm(forms.ModelForm):
+    class Meta:
+        model = PuntajeMunicipio
+        fields = ['municipio', 'puntos']
+        widgets = {
+            'municipio': forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control form-control text-center m-auto', 'style': 'width: 5rem;'}),            
+        }
+    
+    estado = forms.ModelChoiceField(queryset=Estado.objects.all(), empty_label="Selecciona un estado", widget=forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['municipio'].queryset = Municipio.objects.none()
+
+    def set_estado(self, estado_id):
+        if estado_id:
+            #self.fields['municipio'].queryset = Municipio.objects.filter(estado=estado_id)
+            municipios_con_puntajes = PuntajeMunicipio.objects.filter(municipio__estado=estado_id)
+            choices = [('', 'Selecciona un municipio')]  # Opción por defecto
+            for puntaje in municipios_con_puntajes:
+                nombre_municipio = puntaje.municipio.nombre
+                puntos = puntaje.puntos if puntaje.puntos is not None else 0
+                choice = (puntaje.municipio.id, f"{nombre_municipio} - Puntos: {puntos}")
+                choices.append(choice)
+            self.fields['municipio'].choices = choices
+            self.initial['estado'] = estado_id  # Establece el valor inicial del campo estado

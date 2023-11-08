@@ -52,6 +52,7 @@ urlpatterns = [
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
     path('administracion/configuracion', viewsAdmin.configuracion, name='AConfigGeneral'), 
     path('administracion/config/puntajes', viewsAdmin.puntajes, name='AConfigPuntajes'),
+    path('administracion/config/puntajes/cargarMunicipio', viewsAdmin.cargar_municipio_puntos, name='AConfigPuntajesCargarM'),
     path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
     path('administracion/eliminarUsuario/<int:user_id>/', viewsAdmin.eliminarUsuario, name='AEliminarUsuario'),
 ]

@@ -187,6 +187,7 @@ def puntajes(request):
     url = verificarRedirect(usuario, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
+    mpForm = PuntajeMunicipioForm()
 
     if request.method == 'GET':
         formset = PuntajesGeneralesFormSet(queryset=PuntajeGeneral.objects.all())
@@ -201,9 +202,33 @@ def puntajes(request):
 
     context = {
         'formset': formset,
+        'mpForm': mpForm,
     }
     
     return render(request, 'admin/puntajes.html', context)
+
+def cargar_municipio_puntos(request):
+    if request.method == 'GET':
+        estadoId = request.GET.get('estado')    
+        municipioId = request.GET.get('municipio')    
+        print(municipioId)            
+        if municipioId:
+            try:
+                puntaje_municipio = PuntajeMunicipio.objects.get(municipio_id=municipioId)
+            except PuntajeMunicipio.DoesNotExist:
+                # Si el objeto no existe, créalo
+                puntaje_municipio = PuntajeMunicipio(municipio_id=municipioId, puntos=0)     
+            mpForm = PuntajeMunicipioForm(instance=puntaje_municipio) 
+           
+        else:
+            mpForm = PuntajeMunicipioForm()
+        mpForm.set_estado(estadoId)
+            
+
+    if request.method == 'POST':
+        mpForm = PuntajeMunicipioForm()
+
+    return render(request, 'municipio_puntos.html', {'mpForm': mpForm})
 
 
 @login_required
