@@ -2,18 +2,31 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import *
+from django import forms
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-class CustomUserCreationForm(UserCreationForm):
-    class Meta(UserCreationForm):
-        model = Usuario
-        fields = ('curp', )
-
-
-class CustomUserChangeForm(UserChangeForm):
-
-    class Meta:
-        model = Usuario
-        fields = ('curp', )
+class SolicitanteAdmin(UserAdmin):
+    fieldsets = (
+        (None, {'fields': ('curp', 'password')}),
+        ('Información Personal', {'fields': ('nombre', 'ap_paterno', 'ap_materno', 'fecha_nacimiento', 'genero', 'g_etnico')}),
+        ('Información de Contacto', {'fields': ('email', 'tel_cel', 'tel_fijo', 'municipio', 'colonia', 'calle', 'numero', 'codigo_postal')}),
+        ('Información Adicional', {'fields': ('folio', 'rfc', 'grado', 'promedio', 'carrera')}),
+        ('Permisos', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Fechas Importantes', {'fields': ('last_login', 'email_verified_at')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('curp', 'password1', 'password2'),
+        }),
+        ('Información Personal', {'fields': ('nombre', 'ap_paterno', 'ap_materno', 'fecha_nacimiento', 'genero', 'g_etnico')}),
+        ('Información de Contacto', {'fields': ('email', 'tel_cel', 'tel_fijo', 'municipio', 'colonia', 'calle', 'numero', 'codigo_postal')}),
+        ('Información Adicional', {'fields': ('folio', 'rfc', 'grado', 'promedio', 'carrera')}),
+        ('Permisos', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    )
+    list_display = ('curp', 'nombre', 'ap_paterno', 'ap_materno', 'email', 'is_active', 'is_staff', 'is_superuser')
+    search_fields = ('curp', 'nombre', 'ap_paterno', 'ap_materno', 'email')
+    ordering = ('-is_superuser', 'id')
 
 class UsuarioAdmin(UserAdmin):
 
@@ -47,7 +60,7 @@ admin.site.register(Usuario, UsuarioAdmin)
 #admin.site.register(Usuario)
 admin.site.register(PuntajeMunicipio)
 admin.site.register(PuntajeGeneral)
-admin.site.register(Solicitante)
+admin.site.register(Solicitante, SolicitanteAdmin)
 admin.site.register(Carrera)
 admin.site.register(Institucion)
 admin.site.register(Municipio)
