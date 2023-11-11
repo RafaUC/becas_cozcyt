@@ -208,27 +208,40 @@ def puntajes(request):
     return render(request, 'admin/puntajes.html', context)
 
 def cargar_municipio_puntos(request):
-    if request.method == 'GET':
+    if request.method == 'GET':  
         estadoId = request.GET.get('estado')    
-        municipioId = request.GET.get('municipio')    
-        print(municipioId)            
-        if municipioId:
-            try:
-                puntaje_municipio = PuntajeMunicipio.objects.get(municipio_id=municipioId)
-            except PuntajeMunicipio.DoesNotExist:
-                # Si el objeto no existe, créalo
-                puntaje_municipio = PuntajeMunicipio(municipio_id=municipioId, puntos=0)     
-            mpForm = PuntajeMunicipioForm(instance=puntaje_municipio) 
-           
+        municipioId = request.GET.get('municipio')  
+    elif request.method == 'POST':  
+        estadoId = request.POST.get('estado')    
+        municipioId = request.POST.get('municipio')  
+    puntaje_municipio = None  # Asigna un valor predeterminado  
+    if municipioId:
+        municipio = get_object_or_404(Municipio,id=municipioId)  
+        try:
+            puntaje_municipio = PuntajeMunicipio.objects.get(municipio_id=municipioId)
+        except PuntajeMunicipio.DoesNotExist:
+            # Si el objeto no existe, créalo
+            puntaje_municipio = PuntajeMunicipio(municipio_id=municipioId, puntos=0)  
+
+    if request.method == 'GET':                       
+        if municipioId and municipio.estado_id == int(estadoId):               
+            mpForm = PuntajeMunicipioForm(instance=puntaje_municipio)            
         else:
             mpForm = PuntajeMunicipioForm()
         mpForm.set_estado(estadoId)
             
+    elif request.method == 'POST':      
+        mpForm = PuntajeMunicipioForm(request.POST, instance=puntaje_municipio)                 
+        mpForm.is_valid()        
+        if mpForm.is_valid():
+            mpForm.save()
+            mpForm.set_estado(estadoId)  
+            messages.success(request, 'Puntaje actualizado con éxito.')
+        else:
+            mpForm.set_estado(estadoId)  
+            messages.error(request, mpForm.errors)
 
-    if request.method == 'POST':
-        mpForm = PuntajeMunicipioForm()
-
-    return render(request, 'municipio_puntos.html', {'mpForm': mpForm})
+    return render(request, 'admin/municipio_puntos.html', {'mpForm': mpForm, 'mensajes': 'mensajes.html'})
 
 
 @login_required

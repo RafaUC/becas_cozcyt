@@ -213,7 +213,7 @@ class PuntajeMunicipioForm(forms.ModelForm):
         fields = ['municipio', 'puntos']
         widgets = {
             'municipio': forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}),
-            'puntos': forms.NumberInput(attrs={'class': 'form-control form-control text-center m-auto', 'style': 'width: 5rem;'}),            
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 text-center m-auto', 'style': 'width: 5rem;'}),            
         }
     
     estado = forms.ModelChoiceField(queryset=Estado.objects.all(), empty_label="Selecciona un estado", widget=forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}))
@@ -221,6 +221,14 @@ class PuntajeMunicipioForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['municipio'].queryset = Municipio.objects.none()
+        if 'municipio' in self.data and self.data.get('municipio'):
+            municipio_id = int(self.data.get('municipio'))
+            municipios = (Municipio.objects.get(pk=municipio_id)).estado.municipio_set.all().order_by('nombre')                
+            self.fields['municipio'].queryset = municipios
+        elif self.instance.pk:
+            municipios = self.instance.municipio.estado.municipio_set.all().order_by('nombre')                
+            self.fields['municipio'].queryset = municipios    
+
 
     def set_estado(self, estado_id):
         if estado_id:
