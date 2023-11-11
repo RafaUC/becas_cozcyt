@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load custom_filters %}    
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+
+    <p class="h4 mx-5 mt-2 mb-3"> Modificar Puntajes generales</p>
+
+    <div class="container ">         
+
+        <form method="post">
+            <button id="submitButton" type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2 font-md"> Guardar cambios </button>
+            {% csrf_token %}        
+            {{ formset.management_form }}
+            <div class="row row-tipo my-3 justify-content-center">
+                {% with first=formset.0 %}
+                    {% if first %}
+                        {% for choice_value, choice_text in first.tipo.field.choices %}
+                            {% if choice_value == first.tipo.value %}
+                                <p class="h6 font-md">
+                                    {{ choice_text }}
+                                </p>                        
+                            {% endif %}
+                        {% endfor %}                        
+                    {% endif %}
+                {% endwith %}   
+                {% for form in formset %}
+                    <div class="col-3 text-center " >
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                            <div class="text-danger">
+                                {{ hidden.errors }}
+                            </div>  
+                        {% endfor %}            
+                        
+                        {% if form.tipo.value == '1-Genero' or form.tipo.value == '3-Tipo de solicitud' %}  
+                            <div style="display: none;">
+                                {{ form.nombre }}
+                            </div>
+                            <div class="form-control form-control-sm form-control-label text-center px-0 ">{{ form.nombre.value }}</div>                                              
+                        {% else %}
+                            {{ form.nombre }}
+                        {% endif %}
+
+                        <div class="text-danger">
+                            {{ form.nombre.errors  }}
+                        </div> 
+                        {{ form.puntos }}                
+                        <div class="text-danger">
+                            {{ form.puntos.errors  }}
+                            {{ form.non_field_errors  }}
+                        </div> 
+                    </div>            
+                    {% with c=formset|hashD:forloop.counter %}
+                    {% with cb=form %}                                    
+                        {% if c.tipo.value != cb.tipo.value and c is not None %}                                                                
+                            </div>
+                            <div class="row row-tipo my-3 justify-content-center">
+                                {% for choice_value, choice_text in c.tipo.field.choices %}
+                                    {% if choice_value == c.tipo.value %}
+                                        <p class="h6 font-md">
+                                            {{ choice_text }}
+                                        </p>                        
+                                    {% endif %}
+                                {% endfor %}                                            
+                        {% endif %}
+                    {% endwith %}
+                    {% endwith %}        
+                {% endfor %}             
+            </div>
+        </form> 
+        
+        <div class="row" id="puntosMunicipio">
+            {% include 'admin/municipio_puntos.html' %}
+        </div>
+        
+    </div>
+
+    <script>
+        function cargarMunicipio() {
+            const estado = $('#id_estado').val()
+            const municipio = $('#id_municipio').val()
+            
+            $.ajax({
+                type: 'GET',
+                url: '{% url "usuarios:AConfigPuntajesCargarM" %}',
+                data: {
+                    'estado': estado,
+                    'municipio': municipio
+                },
+                success: function (data) {
+                    // Actualiza el contenido en el div de resultado
+                    $('#puntosMunicipio').html(data);
+                },
+                error: function () {
+                    alert('Ha ocurrido un error al cargar el municipio.');
+                }
+            });
+        }
+
+        function postMunicipio() {
+            const estado = $('#id_estado').val()
+            const municipio = $('#id_municipio').val()
+            const puntos = $('#id_puntos').val()
+            const csrf_token = $('input[name="csrfmiddlewaretoken"]').val(); 
+            
+            $.ajax({
+                type: 'POST',
+                url: '{% url "usuarios:AConfigPuntajesCargarM" %}',
+                data: {
+                    'estado': estado,
+                    'municipio': municipio,
+                    'puntos': puntos,
+                    'csrfmiddlewaretoken': csrf_token
+                },
+                success: function (data) {
+                    // Actualiza el contenido en el div de resultado
+                    $('#puntosMunicipio').html(data);
+                },
+                error: function () {
+                    alert('Ha ocurrido un error al Asignar puntuacion a municipio.');
+                }
+            });
+        }
+    </script>
+
+{% endblock body %}

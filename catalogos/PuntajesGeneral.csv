@@ -1,0 +1,16 @@
+﻿id,tipo,nombre,puntos
+1,"1-Genero","Hombre",0
+2,"1-Genero","Mujer",1
+3,"1-Genero","Otro",1
+4,"2-Ingresos","$0 - $5000",3
+5,"2-Ingresos","$5001 - $10000",2
+6,"2-Ingresos","$10001 - $90000",1
+7,"3-Tipo de solicitud","Nuevo ingreso",3
+8,"3-Tipo de solicitud","Renovación",0
+9,"4-Periodo","1 - 5",0
+10,"4-Periodo","6 - 12",2
+11,"5-Promedio","7.5 - 7.99",2
+12,"5-Promedio","8.0 - 8.49",6
+13,"5-Promedio","8.5 - 9.99",8
+14,"5-Promedio","9.0 - 9.49",10
+15,"5-Promedio","9.5 - 10.0",12

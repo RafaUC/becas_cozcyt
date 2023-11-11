@@ -152,14 +152,16 @@ def primerLogin(request):
     return render(request, 'primer_login.html', context)
 
 def cargar_select_list(request, app, modDep, modIndep, orderBy='id'):
-    estado_id = request.GET.get(modIndep)
+    mod_Indep = request.GET.get(modIndep)
     modelo = apps.get_model(app, modDep)
     columna = modIndep+'_id'
     try:                     
-        query = modelo.objects.filter(**{columna: estado_id}).order_by(orderBy)        
+        query = modelo.objects.filter(**{columna: mod_Indep}).order_by(orderBy)        
     except Exception as e:              
-        query = Municipio.objects.none()    
+        query = modelo.objects.none()    
     return render(request, 'select_list.html', {'query': query})
+
+
 
 def borrarSelect(formDep, formIndep, campoDep, campoIndep):
     if formDep.has_error(campoDep):         #se verifica que el select dependiente (municipio) tenga errores,

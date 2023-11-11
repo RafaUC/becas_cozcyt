@@ -13,6 +13,7 @@
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
   --pagina-gris: #b9b4b4;
 
+  --gris-0: #f8f8f8; /* Blanco apagado */
   --gris-1: #efefef; /* Blanco apagado */
   --gris-2: #e0e0e0; /* Gris claro */
   --gris-3: #c0c0c0; /* Gris medio */
@@ -41,6 +42,10 @@ body {
 
 
 /* Clases para aplicar colores de fondo */
+.fondo-gris-0 {
+  background-color: var(--gris-0) !important;
+}
+
 .fondo-gris-1 {
   background-color: var(--gris-1) !important;
 }
@@ -630,3 +635,8 @@ th {
   background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
 }
 
+.form-control-label {
+  border: none;
+  margin: 2px; /* Ajusta el valor del margen según tus preferencias */
+  /* Otros estilos personalizados, como el color de fondo o el tamaño de fuente */
+}
