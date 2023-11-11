@@ -224,13 +224,20 @@ class PuntajeMunicipioForm(forms.ModelForm):
 
     def set_estado(self, estado_id):
         if estado_id:
-            #self.fields['municipio'].queryset = Municipio.objects.filter(estado=estado_id)
+            municipios = Municipio.objects.filter(estado=estado_id)
             municipios_con_puntajes = PuntajeMunicipio.objects.filter(municipio__estado=estado_id)
             choices = [('', 'Selecciona un municipio')]  # Opción por defecto
-            for puntaje in municipios_con_puntajes:
-                nombre_municipio = puntaje.municipio.nombre
-                puntos = puntaje.puntos if puntaje.puntos is not None else 0
-                choice = (puntaje.municipio.id, f"{nombre_municipio} - Puntos: {puntos}")
+            for muni in municipios:                
+                try:
+                    puntaje = PuntajeMunicipio.objects.get(municipio=muni)
+                except PuntajeMunicipio.DoesNotExist:
+                    puntaje = None
+                nombre_municipio = muni.nombre
+                if puntaje:                    
+                    puntos = puntaje.puntos if puntaje.puntos is not None else 0
+                    choice = (muni.id, f"{nombre_municipio} - Puntos: {puntos}")
+                else:
+                    choice = (muni.id, f"{nombre_municipio} - Puntos: {0}")
                 choices.append(choice)
             self.fields['municipio'].choices = choices
             self.initial['estado'] = estado_id  # Establece el valor inicial del campo estado

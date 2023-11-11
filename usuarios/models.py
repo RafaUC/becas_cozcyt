@@ -175,11 +175,10 @@ class Solicitante(Usuario):
 class PuntajeGeneral(models.Model):
     SECCION_CHOICES = (
         ('1-Genero', 'Género'),
-        ('2-Ingresos', 'Ingresos'),
-        #('3-Municipio', 'Municipio'),
-        ('4-Tipo de solicitud', 'Tipo de solicitud'),
-        ('5-Periodo', 'Periodo'),
-        ('6-Promedio', 'Promedio'),
+        ('2-Ingresos', 'Ingresos'),        
+        ('3-Tipo de solicitud', 'Tipo de solicitud'),
+        ('4-Periodo', 'Periodo'),
+        ('5-Promedio', 'Promedio'),
     )
 
     tipo = models.CharField(max_length=50, choices=SECCION_CHOICES, verbose_name='Tipo de Puntaje')
