@@ -8,20 +8,29 @@ from django.core.exceptions import ValidationError
 
 class Estado(models.Model):
     nombre = models.CharField(verbose_name="Nombre Estado", max_length=191, null=False)
-    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=False)
+    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)
 
     def __str__(self):
         return self.nombre
 
 class Municipio(models.Model):
-    nombre = models.CharField(verbose_name="Nombre Municipio", max_length=191, null=False)
     estado = models.ForeignKey(Estado, verbose_name="Estado", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=False)
+    cve_mun = models.PositiveIntegerField(verbose_name="Clave Municipio", null=False)
+    nombre = models.CharField(verbose_name="Nombre Municipio", max_length=191, null=False)    
+    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # Generar el ID combinando estado y cve_mun como una cadena
+        self.id = f"{self.estado_id}{self.cve_mun}"
+        super(Municipio, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ['estado', 'nombre']
+        unique_together = ('estado', 'cve_mun')
 
 class Institucion(models.Model):
     nombre = models.CharField(verbose_name="Nombre Institución", max_length=191, null=False)
@@ -38,7 +47,7 @@ class Carrera(models.Model):
     puntos = models.IntegerField(verbose_name="Puntos")
     institucion = models.ForeignKey(Institucion, 
         verbose_name="Institución", null=False, blank=False, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=False)
+    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)
     deleted_at = models.DateTimeField(verbose_name="deleted_at", null=True)
 
@@ -110,6 +119,7 @@ class Solicitante(Usuario):
     GENERO_CHOICES = (
         ('M', 'Masculino'),
         ('F', 'Femenino'),
+        ('O', 'Otro'),
     )
     GRADO_CHOICES = [(f"{i:02d}", f"{i:02d}") for i in range(1, 16)]
     
@@ -162,3 +172,30 @@ class Solicitante(Usuario):
             ('permisos_solicitante', 'Permisos para solicitantes'), ] 
 
 
+class PuntajeGeneral(models.Model):
+    SECCION_CHOICES = (
+        ('1-Genero', 'Género'),
+        ('2-Ingresos', 'Ingresos'),        
+        ('3-Tipo de solicitud', 'Tipo de solicitud'),
+        ('4-Periodo', 'Periodo'),
+        ('5-Promedio', 'Promedio'),
+    )
+
+    tipo = models.CharField(max_length=50, choices=SECCION_CHOICES, verbose_name='Tipo de Puntaje')
+    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    puntos = models.IntegerField(verbose_name='Puntos', default=0)
+
+    def __str__(self):
+        return f'({self.tipo}) {self.nombre}'
+
+    class Meta:
+        verbose_name = 'Puntaje General'
+        verbose_name_plural = 'Puntajes Generales'
+        ordering = ['tipo', 'id']
+
+class PuntajeMunicipio(models.Model):
+    municipio = models.OneToOneField(Municipio, on_delete=models.CASCADE, primary_key=True)
+    puntos = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"PuntajeMun de {self.municipio} - {self.puntos} puntos"

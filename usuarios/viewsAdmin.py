@@ -182,6 +182,69 @@ def configuracion(request):
     return render(request, 'admin/configuracion.html')
 
 @login_required
+def puntajes(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    mpForm = PuntajeMunicipioForm()
+
+    if request.method == 'GET':
+        formset = PuntajesGeneralesFormSet(queryset=PuntajeGeneral.objects.all())
+    elif request.method == 'POST':
+        formset = PuntajesGeneralesFormSet(request.POST, queryset=PuntajeGeneral.objects.all())
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Cambios guardados con éxito')
+        else:
+            messages.warning(request, 'No se pudieron guardar los cambios')
+            messages.error(request, formset.errors)
+
+    context = {
+        'formset': formset,
+        'mpForm': mpForm,
+    }
+    
+    return render(request, 'admin/puntajes.html', context)
+
+def cargar_municipio_puntos(request):
+    if request.method == 'GET':  
+        estadoId = request.GET.get('estado')    
+        municipioId = request.GET.get('municipio')  
+    elif request.method == 'POST':  
+        estadoId = request.POST.get('estado')    
+        municipioId = request.POST.get('municipio')  
+    puntaje_municipio = None  # Asigna un valor predeterminado  
+    if municipioId:
+        municipio = get_object_or_404(Municipio,id=municipioId)  
+        try:
+            puntaje_municipio = PuntajeMunicipio.objects.get(municipio_id=municipioId)
+        except PuntajeMunicipio.DoesNotExist:
+            # Si el objeto no existe, créalo
+            puntaje_municipio = PuntajeMunicipio(municipio_id=municipioId, puntos=0)  
+
+    if request.method == 'GET':                       
+        if municipioId and municipio.estado_id == int(estadoId):               
+            mpForm = PuntajeMunicipioForm(instance=puntaje_municipio)            
+        else:
+            mpForm = PuntajeMunicipioForm()
+        mpForm.set_estado(estadoId)
+            
+    elif request.method == 'POST':      
+        mpForm = PuntajeMunicipioForm(request.POST, instance=puntaje_municipio)                 
+        mpForm.is_valid()        
+        if mpForm.is_valid():
+            mpForm.save()
+            mpForm.set_estado(estadoId)  
+            messages.success(request, 'Puntaje actualizado con éxito.')
+        else:
+            mpForm.set_estado(estadoId)  
+            messages.error(request, mpForm.errors)
+
+    return render(request, 'admin/municipio_puntos.html', {'mpForm': mpForm, 'mensajes': 'mensajes.html'})
+
+
+@login_required
 def eliminarUsuario(request, user_id):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    

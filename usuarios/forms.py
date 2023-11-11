@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.forms import modelformset_factory
 
 from .models import *
 from django.contrib.auth import get_user_model
@@ -183,3 +184,68 @@ class SolicitanteEscolaresForm(SolicitanteForm):
                   'codigo_postal', 
                   'tel_cel', 
                   'tel_fijo')
+
+class PuntajesGeneralesForm(forms.ModelForm):
+    class Meta:
+        model = PuntajeGeneral
+        fields = ['tipo', 'nombre', 'puntos']
+        labels = {
+            'tipo': 'Tipo de seccion',
+            'nombre': 'Nombre del Puntaje',
+            'puntos': 'Puntos Asignados',
+        }
+        widgets = {
+            'tipo': forms.HiddenInput(), 
+            'nombre': forms.TextInput(attrs={'class': 'form-control form-control-sm form-control-label text-center px-0 fondo-gris-0'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control form-control-sm text-center m-auto', 'style': 'width: 5rem;'}),
+        }
+
+PuntajesGeneralesFormSet = modelformset_factory(
+    PuntajeGeneral,
+    form=PuntajesGeneralesForm,
+    extra=0, 
+    can_delete=True
+)
+
+class PuntajeMunicipioForm(forms.ModelForm):
+    class Meta:
+        model = PuntajeMunicipio
+        fields = ['municipio', 'puntos']
+        widgets = {
+            'municipio': forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 text-center m-auto', 'style': 'width: 5rem;'}),            
+        }
+    
+    estado = forms.ModelChoiceField(queryset=Estado.objects.all(), empty_label="Selecciona un estado", widget=forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['municipio'].queryset = Municipio.objects.none()
+        if 'municipio' in self.data and self.data.get('municipio'):
+            municipio_id = int(self.data.get('municipio'))
+            municipios = (Municipio.objects.get(pk=municipio_id)).estado.municipio_set.all().order_by('nombre')                
+            self.fields['municipio'].queryset = municipios
+        elif self.instance.pk:
+            municipios = self.instance.municipio.estado.municipio_set.all().order_by('nombre')                
+            self.fields['municipio'].queryset = municipios    
+
+
+    def set_estado(self, estado_id):
+        if estado_id:
+            municipios = Municipio.objects.filter(estado=estado_id)
+            municipios_con_puntajes = PuntajeMunicipio.objects.filter(municipio__estado=estado_id)
+            choices = [('', 'Selecciona un municipio')]  # Opción por defecto
+            for muni in municipios:                
+                try:
+                    puntaje = PuntajeMunicipio.objects.get(municipio=muni)
+                except PuntajeMunicipio.DoesNotExist:
+                    puntaje = None
+                nombre_municipio = muni.nombre
+                if puntaje:                    
+                    puntos = puntaje.puntos if puntaje.puntos is not None else 0
+                    choice = (muni.id, f"{nombre_municipio} - Puntos: {puntos}")
+                else:
+                    choice = (muni.id, f"{nombre_municipio} - Puntos: {0}")
+                choices.append(choice)
+            self.fields['municipio'].choices = choices
+            self.initial['estado'] = estado_id  # Establece el valor inicial del campo estado
