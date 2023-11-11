@@ -42,8 +42,8 @@ def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos):
                 
                 nuevo_registro = modelo(**datos_a_guardar)        
                 nuevo_registro.save()
-                #sys.stdout.write(".")  # Imprime un punto sin salto de línea
-                #sys.stdout.flush()
+                sys.stdout.write(".")  # Imprime un punto sin salto de línea
+                sys.stdout.flush()
         print(' ')
         print(f'Importado "{archivo_csv}" con exito.')
     except Exception as e:    

@@ -198,4 +198,4 @@ class PuntajeMunicipio(models.Model):
     puntos = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Puntaje de {self.municipio} - {self.puntos} puntos"
+        return f"PuntajeMun de {self.municipio} - {self.puntos} puntos"

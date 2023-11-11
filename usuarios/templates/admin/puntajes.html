@@ -71,7 +71,7 @@
         </form> 
         
         <div class="row" id="puntosMunicipio">
-            {% include 'municipio_puntos.html' %}
+            {% include 'admin/municipio_puntos.html' %}
         </div>
         
     </div>
@@ -94,6 +94,31 @@
                 },
                 error: function () {
                     alert('Ha ocurrido un error al cargar el municipio.');
+                }
+            });
+        }
+
+        function postMunicipio() {
+            const estado = $('#id_estado').val()
+            const municipio = $('#id_municipio').val()
+            const puntos = $('#id_puntos').val()
+            const csrf_token = $('input[name="csrfmiddlewaretoken"]').val(); 
+            
+            $.ajax({
+                type: 'POST',
+                url: '{% url "usuarios:AConfigPuntajesCargarM" %}',
+                data: {
+                    'estado': estado,
+                    'municipio': municipio,
+                    'puntos': puntos,
+                    'csrfmiddlewaretoken': csrf_token
+                },
+                success: function (data) {
+                    // Actualiza el contenido en el div de resultado
+                    $('#puntosMunicipio').html(data);
+                },
+                error: function () {
+                    alert('Ha ocurrido un error al Asignar puntuacion a municipio.');
                 }
             });
         }

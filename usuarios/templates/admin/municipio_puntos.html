@@ -1,0 +1,44 @@
+{% if mensajes %}
+    {% include mensajes %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}    
+    <div class="row my-3 mb-5 justify-content-center">
+        <p class="h6 font-md">
+            Municipios
+        </p>     
+        <div class="col-4 text-center">
+            {% for hidden in mpForm.hidden_fields %}
+                {{ hidden }}
+                <div class="text-danger font-xs">
+                    {{ hidden.errors }}
+                </div>  
+            {% endfor %}    
+            {{ mpForm.estado }}
+            <div class="text-danger font-xs">
+                {{ mpForm.estado.errors  }}
+                {{ mpForm.non_field_errors  }}            
+            </div> 
+        </div>
+        <div class="col-4 text-center">
+            {{ mpForm.municipio }}
+            <div class="text-danger font-xs">
+                {{ mpForm.municipio.errors  }}            
+            </div> 
+        </div>
+        <div class="col-1 text-center">
+            {{ mpForm.puntos }}
+            <div class="text-danger font-xxs">
+                {% for error in mpForm.puntos.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+                
+            </div> 
+        </div>
+        <div class="col-auto text-center"> 
+            <button id="submitButton" type="button" onclick="postMunicipio()" value="Guardar" class="btn btn-aceptado p-1 font-md"> Asignar </button>
+        </div>
+    </div>
+    
+</form>
