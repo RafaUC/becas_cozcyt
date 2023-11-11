@@ -99,7 +99,7 @@ def configEstudio(request):
             if form.cleaned_data:
                 non_empty_forms.append(form)
             else:
-                form.childAsinfo = 'on'
+                #form.childAsinfo = 'on'
                 empty_forms.append(form)        
         ordered_forms = non_empty_forms + empty_forms                        
         seccionFormset.forms = ordered_forms     
