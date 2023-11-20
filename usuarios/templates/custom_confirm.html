@@ -18,14 +18,14 @@
 
 <script>    
     function showCustomConfirm(dialogo, titulo) {        
-        // Mostrar la ventana de confirmación personalizada
-        $('#custom-confirm-modal').modal('show');
+        // Mostrar la ventana de confirmación personalizada        
         if (dialogo !== undefined){
             $('#custom-confirm-modal-dialogo').text(dialogo);
         }
         if (dialogo !== undefined){
             $('#custom-confirm-modal-titulo').text(titulo);
         }
+        $('#custom-confirm-modal').modal('show');
         
         // Crear promesa para controlar el resultado de la confirmación
         return new Promise((resolve) => {

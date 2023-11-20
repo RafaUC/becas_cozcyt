@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.apps import apps
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -64,13 +65,88 @@ def BusquedaEnCamposQuerySet(queryset, search_query):
     search_terms = search_query.split()     
     model = queryset.model 
     fields = get_model_fields(model)        
-
+    
     q_objects = Q()
     for term in search_terms:
-        for field in fields:            
-            q_objects |= Q(**{f'{field}__icontains': term})
-    queryset = queryset.filter(q_objects)         
+        term_query = Q()
+        for field in fields:
+            if ':' in term:
+                campo, valor = term.split(':', 1)                
+                if campo in field:
+                    term_query |= Q(**{f'{field}__icontains': valor})
+            else:
+                term_query |= Q(**{f'{field}__icontains': term})
+        q_objects &= term_query
+    queryset = queryset.filter(q_objects)
     return queryset
+
+@login_required
+def listaInstituciones(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    request.session['anterior'] = request.build_absolute_uri()    
+    instituciones = Institucion.objects.all()
+
+    if (request.method == 'GET'):
+        search_query = request.GET.get('search', '')    
+        #Si se hizo una busqueda de filtrado     
+        if search_query:                                      
+            instituciones = BusquedaEnCamposQuerySet(instituciones, search_query)                                        
+    
+    paginator = Paginator(instituciones, 20)  # Mostrar 10 ins por página
+    page_number = request.GET.get('page')
+    page_insti = paginator.get_page(page_number)
+
+    context = {        
+        'page_insti': page_insti,
+    }
+    return render(request, 'admin/instituciones.html', context)
+
+@login_required
+def crearEditarInstitucion(request, pk=None):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+
+    if pk:
+        instancia = get_object_or_404(Institucion, pk=pk)
+        postUrl = request.build_absolute_uri(reverse('usuarios:AEditarInstitucion'))
+    else:
+        instancia = None
+        postUrl = request.build_absolute_uri(reverse('usuarios:ACrearInstitucion'))
+
+    if request.method == 'GET':
+        # Si es una solicitud GET, mostrar el formulario
+        form = InstitucionForm(instance=instancia)
+        
+    elif request.method == 'POST':
+        # Si es una solicitud POST, procesar el formulario
+        form = InstitucionForm(request.POST, instance=instancia)
+        if form.is_valid():
+            instancia = form.save()
+            # Redirigir a la página de detalle u otra página según sea necesario
+            messages.success(request, 'Información de institución guardada con éxito')
+            context = {       
+                'redirectAfter': request.build_absolute_uri(reverse('usuarios:AInstituciones')),
+                'mensajes' : 'mensajes.html',
+                'postUrl': postUrl,
+                'modalForm': form,
+            }
+            return render(request, 'modal_base.html', context)
+        else:
+            messages.error(request, form.errors)
+    
+    
+    context = {        
+        'mensajes' : 'mensajes.html',
+        'postUrl': postUrl,
+        'modalForm': form,
+    }
+    return render(request, 'modal_base.html', context)
 
 @login_required
 def listaUsuarios(request):

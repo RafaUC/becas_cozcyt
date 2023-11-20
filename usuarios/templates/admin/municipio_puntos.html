@@ -27,7 +27,7 @@
                 {{ mpForm.municipio.errors  }}            
             </div> 
         </div>
-        <div class="col-1 text-center">
+        <div class="col-auto text-center">
             {{ mpForm.puntos }}
             <div class="text-danger font-xxs">
                 {% for error in mpForm.puntos.errors %}
@@ -36,7 +36,7 @@
                 
             </div> 
         </div>
-        <div class="col-auto text-center"> 
+        <div class="col-2 text-center"> 
             <button id="submitButton" type="button" onclick="postMunicipio()" value="Guardar" class="btn btn-aceptado p-1 font-md"> Asignar </button>
         </div>
     </div>

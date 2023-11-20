@@ -249,3 +249,16 @@ class PuntajeMunicipioForm(forms.ModelForm):
                 choices.append(choice)
             self.fields['municipio'].choices = choices
             self.initial['estado'] = estado_id  # Establece el valor inicial del campo estado
+
+class InstitucionForm(forms.ModelForm):
+    class Meta:
+        model = Institucion
+        fields = ['nombre', 'puntos'] 
+        labels = {
+            'nombre': 'Nombre de la Institución', 
+            'puntos': 'Puntos',  
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese nombre de la institución'}),  
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3' }),  
+        }
