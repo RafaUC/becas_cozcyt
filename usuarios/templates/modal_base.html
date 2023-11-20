@@ -1,0 +1,90 @@
+{% load custom_filters %}
+
+{% if redirectAfter %}
+    <script>        
+            // si se pide redirigir porque el modal tuvo exito en su funcion
+            window.location.href = '{{redirectAfter}}';        
+    </script>
+{% elif mensajes %}
+    {% include mensajes %}
+{% endif %}
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="base-modal-titulo">
+                    {% if modalFormset %}
+                        lista de {{ modalFormset|model_verbose_name }}s
+                    {% elif modalForm %}
+                        {% if modalForm.instance.pk %}                            
+                            Modificar {{ modalForm|model_verbose_name }}
+                        {% else %}                            
+                            Crear {{ modalForm|model_verbose_name }}
+                        {% endif %}   
+                    {% endif %}
+                
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+            </div>
+            {% if modalForm or modalFormset %}     
+                <form method="post" id="base-modal-form">  
+                    {% csrf_token %}     
+            {% endif %}
+            <div id="base-modal-dialogo" class="modal-body font-md red-errors">                
+                {% if modalFormset %}
+                    {{ modalFormset }}
+                {% elif modalForm %}
+                    {{ modalForm }}
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                {% if modalFormset %}
+                    btn-nuevo
+                {% endif %}
+                {% if modalForm or modalFormset %}    
+                    <button id="base-modal-submit-btn" type="button" onclick="showFormModal('{{ postUrl }}', 'POST')" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>            
+                {% endif %}
+            </div>
+            {% if modalForm or modalFormset %}        
+                </form>        
+            {% endif %}
+        </div>
+ 
+
+<script>
+    function showCustomModal(dialogo, titulo) {  
+        //$('#modal-base-modal').modal('hide');              
+        const modalDialogo = $('#base-modal-dialogo');
+        const modalTitulo = $('#base-modal-titulo');        
+        modalDialogo.empty();
+        modalTitulo.empty();
+        
+        if (dialogo !== undefined) {
+            modalDialogo.text(dialogo);
+        }
+        if (titulo !== undefined) {
+            modalTitulo.text(titulo);
+        }        
+        $('#modal-base-modal').modal('show');
+    }
+
+    function showFormModal(url, method) {
+        //$('#modal-base-modal').modal('hide');
+        // si el metodo es post, enviar la data del formulario
+        var formData = method.toUpperCase() === 'POST' ? $('#base-modal-form').serialize() : '';        
+
+        $.ajax({
+            url: url,
+            method: method,
+            data: formData,
+            success: function(data) {
+                // Renderiza el contenido en el div con ID "modal-base-cont"
+                $('#modal-base-cont').html(data);                
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar el contenido del modal:', error);
+            }
+        });        
+        $('#modal-base-modal').modal('show'); // Muestra el modal después de completar la solicitud AJAX
+    }
+</script>

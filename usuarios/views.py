@@ -25,6 +25,7 @@ def loginRedirect(request):
         return redirect("usuarios:convocatorias")
     
 #Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no, retorna la url donde deberia ser redirigido
+#si no se dan permisos en el parametro permisos significa que no requere ningun permiso pero no puede entrar un admin
 def verificarRedirect(usuario, *permisos):    
     """if not any(usuario.has_perm(perm) for perm in permisos):  #el no usuario tiene permiso de estar en la pagina
         return settings.LOGIN_REDIRECT_URL """    
