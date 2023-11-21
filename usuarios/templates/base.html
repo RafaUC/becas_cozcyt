@@ -40,6 +40,14 @@
   <body>
     {% include "mensajes.html" %}
     {% include "custom_confirm.html" %}
+    <div >
+      <div class="modal fade" id="modal-base-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div id="modal-base-cont" class="modal-dialog modal-dialog-centered" role="document">
+          {% include "modal_base.html" %}
+        </div>
+      </div>
+    </div>
+    
 
     <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">

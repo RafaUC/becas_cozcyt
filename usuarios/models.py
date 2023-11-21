@@ -34,17 +34,20 @@ class Municipio(models.Model):
 
 class Institucion(models.Model):
     nombre = models.CharField(verbose_name="Nombre Institución", max_length=191, null=False)
-    puntos = models.IntegerField(verbose_name="Puntos", null=True)
+    puntos = models.IntegerField(verbose_name="Puntos", default=0)
     created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)
 
-
     def __str__(self):
         return self.nombre
+    
+    class Meta:
+        ordering = ['nombre']
+        verbose_name="Institución"
 
 class Carrera(models.Model):
     nombre = models.CharField(verbose_name="Nombre Carrera", max_length=191, null=False)
-    puntos = models.IntegerField(verbose_name="Puntos")
+    puntos = models.IntegerField(verbose_name="Puntos", default=0)
     institucion = models.ForeignKey(Institucion, 
         verbose_name="Institución", null=False, blank=False, on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
@@ -53,6 +56,10 @@ class Carrera(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    class Meta:
+        ordering = ['nombre']
+        verbose_name="Carrera"
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, curp, nombre,  password=None, is_admin=False, is_staff=False, is_active=True):        
