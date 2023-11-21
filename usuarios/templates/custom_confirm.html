@@ -20,10 +20,10 @@
     function showCustomConfirm(dialogo, titulo) {        
         // Mostrar la ventana de confirmación personalizada        
         if (dialogo !== undefined){
-            $('#custom-confirm-modal-dialogo').text(dialogo);
+            $('#custom-confirm-modal-dialogo').html(dialogo);
         }
         if (dialogo !== undefined){
-            $('#custom-confirm-modal-titulo').text(titulo);
+            $('#custom-confirm-modal-titulo').html(titulo);
         }
         $('#custom-confirm-modal').modal('show');
         

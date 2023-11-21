@@ -110,7 +110,7 @@ Lista de usuarios
                                 <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
                             </a>
                             <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
-                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
                                     <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
                                 </button>                                
                             </form>

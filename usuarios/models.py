@@ -57,6 +57,10 @@ class Carrera(models.Model):
     def __str__(self):
         return self.nombre
 
+    class Meta:
+        ordering = ['nombre']
+        verbose_name="Carrera"
+
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, curp, nombre,  password=None, is_admin=False, is_staff=False, is_active=True):        
         user = self.model(
