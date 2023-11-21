@@ -19,7 +19,7 @@ Lista de instituciones
                         <input
                         class="form-control me-2"
                         type="search"
-                        placeholder="Buscar por Nombre, Carreras, Puntaje, etc."
+                        placeholder="Buscar por Nombre, Institución, Puntaje, etc."
                         name="search"
                         aria-label="Search"
                         value="{{ request.GET.search}}"
@@ -35,8 +35,8 @@ Lista de instituciones
     <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal  horizontal-scroll">    
         
         <table class="table custom-table-simple">
-            <div class="row">
-                <div class="col">
+            <div class="row mx-0">
+                <div class="col ps-0">
                     <p class="h4 mx-3">Instituciones</p>           
                 </div>
                 <div class="col-auto">                    
@@ -59,14 +59,14 @@ Lista de instituciones
                     <td class="text-center">{{ institucion.puntos }}</td> 
                     <td style="text-align: right;">
                         <div class="d-flex align-items-center justify-content-center ">
-                            <button type="button" onclick="" title="Lsta de carreras" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Lista de carreras">
+                            <button type="button" onclick="showFormModal('{% url 'usuarios:AListaCarreras' institucion.id %}', 'GET')" title="Lsta de carreras" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Lista de carreras">
                                 <i class="fa fa-list-ol m-0 text-primary " style="font-size: 20px;"></i>
                             </button>  
-                            <button type="button" onclick="" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
+                            <button type="button" onclick="showFormModal('{% url 'usuarios:AEditarInstitucion' institucion.id %}', 'GET')" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
                                 <i class="fa fa fa-pencil m-0 text-warning " style="font-size: 20px;"></i>
                             </button>  
-                            <form class="p-0 m-0" action="#" method="get" >                                                        
-                                <button type="button" onclick="" title="Eliminar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar institución">
+                            <form class="p-0 m-0" action="{% url 'usuarios:AEliminarInstitucion' institucion.id %}" method="get" >                                                        
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución? <br> {{institucion.nombre}}')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
                                     <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
                                 </button>                                
                             </form>

@@ -2,8 +2,8 @@
 
 {% if redirectAfter %}
     <script>        
-            // si se pide redirigir porque el modal tuvo exito en su funcion
-            window.location.href = '{{redirectAfter}}';        
+            // si se pide redirigir porque el modal tuvo exito en su funcion            
+            window.location.href = '{{redirectAfter|safe}}';        
     </script>
 {% elif mensajes %}
     {% include mensajes %}
@@ -13,15 +13,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="base-modal-titulo">
-                    {% if modalFormset %}
-                        lista de {{ modalFormset|model_verbose_name }}s
-                    {% elif modalForm %}
-                        {% if modalForm.instance.pk %}                            
-                            Modificar {{ modalForm|model_verbose_name }}
-                        {% else %}                            
-                            Crear {{ modalForm|model_verbose_name }}
-                        {% endif %}   
-                    {% endif %}
+                    {{ modalTitle|safe }}
                 
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
@@ -32,17 +24,51 @@
             {% endif %}
             <div id="base-modal-dialogo" class="modal-body font-md red-errors">                
                 {% if modalFormset %}
-                    {{ modalFormset }}
+                    
+                    {{ modalFormset.management_form }}
+                    <table class=" custom-table-simple">
+                        <thead>
+                            <tr>
+                            {% for field in modalFormset.empty_form.visible_fields %}
+                                <th >{{ field.label|capfirst }}</th>
+                            {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in modalFormset %}                            
+                                <tr>                                    
+                                    {% for field in form.visible_fields %}
+                                    <td class="text-center">
+                                        {% if form.instance.id is None %}                                            
+                                            <p class="text-start mb-1 mt-5 font-semi-bold">
+                                                {% if forloop.first %}
+                                                Crear nuevo
+                                                {% endif %}
+                                                &nbsp;
+                                            </p>                                            
+                                        {% endif %}
+                                        {{ field.errors }}
+                                        {{ field }}                                        
+                                    </td>
+                                    {% endfor %}
+                                    {% for field in form.hidden_fields %}
+                                        {{ field }}
+                                        {{ field.errors }}
+                                    {% endfor%}
+                                    {{ form.non_field_errors }}
+                                </tr>
+                            {% endfor %}
+                            {{ modalFormset.non_form_errors }}
+                        </tbody>
+                    </table>
+
                 {% elif modalForm %}
                     {{ modalForm }}
                 {% endif %}
             </div>
-            <div class="modal-footer">
-                {% if modalFormset %}
-                    btn-nuevo
-                {% endif %}
+            <div class="modal-footer">                
                 {% if modalForm or modalFormset %}    
-                    <button id="base-modal-submit-btn" type="button" onclick="showFormModal('{{ postUrl }}', 'POST')" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>            
+                    <button id="base-modal-submit-btn" type="button" onclick="showFormModal('{{ postUrl }}', 'POST')" value="Guardar" class="btn btn-aceptado m-1 p-2">Guardar</button>            
                 {% endif %}
             </div>
             {% if modalForm or modalFormset %}        
@@ -60,10 +86,10 @@
         modalTitulo.empty();
         
         if (dialogo !== undefined) {
-            modalDialogo.text(dialogo);
+            modalDialogo.html(dialogo);
         }
         if (titulo !== undefined) {
-            modalTitulo.text(titulo);
+            modalTitulo.html(titulo);
         }        
         $('#modal-base-modal').modal('show');
     }
@@ -79,12 +105,13 @@
             data: formData,
             success: function(data) {
                 // Renderiza el contenido en el div con ID "modal-base-cont"
-                $('#modal-base-cont').html(data);                
+                $('#modal-base-cont').html(data);     
+                $('#modal-base-modal').modal('show');           
             },
             error: function(xhr, status, error) {
                 console.error('Error al cargar el contenido del modal:', error);
             }
         });        
-        $('#modal-base-modal').modal('show'); // Muestra el modal después de completar la solicitud AJAX
+        
     }
 </script>

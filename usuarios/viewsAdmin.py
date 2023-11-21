@@ -87,7 +87,7 @@ def listaInstituciones(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
     
-    request.session['anterior'] = request.build_absolute_uri()    
+    request.session['anterior'] = request.build_absolute_uri()       
     instituciones = Institucion.objects.all()
 
     if (request.method == 'GET'):
@@ -111,27 +111,27 @@ def crearEditarInstitucion(request, pk=None):
     url = verificarRedirect(usuario, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return HttpResponse("", status=401)
-
+    
     if pk:
         instancia = get_object_or_404(Institucion, pk=pk)
-        postUrl = request.build_absolute_uri(reverse('usuarios:AEditarInstitucion'))
+        postUrl = request.build_absolute_uri(reverse('usuarios:AEditarInstitucion', args=[pk]))
+        modalTitle = 'Editar Institución'
     else:
         instancia = None
         postUrl = request.build_absolute_uri(reverse('usuarios:ACrearInstitucion'))
+        modalTitle = 'Crear Institución'
 
-    if request.method == 'GET':
-        # Si es una solicitud GET, mostrar el formulario
+    if request.method == 'GET':        
         form = InstitucionForm(instance=instancia)
         
-    elif request.method == 'POST':
-        # Si es una solicitud POST, procesar el formulario
+    elif request.method == 'POST':        
         form = InstitucionForm(request.POST, instance=instancia)
         if form.is_valid():
-            instancia = form.save()
-            # Redirigir a la página de detalle u otra página según sea necesario
-            messages.success(request, 'Información de institución guardada con éxito')
+            instancia = form.save()            
+            messages.success(request, 'Información de institución guardada con éxito')            
             context = {       
-                'redirectAfter': request.build_absolute_uri(reverse('usuarios:AInstituciones')),
+                'redirectAfter': request.session['anterior'],
+                'modalTitle': modalTitle,
                 'mensajes' : 'mensajes.html',
                 'postUrl': postUrl,
                 'modalForm': form,
@@ -140,13 +140,59 @@ def crearEditarInstitucion(request, pk=None):
         else:
             messages.error(request, form.errors)
     
-    
-    context = {        
+    context = {    
+        'modalTitle': modalTitle,
         'mensajes' : 'mensajes.html',
         'postUrl': postUrl,
         'modalForm': form,
     }
     return render(request, 'modal_base.html', context)
+
+@login_required
+def eliminarInstitucion(request, pk):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
+    institucionBorrar = get_object_or_404(Institucion, pk=pk)    
+    institucionBorrar.delete()
+    messages.success(request, 'Institución eliminada con éxito')    
+    anterior_url = request.session.get('anterior', "usuarios:AInstituciones")
+    return redirect(anterior_url)
+
+@login_required
+def listaCarreras(request, pkInst):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+    
+    institucion = get_object_or_404(Institucion, pk=pkInst)
+    CarreraInlineFormSet = inlineformset_factory(Institucion, Carrera, form=CarreraForm, extra=1, exclude=['institucion'])
+    postUrl = request.build_absolute_uri(reverse('usuarios:AListaCarreras', args=[pkInst]))
+    modalTitle = f'Carreras que pertenecen a <br> {institucion.nombre}'
+
+    if request.method == 'GET':        
+        formset = CarreraInlineFormSet(instance=institucion)
+    elif request.method == 'POST':
+        # Si se envió el formulario, procesa los datos
+        formset = CarreraInlineFormSet(request.POST, instance=institucion)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Exito guardando las carreras')            
+            return redirect('usuarios:AListaCarreras', pkInst)
+        else:
+            messages.error(request, formset.errors)
+    
+    context = {        
+        'modalTitle': modalTitle,
+        'mensajes' : 'mensajes.html',
+        'postUrl': postUrl,
+        'modalFormset': formset,
+    }
+    return render(request, 'modal_base.html', context)
+
 
 @login_required
 def listaUsuarios(request):
@@ -329,6 +375,7 @@ def eliminarUsuario(request, user_id):
 
     user_to_delete = get_object_or_404(User, pk=user_id)    
     user_to_delete.delete()
+    messages.success(request, 'Usuario eliminado con éxito')
     #print('usuario '+ str(user_to_delete) + ' eliminado')    
     anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
     return redirect(anterior_url)
