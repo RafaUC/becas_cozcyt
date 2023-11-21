@@ -1,26 +1,37 @@
 {% extends 'base.html' %}
 
+{% block titulo %}    
+Lista de usuarios          
+{% endblock titulo %}
+
 {% block body %}
     <div class="row align-items-center m-0">
         <p class="col-4 h2 mx-3 mt-3">Lista de Usuarios</p>
         <div class="col mt-5 mx-3">
-            <form class="d-flex" role="search" method="GET">                
-                <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
-                name="search"
-                aria-label="Search"
-                value="{{ request.GET.search}}"
-                >
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
-        </div>
+            <div class="row align-items-center">
+                <div class="col-auto p-0">
+                    <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="Para buscar valores en atributos específicos <br>escribir: atributo:valor <br>ejemplo: 'nombre:Juan'" data-bs-html="true" ></i>
+                </div>
+                <div class="col">
+                    <form class="d-flex" role="search" method="GET">                
+                        <input
+                        class="form-control me-2"
+                        type="search"
+                        placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
+                        name="search"
+                        aria-label="Search"
+                        value="{{ request.GET.search}}"
+                        >
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
+                </div>                
+            </div>
+        </div>        
     </div>
     
     
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal">            
-        <table class="table">
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal horizontal-scroll">            
+        <table class="table custom-table-simple ">
             <p class="h4 mx-3">Administradores</p>
             <thead>
                 <tr>
@@ -69,9 +80,9 @@
             </span>
         </div>
     </div>
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal horizontal-scroll">    
         
-        <table class="table">
+        <table class="table custom-table-simple ">
             <p class="h4 mx-3">Solicitantes</p>
             <thead>
                 <tr>
@@ -93,15 +104,17 @@
                     </td>
                     <td>{{ usuario.curp }}</td>
                     <td >{{ usuario.email }}</td>
-                    <td class="d-flex align-items-center" style="text-align: right;">
-                        <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
-                            <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
-                        </a>
-                        <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
-                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                            </button>                                
-                        </form>
+                    <td style="text-align: right;">
+                        <div class="d-flex align-items-center">
+                            <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
+                            </a>
+                            <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                    <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                </button>                                
+                            </form>
+                        </div>
                     </td>               
                 </tr>
                 

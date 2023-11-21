@@ -635,8 +635,49 @@ th {
   background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
 }
 
+/* Estilo para la tabla */
+.custom-table-simple {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;  
+}
+
+/* Estilo para las celdas del encabezado de la tabla */
+.custom-table-simple th {  
+  color: var(--negro); /* Color del texto del encabezado */
+  font-weight: bold;
+  padding: 0.5rem 0.5rem;/* Espaciado interno en el encabezado */  
+  border: 0px solid; /* División vertical y borde alrededor de las celdas del encabezado */  
+  border-bottom: 2px solid;
+  border-color: var(--pagina-gris);
+  white-space: normal; 
+  word-wrap: break-word;
+  background-color: var(--pagina-blanco); /* Color de fondo del encabezado */
+}
+
+/* Estilo para las celdas de datos de la tabla */
+.custom-table-simple td {
+  padding: 0.5rem 0.5rem;/* Espaciado interno en las celdas de datos */    
+  border: 1px solid; /* División vertical y borde alrededor de las celdas de datos */
+  border-left: 0px solid;
+  border-right: 0px solid;
+  border-color: var(--gris-3);
+  vertical-align: middle;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Estilo para filas alternas (para un efecto de rayas) */
+.custom-table-simple tr:nth-child(even) {
+  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
+}
+
 .form-control-label {
   border: none;
-  margin: 2px; /* Ajusta el valor del margen según tus preferencias */
-  /* Otros estilos personalizados, como el color de fondo o el tamaño de fuente */
+  margin: 2px; 
+  
+}
+
+.red-errors .errorlist li {
+  color: #dc3545; /* Este es el color por defecto de 'text-danger' en Bootstrap */
 }

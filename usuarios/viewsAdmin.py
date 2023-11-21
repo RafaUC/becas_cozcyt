@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.apps import apps
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -64,13 +65,134 @@ def BusquedaEnCamposQuerySet(queryset, search_query):
     search_terms = search_query.split()     
     model = queryset.model 
     fields = get_model_fields(model)        
-
+    
     q_objects = Q()
     for term in search_terms:
-        for field in fields:            
-            q_objects |= Q(**{f'{field}__icontains': term})
-    queryset = queryset.filter(q_objects)         
+        term_query = Q()
+        for field in fields:
+            if ':' in term:
+                campo, valor = term.split(':', 1)                
+                if campo in field:
+                    term_query |= Q(**{f'{field}__icontains': valor})
+            else:
+                term_query |= Q(**{f'{field}__icontains': term})
+        q_objects &= term_query
+    queryset = queryset.filter(q_objects)
     return queryset
+
+@login_required
+def listaInstituciones(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    request.session['anterior'] = request.build_absolute_uri()       
+    instituciones = Institucion.objects.all()
+
+    if (request.method == 'GET'):
+        search_query = request.GET.get('search', '')    
+        #Si se hizo una busqueda de filtrado     
+        if search_query:                                      
+            instituciones = BusquedaEnCamposQuerySet(instituciones, search_query)                                        
+    
+    paginator = Paginator(instituciones, 20)  # Mostrar 10 ins por página
+    page_number = request.GET.get('page')
+    page_insti = paginator.get_page(page_number)
+
+    context = {        
+        'page_insti': page_insti,
+    }
+    return render(request, 'admin/instituciones.html', context)
+
+@login_required
+def crearEditarInstitucion(request, pk=None):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+    
+    if pk:
+        instancia = get_object_or_404(Institucion, pk=pk)
+        postUrl = request.build_absolute_uri(reverse('usuarios:AEditarInstitucion', args=[pk]))
+        modalTitle = 'Editar Institución'
+    else:
+        instancia = None
+        postUrl = request.build_absolute_uri(reverse('usuarios:ACrearInstitucion'))
+        modalTitle = 'Crear Institución'
+
+    if request.method == 'GET':        
+        form = InstitucionForm(instance=instancia)
+        
+    elif request.method == 'POST':        
+        form = InstitucionForm(request.POST, instance=instancia)
+        if form.is_valid():
+            instancia = form.save()            
+            messages.success(request, 'Información de institución guardada con éxito')            
+            context = {       
+                'redirectAfter': request.session['anterior'],
+                'modalTitle': modalTitle,
+                'mensajes' : 'mensajes.html',
+                'postUrl': postUrl,
+                'modalForm': form,
+            }
+            return render(request, 'modal_base.html', context)
+        else:
+            messages.error(request, form.errors)
+    
+    context = {    
+        'modalTitle': modalTitle,
+        'mensajes' : 'mensajes.html',
+        'postUrl': postUrl,
+        'modalForm': form,
+    }
+    return render(request, 'modal_base.html', context)
+
+@login_required
+def eliminarInstitucion(request, pk):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
+    institucionBorrar = get_object_or_404(Institucion, pk=pk)    
+    institucionBorrar.delete()
+    messages.success(request, 'Institución eliminada con éxito')    
+    anterior_url = request.session.get('anterior', "usuarios:AInstituciones")
+    return redirect(anterior_url)
+
+@login_required
+def listaCarreras(request, pkInst):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+    
+    institucion = get_object_or_404(Institucion, pk=pkInst)
+    CarreraInlineFormSet = inlineformset_factory(Institucion, Carrera, form=CarreraForm, extra=1, exclude=['institucion'])
+    postUrl = request.build_absolute_uri(reverse('usuarios:AListaCarreras', args=[pkInst]))
+    modalTitle = f'Carreras que pertenecen a <br> {institucion.nombre}'
+
+    if request.method == 'GET':        
+        formset = CarreraInlineFormSet(instance=institucion)
+    elif request.method == 'POST':
+        # Si se envió el formulario, procesa los datos
+        formset = CarreraInlineFormSet(request.POST, instance=institucion)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Exito guardando las carreras')            
+            return redirect('usuarios:AListaCarreras', pkInst)
+        else:
+            messages.error(request, formset.errors)
+    
+    context = {        
+        'modalTitle': modalTitle,
+        'mensajes' : 'mensajes.html',
+        'postUrl': postUrl,
+        'modalFormset': formset,
+    }
+    return render(request, 'modal_base.html', context)
+
 
 @login_required
 def listaUsuarios(request):
@@ -253,6 +375,7 @@ def eliminarUsuario(request, user_id):
 
     user_to_delete = get_object_or_404(User, pk=user_id)    
     user_to_delete.delete()
+    messages.success(request, 'Usuario eliminado con éxito')
     #print('usuario '+ str(user_to_delete) + ' eliminado')    
     anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
     return redirect(anterior_url)

@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.forms import modelformset_factory
+from django.forms import inlineformset_factory
 
 from .models import *
 from django.contrib.auth import get_user_model
@@ -249,3 +250,36 @@ class PuntajeMunicipioForm(forms.ModelForm):
                 choices.append(choice)
             self.fields['municipio'].choices = choices
             self.initial['estado'] = estado_id  # Establece el valor inicial del campo estado
+
+class InstitucionForm(forms.ModelForm):
+    class Meta:
+        model = Institucion
+        fields = ['nombre', 'puntos'] 
+        labels = {
+            'nombre': 'Nombre de la Institución', 
+            'puntos': 'Puntos',  
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese nombre de la institución'}),  
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3' }),  
+        }
+
+class CarreraForm(forms.ModelForm):
+    class Meta:
+        model = Carrera
+        fields = ['nombre', 'puntos', ]
+        labels = {
+            'nombre': 'Nombre carrera',
+            'puntos': 'Puntos',
+            
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'style': 'width: 21rem;','placeholder': 'Nombre de la carrera'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 m-0', 'style': 'width: 5rem;'}),            
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['title'] = self[field_name].value()
+
+CarreraInlineFormSet = inlineformset_factory(Institucion, Carrera, form=CarreraForm, extra=1, can_delete=True)

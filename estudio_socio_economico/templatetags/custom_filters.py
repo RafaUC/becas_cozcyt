@@ -1,6 +1,8 @@
 from django import template
 from estudio_socio_economico.models import Elemento
 import logging
+from django.db import models
+from django import forms
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -39,3 +41,16 @@ def splitPop(s,str):
 @register.filter(name='is_list')
 def is_list(value):
     return isinstance(value, list)
+
+@register.filter
+def model_verbose_name(obj):    
+    #Devuelve el 'verbose name' del modelo asociado a un formulario o un formset.    
+    try:
+        # Intenta obtener el 'verbose name' del modelo
+        if isinstance(obj, models.Model):
+            return obj.model._meta.verbose_name
+        elif isinstance(obj, forms.BaseForm):
+            return obj.Meta.model._meta.verbose_name
+    except Exception as e:
+        print(e)
+        return ' '

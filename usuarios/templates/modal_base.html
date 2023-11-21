@@ -1,0 +1,117 @@
+{% load custom_filters %}
+
+{% if redirectAfter %}
+    <script>        
+            // si se pide redirigir porque el modal tuvo exito en su funcion            
+            window.location.href = '{{redirectAfter|safe}}';        
+    </script>
+{% elif mensajes %}
+    {% include mensajes %}
+{% endif %}
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="base-modal-titulo">
+                    {{ modalTitle|safe }}
+                
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+            </div>
+            {% if modalForm or modalFormset %}     
+                <form method="post" id="base-modal-form">  
+                    {% csrf_token %}     
+            {% endif %}
+            <div id="base-modal-dialogo" class="modal-body font-md red-errors">                
+                {% if modalFormset %}
+                    
+                    {{ modalFormset.management_form }}
+                    <table class=" custom-table-simple">
+                        <thead>
+                            <tr>
+                            {% for field in modalFormset.empty_form.visible_fields %}
+                                <th >{{ field.label|capfirst }}</th>
+                            {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in modalFormset %}                            
+                                <tr>                                    
+                                    {% for field in form.visible_fields %}
+                                    <td class="text-center">
+                                        {% if form.instance.id is None %}                                            
+                                            <p class="text-start mb-1 mt-5 font-semi-bold">
+                                                {% if forloop.first %}
+                                                Crear nuevo
+                                                {% endif %}
+                                                &nbsp;
+                                            </p>                                            
+                                        {% endif %}
+                                        {{ field.errors }}
+                                        {{ field }}                                        
+                                    </td>
+                                    {% endfor %}
+                                    {% for field in form.hidden_fields %}
+                                        {{ field }}
+                                        {{ field.errors }}
+                                    {% endfor%}
+                                    {{ form.non_field_errors }}
+                                </tr>
+                            {% endfor %}
+                            {{ modalFormset.non_form_errors }}
+                        </tbody>
+                    </table>
+
+                {% elif modalForm %}
+                    {{ modalForm }}
+                {% endif %}
+            </div>
+            <div class="modal-footer">                
+                {% if modalForm or modalFormset %}    
+                    <button id="base-modal-submit-btn" type="button" onclick="showFormModal('{{ postUrl }}', 'POST')" value="Guardar" class="btn btn-aceptado m-1 p-2">Guardar</button>            
+                {% endif %}
+            </div>
+            {% if modalForm or modalFormset %}        
+                </form>        
+            {% endif %}
+        </div>
+ 
+
+<script>
+    function showCustomModal(dialogo, titulo) {  
+        //$('#modal-base-modal').modal('hide');              
+        const modalDialogo = $('#base-modal-dialogo');
+        const modalTitulo = $('#base-modal-titulo');        
+        modalDialogo.empty();
+        modalTitulo.empty();
+        
+        if (dialogo !== undefined) {
+            modalDialogo.html(dialogo);
+        }
+        if (titulo !== undefined) {
+            modalTitulo.html(titulo);
+        }        
+        $('#modal-base-modal').modal('show');
+    }
+
+    function showFormModal(url, method) {
+        //$('#modal-base-modal').modal('hide');
+        // si el metodo es post, enviar la data del formulario
+        var formData = method.toUpperCase() === 'POST' ? $('#base-modal-form').serialize() : '';        
+
+        $.ajax({
+            url: url,
+            method: method,
+            data: formData,
+            success: function(data) {
+                // Renderiza el contenido en el div con ID "modal-base-cont"
+                $('#modal-base-cont').html(data);     
+                $('#modal-base-modal').modal('show');           
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar el contenido del modal:', error);
+            }
+        });        
+        
+    }
+</script>
