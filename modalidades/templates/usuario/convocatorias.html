@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Convocatorias
+{% endblock titulo %}
+
+{% block body %}
+    <div class="rounded-2 p-1 mx-4 principal">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h3 tituloModulo">
+                    Convocatoria mes-mes 202x
+                </p>
+                <!-- <hr> -->
+            </div>
+        </div>
+        <div class="rounded-2 mx-4" style="padding-top: 30px;">          
+            <div class="row">
+                {% for modalidad in modalidades%}
+                <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                    <div class="card card-modalidad">
+                        <div class="card-body">
+                            <h5 class="card-title" id="tituloCard">
+                                {{modalidad.nombre}}
+                            </h5>
+                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
+                            <br>
+                            <a href="{% url 'usuarios:documentos_convocatoria' modalidad.id %}" class="btn btnSolicitar" >
+                            Solicitar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
