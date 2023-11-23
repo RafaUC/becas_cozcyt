@@ -42,7 +42,6 @@ urlpatterns = [
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
-    path('convocatorias/',views.convocatorias, name='convocatorias'),    
     path('historial/',views.historial, name='historial'),
 
     ### urls Administrador ###

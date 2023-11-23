@@ -23,13 +23,17 @@
     <!-- Bootstrap CSS -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">    
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/modalidades.css' %}" rel="stylesheet">   
+
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link href="{% static 'css/jquery.toast.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/jquery.toast.css' %}" rel="stylesheet"> 
+    
+    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <title>
         {% block titulo %}    
           
@@ -107,7 +111,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'usuarios:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
+                <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
                   <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
                   Convocatorias
                 </a>
