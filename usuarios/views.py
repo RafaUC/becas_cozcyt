@@ -12,10 +12,13 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.http import HttpResponse  
+from django.core.files.storage import FileSystemStorage
 
 from .forms import *
 from .models import *
 from .tokens import account_activation_token
+from modalidades.models import *
+from modalidades.forms import *
 
 @login_required
 def loginRedirect(request):    
@@ -23,7 +26,7 @@ def loginRedirect(request):
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
         return redirect("usuarios:AInicio")
     else:
-        return redirect("usuarios:convocatorias")
+        return redirect("solicitudes:convocatorias")
     
 #Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no retorna la url donde deberia ser redirigido
 def verificarRedirect(usuario, *permisos):    
@@ -247,15 +250,6 @@ def sMensajes(request):
         return redirect(url)
 
     return render(request, 'solicitante/sMensajes.html')
-
-
-def convocatorias(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'solicitante/convocatorias.html')
 
 
 def estudioSE(request):

@@ -23,4 +23,11 @@ urlpatterns = [
     path('eliminar_modalidad/<modalidad_id>', viewsAdmin.eliminarModalidad, name = 'AConfigEliminarModalidades'),
     path('editar_modalidad/<modalidad_id>', viewsAdmin.editarModalidad, name = 'AConfigEditarModalidades'),
     path('eliminar_documento/<modalidad_id>/<documento_id>', viewsAdmin.eliminarDocumento, name = 'AConfigEliminarDocumento'),
+    
 ]
+
+htmx_urlpatterns = [
+    # path('ordenar/', viewsAdmin.ordenarDocumentos, name="OrdenarDocumentos"),
+]
+
+urlpatterns += htmx_urlpatterns

@@ -8,17 +8,17 @@
     {% include 'admin/config_nav.html' %}
     <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
     <hr> -->
-    <div class="rounded-2 p-1 mx-4" style="color: #676767;">
+    <div class="rounded-2 p-1 mx-4 principal">
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h5" style="font-weight: bold;">Modalidades</p>
+                <p class="col h5 subtitulo-mod">Modalidades</p>
                 <hr>
             </div>
         </div>
         <div class="rounded-2 mx-4">          
             <div class="row">
                 <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
-                    <a href="{% url 'modalidades:AConfigAgregarModalidad' %}" class = "btn" style="padding: 6px 0 6px; text-align: center; color: #676767; text-decoration: none; background-color: #D5F5E2; font-size: medium; border-radius: 10px;">
+                    <a href="{% url 'modalidades:AConfigAgregarModalidad' %}" class = "btn" id="btnAgregarMod">
                         Agregar
                     </a>    
                 </div>   
@@ -29,8 +29,8 @@
                 <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
                     <div class="card">
                         <div class="card-body" style="text-align: center; height: 320px;">
-                            <h5 class="card-title">{{modalidad.nombre}}</h5>
-                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
+                            <h5 class="card-title" id="tituloCard">{{modalidad.nombre}}</h5>
+                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
                             <br>
                             <a href="{% url 'modalidades:AConfigEditarModalidades' modalidad.id %}"  class="btn" style="background-color: #D5F5E2; color: #676767;">Editar</a>
                             <a href="{% url 'modalidades:AConfigEliminarModalidades' modalidad.id %}" 
