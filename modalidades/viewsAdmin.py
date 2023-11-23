@@ -3,9 +3,12 @@ from django.contrib import messages
 from django.forms.models import modelformset_factory  #model form for querysets
 from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
+from django.http import HttpResponse  
+from django.views.decorators.http import require_POST
 
 from .forms import *
 from .models import *
+from .utils import *
 
 # Create your views here.
 
@@ -28,7 +31,9 @@ def agregarModalidad(request):
     
     form = ModalidadForm()
     DocumetoModalidadFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=0)
-    formset = DocumetoModalidadFormSet(request.POST or None, queryset = Modalidad.objects.none())
+    #Agregar el qs con los documentos base a la variable de qs
+    # qs =  Documento.objects.filter(nombre__startswith='C')
+    formset = DocumetoModalidadFormSet(request.POST or None, queryset = Documento.objects.none())
     if request.method == "POST":
         form = ModalidadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -38,6 +43,8 @@ def agregarModalidad(request):
                 for form in formset:
                     documento = form.save(commit=False)
                     documento.modalidad = modalidad
+                    documento.order = get_max_order(modalidad)
+                    # documento.order = 
                     documento.save()
             # print('modalidad creada')
             else:
@@ -108,3 +115,30 @@ def eliminarDocumento(request, modalidad_id ,documento_id):
     documento.delete()
     messages.success(request, "Documento eliminado correctamente.")
     return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
+
+def ordenarDocumentos(request):
+    documentos_id = request.POST.getlist('ordering')
+    modalidad_id = request.POST.get('modalidad_id')
+    print(documentos_id)
+    modalidad = Modalidad.objects.get(pk = modalidad_id)
+    form = ModalidadForm(request.POST or None, request.FILES or None, instance=modalidad)
+    # qs = modalidad.get_documentos_children()
+    # print(qs)
+    documentosQS = []
+    for idx, documento_id in enumerate(documentos_id, start = 0):
+        # documento = qs[idx]
+        documento = Documento.objects.get(pk = documento_id)
+        print(documento)
+        documento.order = idx + 1
+        documento.save()
+    DocumetoModalidadFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=0, can_order=True)
+    qs = modalidad.get_documentos_children()
+    print(qs)
+    # formset = DocumetoModalidadFormSet(request.POST or None, queryset = qs)
+    formset = Documento.objects.filter(modalidad = modalidad)
+    # documentos = Documento.objects.all()
+    # print(documentos)
+    # documentoFormset = DocumentoForm(queryset=documentos, prefix='documento_formset')
+    # return render(request, "partials/form_editarmod.html", {'formset' : documentoFormset})
+    context = {'modalidad' : modalidad , 'form' : form, 'formset' : formset}
+    return render(request, "partials/form_editarmod.html", context)
