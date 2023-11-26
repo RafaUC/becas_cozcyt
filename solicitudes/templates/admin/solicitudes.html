@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Administrar solicitudes
+{% endblock titulo %}
+
+{% block body %}    
+
+    <div class="row align-items-center m-0">
+        <p class="col h2 mx-3 mt-4">Solicitudes {{ ciclo }}</p>
+              
+    </div>
+
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal  horizontal-scroll">    
+        <div class="row mx-0">
+            <div class="col-4 ps-0">
+                <p class="h4 mx-3">Solicitudes</p>           
+            </div>
+            <div class="col mt-1 mb-4 mx-3">
+                <div class="row align-items-center">
+                    <div class="col-auto p-0">
+                        <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="Para buscar valores en atributos específicos <br>escribir: atributo:valor <br>ejemplo: 'nombre:Juan' <br><br> Para excluir resultados con algun contenido agregar '-' antes de cada termino <br>Ejemplo: '-juan'" data-bs-html="true" ></i>
+                    </div>
+                    <div class="col">
+                        <form class="d-flex" role="search" method="GET">                
+                            <input
+                            class="form-control me-2"
+                            type="search"
+                            placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
+                            name="search"
+                            aria-label="Search"
+                            value="{{ request.GET.search}}"
+                            >
+                            <button class="btn btn-outline-success" type="submit">Buscar</button>
+                        </form>
+                    </div>                
+                </div>
+            </div> 
+        </div>
+         
+        <table class="table custom-table-simple">            
+            <thead>
+                <tr>
+                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
+                    <th class="borde-pagina-gris" style="width: auto; max-width: 5rem; border-bottom: 2px solid;"> Nombre</th>
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntos</th>                    
+                    <th class="borde-pagina-gris " style="width: 10rem; border-bottom: 2px solid;"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for institucion in page_insti %}                
+                <tr>                    
+                    <td class="text-center">{{ institucion.id }}</td>
+                    <td class="text-start">{{ institucion.nombre }}</td>
+                    <td class="text-center">{{ institucion.puntos }}</td> 
+                    <td style="text-align: right;">
+                        <div class="d-flex align-items-center justify-content-center ">                            
+                            <button type="button" onclick="" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
+                                <i class="fa fa fa-pencil m-0 text-warning " style="font-size: 20px;"></i>
+                            </button>  
+                            <form class="p-0 m-0" action="" method="get" >                                                        
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución?')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
+                                    <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                </button>                                
+                            </form>
+                        </div>
+                    </td>               
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
+            <span class="step-links">                                
+                <span class="current font-xs me-1">
+                    Página {{ page_insti.number }} / {{ page_insti.paginator.num_pages }}.
+                </span>                
+                {% if page_insti.has_previous %}                    
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                {% endif %}
+                {% if page_insti.has_next %}
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                {% endif %}                
+            </span>
+        </div>
+    </div>
+
+{% endblock body %}

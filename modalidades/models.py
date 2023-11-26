@@ -11,9 +11,9 @@ def ciclo_actual():
         mes = now.month
         # Determinar el ciclo actual
         if mes >= 8:
-            ciclo = "Ago-Dic"
+            ciclo = "Agosto - Diciembre"
         else:
-            ciclo = "Ene-Jun"
+            ciclo = "Enero - Junio"
         # Obtener el año actual
         año = now.year
         return f"{ciclo} {año}"

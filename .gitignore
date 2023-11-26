@@ -3,6 +3,7 @@
 migrations/
 static/images/
 media/protected/
+protected_uploads/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
