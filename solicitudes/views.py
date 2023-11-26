@@ -6,6 +6,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.files.storage import FileSystemStorage
+from pathlib import Path
 
 from .forms import *
 from .models import *
@@ -24,13 +25,30 @@ from modalidades.forms import *
 
 @never_cache
 @login_required
-def verificarPdf(request, soli, file):
-    documentoRespuesta = get_object_or_404(RespuestaDocumento,pk = file)
-    solicitud = get_object_or_404(Solicitud, pk = soli)    
-    if(documentoRespuesta.solicitud == solicitud):
+def verPDF(request, soli, file):
+    documento_respuesta = get_object_or_404(RespuestaDocumento, pk=file)
+    solicitud = get_object_or_404(Solicitud, pk=soli)
+
+    # Verificar si el documento pertenece a la solicitud
+    if documento_respuesta.solicitud != solicitud:
         raise Http404("El recurso no existe")
-    response = FileResponse(documentoRespuesta.pdf)
-    return response
+
+    # Construir la ruta completa al archivo PDF
+    ruta_path = Path(f'{settings.MEDIA_ROOT}{documento_respuesta.file}') 
+
+    # Verificar si el archivo existe antes de intentar abrirlo
+    if not ruta_path.is_file():
+        raise Http404("El archivo no existe")
+
+    # Verificar si el archivo es un PDF (opcional)
+    if not ruta_path.suffix.lower() == ".pdf":
+        raise Http404("El archivo no es un PDF")
+
+    # Abrir el archivo y generar una FileResponse
+    with open(ruta_path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="{os.path.basename(ruta_path)}"'
+        return response
 
 
 def convocatorias(request):

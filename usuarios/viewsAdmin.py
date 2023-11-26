@@ -23,14 +23,7 @@ def inicio(request):
 
     return render(request, 'admin/inicio.html')
 
-@login_required
-def solicitudes(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'admin/solicitudes.html')
+
 
 @login_required
 def estadisticas(request):
@@ -42,42 +35,57 @@ def estadisticas(request):
     return render(request, 'admin/estadisticas.html')
 
 
+CLASE_CAMPOS_BUSQUEDA = {'foreignKey': models.ForeignKey, 'manyToOne': models.ManyToOneRel, 'manyToMany': models.ManyToManyField, 'oneToOne': models.OneToOneRel}
+
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
-def get_related_fields(field, prefix=''):
-    if isinstance(field, models.ForeignKey):
+def get_related_fields(field, relatedFieldType, prefix='' ):   
+    print(f'== {field} - {type(field)} ') 
+    if isinstance(field, relatedFieldType):
+        print('a1')
         related_model = field.related_model
-        related_fields = get_model_fields(related_model, prefix+field.name+'__')
+        related_fields = get_model_fields(related_model, relatedFieldType, prefix+field.name+'__')
         return related_fields
-    elif isinstance(field, (models.ManyToOneRel, models.ManyToManyField)):
+    elif field.__class__ in CLASE_CAMPOS_BUSQUEDA.values(): 
+        print('a2')
         return []
     else:        
+        print('a3')
         return [prefix + field.name]
 
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
-def get_model_fields(model, prefix=''):
+def get_model_fields(model, relatedFieldType, prefix='' ):
     fields = []
     for field in model._meta.get_fields():
-        fields.extend(get_related_fields(field, prefix))
+        fields.extend(get_related_fields(field, relatedFieldType, prefix))
     return fields
 
 #Metodo para filtrar un queryset en base a un string de palabras clave a buscar en sus campos
-def BusquedaEnCamposQuerySet(queryset, search_query):  
+def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMPOS_BUSQUEDA['foreignKey']):  
     search_terms = search_query.split()     
     model = queryset.model 
-    fields = get_model_fields(model)        
+    fields = get_model_fields(model, relatedFieldType)  
+       
     
     q_objects = Q()
+    exclude_objects = Q()
+
     for term in search_terms:
-        term_query = Q()
+        term_query = Q()        
+        is_exclude = term.startswith('-') # Verifica si el término comienza con '-' para exclusión
+        term = term[1:] if is_exclude else term
         for field in fields:
             if ':' in term:
-                campo, valor = term.split(':', 1)                
+                campo, valor = term.split(':', 1)
                 if campo in field:
                     term_query |= Q(**{f'{field}__icontains': valor})
             else:
-                term_query |= Q(**{f'{field}__icontains': term})
-        q_objects &= term_query
-    queryset = queryset.filter(q_objects)
+                term_query |= Q(**{f'{field}__icontains': term})        
+        if is_exclude: # Agrega la condición al objeto de exclusión o al objeto de inclusión
+            exclude_objects &= term_query
+        else:
+            q_objects &= term_query
+            
+    queryset = queryset.filter(q_objects).exclude(exclude_objects)
     return queryset
 
 @login_required
