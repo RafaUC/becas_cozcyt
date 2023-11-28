@@ -42,29 +42,46 @@ Administrar solicitudes
             <thead>
                 <tr>
                     <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
-                    <th class="borde-pagina-gris" style="width: auto; max-width: 5rem; border-bottom: 2px solid;"> Nombre</th>
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntos</th>                    
-                    <th class="borde-pagina-gris " style="width: 10rem; border-bottom: 2px solid;"> </th>
+                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                    
+                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Folio</th>  
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntaje</th>  
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
+                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Estado</th>  
+                    <th class="borde-pagina-gris " style="width: 12rem; border-bottom: 2px solid;"> </th>
                 </tr>
             </thead>
             <tbody>
-                {% for institucion in page_insti %}                
-                <tr>                    
-                    <td class="text-center">{{ institucion.id }}</td>
-                    <td class="text-start">{{ institucion.nombre }}</td>
-                    <td class="text-center">{{ institucion.puntos }}</td> 
+                {% for solicitud in page_soli %}                
+                <tr class="{{ solicitud.estado }}">                    
+                    {% with solicitud.solicitante as solicitante %}
+                    <td class="text-center">{{ solicitud.id }}</td>                    
+                    <td class="text-start">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</td>                    
+                    <td class="text-center">{{ solicitante.curp }}</td> 
+                    <td class="text-center">{{ solicitante.folio }}</td> 
+                    <td class="text-center">{{ solicitud.puntaje }}</td> 
+                    <td class="text-center">{{ solicitud.tipo }}</td> 
+                    <td class="text-center">{{ solicitud.get_estado_display }}</td>                     
                     <td style="text-align: right;">
-                        <div class="d-flex align-items-center justify-content-center ">                            
-                            <button type="button" onclick="" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
-                                <i class="fa fa fa-pencil m-0 text-warning " style="font-size: 20px;"></i>
-                            </button>  
-                            <form class="p-0 m-0" action="" method="get" >                                                        
-                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución?')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
-                                    <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                </button>                                
-                            </form>
+                        <div class="d-flex align-items-center justify-content-center ">                                                           
+                            <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
+                            </a>
+                            <a href="#" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-id-card-o align-self-bottom" aria-hidden="true"></i>
+                            </a>   
+                            <a href="#" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-file align-self-bottom" aria-hidden="true"></i>
+                            </a>   
+                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-check-circle align-self-bottom" aria-hidden="true"></i>
+                            </a>   
+                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Ver información del usuario">
+                                <i class="fa fa-times-circle align-self-bottom" aria-hidden="true"></i>
+                            </a>                    
                         </div>
-                    </td>               
+                    </td>  
+                    {% endwith %}             
                 </tr>
                 
                 {% endfor %}
@@ -73,15 +90,15 @@ Administrar solicitudes
         <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
             <span class="step-links">                                
                 <span class="current font-xs me-1">
-                    Página {{ page_insti.number }} / {{ page_insti.paginator.num_pages }}.
+                    Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
                 </span>                
-                {% if page_insti.has_previous %}                    
+                {% if page_soli.has_previous %}                    
                     <a href="{{ request.path }}?search={{ request.GET.search }}&page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
                 {% endif %}
-                {% if page_insti.has_next %}
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_insti.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                {% if page_soli.has_next %}
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                 {% endif %}                
             </span>
         </div>

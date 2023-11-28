@@ -23,5 +23,5 @@ urlpatterns = [
     path('documento_respuesta/<int:pk>',views.documentoRespuesta, name='documento-respuesta'),
     path('documento/<int:soli>/<int:file>',views.verPDF, name='verPdf'),
 
-    path('administracion/solicitudes', viewsAdmin.solicitudes, name='ASolicitudes'),
+    path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
 ]

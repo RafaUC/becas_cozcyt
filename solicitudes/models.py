@@ -17,21 +17,26 @@ from estudio_socio_economico.models import Elemento, RNumerico
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
-        ('docPendiente', 'Documentación pendiente'),
-        ('docAprobada', 'Documentación aprobada'),
+        ('docPendiente', 'Doc. pendiente'),
+        ('docAprobada', 'Doc. aprobada'),
         ('aceptado', 'Aceptado'),
         ('rechazado', 'Rechazado'),
+    ]
+    TIPO_CHOICES = [
+        ('renovacion', 'Renovación'),
+        ('ingreso', 'Nuevo Ingreso')
     ]
 
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=False)
     solicitante = models.ForeignKey(Solicitante, on_delete=models.CASCADE, null=False)
     ciclo = models.CharField(max_length=50, default=ciclo_actual(), editable=False, null=False)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='docPendiente')
     puntaje = models.IntegerField(default=0) 
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='ingreso')
 
     readonly_fields = ('ciclo',)
     class Meta:
-        ordering = ['puntaje','id']
+        ordering = ['-puntaje','id']
         verbose_name = 'Solicitud'
         verbose_name_plural = 'Solicitudes'
         unique_together = ('modalidad', 'solicitante')
@@ -40,18 +45,17 @@ class Solicitud(models.Model):
         return f'Solicitud object ({self.id}) p:{self.puntaje}'
 
 
-#Señal para calcular y actualizar el puntaje de una solicitud
+#Señal para calcular y actualizar el puntaje de una solicitud y su tipo
 @receiver(pre_save, sender=Solicitud)
-def calcular_puntaje(sender, instance, **kwargs):
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaPUNTAJESSSSS')
+def calcular_puntaje(sender, instance, **kwargs):    
     nuevoPuntaje = 0
     solicitante = instance.solicitante
-    tipoChoices = PuntajeGeneral.SECCION_CHOICES    
+    seccionChoices = PuntajeGeneral.SECCION_CHOICES    
 
     #Procesando puntajes generales
     #Genero
     try:
-        puntajes = PuntajeGeneral.objects.filter(tipo = tipoChoices[0][0])    
+        puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[0][0])    
         for puntaje in puntajes:
             if solicitante.genero == puntaje.nombre:
                 nuevoPuntaje += puntaje.puntos
@@ -60,7 +64,7 @@ def calcular_puntaje(sender, instance, **kwargs):
         print(f"Se produjo una excepción calculando el puntaje de generos: {e}")
     #Ingresos
     try:
-        puntajes = PuntajeGeneral.objects.filter(tipo = tipoChoices[1][0])
+        puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[1][0])
         ingresos = [] #lista de querysets relacionados con ingresos    
         q = Q(**{'nombre__icontains': 'sueldo'}) | Q(**{'nombre__icontains': 'ingreso'})
         ingresoPreguntas = Elemento.objects.filter(tipo=Elemento.TIPO_CHOICES[1][0]).filter(q)    
@@ -81,16 +85,18 @@ def calcular_puntaje(sender, instance, **kwargs):
     try:        
         existe_solicitud = Solicitud.objects.filter(solicitante=solicitante, estado=Solicitud.ESTADO_CHOICES[2][0]).filter(~Q(ciclo=ciclo_actual())).exists()
         if existe_solicitud:
-            puntaje = PuntajeGeneral.objects.get(tipo = tipoChoices[2][0], nombre='Renovación')
+            puntaje = PuntajeGeneral.objects.get(tipo = seccionChoices[2][0], nombre='Renovación')
+            instance.tipo = Solicitud.TIPO_CHOICES[0][0]
             nuevoPuntaje += puntaje.puntos
         else:
-            puntaje = PuntajeGeneral.objects.get(tipo = tipoChoices[2][0], nombre='Nuevo ingreso')
+            puntaje = PuntajeGeneral.objects.get(tipo = seccionChoices[2][0], nombre='Nuevo ingreso')
+            instance.tipo = Solicitud.TIPO_CHOICES[1][0]
             nuevoPuntaje += puntaje.puntos
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de Tipo Solicitud: {e}")
+        print(f"Se produjo una excepción calculando el puntaje y tipo de Tipo Solicitud: {e}")
     #periodo
     try:
-        puntajes = PuntajeGeneral.objects.filter(tipo = tipoChoices[3][0])
+        puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[3][0])
         for puntaje in puntajes:
             limite_inferior, limite_superior = map(int, puntaje.nombre.split('-'))
             if limite_inferior <= int(solicitante.grado) <= limite_superior:
@@ -100,7 +106,7 @@ def calcular_puntaje(sender, instance, **kwargs):
         print(f"Se produjo una excepción calculando el puntaje de periodo: {e}")
     #promedio
     try:
-        puntajes = PuntajeGeneral.objects.filter(tipo = tipoChoices[4][0])        
+        puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[4][0])        
         for puntaje in puntajes:
             limite_inferior, limite_superior = map(float, puntaje.nombre.split('-'))            
             if limite_inferior <= solicitante.promedio <= limite_superior:
@@ -123,8 +129,7 @@ def calcular_puntaje(sender, instance, **kwargs):
         nuevoPuntaje += carrera.institucion.puntos
     except Exception as e:        
         print(f"Se produjo una excepción calculando el puntaje de Institución y carrera: {e}")
-
-    print(f'Nuevo puntaje: {nuevoPuntaje}')
+    
     instance.puntaje = nuevoPuntaje
 
 
