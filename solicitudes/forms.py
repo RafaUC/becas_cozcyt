@@ -25,11 +25,12 @@ class DocumentoRespForm(ModelForm):
     file.widget.attrs.update({'id': 'file-upload'})
     class Meta:
         model = RespuestaDocumento
-        fields = ('file',)
+        # fields = ('file',)
+        fields = '__all__'
         labels = {
             'file' : '',
         }
-        exclude = ('solicitud','documento',)
+        # exclude = ('solicitud','documento',)
         widgets = {
             # 'file' :  forms.FileField(attrs={'class': 'btn btnSubirDoc',})
         }
