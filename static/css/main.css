@@ -13,9 +13,9 @@
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
   --pagina-gris: #b9b4b4;
 
-  --soli-doc-aprovada: #faf1d1;
-  --soli-aceptada: #d0fad9;
-  --soli-rechazada: #fad5d3;
+  --soli-doc-aprovada: #dfeafc;
+  --soli-aceptada: #def8e3;
+  --soli-rechazada: #ffe1df;
 
   --gris-0: #f8f8f8; /* Blanco apagado */
   --gris-1: #efefef; /* Blanco apagado */
@@ -671,11 +671,6 @@ th {
   word-wrap: break-word;
 }
 
-/* Estilo para filas alternas (para un efecto de rayas) */
-.custom-table-simple tr:nth-child(even) {
-  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
-}
-
 .form-control-label {
   border: none;
   margin: 2px; 
@@ -684,4 +679,21 @@ th {
 
 .red-errors .errorlist li {
   color: #dc3545; /* Este es el color por defecto de 'text-danger' en Bootstrap */
+}
+
+/* Estilos para Solicitudes */
+.docPendiente {
+  background-color: var(--pagina-blanco); /* Color de respaldo predeterminado si la variable no está definida */  
+}
+
+.docAprobada {
+  background-color: var(--soli-doc-aprovada);  
+}
+
+.aceptado {
+  background-color: var(--soli-aceptada);  
+}
+
+.rechazado {
+  background-color: var(--soli-rechazada);  
 }
