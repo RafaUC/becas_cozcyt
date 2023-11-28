@@ -44,55 +44,85 @@ def convocatorias(request):
 
 
 
-def documentos_convocatorias(request, modalidad_id):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenado su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
+# def documentos_convocatorias(request, modalidad_id):
+#     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+#     url = verificarRedirect(solicitante)    
+#     if url:          #Verifica si el usuario ha llenado su informacion personal por primera vez y tiene los permisos necesarios
+#         return redirect(url)
 
-    obj = Modalidad.objects.get(pk = modalidad_id)
-    form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
-    documentos = obj.get_documentos_children()
+#     obj = Modalidad.objects.get(pk = modalidad_id)
+#     form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
+#     documentos = obj.get_documentos_children()
     
-    solicitudForm = SolicitudForm()
-    documentoForm = DocumentoRespForm()
-    solicitudForm = SolicitudForm(request.POST or None)
-    # print(Modalidad.objects.get(id=modalidad_id))
-    # print(Solicitante.objects.get(id=request.user.id))
-    DocumetosRespuestaFormSet = modelformset_factory(RespuestaDocumento, form=DocumentoRespForm, extra=0)
-    formset = DocumetosRespuestaFormSet(request.POST or None, queryset = RespuestaDocumento.objects.none())
-    if request.method == "POST":
-        #Se crea la solicitud 
-        solicitudForm.instance.modalidad = Modalidad.objects.get(id=modalidad_id)
-        solicitudForm.instance.solicitante = Solicitante.objects.get(id=request.user.id)
-        print(solicitudForm.instance.modalidad)
-        print(solicitudForm.instance.solicitante)
-        if solicitudForm.is_valid():
-            solicitud = solicitudForm.save(commit=False)
-            solicitud.save()
-            #Se procesan los documentos
-            documentoForm = DocumentoForm(request.POST, request.FILES)
-            documentoForm.instance.solicitud = solicitud
-            print(solicitud)
-            #Se obtiene el id del doc para poder hacer la instancia
-            documentoForm.instance.documento = 442
-            print(documentoForm.instance.documento)
-            documentoForm.save
-            documento_id=442
-            return redirect("solicitudes:convocatorias")
-        else:
-            print("nour")
-            print(solicitudForm.errors)
-            # return redirect("solicitudes:convocatorias")
-    context = {
-        'modalidad' : obj , 
-        'form' : form, 
-        'formset' : documentos,
-        'documentoForm' : documentoForm,
-        'solicitudForm' : solicitudForm,
-    }
-    return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
+#     solicitudForm = SolicitudForm()
+#     documentoForm = DocumentoRespForm()
+#     solicitudForm = SolicitudForm(request.POST or None)
+#     # print(Modalidad.objects.get(id=modalidad_id))
+#     # print(Solicitante.objects.get(id=request.user.id))
+#     DocumetosRespuestaFormSet = modelformset_factory(RespuestaDocumento, form=DocumentoRespForm, extra=0)
+#     formset = DocumetosRespuestaFormSet(request.POST or None, queryset = RespuestaDocumento.objects.none())
+#     if request.method == "POST":
+#         #Se crea la solicitud 
+#         solicitudForm.instance.modalidad = Modalidad.objects.get(id=modalidad_id)
+#         solicitudForm.instance.solicitante = Solicitante.objects.get(id=request.user.id)
+#         print(solicitudForm.instance.modalidad)
+#         print(solicitudForm.instance.solicitante)
+#         if solicitudForm.is_valid():
+#             solicitud = solicitudForm.save(commit=False)
+#             solicitud.save()
+#             #Se procesan los documentos
+#             documentoForm = DocumentoForm(request.POST, request.FILES)
+#             documentoForm.instance.solicitud = solicitud
+#             print(solicitud)
+#             #Se obtiene el id del doc para poder hacer la instancia
+#             documentoForm.instance.documento = 442
+#             print(documentoForm.instance.documento)
+#             documentoForm.save
+#             documento_id=442
+#             return redirect("solicitudes:convocatorias")
+#         else:
+#             print("nour")
+#             print(solicitudForm.errors)
+#             # return redirect("solicitudes:convocatorias")
+#     context = {
+#         'modalidad' : obj , 
+#         'form' : form, 
+#         'formset' : documentos,
+#         'documentoForm' : documentoForm,
+#         'solicitudForm' : solicitudForm,
+#     }
+#     return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
 
+def documentos_convocatorias(request, modalidad_id):
+    usuario = get_object_or_404(Usuario, pk=request.user.id) 
+    solicitante = usuario.solicitante
+    modalidad = Modalidad.objects.get(pk = modalidad_id)
+    documentos = Documento.objects.filter(modalidad__id=modalidad_id)
+    
+    context ={
+        'modalidad': modalidad,
+        'documentos': documentos
+    }
+    
+    if request.method == 'POST':
+        solicitud = Solicitud.objects.create(
+            modalidad=modalidad,
+            solicitante = solicitante
+        )
+        for doc in request.FILES:
+            files={'file':request.FILES[doc]}
+            documento = Documento.objects.get(id=doc)
+            data={
+                'solicitud':solicitud,
+                'documento': documento
+            }
+            formRespDocs = DocumentoRespForm(data=data,files=files)
+            
+            if formRespDocs.is_valid():
+                formRespDocs.save()
+                   
+    
+    return render(request, 'usuario_solicitud/temporal.html', context)
 
 def documentoRespuesta(request, pk=None):
     documento = Documento.objects.get(id=pk)
