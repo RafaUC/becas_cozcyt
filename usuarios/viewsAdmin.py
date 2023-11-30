@@ -38,18 +38,14 @@ def estadisticas(request):
 CLASE_CAMPOS_BUSQUEDA = {'foreignKey': models.ForeignKey, 'manyToOne': models.ManyToOneRel, 'manyToMany': models.ManyToManyField, 'oneToOne': models.OneToOneRel}
 
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
-def get_related_fields(field, relatedFieldType, prefix='' ):   
-    print(f'== {field} - {type(field)} ') 
-    if isinstance(field, relatedFieldType):
-        print('a1')
+def get_related_fields(field, relatedFieldType, prefix='' ):       
+    if isinstance(field, relatedFieldType):        
         related_model = field.related_model
         related_fields = get_model_fields(related_model, relatedFieldType, prefix+field.name+'__')
         return related_fields
-    elif field.__class__ in CLASE_CAMPOS_BUSQUEDA.values(): 
-        print('a2')
+    elif field.__class__ in CLASE_CAMPOS_BUSQUEDA.values():         
         return []
-    else:        
-        print('a3')
+    else:                
         return [prefix + field.name]
 
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
@@ -71,8 +67,10 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
 
     for term in search_terms:
         term_query = Q()        
-        is_exclude = term.startswith('-') # Verifica si el término comienza con '-' para exclusión
-        term = term[1:] if is_exclude else term
+        is_exclude = term.startswith('-')  # Verifica si el término comienza con '-'
+        is_or = term.startswith('~')  # Verifica si el término comienza con '~' para OR
+        term = term[1:] if is_exclude or is_or else term
+        
         for field in fields:
             if ':' in term:
                 campo, valor = term.split(':', 1)
@@ -80,8 +78,11 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
                     term_query |= Q(**{f'{field}__icontains': valor})
             else:
                 term_query |= Q(**{f'{field}__icontains': term})        
-        if is_exclude: # Agrega la condición al objeto de exclusión o al objeto de inclusión
+
+        if is_exclude:  # Agrega la condición al objeto de exclusión o al objeto de inclusión
             exclude_objects &= term_query
+        elif is_or:  # Realiza un OR con los términos de búsqueda
+            q_objects |= term_query
         else:
             q_objects &= term_query
             
