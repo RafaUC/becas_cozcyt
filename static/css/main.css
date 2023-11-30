@@ -627,6 +627,7 @@ th {
   border-color: var(--gris-3);
   white-space: normal;
   word-wrap: break-word;
+  word-break:break-all
 }
 
 /* Estilo para filas alternas (para un efecto de rayas) */
@@ -696,4 +697,10 @@ th {
 
 .rechazado {
   background-color: var(--soli-rechazada);  
+}
+
+.bold-legends legend {
+  font-weight: bold;
+  font-size: 1.143rem; /* 16px / 14px */
+  margin: 0;
 }

@@ -13,41 +13,64 @@ Administrar solicitudes
 
     <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal  horizontal-scroll">    
         <div class="row mx-0">
-            <div class="col-4 ps-0">
+            <div class="col-3 ps-0">
                 <p class="h4 mx-3">Solicitudes</p>           
-            </div>
+            </div>            
             <div class="col mt-1 mb-4 mx-3">
-                <div class="row align-items-center">
-                    <div class="col-auto p-0">
-                        <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="Para buscar valores en atributos específicos <br>escribir: atributo:valor <br>ejemplo: 'nombre:Juan' <br><br> Para excluir resultados con algun contenido agregar '-' antes de cada termino <br>Ejemplo: '-juan'" data-bs-html="true" ></i>
+                <form role="search" method="GET"> 
+                    <div class="row align-items-center">
+                             
+                        <div class="col-auto text-end ">                
+                            <button class="btn btn-outline-secondary dropdown-toggle p-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filtros
+                                <i class="fa fa-filter align-self-bottom" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <!-- Contenido del dropdown -->
+                                <div class="px-3 py-2">
+                                    <div class="mb-2 bold-legends">
+                                        {{ filtroSolForm.as_div }}
+                                        {{ filtroModForm.as_div }}
+                                    </div>  
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-secondary p-0 px-2 mt-1">Aplicar</button>
+                                    </div>                                                                  
+                                </div>
+                            </div>                
+                        </div>
+                        <div class="col-auto p-0">
+                            <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="<b>Puede buscar cambiando las palabras o contenido y en los atributos que necesite</b><br><br><b>juan zacatecas</b><br>Busca elementos que contengan 'juan' y 'zacatecas'<br><br><b>nombre:juan</b><br>Busca elementos cuyo atributo nombre contenga 'juan'<br><br><b>~juan ~maria</b><br>Busca elementos que contengan o 'juan' o 'maria'<br><br><b>juan -zacatecas</b><br>Busca elementos que contengan 'juan' y no contengan 'zacatecas'" data-bs-html="true" ></i>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex">    
+                                <input
+                                id='barra-Busqueda'
+                                class="form-control me-2"
+                                type="search"
+                                placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
+                                name="search"
+                                aria-label="Search"
+                                value="{{ request.GET.search }}"
+                                >
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </div>  
+                        </div>                
+                    
                     </div>
-                    <div class="col">
-                        <form class="d-flex" role="search" method="GET">                
-                            <input
-                            class="form-control me-2"
-                            type="search"
-                            placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
-                            name="search"
-                            aria-label="Search"
-                            value="{{ request.GET.search}}"
-                            >
-                            <button class="btn btn-outline-success" type="submit">Buscar</button>
-                        </form>
-                    </div>                
-                </div>
+                </form>
             </div> 
         </div>
          
         <table class="table custom-table-simple">            
             <thead>
-                <tr>
-                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
-                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                    
+                <tr>                    
                     <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Folio</th>  
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntaje</th>  
+                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                                        
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntaje</th>
+                    <th class="borde-pagina-gris text-center" style="width: 10rem; border-bottom: 2px solid;"> Modalidad</th>  
                     <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
-                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Estado</th>  
+                    <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>  
                     <th class="borde-pagina-gris " style="width: 12rem; border-bottom: 2px solid;"> </th>
                 </tr>
             </thead>
@@ -55,13 +78,13 @@ Administrar solicitudes
                 {% for solicitud in page_soli %}                
                 <tr class="{{ solicitud.estado }}">                    
                     {% with solicitud.solicitante as solicitante %}
-                    <td class="text-center">{{ solicitud.id }}</td>                    
+                    <td class="text-center">{{ solicitante.folio }}</td>                                   
                     <td class="text-start">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</td>                    
-                    <td class="text-center">{{ solicitante.curp }}</td> 
-                    <td class="text-center">{{ solicitante.folio }}</td> 
-                    <td class="text-center">{{ solicitud.puntaje }}</td> 
+                    <td class="text-center">{{ solicitante.curp }}</td>                     
+                    <td class="text-center">{{ solicitud.puntaje }}</td>
+                    <td class="text-center font-xs ">{{ solicitud.modalidad.nombre }}</td>       
                     <td class="text-center">{{ solicitud.tipo }}</td> 
-                    <td class="text-center">{{ solicitud.get_estado_display }}</td>                     
+                    <td class="text-center font-xs">{{ solicitud.get_estado_display }}</td>                     
                     <td style="text-align: right;">
                         <div class="d-flex align-items-center justify-content-center ">                                                           
                             <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
@@ -87,20 +110,27 @@ Administrar solicitudes
                 {% endfor %}
             </tbody>
         </table>
-        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
-            <span class="step-links">                                
-                <span class="current font-xs me-1">
-                    Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
-                </span>                
-                {% if page_soli.has_previous %}                    
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
-                {% endif %}
-                {% if page_soli.has_next %}
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&page={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
-                {% endif %}                
+        <div class="row pagination mx-3 font-semi-bold font-md ">
+            <span class="col step-links">           
+                <span class="row current font-xs ms-1 pt-1">         
+                {{ page_soli.start_index }} a {{ page_soli.end_index }} de {{ page_soli.paginator.count }} resultados.              
+                </span>
             </span>
+            <div class="col d-flex justify-content-end">
+                <span class="step-links">                                
+                    <span class="current font-xs me-1">                                        
+                        Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.                    
+                    </span>                
+                    {% if page_soli.has_previous %}                    
+                        <a href="{{ request.path }}?{{ url_base_page }}&page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                    {% endif %}
+                    {% if page_soli.has_next %}
+                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                    {% endif %}                
+                </span>
+            </div>
         </div>
     </div>
 

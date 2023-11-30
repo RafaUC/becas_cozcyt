@@ -119,6 +119,7 @@ def estudioSE(request):
                 if form.instance.elemento.seccion.tipo == Seccion.TIPOS_CHOICES[0][0]:
                     form.save() 
             messages.success(request, 'Estudio Socioeconómico guardado con éxito')
+            messages.info(request, 'Generando PDF, porfavor espere.')
             #return redirect('estudioSE:estudioSE_PDF')  
             descargarPDF = True
         else:            
@@ -281,7 +282,7 @@ def getEstudioPDF(request):
     for seccion in preguntasEstudio:
         for elemento in seccion.elemento_set.all():
             if any(elemento.tipo == choice[0] for choice in Elemento.TIPO_CHOICES[6:]):
-                if elemento.tipo == 'casillas':
+                if elemento.tipo == Elemento.TIPO_CHOICES[7][0]:
                     fAClasses = ['fa fa-square-o','fa fa-check-square']
                 else:
                     fAClasses = ['fa fa-circle-thin', 'fa fa-check-circle']
