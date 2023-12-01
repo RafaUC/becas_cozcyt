@@ -21,8 +21,6 @@ from modalidades.forms import *
 #no cache a las subidas al servidor
 ##########################################
 
-
-
 @never_cache
 @login_required
 def verificarPdf(request, soli, file):
@@ -65,8 +63,14 @@ def documentos_convocatorias(request, modalidad_id):
         }
 
         if request.method == 'POST':
-            
-
+            for doc in request.FILES:
+                documento = Documento.objects.get(id=doc) 
+                documentoRespuesta = RespuestaDocumento.objects.get(documento=doc, solicitud=solicitud)
+                files=request.FILES[doc] #Se obtiene el documento que se sube
+                documentoRespuesta.file.delete() #Se elimina el documento que va a ser modificado
+                documentoRespuesta.file = files #Se agrega el nuevo documento
+                documentoRespuesta.save() 
+                
             messages.success(request, "Documentos modificados con éxito")
             return redirect("solicitudes:convocatorias")
 
@@ -105,7 +109,7 @@ def documentos_convocatorias(request, modalidad_id):
         return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
     
 
-def documentoRespuesta(request, pk=None):
-    documento = Documento.objects.get(id=pk)
-    print("id_documento:", documento)
-    return redirect('documentos_convocatoria')
+# def documentoRespuesta(request, pk=None):
+#     documento = Documento.objects.get(id=pk)
+#     print("id_documento:", documento)
+#     return redirect('documentos_convocatoria')
