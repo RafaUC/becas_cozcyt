@@ -71,7 +71,7 @@ Administrar solicitudes
                     <th class="borde-pagina-gris text-center" style="width: 10rem; border-bottom: 2px solid;"> Modalidad</th>  
                     <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
                     <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>  
-                    <th class="borde-pagina-gris " style="width: 12rem; border-bottom: 2px solid;"> </th>
+                    <th class="borde-pagina-gris " style="width: 10rem; border-bottom: 2px solid;"> </th>
                 </tr>
             </thead>
             <tbody>
@@ -86,21 +86,41 @@ Administrar solicitudes
                     <td class="text-center">{{ solicitud.tipo }}</td> 
                     <td class="text-center font-xs">{{ solicitud.get_estado_display }}</td>                     
                     <td style="text-align: right;">
-                        <div class="d-flex align-items-center justify-content-center ">                                                           
-                            <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
-                            </a>
-                            <a href="#" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-id-card-o align-self-bottom" aria-hidden="true"></i>
+                        <div class="d-flex align-items-center justify-content-center">                                
+                            <button class="btn btn-outline-secondary dropdown-toggle me-3 p-1" type="button" id="dropdownMenuButton" data-bs-original-title="Opciones" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
+                                <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
+                            </button>                            
+                            <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center dropdown-item">
+                                        <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
+                                        <span class="align-self-center">Información del usuario</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                        <i class="fa fa-list-alt align-self-centerfont-lg" style="width: 16px;" aria-hidden="true"></i> 
+                                        <span class="align-self-center">Detalles de la Solicitud</span>
+                                    </a>  
+                                </li>                                      
+                                <li>
+                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                        <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
+                                        <span class="align-self-center">Historial de solicitudes</span>
+                                    </a>  
+                                </li>
+                                <li>
+                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                        <i class="fa fa-file-archive-o align-self-center font-lg" aria-hidden="true"></i> 
+                                        <span class="align-self-center">Descargar docs solicitud</span>
+                                    </a>  
+                                </li>                                                                                              
+                            </ul>                                                                                                            
+                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Aceptar solicitud">
+                                <i class="fa fa-check-circle align-self-center" aria-hidden="true"></i>
                             </a>   
-                            <a href="#" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-file align-self-bottom" aria-hidden="true"></i>
-                            </a>   
-                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-check-circle align-self-bottom" aria-hidden="true"></i>
-                            </a>   
-                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-times-circle align-self-bottom" aria-hidden="true"></i>
+                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Rechazar solicitud">
+                                <i class="fa fa-times-circle align-self-center" aria-hidden="true"></i>
                             </a>                    
                         </div>
                     </td>  
