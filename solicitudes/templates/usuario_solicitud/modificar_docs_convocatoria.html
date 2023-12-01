@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Documentos
+{% endblock titulo %}
+
+{% block body %}
+    <div class="rounded-2 p-1 mx-4 principal">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h3 tituloModulo">
+                    Mis documentos <i>{{ modalidad.nombre }}</i>
+                </p>
+                <div class="a fa-user-info px-3 align-self-center">
+                    {{ modalidad.descripcion}}
+                </div>
+                <!-- <hr> -->
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
+                <div class="row">
+                    {% for documento, documentoResp in listaDocumentos %}
+                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
+                        <div class="card card-documento">
+                            <div class="card-body" id="{{documento.id}}">
+                                <div class="row" style="height: 100px;">
+                                    <!-- {{modalidad.id}} -->
+                                    <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
+                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                    <div class="card" id="previewDoc">
+                                        <div class="clear:both">
+                                            <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
+                                            <iframe type="application/pdf" width="220" height="200"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <a href="" class="btn btnSubirDoc">
+                                Subir documento --> 
+                                <!-- Obtener el id del documento -->
+                                <!-- <div>
+                                    <label for="file-upload" class="btnSubirDoc">
+                                    {{ documentoForm.file }}
+                                    </label>
+                                </div> -->
+                                <div class="subir-documento">
+                                    <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
+                                    <input type="file" name="{{documento.id}}" id="files" accept=".pdf">
+                                    <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row" style="text-align: center; padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
+                        <a href="{% url 'solicitudes:convocatorias' %}" class="btn btnCancelar">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
+                        <button type="submit" class="btn btnSubirDocs" name="guardar">Actualizar documentos</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        // document.querySelector("#files").onchange = function() {
+        // const fileName = this.files[0]?.name;
+        // const label = document.querySelector("label[for=files]");
+        // label.innerText = fileName ?? "Subir documentos";
+        // };
+        const fileBlocks = document.querySelectorAll('.subir-documento')
+        const buttons = document.querySelectorAll('.btnSubirDoc')
+
+        ;[...buttons].forEach(function (btn) {
+        btn.onclick = function () {
+            btn.parentElement.querySelector('input[type="file"]').click()
+        }
+        })
+
+        ;[...fileBlocks].forEach(function (block) {
+        block.querySelector('input[type="file"]').onchange = function () {
+            const filename = this.files[0].name
+
+            block.querySelector('.btnSubirDoc').textContent = filename
+        }
+        })
+    </script>
+    <script>
+        function PreviewFile() {
+            pdffile=document.getElementById("files").files[0];
+            pdffile_url=URL.createObjectURL(pdffile);
+            $('#viewer').attr('src',pdffile_url);
+        }
+    </script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+{% endblock body %}

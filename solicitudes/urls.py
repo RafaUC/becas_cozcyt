@@ -19,7 +19,7 @@ from . import views
 app_name = 'solicitudes'
 urlpatterns = [
     path('convocatorias/',views.convocatorias, name='convocatorias'),
-    path('convocatorias/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
+    path('convocatorias/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
     path('documento_respuesta/<int:pk>',views.documentoRespuesta, name='documento-respuesta'),
     path('documento/<int:soli>/<int:file>',views.verificarPdf, name='verPdf'),
 ]
