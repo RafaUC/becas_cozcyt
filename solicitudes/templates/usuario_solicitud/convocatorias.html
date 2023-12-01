@@ -8,7 +8,7 @@
     <div class="rounded-2 p-1 mx-4" style="color: #676767;">
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h3" style="font-weight: 600; padding-top: 40px;">Convocatoria mes-mes 202x</p>
+                <p class="col h3" style="font-weight: 600; padding-top: 40px;" id="ciclo-escolar"></p>
                 <!-- <hr> -->
             </div>
         </div>
@@ -31,4 +31,18 @@
             </div>
         </div>
     </div>
+    <script>
+        window.onload = function (){
+            var fecha = new Date();
+            var mesActual = fecha.getMonth() + 1; //getMonth() regresa el index del mes, por lo que enero sería 0 así que hay que sumar 1
+            var cicloEscolar;
+            if(mesActual >= 8){
+                cicloEscolar = 'agosto - diciembre'
+            }
+            else{
+                cicloEscolar = 'enero - julio'
+            }
+            document.getElementById('ciclo-escolar').innerHTML = 'Convocatoria ' + cicloEscolar +' ' + fecha.getFullYear();
+        }
+    </script>
 {% endblock body %}

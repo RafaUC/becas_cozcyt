@@ -12,14 +12,7 @@ class SolicitudForm(ModelForm):
     class Meta:
         model = Solicitud
         exclude = ('modalidad', 'solicitante',)
-        # fields = ('modalidad','solicitante',)
-        # labels = {
-        #    'modalidad' : '',
-        #    'solicitante' : '',
-        # }
-        # widgets = {
-        #     'modalidad' : forms.TextInput(attrs={'class': 'form-control'})
-        # }
+        
 class DocumentoRespForm(ModelForm):
     file = forms.FileField()
     file.widget.attrs.update({'id': 'file-upload'})

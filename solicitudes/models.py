@@ -20,6 +20,9 @@ class Solicitud(models.Model):
         verbose_name_plural = 'Solicitudes'
         unique_together = ('modalidad', 'solicitante')
 
+    def __str__(self):
+        return f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
+
 
 def validador_pdf(value):
     ext = os.path.splitext(value.name)[1]  # Obtener la extensión del archivo
@@ -44,5 +47,9 @@ class RespuestaDocumento(models.Model):
         unique_together = ('solicitud', 'documento')
 
     def __str__(self):
-        return f'DocumentoRespuesta: {self.id}'
+        return f'{self.solicitud}/ {self.documento}'
+    
+    @property
+    def filename(self) -> str:
+        return os.path.basename(self.file.name)
         
