@@ -36,15 +36,15 @@ def listaSolicitudes(request):
     request.session['anterior'] = request.get_full_path()        
     url_base_page = request.session['anterior'].split('&page=')[0]
     url_base_page = url_base_page.split('?')[1] if '?' in url_base_page else ''    
-    solicitudes = Solicitud.objects.all()  
+    solicitudes = Solicitud.objects.filter(ciclo = cicloActual)  
     modalidades = Modalidad.objects.all()
-    filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=True)
-    filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=True)
+    filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
+    filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)
 
     if request.method == 'GET':             
         if 'search' in request.GET:
-            filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=True)
-            filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=True)                               
+            filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
+            filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)                               
                                     
             search_query = filtroSolForm.get_search_query()
             solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el primer filtro
