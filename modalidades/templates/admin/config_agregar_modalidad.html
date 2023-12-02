@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-    Agregar Modalidade
+    Agregar Modalidad
 {% endblock titulo %}
 {% block body %}
 <style>
@@ -11,18 +11,18 @@
 </style>
     <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
     <hr> -->
-    <div class="rounded-2 p-1 mx-4" style="color: #676767;">
+    <div class="rounded-2 p-1 mx-4 principal">
         <div class="row">
-            <p class="col h3" style="font-weight: 400; padding-top: 40px;">Modalidades</p>
+            <p class="col h3 tituloModulo">Modalidades</p>
         </div>
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h5" style="font-weight: bold;">Agregar nueva modalidad</p>
+                <p class="col h5 subtitulo-mod">Agregar nueva modalidad</p>
                 <hr>
             </div>
         </div>
         <div class="border rounded-2 p-4 mx-4 mb-4">         
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" htmx-trigger = 'end'>
                 {% csrf_token %}    
                 <div class="row">
                     <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
@@ -31,30 +31,32 @@
                 </div>
                 <div class="row">
                     <div class="child col-4" style="display: inline-block;">
-                        <p class="titulo-mods" style="font-weight: 400; font-size: 17px;"> Titulo de la modalidad </p>
+                        <p class="agregarMod" id="titulo-mods"> Titulo de la modalidad </p>
                         {{ form.nombre }}
                     </div>
                     <div class="child col-1" style="display: inline-block; padding: 0 20%; ">
-                        <p class="imagen-mods" style="padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Imagen </p>
+                        <p class="agregarMod" id="imagen-mods" style="padding-bottom: 5px;"> Imagen </p>
                         {{ form.imagen}}
                     </div>
                 </div>
                 <div class="child" style="">
-                    <p class="imagen-mods" style="padding-top: 5px; padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Descripción </p>
+                    <p class="agregarMod" id="descripcion-mods" style="padding-top: 5px; padding-bottom: 5px;"> Descripción </p>
                     {{ form.descripcion}}
                 </div>
             
                 <div class="row" style="padding-top: 40px; ">
-                    <p class="documento-mods" style="display: inline-block; font-weight: 400; font-size: 17px; width:auto"> Documentos </p>
+                    <p class="agregarMod" id="documento-mods" style="display: inline-block; width:auto"> Documentos </p>
                     <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
                         <button id = 'add-more' type="button" class="btn btn-guardar" name="agregar">Agregar</button>    
                     </div>   
                     <div class="row" id = 'documentos-list'>
                         {{ formset.management_form}}
-                        {% for documento in formset %}
-                        <div class="documento-form col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                        {% for documento in formset %} 
+                        {{documento.order}}
+                        <div class="documento-form col-sm-4">
                             <div class="card">
-                                <div class="card-body" style="text-align: right; height: 230px;">
+                                <div class="card-body" id="documentoMod" style="padding-top: 10px; padding-bottom: 10px;">
+                                    <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
                                     <p class="card-title">{{ documento }}</p>
                                 </div>
                             </div>
@@ -62,8 +64,8 @@
                         {% endfor %}
                         <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
                             <div class="card">
-                                <div class="card-body" style="text-align: right; height: 230px;">
-                                    <button id = 'cancel-document' type="button" class="btn btn-eliminar" onclick="cancel_adding_document('form', this)" style="background-color: #E9C3C1; color: #676767;">X</button>
+                                <div class="card-body" id="documentoMod">
+                                    <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
                                     <p class="card-title">{{ formset.empty_form.as_p }}</p>
                                 </div>
                             </div>
@@ -114,7 +116,6 @@
                 });
             }
             return false;
-
         }
 
         function updateElementIndex(el, prefix_tag, ndx) {
@@ -127,6 +128,7 @@
             if (el.id) el.id = el.id.replace(id_regex, replacement);
             if (el.name) el.name = el.name.replace(id_regex, replacement);
         };
+
     </script>
     
 {% endblock body %}

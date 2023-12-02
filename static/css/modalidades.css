@@ -1,0 +1,152 @@
+:root {
+    /* Color styles */
+    --verdeBtns: #D5F5E2;
+    --letraGeneral: #676767;
+    --bordesCard: #d1d1d1;
+    --rosaF: #E4756F;
+    --rosaM: #E1B2AF;
+    --rosaC: #E9C3C1;
+    --cancelar: #DCCBCA;
+    --blanco: #FFFFFF;
+    --btnActivo: #B9E2C1;
+  }
+
+.principal{
+    color: var(--letraGeneral);
+}
+/* Vistas administrador */
+
+/* Configuración - Modalidades */
+#btnAgregarMod{
+    padding: 6px 0 6px; 
+    text-align: center; 
+    color: var(--letraGeneral) !important; 
+    text-decoration: none; 
+    background-color: var(--verdeBtns) !important; 
+    font-size: medium; 
+    border-radius: 10px;
+}
+
+
+
+/* Configuración - Agregar modalidad */
+.agregarMod{
+    font-weight: 600; 
+    font-size: 17px;
+}
+.subtitulo-mod{
+    font-weight: bold;
+}
+.btnEliminar{
+    background-color: var(--rosaC);
+    color: var(--letraGeneral) !important; 
+}
+#documentoMod{
+    text-align: right; 
+    height: 230px;
+}
+
+
+/* Vistas usuario */
+/* Convocatorias - Modalidades */
+.tituloModulo{
+    font-weight: 600; 
+    padding-top: 40px;
+}
+.card-modalidad{
+    text-align: center; 
+    height: 320px;
+}
+.imagen-modalidad{
+    width: 170px; 
+    padding-bottom: 20px;
+}
+.btnSolicitar{
+    background-color: var(--rosaF); 
+    color: var(--blanco);
+    width: 170px; 
+    border-radius: 50px;
+    border-width: 1.5px; 
+    font-weight: 530;
+}
+.btnSolicitar:hover{
+    background-color: var(--blanco); 
+    color: var(--rosaF);
+    width: 170px; 
+    border-radius: 50px;
+    border-color:var(--rosaF);
+    border-width: 1.5px; 
+    font-weight: 530;
+}
+
+
+/* Documentos */
+.card-documento{
+    text-align: center; 
+    height: 380px;
+    border-radius: 15px; 
+    border-color: #d1d1d1;
+}
+#tituloCard{
+    font-weight:600; 
+    padding-bottom: 0px;
+}
+#contenidoCard{
+    font-weight: 400; 
+    padding-top: 0px; 
+    padding-bottom: 0px;
+}
+#previewDoc{
+    height: 200px; 
+    color: var(--letraGeneral);;
+}
+
+.btnSubirDoc{
+    background-color: var(--blanco);; 
+    color: var(--rosaM);
+    width: 170px; 
+    padding: 6px;
+    font-size: medium;
+    border-color: var(--rosaM); 
+    border-radius: 50px; 
+    border: 1.5px solid; 
+    font-weight: 530;
+}
+.btnSubirDoc:hover{
+    background-color: var(--rosaM);
+    color: var(--blanco); 
+}
+
+/* input[name="file"] { Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
+    /* display: none;
+} */
+
+
+.btnSubirDocs{
+    background-color: var(--btnActivo);
+    color: #676767;
+    color: var(--blanco); 
+    width: 170px;
+    border-radius: 50px; 
+    border-width: 1.5px; 
+    font-weight: 530;
+}
+
+.btnSubirDocs:hover{
+    background-color: var(--blanco);
+    color: var(--btnActivo);
+    border-color: var(--btnActivo);
+}
+
+.btnCancelar{
+    background-color: #DFDFDF;
+    color: #A8A8A8; 
+    width: 170px;
+    border-radius: 50px; 
+    border-width: 1.5px; 
+    font-weight: 530;
+}
+.btnCancelar:hover{
+    background-color: #F0F0F0;
+    color: #C9C9C9; 
+}

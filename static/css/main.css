@@ -8,10 +8,15 @@
   --aceptado-desactivado: #ABEBC6;
   --aceptado-activado: rgb(49, 185, 81);
   --aceptado-hover: rgb(30, 139, 56);
-  --cancelar-desactivado: rgba(233, 195, 193, 1);
-  --cancelar-activado: rgba(234, 94, 94, 1);
+  --cancelar-desactivado: rgb(209, 134, 129);
+  --cancelar-activado: rgb(223, 87, 87);
+  --cancelar-hover: rgb(182, 65, 65);
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
   --pagina-gris: #b9b4b4;
+
+  --soli-doc-aprovada: #dfeafc;
+  --soli-aceptada: #def8e3;
+  --soli-rechazada: #ffe1df;
 
   --gris-0: #f8f8f8; /* Blanco apagado */
   --gris-1: #efefef; /* Blanco apagado */
@@ -331,6 +336,38 @@ body {
   border-color: var(--aceptado-hover);
 }
 
+.btn-cancelar {
+  color: #fff;
+  background-color: var(--cancelar-activado);
+  border-color: var(--cancelar-activado);
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 17px; 
+}
+
+.btn-cancelar:hover {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
+}
+/*
+.btn-aceptado:focus, .btn-aceptado.focus {
+  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
+}*/
+
+.btn-cancelar.disabled, .btn-cancelar:disabled {
+  color: #fff;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-cancelar:not(:disabled):not(.disabled):active, .btn-cancelar:not(:disabled):not(.disabled).active,
+.show > .btn-cancelar.dropdown-toggle {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
+}
+
 /*
 .btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
 .show > .btn-aceptado.dropdown-toggle:focus {
@@ -623,6 +660,7 @@ th {
   border-color: var(--gris-3);
   white-space: normal;
   word-wrap: break-word;
+  word-break:break-all
 }
 
 /* Estilo para filas alternas (para un efecto de rayas) */
@@ -667,11 +705,6 @@ th {
   word-wrap: break-word;
 }
 
-/* Estilo para filas alternas (para un efecto de rayas) */
-.custom-table-simple tr:nth-child(even) {
-  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
-}
-
 .form-control-label {
   border: none;
   margin: 2px; 
@@ -680,4 +713,27 @@ th {
 
 .red-errors .errorlist li {
   color: #dc3545; /* Este es el color por defecto de 'text-danger' en Bootstrap */
+}
+
+/* Estilos para Solicitudes */
+.docPendiente {
+  background-color: var(--pagina-blanco); /* Color de respaldo predeterminado si la variable no está definida */  
+}
+
+.docAprobada {
+  background-color: var(--soli-doc-aprovada);  
+}
+
+.aceptado {
+  background-color: var(--soli-aceptada);  
+}
+
+.rechazado {
+  background-color: var(--soli-rechazada);  
+}
+
+.bold-legends legend {
+  font-weight: bold;
+  font-size: 1.143rem; /* 16px / 14px */
+  margin: 0;
 }

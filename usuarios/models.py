@@ -124,9 +124,9 @@ def only_int(value):
 
 class Solicitante(Usuario):
     GENERO_CHOICES = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino'),
-        ('O', 'Otro'),
+        ('Masculino', 'Masculino'),
+        ('Femenino', 'Femenino'),
+        ('Otro', 'Otro'),
     )
     GRADO_CHOICES = [(f"{i:02d}", f"{i:02d}") for i in range(1, 16)]
     
@@ -135,7 +135,7 @@ class Solicitante(Usuario):
     GRADO_REGEX = r'^\d{1,2}$'
 
     folio = models.CharField(
-        verbose_name="Folio" ,max_length=8, null=True, blank=True,
+        verbose_name="Folio" ,max_length=12, null=True, blank=True,
         validators=[
             RegexValidator(FOLIO_REGEX,'El folio debe tener 4 letras seguidas de 4 números.')])
     rfc = models.CharField(
@@ -172,6 +172,17 @@ class Solicitante(Usuario):
     def __str__(self):
         return self.nombre + " " + self.ap_paterno
         
+    def save(self, *args, **kwargs):
+        # Generar el folio si no está establecido        
+        curp_prefix = self.curp[:4].upper()
+        if self.id:            
+            numero_con_padding = f"{self.id:04d}" if self.id <= 9999 else str(self.id)
+        else:
+            ultima_instancia = Solicitante.objects.order_by('-id').first()
+            ultimo_numero = 1 if not ultima_instancia else ultima_instancia.id + 1
+            numero_con_padding = f"{ultimo_numero:04d}" if ultimo_numero <= 9999 else str(ultimo_numero)
+        self.folio = f"{curp_prefix}{numero_con_padding}"        
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Solicitante"

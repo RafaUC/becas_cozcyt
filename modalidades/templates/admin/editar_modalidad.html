@@ -12,72 +12,18 @@
     </style>
     <!-- <p class="h1" style="padding-left: 50px; font-size: 25px; font-weight: bold; color: #676767;"> Modalidades</p>
     <hr> -->
-    <div class="rounded-2 p-1 mx-4" style="color: #676767;">
+    <div class="rounded-2 p-1 mx-4 principal">
         <div class="row">
-            <p class="col h3" style="font-weight: 400; padding-top: 40px;">Modalidades</p>
+            <p class="col h3 tituloModulo">Modalidades</p>
         </div>
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h5" style="font-weight: bold;">Editar modalidad</p>
+                <p class="col h5 subtitulo-mod">Editar modalidad</p>
                 <hr>
             </div>
         </div>
         <div class="border rounded-2 p-4 mx-4 mb-4">  
-            <form action = '' method="POST" enctype="multipart/form-data">
-                {% csrf_token %}    
-                <div class="row">
-                    <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
-                        <button type="submit" class="btn btn-guardar" name="guardar">Guardar</button>    
-                    </div>   
-                </div>
-                <div class="row">
-                    <div class="child col-4" style="display: inline-block;">
-                        <p class="titulo-mods" style="font-weight: 400; font-size: 17px;"> Titulo de la modalidad </p>
-                        <p>{{ form.nombre }}</p>
-                    </div>
-                    <div class="child col-1" style="display: inline-block; padding: 0 20%; ">
-                        <p class="imagen-mods" style="padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Imagen </p>
-                        {{ form.imagen}}
-                    </div>
-                </div>
-                <div class="child" style="">
-                    <p class="imagen-mods" style="padding-top: 5px; padding-bottom: 5px; font-weight: 400; font-size: 17px;"> Descripción </p>
-                    {{ form.descripcion}}
-                </div>
-            
-                <div class="row" style="padding-top: 40px; ">
-                    <p class="documento-mods" style="display: inline-block; font-weight: 400; font-size: 17px; width:auto"> Documentos </p>
-                    <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
-                        <button id = 'add-more' type="button" class="btn btn-guardar" name="agregar">Agregar</button>    
-                    </div>   
-                    <div class="row" id = 'documentos-list'>
-                        {% if formset %}
-                        {{ formset.management_form}}
-                        {% for documento in formset %}
-                        <div class="documento-form col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
-                            <div class="card">
-                                <div class="card-body" style="text-align: right; height: 230px;">
-                                    <a href="{% url 'modalidades:AConfigEliminarDocumento' modalidad.id documento.id.value %}" id='delete-document' 
-                                    type="button" class="btn btn-eliminar" onclick="return confirm('¿Está seguro que desea eliminar este documento permanentemente?')" 
-                                    style="background-color: #E9C3C1; color: #676767;">X</a>
-                                    <p class="card-title">{{ documento }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
-                            <div class="card">
-                                <div class="card-body" style="text-align: right; height: 230px;">
-                                    <button id='cancel-document' type="button" class="btn btn-cancelar" onclick="cancel_adding_document('form', this)" 
-                                    style="background-color: #E9C3C1; color: #676767;">X</button>
-                                    <p class="card-title">{{ formset.empty_form.as_p }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </form>
+            {% include 'partials/form_editarmod.html' %}
         </div>
     </div>
 
@@ -86,6 +32,10 @@
             if(event.target.id == 'add-more'){
                 add_document_form(event)
             }
+        })
+
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
         })
 
         function add_document_form(event) {
@@ -135,6 +85,17 @@
             if (el.id) el.id = el.id.replace(id_regex, replacement);
             if (el.name) el.name = el.name.replace(id_regex, replacement);
         };
+
+        // htmx.onLoad(function(content) {
+        //     var sortables = document.querySelectorAll("#documentos-list");
+        //     for (var i = 0; i < sortables.length; i++) {
+        //     var sortable = sortables[i];
+        //     new Sortable(sortable, {
+        //         animation: 150,
+        //         ghostClass: 'blue-background-class'
+        //     });
+        //     }
+        // })
 
     </script>
     
