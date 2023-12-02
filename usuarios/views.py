@@ -11,10 +11,13 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.http import HttpResponse  
+from django.core.files.storage import FileSystemStorage
 
 from .forms import *
 from .models import *
 from .tokens import account_activation_token
+from modalidades.models import *
+from modalidades.forms import *
 
 @login_required
 def loginRedirect(request):    
@@ -22,7 +25,7 @@ def loginRedirect(request):
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
         return redirect("usuarios:AInicio")
     else:
-        return redirect("usuarios:convocatorias")
+        return redirect("solicitudes:convocatorias")
     
 #Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no, retorna la url donde deberia ser redirigido
 #si no se dan permisos en el parametro permisos significa que no requere ningun permiso pero no puede entrar un admin
@@ -143,8 +146,10 @@ def primerLogin(request):
             usuario.__dict__.update({'nombre': nombre})
             solicitante.__dict__.update(usuario.__dict__)  
             solicitante.save()
+            messages.success(request, 'Perfil completado con éxito')
             return redirect(settings.LOGIN_REDIRECT_URL)       
-        else:    #el formulario no es valido                    
+        else:    #el formulario no es valido          
+            messages.error(request, form.errors)          
             borrarSelect(form, estadoSelectForm, 'municipio', 'estado')
             borrarSelect(form, institucionSelectForm, 'carrera', 'institucion')
     context = {'form' : form,
@@ -190,16 +195,7 @@ def perfil(request):
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
     estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})
     institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})
-    for field in formPersonal.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in formDomicilio.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in formEscolar.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in estadoSelectForm.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in institucionSelectForm.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
+    
 
     if request.method == 'POST':
         boton = request.POST.get('guardar', None)
@@ -211,29 +207,49 @@ def perfil(request):
                 solicitante = formPersonal.save(commit=False)
                 #solicitante.rfc = rfc
                 solicitante.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect("usuarios:perfil")  
+            else:
+                messages.error(request, formPersonal.errors)
 
         elif boton == 'domicilio':
             estadoSelectForm = EstadoSelectForm(data = request.POST)   
             formDomicilio = SolicitanteDomicilioForm(request.POST, instance=solicitante) 
             if formDomicilio.is_valid() and estadoSelectForm.is_valid():
                 formDomicilio.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect("usuarios:perfil")  
             else:    #el formulario no es valido                             
                 borrarSelect(formDomicilio, estadoSelectForm, 'municipio', 'estado')                
+                messages.error(request, formDomicilio.errors)
+                messages.error(request, estadoSelectForm.errors)
 
         elif boton == 'escolar':
             institucionSelectForm = InstitucionSelectForm(data = request.POST)
             formEscolar = SolicitanteEscolaresForm(request.POST, instance=solicitante) 
             if formEscolar.is_valid() and institucionSelectForm.is_valid():
                 formEscolar.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect("usuarios:perfil")  
             else:    #el formulario no es valido                                
                 borrarSelect(formEscolar, institucionSelectForm, 'carrera', 'institucion')
+                messages.error(request, formEscolar.errors)
+                messages.error(request, institucionSelectForm.errors)
         
         
         estadoSelectForm.errors.as_data()                         
         
+    for field in formPersonal.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formDomicilio.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formEscolar.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in estadoSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in institucionSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    
     context = {'estadoSelectForm' : estadoSelectForm,
                'institucionSelectForm': institucionSelectForm,
                'formPersonal': formPersonal,
@@ -249,15 +265,6 @@ def sMensajes(request):
         return redirect(url)
 
     return render(request, 'solicitante/sMensajes.html')
-
-@login_required
-def convocatorias(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'solicitante/convocatorias.html')
 
 
 @login_required

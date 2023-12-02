@@ -42,12 +42,10 @@ urlpatterns = [
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
-    path('convocatorias/',views.convocatorias, name='convocatorias'),    
     path('historial/',views.historial, name='historial'),
 
     ### urls Administrador ###
-    path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),
-    path('administracion/solicitudes', viewsAdmin.solicitudes, name='ASolicitudes'),
+    path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),    
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
     path('administracion/instituciones', viewsAdmin.listaInstituciones, name='AInstituciones'),

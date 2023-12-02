@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Documentos
+{% endblock titulo %}
+
+{% block body %}
+    <div class="rounded-2 p-1 mx-4 principal">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h3 tituloModulo">
+                    Mis documentos
+                </p>
+                <div class="a fa-user-info px-2 align-self-center">
+                    Info
+                </div>
+                <!-- <hr> -->
+            </div>
+        </div>
+        <form method="POST" enctype= multipart/form-data>
+            {% csrf_token %}
+            <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
+                <div class="row">
+                    {% for documento in formset %}
+                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
+                        <div class="card card-documento">
+                            <div class="card-body" id="{{documento.id}}">
+                                <div class="row" style="height: 100px;">
+                                    <!-- {{modalidad.id}} -->
+                                    <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
+                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
+                                    <!-- <img class="imagen-modalidad" src="" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
+                                    <br> -->
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <div class="card" id="previewDoc">
+                                        <div class="card-body">
+                                            Aqui va preview documento
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <a href="" class="btn btnSubirDoc">
+                                Subir documento --> 
+                                <!-- Obtener el id del documento -->
+                                <a href="{% url 'solicitudes:documento-respuesta' documento.id %}">
+                                    <div>
+                                        <label for="file-upload" class="btnSubirDoc">
+                                        {{ documentoForm.file }}
+                                        </label>
+                                        <!-- Subir documento -->
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row" style="text-align: center; padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
+                        <a href="{% url 'solicitudes:convocatorias' %}" class="btn btnCancelar">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
+                        <button type="submit" class="btn btnSubirDocs" name="guardar">Subir documentos</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock body %}

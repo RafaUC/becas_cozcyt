@@ -24,7 +24,7 @@ class SolicitanteAdmin(UserAdmin):
         ('Información Adicional', {'fields': ('folio', 'rfc', 'grado', 'promedio', 'carrera')}),
         ('Permisos', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
-    list_display = ('curp', 'nombre', 'ap_paterno', 'ap_materno', 'email', 'is_active', 'is_staff', 'is_superuser')
+    list_display = ('curp', 'nombre', 'ap_paterno', 'ap_materno', 'folio', 'email', 'is_active', 'is_staff', 'is_superuser')
     search_fields = ('curp', 'nombre', 'ap_paterno', 'ap_materno', 'email')
     ordering = ('-is_superuser', 'id')
 

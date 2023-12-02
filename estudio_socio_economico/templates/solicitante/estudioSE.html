@@ -101,8 +101,8 @@
         $(document).ready(function() {
 
             {% if descargarPDF and descargarPDF == True %}
-                window.open('{% url "estudioSE:estudioSE_PDF" %}', '_blank');
-                //window.location.href = '{% url "estudioSE:estudioSE_PDF" %}'
+                //window.open('{% url "estudioSE:estudioSE_PDF" %}', '_blank');
+                window.location.href = '{% url "estudioSE:estudioSE_PDF" %}'
             {% endif %}
 
             const elementos = document.querySelectorAll('input[type="radio"], input[type="checkbox"]');

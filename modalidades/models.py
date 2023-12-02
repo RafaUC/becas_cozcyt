@@ -11,9 +11,9 @@ def ciclo_actual():
         mes = now.month
         # Determinar el ciclo actual
         if mes >= 8:
-            ciclo = "Ago-Dic"
+            ciclo = "Agosto - Diciembre"
         else:
-            ciclo = "Ene-Jun"
+            ciclo = "Enero - Junio"
         # Obtener el año actual
         año = now.year
         return f"{ciclo} {año}"
@@ -39,11 +39,15 @@ class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
     descripcion = models.CharField(max_length=255, verbose_name=_("Descripción"), null=False)
-    order = models.IntegerField(verbose_name=_("Orden"), null=True)
+    order = models.IntegerField(verbose_name='orden', default=100_000)
 
     class Meta:
         verbose_name = _("Documento")
         verbose_name_plural = _("Documentos")
+        ordering = ['order']
 
     def __str__(self):
         return self.nombre
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(nombre="Curp")

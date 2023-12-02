@@ -23,14 +23,7 @@ def inicio(request):
 
     return render(request, 'admin/inicio.html')
 
-@login_required
-def solicitudes(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'admin/solicitudes.html')
+
 
 @login_required
 def estadisticas(request):
@@ -42,42 +35,58 @@ def estadisticas(request):
     return render(request, 'admin/estadisticas.html')
 
 
+CLASE_CAMPOS_BUSQUEDA = {'foreignKey': models.ForeignKey, 'manyToOne': models.ManyToOneRel, 'manyToMany': models.ManyToManyField, 'oneToOne': models.OneToOneRel}
+
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
-def get_related_fields(field, prefix=''):
-    if isinstance(field, models.ForeignKey):
+def get_related_fields(field, relatedFieldType, prefix='' ):       
+    if isinstance(field, relatedFieldType):        
         related_model = field.related_model
-        related_fields = get_model_fields(related_model, prefix+field.name+'__')
+        related_fields = get_model_fields(related_model, relatedFieldType, prefix+field.name+'__')
         return related_fields
-    elif isinstance(field, (models.ManyToOneRel, models.ManyToManyField)):
+    elif field.__class__ in CLASE_CAMPOS_BUSQUEDA.values():         
         return []
-    else:        
+    else:                
         return [prefix + field.name]
 
 #funcion recursiva para generar los nombres de los campos y los campos relacionados
-def get_model_fields(model, prefix=''):
+def get_model_fields(model, relatedFieldType, prefix='' ):
     fields = []
     for field in model._meta.get_fields():
-        fields.extend(get_related_fields(field, prefix))
+        fields.extend(get_related_fields(field, relatedFieldType, prefix))
     return fields
 
 #Metodo para filtrar un queryset en base a un string de palabras clave a buscar en sus campos
-def BusquedaEnCamposQuerySet(queryset, search_query):  
+def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMPOS_BUSQUEDA['foreignKey']):  
     search_terms = search_query.split()     
     model = queryset.model 
-    fields = get_model_fields(model)        
+    fields = get_model_fields(model, relatedFieldType)  
+       
     
     q_objects = Q()
+    exclude_objects = Q()
+
     for term in search_terms:
-        term_query = Q()
+        term_query = Q()        
+        is_exclude = term.startswith('-')  # Verifica si el término comienza con '-'
+        is_or = term.startswith('~')  # Verifica si el término comienza con '~' para OR
+        term = term[1:] if is_exclude or is_or else term
+        
         for field in fields:
             if ':' in term:
-                campo, valor = term.split(':', 1)                
+                campo, valor = term.split(':', 1)
                 if campo in field:
                     term_query |= Q(**{f'{field}__icontains': valor})
             else:
-                term_query |= Q(**{f'{field}__icontains': term})
-        q_objects &= term_query
-    queryset = queryset.filter(q_objects)
+                term_query |= Q(**{f'{field}__icontains': term})        
+
+        if is_exclude:  # Agrega la condición al objeto de exclusión o al objeto de inclusión
+            exclude_objects &= term_query
+        elif is_or:  # Realiza un OR con los términos de búsqueda
+            q_objects |= term_query
+        else:
+            q_objects &= term_query
+            
+    queryset = queryset.filter(q_objects).exclude(exclude_objects)
     return queryset
 
 @login_required
@@ -241,16 +250,7 @@ def editarUsuario(request, pk):
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
     estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})
     institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})
-    for field in formPersonal.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in formDomicilio.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in formEscolar.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in estadoSelectForm.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
-    for field in institucionSelectForm.fields.values():
-        field.widget.attrs['disabled'] = 'disabled'
+    
 
     if request.method == 'POST':
         url = request.get_full_path()        
@@ -263,29 +263,49 @@ def editarUsuario(request, pk):
                 solicitante = formPersonal.save(commit=False)
                 #solicitante.rfc = rfc
                 solicitante.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect(url)
+            else:
+                messages.error(request, formPersonal.errors)    
 
         elif boton == 'domicilio':
             estadoSelectForm = EstadoSelectForm(data = request.POST)   
             formDomicilio = SolicitanteDomicilioForm(request.POST, instance=solicitante) 
             if formDomicilio.is_valid() and estadoSelectForm.is_valid():
                 formDomicilio.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect(url)
             else:    #el formulario no es valido                             
-                borrarSelect(formDomicilio, estadoSelectForm, 'municipio', 'estado')                
+                borrarSelect(formDomicilio, estadoSelectForm, 'municipio', 'estado') 
+                messages.error(request, formDomicilio.errors)      
+                messages.error(request, estadoSelectForm.errors)                 
 
         elif boton == 'escolar':
             institucionSelectForm = InstitucionSelectForm(data = request.POST)
             formEscolar = SolicitanteEscolaresForm(request.POST, instance=solicitante) 
             if formEscolar.is_valid() and institucionSelectForm.is_valid():
                 formEscolar.save()
+                messages.success(request, 'Perfil actualizado con éxito')
                 return redirect(url)
-            else:    #el formulario no es valido                                
+            else:    #el formulario no es valido                                            
                 borrarSelect(formEscolar, institucionSelectForm, 'carrera', 'institucion')
+                messages.error(request, formEscolar.errors)    
+                messages.error(request, institucionSelectForm.errors)    
         
         
         estadoSelectForm.errors.as_data()                         
         
+    for field in formPersonal.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formDomicilio.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in formEscolar.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in estadoSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+    for field in institucionSelectForm.fields.values():
+        field.widget.attrs['disabled'] = 'disabled'
+
     context = {'curp' : solicitante.curp,
                'estadoSelectForm' : estadoSelectForm,
                'institucionSelectForm': institucionSelectForm,
