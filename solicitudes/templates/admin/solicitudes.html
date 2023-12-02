@@ -21,7 +21,7 @@ Administrar solicitudes
                     <div class="row align-items-center">
                              
                         <div class="col-auto text-end ">                
-                            <button class="btn btn-outline-secondary dropdown-toggle p-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-outline-secondary dropdown-toggle filtro-dropdown p-1" type="button" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
                                 Filtros
                                 <i class="fa fa-filter align-self-bottom" aria-hidden="true"></i>
                             </button>
@@ -60,76 +60,94 @@ Administrar solicitudes
                 </form>
             </div> 
         </div>
-         
-        <table class="table custom-table-simple">            
-            <thead>
-                <tr>                    
-                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Folio</th>  
-                    <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                                        
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Puntaje</th>
-                    <th class="borde-pagina-gris text-center" style="width: 10rem; border-bottom: 2px solid;"> Modalidad</th>  
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
-                    <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>  
-                    <th class="borde-pagina-gris " style="width: 10rem; border-bottom: 2px solid;"> </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for solicitud in page_soli %}                
-                <tr class="{{ solicitud.estado }}">                    
-                    {% with solicitud.solicitante as solicitante %}
-                    <td class="text-center">{{ solicitante.folio }}</td>                                   
-                    <td class="text-start">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</td>                    
-                    <td class="text-center">{{ solicitante.curp }}</td>                     
-                    <td class="text-center">{{ solicitud.puntaje }}</td>
-                    <td class="text-center font-xs ">{{ solicitud.modalidad.nombre }}</td>       
-                    <td class="text-center">{{ solicitud.tipo }}</td> 
-                    <td class="text-center font-xs">{{ solicitud.get_estado_display }}</td>                     
-                    <td style="text-align: right;">
-                        <div class="d-flex align-items-center justify-content-center">                                
-                            <button class="btn btn-outline-secondary dropdown-toggle me-3 p-1" type="button" id="dropdownMenuButton" data-bs-original-title="Opciones" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
-                                <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
-                            </button>                            
-                            <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center dropdown-item">
-                                        <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
-                                        <span class="align-self-center">Información del usuario</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
-                                        <i class="fa fa-list-alt align-self-centerfont-lg" style="width: 16px;" aria-hidden="true"></i> 
-                                        <span class="align-self-center">Detalles de la Solicitud</span>
-                                    </a>  
-                                </li>                                      
-                                <li>
-                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
-                                        <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
-                                        <span class="align-self-center">Historial de solicitudes</span>
-                                    </a>  
-                                </li>
-                                <li>
-                                    <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
-                                        <i class="fa fa-file-archive-o align-self-center font-lg" aria-hidden="true"></i> 
-                                        <span class="align-self-center">Descargar docs solicitud</span>
-                                    </a>  
-                                </li>                                                                                              
-                            </ul>                                                                                                            
-                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Aceptar solicitud">
-                                <i class="fa fa-check-circle align-self-center" aria-hidden="true"></i>
-                            </a>   
-                            <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Rechazar solicitud">
-                                <i class="fa fa-times-circle align-self-center" aria-hidden="true"></i>
-                            </a>                    
-                        </div>
-                    </td>  
-                    {% endwith %}             
-                </tr>
-                
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="text-end mx-3">
+            <button class="btn btn-aceptado font-md" type="submit" value="aceptar" onclick="enviarFormulario('seleccionadosForm', this)">Aceptar seleccionados</button>
+            <button class="btn btn-cancelar font-md" type="submit" value="rechazar"onclick="enviarFormulario('seleccionadosForm', this)">Rechazar seleccionados</button>            
+        </div>
+        <form id="seleccionadosForm" role="search" method="POST"> 
+            {% csrf_token %}  
+            <input type="hidden" id=id-input-boton-presionado name="boton-presionado" value="">
+            <table class="table custom-table-simple">            
+                <thead>
+                    <tr>                    
+                        <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Folio</th>  
+                        <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
+                        <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                                        
+                        <th class="borde-pagina-gris text-center" style="width: 3rem; border-bottom: 2px solid;"> Puntaje</th>
+                        <th class="borde-pagina-gris text-center" style="width: 10rem; border-bottom: 2px solid;"> Modalidad</th>  
+                        <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
+                        <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>  
+                        <th class="borde-pagina-gris text-end px-0" style="white-space: nowrap; width: 1rem; border-bottom: 2px solid;">
+                            <label class="font-normal" for="id-select-todo-check" data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda">
+                                Selec. todo
+                            </label>
+                        </th>
+                        <th class="borde-pagina-gris text-start " data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda" style="width: 2rem; border-bottom: 2px solid;">                             
+                            <input class="checkbox-principal form-check-input me-3" type="checkbox" id="id-select-todo-check" name="select-todo-check" value="todo">                        
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in page_soli %}                
+                    <tr class="{{ solicitud.estado }}">                    
+                        {% with solicitud.solicitante as solicitante %}
+                        <td class="text-center">{{ solicitante.folio }}</td>                                   
+                        <td class="text-start">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</td>                    
+                        <td class="text-center">{{ solicitante.curp }}</td>                     
+                        <td class="text-center">{{ solicitud.puntaje }}</td>
+                        <td class="text-center font-xs ">{{ solicitud.modalidad.nombre }}</td>       
+                        <td class="text-center">{{ solicitud.tipo }}</td> 
+                        <td class="text-center font-xs">{{ solicitud.get_estado_display }}</td>                     
+                        <td style="text-align: right;">
+                            <div class="d-flex align-items-center justify-content-center">                                
+                                <button class="btn btn-outline-secondary dropdown-toggle me-0 p-1" type="button" id="dropdownMenuButton{{solicitante.id}}"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
+                                    <i class="fa fa-user-circle align-self-center font-lg" data-bs-original-title="Opciones" aria-hidden="true"></i>
+                                </button>                            
+                                <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a href="{% url 'usuarios:AEditarUsuario' solicitante.id %}" class="m-0 me-2 align-items-center dropdown-item">
+                                            <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
+                                            <span class="align-self-center">Información del usuario</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                            <i class="fa fa-list-alt align-self-centerfont-lg" style="width: 16px;" aria-hidden="true"></i> 
+                                            <span class="align-self-center">Detalles de la Solicitud</span>
+                                        </a>  
+                                    </li>                                      
+                                    <li>
+                                        <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                            <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
+                                            <span class="align-self-center">Historial de solicitudes</span>
+                                        </a>  
+                                    </li>
+                                    <li>
+                                        <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                            <i class="fa fa-file-archive-o align-self-center font-lg" aria-hidden="true"></i> 
+                                            <span class="align-self-center">Descargar docs solicitud</span>
+                                        </a>  
+                                    </li>                                                                                              
+                                </ul>                                                                                                            
+                                <!-- <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Aceptar solicitud">
+                                    <i class="fa fa-check-circle align-self-center" aria-hidden="true"></i>
+                                </a>   
+                                <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Rechazar solicitud">
+                                    <i class="fa fa-times-circle align-self-center" aria-hidden="true"></i>
+                                </a>                     -->
+                            </div>
+                        </td>  
+                        <td class="text-start">
+                            {% if not solicitud.estado == 'docPendiente' %}
+                            <input class="checkbox-principal form-check-input" type="checkbox" id="id-select-soli-check-{{solicitud.id}}" name="select-soli-check" value="{{ solicitud.id }}">
+                            {% endif %}
+                        </td>
+                        {% endwith %}             
+                    </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
         <div class="row pagination mx-3 font-semi-bold font-md ">
             <span class="col step-links">           
                 <span class="row current font-xs ms-1 pt-1">         
@@ -151,7 +169,54 @@ Administrar solicitudes
                     {% endif %}                
                 </span>
             </div>
-        </div>
+        </div>        
     </div>
+    <script>
+        function enviarFormulario(formularioId, boton) { 
+            // Obtener el formulario y el valor del botón
+            const formulario = $('#' + formularioId);
+            const valorBoton = boton.value;
+            const textoBoton = $(boton).text();
 
+            // Establecer el valor del campo oculto
+            formulario.find('#id-input-boton-presionado').val(valorBoton);
+
+            // Enviar el formulario                   
+            confrimSubmit(formulario, `¿${textoBoton}?`)            
+        }
+
+        $(document).ready(function() { 
+            $('button.dropdown-toggle.filtro-dropdown').on('click', function (event) {                
+                $(this).parent().find('.dropdown-menu').toggleClass('show');
+            });
+            $('body').on('click', function (e) {                
+                if (!$('button.dropdown-toggle.filtro-dropdown').is(e.target) 
+                    && $('button.dropdown-toggle.filtro-dropdown').has(e.target).length === 0 
+                    && $('.show').has(e.target).length === 0
+                ) {
+                    $('button.dropdown-toggle.filtro-dropdown').parent().find('.dropdown-menu').removeClass('show');
+                } else {                    
+                }
+            });
+
+            // Cuando cambia el estado del checkbox con id 'id-select-todo-check'
+            $('#id-select-todo-check').change(function () {
+                // Obtenemos el estado actual del checkbox
+                const isChecked = $(this).prop('checked');
+                // Asignamos el mismo estado a todos los checkboxes con name 'select-soli-check'
+                $('input[name="select-soli-check"]').prop('checked', isChecked);
+            });
+
+            //Cuando algun select-soli-check se desactiva tambien se desactiva el select-todo-check
+            $('input[name="select-soli-check"]').change(function () {
+                // Verificamos si algún checkbox con name 'select-soli-check' está seleccionado
+                const anyChecked = $(this).prop('checked');
+                console.log(anyChecked)
+                // Si no hay ningún checkbox seleccionado, desactivamos el checkbox con id 'id-select-todo-check'
+                if (!anyChecked){
+                    $('#id-select-todo-check').prop('checked', anyChecked);
+                }                
+            });
+        });       
+    </script>
 {% endblock body %}

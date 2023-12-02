@@ -8,8 +8,9 @@
   --aceptado-desactivado: #ABEBC6;
   --aceptado-activado: rgb(49, 185, 81);
   --aceptado-hover: rgb(30, 139, 56);
-  --cancelar-desactivado: rgba(233, 195, 193, 1);
-  --cancelar-activado: rgba(234, 94, 94, 1);
+  --cancelar-desactivado: rgb(209, 134, 129);
+  --cancelar-activado: rgb(223, 87, 87);
+  --cancelar-hover: rgb(182, 65, 65);
   --pagina-fondo: #EEE5E5/*#F1ECEC*/;
   --pagina-gris: #b9b4b4;
 
@@ -333,6 +334,38 @@ body {
   color: #fff;
   background-color: var(--aceptado-hover);
   border-color: var(--aceptado-hover);
+}
+
+.btn-cancelar {
+  color: #fff;
+  background-color: var(--cancelar-activado);
+  border-color: var(--cancelar-activado);
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 17px; 
+}
+
+.btn-cancelar:hover {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
+}
+/*
+.btn-aceptado:focus, .btn-aceptado.focus {
+  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
+}*/
+
+.btn-cancelar.disabled, .btn-cancelar:disabled {
+  color: #fff;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-cancelar:not(:disabled):not(.disabled):active, .btn-cancelar:not(:disabled):not(.disabled).active,
+.show > .btn-cancelar.dropdown-toggle {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
 }
 
 /*

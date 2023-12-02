@@ -41,20 +41,55 @@ def listaSolicitudes(request):
     filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
     filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)
 
-    if request.method == 'GET':             
-        if 'search' in request.GET:
-            filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
-            filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)                               
-                                    
-            search_query = filtroSolForm.get_search_query()
-            solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el primer filtro
-            search_query = filtroModForm.get_search_query()
-            solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el segundo filtro
-            search_query = request.GET.get('search', '')    
-            
-            #Si se hizo una busqueda de filtrado     
-            if search_query:       
-                solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query)      
+    if 'search' in request.GET:
+        filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
+        filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)                               
+                                
+        search_query = filtroSolForm.get_search_query()
+        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el primer filtro
+        search_query = filtroModForm.get_search_query()
+        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el segundo filtro
+        search_query = request.GET.get('search', '')    
+        
+        #Si se hizo una busqueda de filtrado     
+        if search_query:       
+            solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query)      
+
+    if request.method == 'POST':
+        soliToUpdate = solicitudes        
+        accion = None
+        todo = None
+        seleccion = None
+        if 'boton-presionado' in request.POST:
+            accion = request.POST['boton-presionado']
+        if 'select-todo-check' in request.POST:
+            todo = request.POST['select-todo-check']
+        if 'select-soli-check' in request.POST:
+            seleccion = request.POST.getlist('select-soli-check')
+            seleccion = [int(id_str) for id_str in seleccion]
+        #print(f'{accion} - {todo} - {seleccion}')
+        #print(f'{type(accion)} - {type(todo)} - {type(seleccion)}')
+
+        if accion and seleccion:            
+            if todo:
+                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])                
+                if accion == 'aceptar':
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    messages.success(request, f'Se aceptaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+                elif accion == 'rechazar':
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    messages.success(request, f'Se rechazaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+            else:
+                soliToUpdate = soliToUpdate.filter(id__in=seleccion)                
+                if accion == 'aceptar':
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    messages.success(request, f'Se aceptaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+                elif accion == 'rechazar':
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    messages.success(request, f'Se rechazaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+        else:
+            messages.error(request, 'No se seleccionaron solicitudes')    
+
                     
     paginator = Paginator(solicitudes, 20)  # Mostrar 10 ins por página
     page_number = request.GET.get('page')
