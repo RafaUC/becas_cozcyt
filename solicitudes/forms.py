@@ -5,6 +5,9 @@ from django.forms import ModelForm
 
 from .models import *
 
+# class ConvocatoriaForm(ModelForm):
+
+
 class SolicitudForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SolicitudForm, self).__init__(*args, **kwargs)

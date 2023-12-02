@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Configuración General
+{% endblock titulo %}
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+    <div class="rounded-2 p-1 mx-4 principal">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h5 subtitulo-mod">Configuración general</p>
+                <hr>
+            </div>
+        </div>
+        <div class="rounded-2 mx-4">          
+            <div class="row">
+                <div class="d-grid gap-1 col-5 px-4">
+                    <p class="col h5 subtitulo-config-general">Detalles de convocatoria</p>
+                </div>   
+                <div class="d-grid gap-1 col-7 px-3 subtitulo-config-general">
+                    <div class="row" style="padding-bottom: 30px;">
+                        <div class="col">
+                            <p>Fecha de inicio</p>
+                            <input type="date" id="config-general-inputs">
+                        </div>
+                        <div class="col">
+                            <p>Fecha de cierre</p>
+                            <input type="date" id="config-general-inputs">
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 20px;">
+                        <div class="col">
+                            <p>Presupuesto para esta convocatoria</p>
+                            <input type="text" id="config-general-inputs">
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px; text-align: center;">
+                        <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
+                            <button type="button" class="btn btnEditar" name="guardar">Editar</button>  
+                        </div>
+                        <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
+                            <button type="button" class="btn btn-guardar" name="guardar">Confirmar</button>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p></p>
+                <hr>
+            </div>
+        </div>
+        <div class="rounded-2 mx-4" style="padding-bottom: 30px;">          
+            <div class="row">
+                <div class="d-grid gap-1 col-5 px-4">
+                    <p class="col h5 subtitulo-config-general">Cuenta de administrador</p>
+                </div>   
+                <div class="d-grid gap-1 col-7 px-3 subtitulo-config-general">
+                    <div class="row">
+                        <div class="col">
+                            Crear una nueva cuenta de administrador
+                        </div>
+                    </div>
+                    <div class="row" style="text-align: center; padding-top: 20px;">
+                        <div class="col">
+                            <button type="button" class="btn btn-guardar" name="guardar">Agregar admin</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

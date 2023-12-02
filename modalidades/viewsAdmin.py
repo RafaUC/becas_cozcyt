@@ -11,6 +11,9 @@ from .models import *
 from .utils import *
 
 # Create your views here.
+def configGeneral(request):
+    return render(request, 'admin/config_general.html')
+
 
 def configModalidades(request): #se muestran las modalidades
     usuario = get_object_or_404(Usuario, pk=request.user.id) 
