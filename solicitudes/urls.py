@@ -25,4 +25,5 @@ urlpatterns = [
     path('historial/',views.historial, name='historial'),
 
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
+    path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
 ]
