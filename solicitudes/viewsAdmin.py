@@ -18,12 +18,30 @@ from .forms import FiltroForm
 from modalidades.models import Modalidad
 from .models import Solicitud
 
+from usuarios.models import Solicitante
+
 # Create your views here.
 #########################################
 # Nota: Recordar
 #no cache a las subidas al servidor
 ##########################################
 
+@login_required
+def historialSolicitante(request, pk):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    solicitante = get_object_or_404(Solicitante, pk=pk)  
+    solicitudes = Solicitud.objects.filter(solicitante = solicitante)
+
+    context = {
+        'solicitudes': solicitudes,
+        'solicitante': solicitante
+    }
+
+    return render(request, 'admin/historialSolicitante.html', context)
 
 @login_required
 def listaSolicitudes(request):
@@ -73,19 +91,20 @@ def listaSolicitudes(request):
         if accion and seleccion:            
             if todo:
                 soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])                
+                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[1][0])  
                 if accion == 'aceptar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
                     messages.success(request, f'Se aceptaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
                 elif accion == 'rechazar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
                     messages.success(request, f'Se rechazaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
             else:
                 soliToUpdate = soliToUpdate.filter(id__in=seleccion)                
                 if accion == 'aceptar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
                     messages.success(request, f'Se aceptaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
                 elif accion == 'rechazar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
                     messages.success(request, f'Se rechazaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
         else:
             messages.error(request, 'No se seleccionaron solicitudes')    

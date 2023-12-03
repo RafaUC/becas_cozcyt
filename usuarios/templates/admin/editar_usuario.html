@@ -5,7 +5,10 @@
 {% endblock titulo %}
 
     {% block nombreUsuario %}
-    <p class="mx-5 my-4 h3" > Editar {{ curp }}</p>
+    <div class="row align-items-center m-0">
+        <p class="col mx-5 my-4 h3" > Solicitante {{ curp }}</p>
+        <p class="col h2 mx-4 mt-4 text-end">Folio: {{ formPersonal.instance.folio }}</p>     
+    </div>
 
     {% if request.session.anterior %}
     <a href="{{ request.session.anterior }}" class="btn btn-aceptado mx-5 mb-4" role="button">Regresar</a>
