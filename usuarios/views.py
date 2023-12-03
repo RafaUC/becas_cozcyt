@@ -267,11 +267,3 @@ def sMensajes(request):
     return render(request, 'solicitante/sMensajes.html')
 
 
-@login_required
-def historial(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'solicitante/historial.html')

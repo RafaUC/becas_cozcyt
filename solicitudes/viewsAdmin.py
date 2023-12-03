@@ -73,19 +73,20 @@ def listaSolicitudes(request):
         if accion and seleccion:            
             if todo:
                 soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])                
+                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[1][0])  
                 if accion == 'aceptar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
                     messages.success(request, f'Se aceptaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
                 elif accion == 'rechazar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
                     messages.success(request, f'Se rechazaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
             else:
                 soliToUpdate = soliToUpdate.filter(id__in=seleccion)                
                 if accion == 'aceptar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[2][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
                     messages.success(request, f'Se aceptaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
                 elif accion == 'rechazar':
-                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
+                    soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
                     messages.success(request, f'Se rechazaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
         else:
             messages.error(request, 'No se seleccionaron solicitudes')    
