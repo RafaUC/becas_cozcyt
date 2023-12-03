@@ -22,6 +22,8 @@ urlpatterns = [
     path('convocatorias/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
     path('documento_respuesta/<int:pk>',views.documentoRespuesta, name='documento-respuesta'),
     path('documento/<int:soli>/<int:file>',views.verPDF, name='verPdf'),
+    path('historial/',views.historial, name='historial'),
 
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
+    path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
 ]

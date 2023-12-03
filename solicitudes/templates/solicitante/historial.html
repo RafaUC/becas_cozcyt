@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Historial de solicitudes
+{% endblock titulo %}
+
+{% block body %}
+
+    {% block nombreUsuario %}    
+    <div class="row align-items-center m-0">
+        <p class="col h2 mx-4 mt-4">Mis solicitudes</p>              
+        <p class="col h2 mx-4 mt-4 text-end">Folio: {{ solicitante.folio }}</p>       
+    </div>
+    {% endblock nombreUsuario %}
+
+    
+    
+
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal  horizontal-scroll">    
+        <div class="row mx-0">
+            <div class="col-3 ps-0">
+                <p class="h4 mx-3">Solicitudes</p>           
+            </div>                        
+        </div>                
+        <table class="table custom-table-simple">            
+            <thead>
+                <tr>                    
+                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> </th>  
+                    <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>
+                    <th class="borde-pagina-gris text-center" style="width: 12rem; border-bottom: 2px solid;"> Modalidad</th>  
+                    <th class="borde-pagina-gris text-center" style="width: 15rem; border-bottom: 2px solid;"> Convocatoria</th> 
+                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>                                         
+                    <th class="borde-pagina-gris text-end px-0" style="white-space: nowrap; width: 2rem; border-bottom: 2px solid;"></th>                                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}                
+                <tr class="{{ solicitud.estado }} font-md">                    
+                    {% with solicitud.solicitante as solicitante %}
+                    <td class="text-center"><i class="fa {{ solicitud.estado }} align-self-center font-sl my-2" aria-hidden="true"></i></td>                                   
+                    <td class="text-center font-semi-bold">{{ solicitud.get_estado_display }}</td>                        
+                    <td class="text-center">{{ solicitud.modalidad.nombre }}</td>  
+                    <td class="text-center">{{ solicitud.ciclo }}</td>     
+                    <td class="text-center">{{ solicitud.get_tipo_display }}</td>                             
+                    
+                    <td >
+                        {% block ultimaCol %}                                                   
+                        {% endblock ultimaCol %}
+                    </td>     
+                
+                    {% endwith %}             
+                </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>                     
+    </div>
+    
+{% endblock body %}

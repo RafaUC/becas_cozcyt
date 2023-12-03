@@ -117,7 +117,7 @@ Administrar solicitudes
                                         </a>  
                                     </li>                                      
                                     <li>
-                                        <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                        <a href="{% url 'solicitudes:AHistorial' solicitante.id %}" class="m-0 me-2 align-items-center dropdown-item" >
                                             <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
                                             <span class="align-self-center">Historial de solicitudes</span>
                                         </a>  
@@ -129,17 +129,14 @@ Administrar solicitudes
                                         </a>  
                                     </li>                                                                                              
                                 </ul>                                                                                                            
-                                <!-- <a href="#" class="m-0 me-2 align-items-center font-xl texto-aceptado-activado" data-bs-original-title="Aceptar solicitud">
-                                    <i class="fa fa-check-circle align-self-center" aria-hidden="true"></i>
-                                </a>   
-                                <a href="#" class="m-0 me-2 align-items-center font-xl texto-cancelar-activado" data-bs-original-title="Rechazar solicitud">
-                                    <i class="fa fa-times-circle align-self-center" aria-hidden="true"></i>
-                                </a>                     -->
+                                
                             </div>
                         </td>  
                         <td class="text-start">
-                            {% if not solicitud.estado == 'docPendiente' %}
+                            {% if not solicitud.estado == 'docRevicion' %}
+                            {% if not solicitud.estado == 'docError' %}
                             <input class="checkbox-principal form-check-input" type="checkbox" id="id-select-soli-check-{{solicitud.id}}" name="select-soli-check" value="{{ solicitud.id }}">
+                            {% endif %}
                             {% endif %}
                         </td>
                         {% endwith %}             

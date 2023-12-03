@@ -17,7 +17,8 @@ from estudio_socio_economico.models import Elemento, RNumerico
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
-        ('docPendiente', 'Doc. pendiente'),
+        ('docRevicion', 'Doc. en revisón'),
+        ('docError', 'Errores doc.'),
         ('docAprobada', 'Doc. aprobada'),
         ('aceptado', 'Aceptado'),
         ('rechazado', 'Rechazado'),
@@ -39,7 +40,7 @@ class Solicitud(models.Model):
         ordering = ['-puntaje','id']
         verbose_name = 'Solicitud'
         verbose_name_plural = 'Solicitudes'
-        unique_together = ('modalidad', 'solicitante')
+        unique_together = ('modalidad', 'ciclo','solicitante')
     
     def __str__(self):
         return f'Solicitud object ({self.id}) p:{self.puntaje}'
@@ -83,7 +84,7 @@ def calcular_puntaje(sender, instance, **kwargs):
         print(f"Se produjo una excepción calculando el puntaje de Ingresos : {e}")
     #tipo de solicitud
     try:        
-        existe_solicitud = Solicitud.objects.filter(solicitante=solicitante, estado=Solicitud.ESTADO_CHOICES[2][0]).filter(~Q(ciclo=ciclo_actual())).exists()
+        existe_solicitud = Solicitud.objects.filter(solicitante=solicitante, estado=Solicitud.ESTADO_CHOICES[3][0]).filter(~Q(ciclo=ciclo_actual())).exists()
         if existe_solicitud:
             puntaje = PuntajeGeneral.objects.get(tipo = seccionChoices[2][0], nombre='Renovación')
             instance.tipo = Solicitud.TIPO_CHOICES[0][0]
@@ -168,8 +169,8 @@ class RespuestaDocumento(models.Model):
 #cumple con las condiciones para pasar a estado docAprobada o no
 @receiver(post_save, sender=RespuestaDocumento)
 def actualizar_estado_solicitud(sender, instance, **kwargs):
-    # Verificar condiciones y actualizar estado de la solicitud        
-    aprobado = False
+    # Verificar condiciones y actualizar estado de la solicitud       
+    opc = -1    
     solicitud = instance.solicitud
     if instance.estado == RespuestaDocumento.ESTADO_CHOICES[1][0]: #'aprobado'        
         # Verificar que existan todas las instancias necesarias de RespuestaDocumento
@@ -181,10 +182,19 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
             # Verificar que todas las instancias de RespuestaDocumento de la solicitud estén aprobadas            
             if respuestas_documentos_solicitud.filter(estado='aprobado').count() == respuestas_documentos_solicitud.count():
                 # Todas las instancias de RespuestaDocumento de la solicitud están aprobadas
-                aprobado = True        
-    if aprobado:
-        solicitud.estado = Solicitud.ESTADO_CHOICES[1][0] #'docAprobada'
+                opc = 0
+    elif instance.estado == RespuestaDocumento.ESTADO_CHOICES[2][0]: #'denegado'
+        opc = 1    
+    
+
+    if opc == 0:
+        solicitud.estado = Solicitud.ESTADO_CHOICES[2][0] #'docAprobada'   
+    elif opc == 1:
+        solicitud.estado = Solicitud.ESTADO_CHOICES[1][0] #'docError'
     else:
-        solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docPendiente'
+        respuestas_documentos_solicitud = RespuestaDocumento.objects.filter(solicitud=solicitud)      
+        #Si no hay ninguna respuestaDocumento denegada setear a docRevicion
+        if respuestas_documentos_solicitud.filter(estado='denegado').count() <= 0:   
+            solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docRevicion'      
 
     solicitud.save()
