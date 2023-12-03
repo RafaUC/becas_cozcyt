@@ -18,12 +18,30 @@ from .forms import FiltroForm
 from modalidades.models import Modalidad
 from .models import Solicitud
 
+from usuarios.models import Solicitante
+
 # Create your views here.
 #########################################
 # Nota: Recordar
 #no cache a las subidas al servidor
 ##########################################
 
+@login_required
+def historialSolicitante(request, pk):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    solicitante = get_object_or_404(Solicitante, pk=pk)  
+    solicitudes = Solicitud.objects.filter(solicitante = solicitante)
+
+    context = {
+        'solicitudes': solicitudes,
+        'solicitante': solicitante
+    }
+
+    return render(request, 'admin/historialSolicitante.html', context)
 
 @login_required
 def listaSolicitudes(request):

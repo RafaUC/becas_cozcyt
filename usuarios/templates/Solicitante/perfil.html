@@ -7,7 +7,10 @@
 {% block body %}
 
     {% block nombreUsuario %}
-    <p class="mx-5 my-4 h3" >Mi Perfil</p>
+    <div class="row align-items-center m-0">
+        <p class="col mx-5 my-4 h3" >Mi Perfil</p>
+        <p class="col h2 mx-4 mt-4 text-end">Folio: {{ formPersonal.instance.folio }}</p>     
+    </div>    
     {% endblock nombreUsuario %}
 
 <div class="border border-2 rounded-2 p-4 mx-5 mb-4 borde-pagina-principal red-errors">
