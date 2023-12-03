@@ -116,3 +116,20 @@ def documentoRespuesta(request, pk=None):
     documento = Documento.objects.get(id=pk)
     print("id_documento:", documento)
     return redirect('documentos_convocatoria')
+
+@login_required
+def historial(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
+    solicitudes = Solicitud.objects.filter(solicitante = solicitante)
+
+    context = {
+        'solicitudes': solicitudes,
+        'solicitante': solicitante
+    }
+
+    return render(request, 'solicitante/historial.html', context)

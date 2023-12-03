@@ -42,7 +42,7 @@ urlpatterns = [
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
-    path('historial/',views.historial, name='historial'),
+    
 
     ### urls Administrador ###
     path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),    

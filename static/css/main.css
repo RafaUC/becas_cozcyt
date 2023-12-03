@@ -15,8 +15,10 @@
   --pagina-gris: #b9b4b4;
 
   --soli-doc-aprovada: #dfeafc;
+  --soli-doc-error: #f6face;
   --soli-aceptada: #def8e3;
   --soli-rechazada: #ffe1df;
+  --icon-solicitudes: rgba(27, 2, 37, 0.35);
 
   --gris-0: #f8f8f8; /* Blanco apagado */
   --gris-1: #efefef; /* Blanco apagado */
@@ -539,6 +541,10 @@ a {
 .font-xxl {
   font-size: 1.857rem; /* 26px / 14px */
 }
+
+.font-sl {
+  font-size: 4rem; /* 26px / 14px */
+}
 /*
 .font-xs {
   font-size: 12px;
@@ -716,8 +722,12 @@ th {
 }
 
 /* Estilos para Solicitudes */
-.docPendiente {
-  background-color: var(--pagina-blanco); /* Color de respaldo predeterminado si la variable no está definida */  
+.docRevicion {
+  background-color: var(--pagina-blanco); 
+}
+
+.docError {
+  background-color: var(--soli-doc-error); 
 }
 
 .docAprobada {
@@ -730,6 +740,32 @@ th {
 
 .rechazado {
   background-color: var(--soli-rechazada);  
+}
+
+i.docRevicion:before {
+  content: "\f251";
+  color: var(--icon-solicitudes)
+}
+
+i.docError:before {
+  content: "\f071";
+  color: var(--icon-solicitudes)
+  
+}
+
+i.docAprobada:before {
+  content: "\f250";
+  color: var(--icon-solicitudes)
+}
+
+i.aceptado:before {
+  content: "\f05d";
+  color: var(--icon-solicitudes)
+}
+
+i.rechazado:before {
+  content: "\f05c";
+  color: var(--icon-solicitudes)
 }
 
 .bold-legends legend {
