@@ -133,10 +133,8 @@ Administrar solicitudes
                             </div>
                         </td>  
                         <td class="text-start">
-                            {% if not solicitud.estado == 'docRevicion' %}
-                            {% if not solicitud.estado == 'docError' %}
-                            <input class="checkbox-principal form-check-input" type="checkbox" id="id-select-soli-check-{{solicitud.id}}" name="select-soli-check" value="{{ solicitud.id }}">
-                            {% endif %}
+                            {% if not solicitud.estado == 'docRevicion' %}                            
+                            <input class="checkbox-principal form-check-input" type="checkbox" id="id-select-soli-check-{{solicitud.id}}" name="select-soli-check" value="{{ solicitud.id }}">                            
                             {% endif %}
                         </td>
                         {% endwith %}             

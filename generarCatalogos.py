@@ -16,13 +16,13 @@ django.setup()
 def load_data_from_sql(sqlFile):
     print(f'Importando "{sqlFile}".')
     try:
-        file_path = os.path.join(os.path.dirname(__file__), sqlFile)
-        sql_statement = open(file_path).read()    
+        file_path = os.path.join(os.path.dirname(__file__), sqlFile)        
+        sql_statement = open(file_path).read()            
         with connection.cursor() as c:
-            c.execute(sql_statement)
+            print(c.execute(sql_statement))                        
         with connection.cursor() as c:
-            c.execute('UNLOCK TABLES;')
-        print(f'Importado "{sqlFile}" con exito.')
+            c.execute('UNLOCK TABLES;')             
+        print(f'Terminado de importar "{sqlFile}".')
     except Exception as e:    
         print(f"Se produjo un error: {e} \nEs posible que los datos se hayan importado erroneamente.")
     
@@ -31,23 +31,24 @@ def load_data_from_sql(sqlFile):
 # la isquierda es el el nombre atributo del modelo y el valor de la derecha es
 # el nombre de la columna del csv al que corresponde
 def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos):
-    print(f'Importando "{archivo_csv}".')
-    try:
-        with open(archivo_csv, 'r', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                datos_a_guardar = {}
-                for campo, columna_csv in mapeo_campos.items():                                              
-                    datos_a_guardar[campo] = row.get(columna_csv)
-                
-                nuevo_registro = modelo(**datos_a_guardar)        
+    print(f'Importando "{archivo_csv}".')    
+    with open(archivo_csv, 'r', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            datos_a_guardar = {}
+            for campo, columna_csv in mapeo_campos.items():
+                datos_a_guardar[campo] = row.get(columna_csv)
+
+            nuevo_registro = modelo(**datos_a_guardar)
+
+            try:
                 nuevo_registro.save()
-                sys.stdout.write(".")  # Imprime un punto sin salto de línea
-                sys.stdout.flush()
-        print(' ')
-        print(f'Importado "{archivo_csv}" con exito.')
-    except Exception as e:    
-        print(f"Se produjo un error: {e} \nEs posible que los datos se hayan importado erroneamente.")
+                sys.stdout.write('+')  # Imprime un símbolo de más para indicar éxito
+            except Exception as e:
+                sys.stdout.write('-')  # Imprime un símbolo de menos para indicar fallo                
+
+            sys.stdout.flush()     
+        print(f'Terminado de importar "{archivo_csv}".')
     
 
 
@@ -55,6 +56,7 @@ def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos):
 while True:
     respuesta = input("Esto restablece la configuracion por defecto del Sistema. \n¿Proceder? (Sí/No): ").strip().lower()
     if respuesta in {'s', 'si'}:
+        
         Estado.objects.all().delete()
         importar_datos_desde_csv('catalogos/CatalogoInegiEstatal.csv', Estado, {
             'id': 'CVE_ENT',
@@ -85,6 +87,7 @@ while True:
             'nombre': 'nombre',
             'puntos': 'puntos'
         })
+        
         Seccion.objects.all().delete()        
         Elemento.objects.all().delete()  
         Opcion.objects.all().delete()  
