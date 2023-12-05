@@ -15,19 +15,19 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---SHOW TABLE STATUS LIKE 'estudio_socio_economico_seccion';
---SHOW TABLE STATUS LIKE 'estudio_socio_economico_elemento';
---SHOW TABLE STATUS LIKE 'estudio_socio_economico_opcion';
+/*SHOW TABLE STATUS LIKE 'estudio_socio_economico_seccion'; */
+/*SHOW TABLE STATUS LIKE 'estudio_socio_economico_elemento'; */
+/*SHOW TABLE STATUS LIKE 'estudio_socio_economico_opcion'; */
 --
 -- Dumping data for table `estudio_socio_economico_seccion`
 --
 
 LOCK TABLES `estudio_socio_economico_seccion` WRITE;
 /*!40000 ALTER TABLE `estudio_socio_economico_seccion` DISABLE KEYS */;
-INSERT INTO `estudio_socio_economico_seccion` (id, nombre, tipo, orden) VALUES (43,'Datos Socioeconómicos','unico',2),(44,'Datos familiares (Deben ser todos con los que vives)','agregacion',3);
+INSERT INTO `estudio_socio_economico_seccion` (id, nombre, tipo, orden) VALUES (1,'Datos Socioeconómicos', 'unico', 2),(2,'Datos familiares (Deben ser todos con los que vives)','agregacion',3);
 /*!40000 ALTER TABLE `estudio_socio_economico_seccion` ENABLE KEYS */;
 UNLOCK TABLES;
-ALTER TABLE `db-becas`.estudio_socio_economico_seccion AUTO_INCREMENT=45;
+ALTER TABLE `estudio_socio_economico_seccion` AUTO_INCREMENT=3;
 
 --
 -- Dumping data for table `estudio_socio_economico_elemento`
@@ -35,10 +35,10 @@ ALTER TABLE `db-becas`.estudio_socio_economico_seccion AUTO_INCREMENT=45;
 
 LOCK TABLES `estudio_socio_economico_elemento` WRITE;
 /*!40000 ALTER TABLE `estudio_socio_economico_elemento` DISABLE KEYS */;
-INSERT INTO `estudio_socio_economico_elemento` (id, nombre, obligatorio, opcionOtro, numMin, numMax, row, col, tipo, seccion_id) VALUES (58,'Ocupación',1,1,0,10,2,1,'texto_corto',43),(59,'Teléfono de trabajo',0,1,10,10,2,2,'numerico',43),(60,'Hora de entrada',0,1,0,10,2,4,'hora',43),(61,'Hora de salida',0,1,0,10,2,5,'hora',43),(62,'Sueldo mensual',0,1,0,10,2,3,'numerico',43),(63,'Actualmente Vives con:',1,0,0,10,6,1,'opcion_multiple',43),(64,'Años viviendo ahí',1,1,0,10,6,2,'numerico',43),(65,'Personas viviendo contigo',1,1,0,10,6,3,'numerico',43),(66,'Vivienda y transporte',1,1,0,10,4,1,'separador',43),(67,'La casa donde vives es:',1,1,0,10,8,1,'opcion_multiple',43),(68,'El material del piso es:',1,1,0,10,8,2,'opcion_multiple',43),(72,'¿Cuántas recámaras tiene?',1,1,0,10,8,3,'numerico',43),(73,'¿Cuántos baños tiene?',1,1,0,10,10,1,'numerico',43),(74,'¿Tiene sala?',1,0,0,10,10,2,'opcion_multiple',43),(75,'¿Tiene cocina independiente?',1,0,0,10,10,3,'opcion_multiple',43),(76,'¿Cuántos autos tiene?',1,1,0,10,10,4,'numerico',43),(77,'¿con que servicios Cuenta?',1,0,0,10,12,1,'casillas',43),(78,'En tu casa cuentas con:',1,0,0,10,14,1,'casillas',43),(79,'¿Cuentas con seguro de gastos Médicos?',1,0,0,10,16,1,'opcion_multiple',43),(80,'¿Qué transporte utilizas?',1,1,0,10,16,2,'opcion_multiple',43),(81,'Nombre completo',1,1,0,10,2,1,'texto_corto',44),(82,'Parentesco',1,1,0,10,2,2,'desplegable',44),(83,'Estado civil',1,0,0,10,2,3,'desplegable',44),(84,'Edad (años)',1,1,0,3,4,1,'numerico',44),(85,'sexo',1,0,0,10,4,2,'opcion_multiple',44),(86,'Escolaridad',1,0,0,10,4,3,'desplegable',44),(87,'¿Termino la carrera?',1,0,0,10,4,4,'opcion_multiple',44),(88,'¿Percibe algún ingreso?',1,0,0,10,6,1,'opcion_multiple',44),(89,'Ocupación',0,0,0,10,6,2,'desplegable',44),(90,'Lugar de Trabajo',0,1,0,10,6,3,'texto_corto',44),(91,'Ingreso mensual',0,1,0,10,6,4,'numerico',44);
+INSERT INTO `estudio_socio_economico_elemento` (id,nombre, obligatorio, opcionOtro, numMin, numMax, row, col, tipo, seccion_id) VALUES (1, 'Ocupación', 1,1,0,10, 2,1,'texto_corto',1),(2, 'Teléfono de trabajo', 0,1,10, 10, 2,2,'numerico', 1),(3, 'Hora de entrada', 0,1,0,10, 2,4,'hora', 1),(4, 'Hora de salida',0,1,0,10, 2,5,'hora', 1),(5, 'Sueldo mensual',0,1,0,10, 2,3,'numerico', 1),(32,'Sueldo familiar mensual (Sueldo mensual del cual dependes economicamente)',0,1,0,10, 3,3,'numerico', 1),(6, 'Actualmente Vives con:',1,0,0,10, 6,1,'opcion_multiple',1),(7, 'Años viviendo ahí', 1,1,0,10, 6,2,'numerico', 1),(8, 'Personas viviendo contigo', 1,1,0,10, 6,3,'numerico', 1),(9, 'Vivienda y transporte', 1,1,0,10, 4,1,'separador',1),(10,'La casa donde vives es:', 1,1,0,10, 8,1,'opcion_multiple',1),(11,'El material del piso es:',1,1,0,10, 8,2,'opcion_multiple',1),(12,'¿Cuántas recámaras tiene?', 1,1,0,10, 8,3,'numerico', 1),(13,'¿Cuántos baños tiene?', 1,1,0,10, 10, 1,'numerico', 1),(14,'¿Tiene sala?',1,0,0,10, 10, 2,'opcion_multiple',1),(15,'¿Tiene cocina independiente?',1,0,0,10, 10, 3,'opcion_multiple',1),(16,'¿Cuántos autos tiene?', 1,1,0,10, 10, 4,'numerico', 1),(17,'¿con que servicios Cuenta?',1,0,0,10, 12, 1,'casillas', 1),(18,'En tu casa cuentas con:', 1,0,0,10, 14, 1,'casillas', 1),(19,'¿Cuentas con seguro de gastos Médicos?',1,0,0,10, 16, 1,'opcion_multiple',1),(20,'¿Qué transporte utilizas?', 1,1,0,10, 16, 2,'opcion_multiple',1),(21,'Nombre completo', 1,1,0,10, 2,1,'texto_corto',2),(22,'Parentesco',1,1,0,10, 2,2,'desplegable',2),(23,'Estado civil',1,0,0,10, 2,3,'desplegable',2),(24,'Edad (años)', 1,1,0,3,4,1,'numerico', 2),(25,'sexo',1,0,0,10, 4,2,'opcion_multiple',2),(26,'Escolaridad', 1,0,0,10, 4,3,'desplegable',2),(27,'¿Termino la carrera?',1,0,0,10, 4,4,'opcion_multiple',2),(28,'¿Percibe algún ingreso?', 1,0,0,10, 6,1,'opcion_multiple',2),(29,'Ocupación', 0,0,0,10, 6,2,'desplegable',2),(30,'Lugar de Trabajo',0,1,0,10, 6,3,'texto_corto',2),(31,'Ingreso mensual', 0,1,0,10, 6,4,'numerico', 2);
 /*!40000 ALTER TABLE `estudio_socio_economico_elemento` ENABLE KEYS */;
 UNLOCK TABLES;
-ALTER TABLE `db-becas`.estudio_socio_economico_elemento AUTO_INCREMENT=92;
+ALTER TABLE `estudio_socio_economico_elemento` AUTO_INCREMENT=33;
 
 --
 -- Dumping data for table `estudio_socio_economico_opcion`
@@ -46,9 +46,7 @@ ALTER TABLE `db-becas`.estudio_socio_economico_elemento AUTO_INCREMENT=92;
 
 LOCK TABLES `estudio_socio_economico_opcion` WRITE;
 /*!40000 ALTER TABLE `estudio_socio_economico_opcion` DISABLE KEYS */;
-INSERT INTO `estudio_socio_economico_opcion` (id, nombre, orden, elemento_id) VALUES (26,'Padres',2,63),(27,'Amigos',4,63),(28,'Familiares',3,63),(29,'Esposo(a)',5,63),(30,'Propia',1,67),(31,'Rentada',2,67),(32,'Casa de huéspedes',3,67),(33,'Tierra',1,68),(34,'Alfombra',2,68),(35,'Madera',3,68),(36,'Duela',4,68),(37,'Cemento',5,68),(39,'Mosaico',6,68),(48,'Si',1,74),(49,'No',2,74),(50,'Si',1,75),(51,'No',2,75),(52,'Agua',1,77),(53,'Luz',2,77),(54,'Drenaje',3,77),(55,'Pavimiento',4,77),(56,'Télefono',5,77),(57,'Gas',6,77),(58,'TV por cable',7,77),(59,'Internet',8,77),(60,'DVD',1,78),(61,'Televisión',2,78),(62,'Estufa',3,78),(63,'Licuadora',4,78),(64,'Lavadora',5,78),(65,'Estéreo',6,78),(66,'Microondas',7,78),(67,'Computadora',8,78),(68,'Si',1,79),(69,'No',2,79),(70,'Auto propio',1,80),(71,'Auto familiar',2,80),(72,'Motocicleta',3,80),(73,'Camión',4,80),(74,'Taxi',5,80),(75,'Caminando',6,80),(76,'Padre',1,82),(77,'Madre',2,82),(78,'Hermano(a)',3,82),(79,'Hijo(a)',4,82),(80,'Abuelo(a)',5,82),(81,'Tío(a)',6,82),(82,'Tutor(a)',7,82),(83,'Esposo(a)',8,82),(84,'Soltero(a)',1,83),(85,'Casado(a)',2,83),(86,'Divorciado(a)',3,83),(87,'Viudo(a)',4,83),(88,'Hombre',1,85),(89,'Mujer',2,85),(90,'Ninguno',1,86),(91,'Primaria',2,86),(92,'Secuandaria',3,86),(93,'Preparatoria',4,86),(94,'Carrera técnica',5,86),(95,'Licenciatura',6,86),(96,'Maestria',7,86),(97,'Posgrado',8,86),(98,'Si',1,87),(99,'No',2,87),(100,'Si',1,88),(101,'No',2,88),(102,'Estudiante',1,89),(103,'Hogar',2,89),(104,'Comerciante',3,89),(105,'Jubilado / Pensionado',4,89),(106,'Obrero',5,89),(107,'Técnico',6,89),(108,'Profesionista',7,89),(109,'Empleado',8,89),(114,'Otro',0,NULL);
+INSERT INTO `estudio_socio_economico_opcion` (id, nombre,orden, elemento_id) VALUES (1, 'Otro', 0,NULL),(2, 'Padres', 2,6),(3, 'Amigos', 4,6),(4, 'Familiares', 3,6),(5, 'Esposo(a)',5,6),(6, 'Propia', 1,10),(7, 'Rentada',2,10),(8, 'Casa de huéspedes',3,10),(9, 'Tierra', 1,11),(10,'Alfombra', 2,11),(11,'Madera', 3,11),(12,'Duela',4,11),(13,'Cemento',5,11),(14,'Mosaico',6,11),(15,'Si', 1,14),(16,'No', 2,14),(17,'Si', 1,15),(18,'No', 2,15),(19,'Agua', 1,17),(20,'Luz',2,17),(21,'Drenaje',3,17),(22,'Pavimiento', 4,17),(23,'Télefono', 5,17),(24,'Gas',6,17),(25,'TV por cable', 7,17),(26,'Internet', 8,17),(27,'DVD',1,18),(28,'Televisión', 2,18),(29,'Estufa', 3,18),(30,'Licuadora',4,18),(31,'Lavadora', 5,18),(32,'Estéreo',6,18),(33,'Microondas', 7,18),(34,'Computadora',8,18),(35,'Si', 1,19),(36,'No', 2,19),(37,'Auto propio',1,20),(38,'Auto familiar',2,20),(39,'Motocicleta',3,20),(40,'Camión', 4,20),(41,'Taxi', 5,20),(42,'Caminando',6,20),(43,'Padre',1,22),(44,'Madre',2,22),(45,'Hermano(a)', 3,22),(46,'Hijo(a)',4,22),(47,'Abuelo(a)',5,22),(48,'Tío(a)', 6,22),(49,'Tutor(a)', 7,22),(50,'Esposo(a)',8,22),(51,'Soltero(a)', 1,23),(52,'Casado(a)',2,23),(53,'Divorciado(a)',3,23),(54,'Viudo(a)', 4,23),(55,'Hombre', 1,25),(56,'Mujer',2,25),(57,'Ninguno',1,26),(58,'Primaria', 2,26),(59,'Secuandaria',3,26),(60,'Preparatoria', 4,26),(61,'Carrera técnica',5,26),(62,'Licenciatura', 6,26),(63,'Maestria', 7,26),(64,'Posgrado', 8,26),(65,'Si', 1,27),(66,'No', 2,27),(67, 'Si',1,28),(68, 'No',2,28),(69, 'Estudiante',1,29),(70, 'Hogar', 2,29),(71, 'Comerciante', 3,29),(72, 'Jubilado / Pensionado', 4,29),(73, 'Obrero',5,29),(74, 'Técnico', 6,29),(75, 'Profesionista', 7,29),(76, 'Empleado',8,29);
 /*!40000 ALTER TABLE `estudio_socio_economico_opcion` ENABLE KEYS */;
 UNLOCK TABLES;
-ALTER TABLE `db-becas`.estudio_socio_economico_opcion AUTO_INCREMENT=115;
-
-
+ALTER TABLE `estudio_socio_economico_opcion` AUTO_INCREMENT=77;

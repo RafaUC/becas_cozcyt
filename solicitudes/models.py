@@ -17,9 +17,9 @@ from estudio_socio_economico.models import Elemento, RNumerico
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
-        ('docRevicion', 'Doc. en revisón'),
-        ('docError', 'Errores doc.'),
-        ('docAprobada', 'Doc. aprobada'),
+        ('docRevicion', 'Documentación en revisón'),
+        ('docError', 'Documentación erronea'),
+        ('docAprobada', 'Documentación aprobada'),
         ('aceptado', 'Aceptado'),
         ('rechazado', 'Rechazado'),
     ]
@@ -67,7 +67,7 @@ def calcular_puntaje(sender, instance, **kwargs):
     try:
         puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[1][0])
         ingresos = [] #lista de querysets relacionados con ingresos    
-        q = Q(**{'nombre__icontains': 'sueldo'}) | Q(**{'nombre__icontains': 'ingreso'})
+        q = Q(**{'nombre__icontains': 'Sueldo mensual'}) #| Q(**{'nombre__icontains': 'ingreso'})
         ingresoPreguntas = Elemento.objects.filter(tipo=Elemento.TIPO_CHOICES[1][0]).filter(q)    
         ids_preguntas = ingresoPreguntas.values_list('id', flat=True)
         # Obtener todas las respuestas que pertenecen a las preguntas
