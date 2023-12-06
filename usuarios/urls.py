@@ -18,6 +18,7 @@ from django.urls import path
 
 app_name = 'usuarios'
 urlpatterns = [    
+    path('', views.loginRedirect, name='rootRedirect'),
     path('login/', views.loginSistema, name='login'),
     path('loginRedirect/', views.loginRedirect, name='loginRedirect'),
 
