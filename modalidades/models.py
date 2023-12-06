@@ -23,11 +23,24 @@ def modalidadMediaPath(instance, filename):
     filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
     return os.path.join('media/', filename)  # Ruta de almacenamiento deseada
 
+class Convocatoria(models.Model):
+    fecha_inicio = models.DateField(null=False, blank=True)
+    fecha_cierre = models.DateField(null=False, blank=True)
+    presupuesto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}'
+
+    @property
+    def mostrar_precio(self):
+        return "%s" % self.presupuesto
+        # f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
 
 class Modalidad(models.Model):
     nombre = models.CharField(max_length=255, verbose_name="Nombre", null=False)
     imagen = models.ImageField(upload_to=modalidadMediaPath, verbose_name="Imagen", null=False)
     descripcion = models.TextField(verbose_name="Descripción", null=False)
+    monto = models.DecimalField(max_digits=6, decimal_places=2,verbose_name="monto", null=True)
 
     def __str__(self):
         return self.nombre
