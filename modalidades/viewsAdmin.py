@@ -12,8 +12,45 @@ from .utils import *
 
 # Create your views here.
 def configGeneral(request):
-    return render(request, 'admin/config_general.html')
+    obj = Convocatoria.objects.all().first()
+    convocatoriaForm = ConvocatoriaForm()
 
+    if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
+        convocatoriaForm = ConvocatoriaForm(request.POST or None, instance = obj)
+        context = {'convocatoria' : convocatoriaForm}
+        for field in convocatoriaForm.fields.values():
+            field.widget.attrs['disabled'] = 'disabled'
+        if request.method == "POST":
+            if convocatoriaForm.is_valid():
+                fechaI = convocatoriaForm.cleaned_data['fecha_inicio']
+                fechaC = convocatoriaForm.cleaned_data['fecha_cierre']
+                presup = convocatoriaForm.cleaned_data['presupuesto']
+                convocatoriaForm.save()
+            messages.success(request, "Convocatoria actualizada.")
+            return redirect("modalidades:AConfigGeneral")
+
+
+    else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
+        if request.method == "POST":
+            convocatoriaForm = ConvocatoriaForm(data = request.POST)
+            if convocatoriaForm.is_valid():
+                fechaI = convocatoriaForm.cleaned_data['fecha_inicio']
+                fechaC = convocatoriaForm.cleaned_data['fecha_cierre']
+                presup = convocatoriaForm.cleaned_data['presupuesto']
+
+                convocatoria = Convocatoria.objects.create(
+                    fecha_inicio = fechaI,
+                    fecha_cierre = fechaC,
+                    presupuesto = presup
+                )
+                convocatoria.save()
+                messages.success(request, "Convocatoria agregada con éxito.")
+                return redirect("modalidades:AConfigGeneral")
+            else:
+                print("convocatoria no valida")
+
+    context = {'convocatoria':convocatoriaForm }
+    return render(request, 'admin/config_general.html', context)
 
 def configModalidades(request): #se muestran las modalidades
     usuario = get_object_or_404(Usuario, pk=request.user.id) 

@@ -31,7 +31,6 @@ def verificarPdf(request, soli, file):
     response = FileResponse(documentoRespuesta.pdf)
     return response
 
-
 def convocatorias(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    
@@ -53,7 +52,6 @@ def documentos_convocatorias(request, modalidad_id):
         modalidad = Modalidad.objects.get(pk = modalidad_id)
         documentos = Documento.objects.filter(modalidad__id=modalidad_id)
         solicitud = Solicitud.objects.get(solicitante=solicitante, modalidad_id=modalidad)
-        print(solicitud)
         documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)
         listaDocumentos = zip(documentos, documentosResp) #Mete las dos listas de documentos y documentosRespuesta en una sola lista
 

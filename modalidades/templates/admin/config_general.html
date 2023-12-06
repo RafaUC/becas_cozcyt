@@ -13,39 +13,47 @@
                 <hr>
             </div>
         </div>
-        <div class="rounded-2 mx-4">          
+        <form method="POST" enctype="multipart/form-data" id="form-convocatoria">
+        {% csrf_token %}   
+        <div class="rounded-2 mx-4">    
             <div class="row">
                 <div class="d-grid gap-1 col-5 px-4">
                     <p class="col h5 subtitulo-config-general">Detalles de convocatoria</p>
                 </div>   
-                <div class="d-grid gap-1 col-7 px-3 subtitulo-config-general">
-                    <div class="row" style="padding-bottom: 30px;">
-                        <div class="col">
-                            <p>Fecha de inicio</p>
-                            <input type="date" id="config-general-inputs">
+                <div class="d-grid gap-1 col-7 px-3 subtitulo-config-general">  
+                    <div id="fields-group">
+                        <div class="row" style="padding-bottom: 30px;">
+                            <div class="col">
+                                <p>Fecha de inicio</p>
+                                <!-- <input type="date" class="config-general-inputs" id="fecha_inicio" required> -->
+                                {{ convocatoria.fecha_inicio }}
+                            </div>
+                            <div class="col">
+                                <p>Fecha de cierre</p>
+                                <!-- <input type="date" class="config-general-inputs" id="fecha_cierre" required> -->
+                                {{ convocatoria.fecha_cierre }}
+                            </div>
                         </div>
-                        <div class="col">
-                            <p>Fecha de cierre</p>
-                            <input type="date" id="config-general-inputs">
-                        </div>
-                    </div>
-                    <div class="row" style="padding-bottom: 20px;">
-                        <div class="col">
-                            <p>Presupuesto para esta convocatoria</p>
-                            <input type="text" id="config-general-inputs">
+                        <div class="row" style="padding-bottom: 20px;">
+                            <div class="col">
+                                <p>Presupuesto para esta convocatoria</p>
+                                <!-- <input class="config-general-inputs" type="text" id="presupuesto" placeholder="$999,999.00"> -->
+                                {{ convocatoria.presupuesto }}
+                            </div>
                         </div>
                     </div>
                     <div class="row" style="padding-bottom: 10px; text-align: center;">
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="button" class="btn btnEditar" name="guardar">Editar</button>  
+                            <button type="button" class="btn btnEditar" name="editar" id="enableFormConvocatoria">Editar</button>  
                         </div>
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="button" class="btn btn-guardar" name="guardar">Confirmar</button>  
+                            <button type="submit" class="btn btn-guardar" id="guardar">Confirmar</button>  
                         </div>
                     </div>
-                </div>
+                </div>    
             </div>
         </div>
+        </form>
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p></p>
@@ -53,6 +61,8 @@
             </div>
         </div>
         <div class="rounded-2 mx-4" style="padding-bottom: 30px;">          
+            <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="row">
                 <div class="d-grid gap-1 col-5 px-4">
                     <p class="col h5 subtitulo-config-general">Cuenta de administrador</p>
@@ -70,6 +80,17 @@
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
+    <script>
+        document.getElementById('enableFormConvocatoria').addEventListener('click', function() {
+            var form = document.getElementById('form-convocatoria');
+            var fields = form.elements;
+            for (var i = 0; i < fields.length; i++) {
+                fields[i].disabled = false;
+            } 
+            document.getElementById("enableFormConvocatoria").disabled = true;
+        });
+    </script>
 {% endblock body %}

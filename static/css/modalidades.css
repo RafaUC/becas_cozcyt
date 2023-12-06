@@ -50,6 +50,7 @@
     font-size: 15px;
 }
 .btnEditar{
+    border-radius: 10px;
     background-color: var(--rosaC);
     color: var(--letraGeneral) !important; 
     margin-left: 10px;
@@ -61,11 +62,11 @@
     height: 230px;
 }
 
-#config-general-inputs{
+.config-general-inputs{
     border-radius: 5px;
     color: var(--letraGeneral) !important; 
     font-size: 15px;
-    border-color: #a3a3a3;
+    /* border-color: #a3a3a3; */
     border: 1px solid;
     padding: 5px 5px 5px 5px;
 }
