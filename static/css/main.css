@@ -447,8 +447,7 @@ body {
 }
 
 .nav .nav-link.active {
-  border-color: var(--pagina-principal);
-  border-left: 12px solid; 
+  border-color: var(--pagina-principal);  
   background-color: var(--pagina-fuerte);
 }
 
@@ -772,4 +771,33 @@ i.rechazado:before {
   font-weight: bold;
   font-size: 1.143rem; /* 16px / 14px */
   margin: 0;
+}
+
+.full-width-btn {
+  display: block;
+  width: 100%;
+  text-align: left; /* Alinea el texto a la izquierda dentro del botón */
+}
+
+.btn-barra-lateral {
+  color: #000;  
+}
+
+.btn-barra-lateral:hover {
+  color: #000;
+  background-color: var(--pagina-tenue-claro);
+  border-color: var(--pagina-tenue-claro);
+}
+
+.btn-barra-lateral.disabled, .btn-barra-lateral:disabled {
+  color: #000;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-barra-lateral:not(:disabled):not(.disabled):active, .btn-barra-lateral:not(:disabled):not(.disabled).active,
+.show > .btn-barra-lateral.dropdown-toggle {
+  color: #fff;
+  background-color: var(--pagina-fuerte);
+  border-color: var(--pagina-fuerte);
 }

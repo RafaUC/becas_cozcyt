@@ -76,6 +76,7 @@ while True:
         })
         Carrera.objects.all().delete()
         importar_datos_desde_csv('catalogos/carreras.csv', Carrera, {
+            'id': 'id',
             'institucion_id': 'instituto',
             'nombre': 'carrera',
             'puntos': 'puntos'
