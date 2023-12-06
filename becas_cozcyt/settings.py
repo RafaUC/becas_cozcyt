@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_htmx',
     'usuarios',
+    'mensajes',
     'modalidades',
     'solicitudes',
     'estudio_socio_economico',
