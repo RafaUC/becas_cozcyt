@@ -105,10 +105,10 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'usuarios:mensajes' %}" class="nav-link d-flex link-dark {% if url_name == 'mensajes' %}active{% endif %} h4">
+                <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center ">
                   <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"> </i>
                   mensajes
-                </a>
+                </button>
               </li>
               <li class="nav-item">
                 <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
@@ -140,6 +140,13 @@
             </div>
           </div>
         </div>
+        {% if not perms.usuarios.permiso_administrador or not request.user.is_superuser == 1 %}
+          <div id="barraMensajes" class="col-auto nopadding" style="display: none;">
+            <div class="fixed-top d-flex flex-column border-end border-2 borde-pagina-principal justify-content-between flex-shrink-0 p-3 bg-light" style="max-width: 280px; height: 100vh; left: 282px;">
+              {% include 'solicitante/contenedor_notif.html' %}            
+            </div>
+          </div>
+        {% endif %}
         <div class="col nopadding nomargin d-flex flex-column justify-content-between">
           <div class="mb-auto ">
 

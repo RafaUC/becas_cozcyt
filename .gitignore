@@ -1,9 +1,13 @@
 # Archivos no incluidos
 #settings.py
 migrations/
-static/images/
+#static/images/
 media/protected/
+media/protected_uploads/
+media/
 protected_uploads/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -133,4 +137,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-*.png
+#*.png

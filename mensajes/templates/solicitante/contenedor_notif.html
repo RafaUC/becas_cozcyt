@@ -1,0 +1,64 @@
+<div id='contenedor-notificacion' class="">
+    <!-- Aquí se cargará la paginación a través de AJAX -->
+    <div class="spinner-border text-primary " role="status" id="cargandoNotificacion" style="display: none;">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+</div>
+
+<script>
+    var loading = false;
+    var page = 1;  
+    const nurl = "{% url 'mensajes:cNotif'%}"
+
+    function loadMore() {
+        console.log(`${page} -- ${!loading && page != null}`)
+        if (!loading && page != null) {
+            loading = true;
+            $.ajax({
+                url: nurl,  
+                data: { page: page },      
+                dataType: 'json',          
+                success: function(data) {                                      
+                    $('#contenedor-notificacion').append(data.html_response);
+                    console.log('cargados los mensajes')
+                    //console.log(data.html_response)
+                    page = data.next_page;                    
+                },
+                error: function () {
+                    console.log('Ha ocurrido un error al Asignar puntuacion a municipio.');
+                },
+                complete: function() {
+                    console.log('terminado carga')
+                    loading = false;
+                }
+            });
+        } else {
+            console.log('No hay next_page')
+        }
+    }
+
+    $(document).ready(function() {
+        // Carga inicial
+        var primeraCarga = false;
+        $("#boton-mensajes").click(function() {
+            $("#barraMensajes").toggle(); // Alternar visibilidad
+            if (!primeraCarga) {
+                loadMore();
+                primeraCarga = true; // Marcar que la función se ha ejecutado
+            }
+        });
+        
+
+        console.log('aaa')
+        console.log($(document))
+        console.log('zzz')
+        $(document).on('scroll', function(e){
+            var t = $(this);            
+            //if ((t[0].scrollHeight - t.scrollTop() - t.outerHeight()) < 5) {
+            if ((t.outerHeight() - $(window).scrollTop() - $(window).height() ) < 5) {
+                console.log('scroll bottom');
+                loadMore();
+            } 
+        });
+    });
+</script>
