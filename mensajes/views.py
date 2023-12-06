@@ -1,0 +1,45 @@
+from django.shortcuts import render, get_object_or_404, redirect
+import os
+from django.http import FileResponse
+from django.http import Http404, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
+from django.core.files.storage import FileSystemStorage
+from pathlib import Path
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from usuarios.views import verificarRedirect
+
+from usuarios.models import Usuario
+from .models import Notificacion
+
+# Create your views here.
+
+
+def renderNotificaciones(request):
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(solicitante)    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+    
+    page = request.GET.get('page', 1)
+    print(f'aaaaaaaaaaaaaaaaaaaaaaaaaaaa {page}')
+    notificaciones = Notificacion.objects.filter(solicitante=solicitante)
+    print(notificaciones)
+    paginator = Paginator(notificaciones, 12)
+    currentPage = paginator.get_page(page)
+    if currentPage.has_next():
+        next_page_number = currentPage.next_page_number()
+    else:
+        next_page_number = None
+
+
+    context = {
+        'currentPage': currentPage
+    }        
+    data = {
+        'html_response': render(request, 'content_notif.html', context).content.decode('utf-8'),
+        'next_page': next_page_number,
+    }
+    print(data)
+    return JsonResponse(data)
