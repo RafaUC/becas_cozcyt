@@ -27,8 +27,6 @@
     border-radius: 10px;
 }
 
-
-
 /* Configuración - Agregar modalidad */
 .agregarMod{
     font-weight: 600; 
@@ -46,6 +44,32 @@
     height: 230px;
 }
 
+/* Configuración - General */
+.subtitulo-config-general{
+    font-weight: 500; 
+    font-size: 15px;
+}
+.btnEditar{
+    border-radius: 10px;
+    background-color: var(--rosaC);
+    color: var(--letraGeneral) !important; 
+    margin-left: 10px;
+    margin-right: 10px;
+    width: auto;
+}
+#documentoMod{
+    text-align: right; 
+    height: 230px;
+}
+
+.config-general-inputs{
+    border-radius: 5px;
+    color: var(--letraGeneral) !important; 
+    font-size: 15px;
+    /* border-color: #a3a3a3; */
+    border: 1px solid;
+    padding: 5px 5px 5px 5px;
+}
 
 /* Vistas usuario */
 /* Convocatorias - Modalidades */
@@ -111,22 +135,26 @@
     border-radius: 50px; 
     border: 1.5px solid; 
     font-weight: 530;
+    overflow: hidden; 
+    white-space: nowrap;
+    /* display: block; Este lo bloquee ya que hace que el botón no esté centrado*/
+    text-overflow: ellipsis;
 }
 .btnSubirDoc:hover{
     background-color: var(--rosaM);
     color: var(--blanco); 
 }
 
-/* input[name="file"] { Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
-    /* display: none;
-} */
+input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
+    display: none;
+} 
 
 
 .btnSubirDocs{
     background-color: var(--btnActivo);
     color: #676767;
     color: var(--blanco); 
-    width: 170px;
+    width: auto;
     border-radius: 50px; 
     border-width: 1.5px; 
     font-weight: 530;

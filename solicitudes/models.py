@@ -133,6 +133,9 @@ def calcular_puntaje(sender, instance, **kwargs):
     
     instance.puntaje = nuevoPuntaje
 
+    def __str__(self):
+        return f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
+
 
 def validador_pdf(value):
     ext = os.path.splitext(value.name)[1]  # Obtener la extensión del archivo
@@ -198,3 +201,10 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
             solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docRevicion'      
 
     solicitud.save()
+    def __str__(self):
+        return f'{self.solicitud}/ {self.documento}'
+    
+    @property
+    def filename(self) -> str:
+        return os.path.basename(self.file.name)
+        
