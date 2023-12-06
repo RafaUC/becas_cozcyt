@@ -18,6 +18,7 @@ from django.urls import path
 
 app_name = 'usuarios'
 urlpatterns = [    
+    path('', views.loginRedirect, name='rootRedirect'),
     path('login/', views.loginSistema, name='login'),
     path('loginRedirect/', views.loginRedirect, name='loginRedirect'),
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
     
+
 
     ### urls Administrador ###
     path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),    
