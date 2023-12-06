@@ -45,6 +45,7 @@ urlpatterns = [
     path('mensajes/',views.sMensajes, name='mensajes'),
     
 
+
     ### urls Administrador ###
     path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),    
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
