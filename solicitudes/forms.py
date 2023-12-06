@@ -5,6 +5,9 @@ from django.forms import ModelForm
 
 from .models import *
 
+# class ConvocatoriaForm(ModelForm):
+
+
 class SolicitudForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SolicitudForm, self).__init__(*args, **kwargs)
@@ -12,24 +15,18 @@ class SolicitudForm(ModelForm):
     class Meta:
         model = Solicitud
         exclude = ('modalidad', 'solicitante',)
-        # fields = ('modalidad','solicitante',)
-        # labels = {
-        #    'modalidad' : '',
-        #    'solicitante' : '',
-        # }
-        # widgets = {
-        #     'modalidad' : forms.TextInput(attrs={'class': 'form-control'})
-        # }
+        
 class DocumentoRespForm(ModelForm):
     file = forms.FileField()
     file.widget.attrs.update({'id': 'file-upload'})
     class Meta:
         model = RespuestaDocumento
-        fields = ('file',)
+        # fields = ('file',)
+        fields = '__all__'
         labels = {
             'file' : '',
         }
-        exclude = ('solicitud','documento',)
+        # exclude = ('solicitud','documento',)
         widgets = {
             # 'file' :  forms.FileField(attrs={'class': 'btn btnSubirDoc',})
         }
