@@ -144,7 +144,7 @@
         {% if not perms.usuarios.permiso_administrador or not request.user.is_superuser == 1 %}
           <div id="barraMensajes" class="col-auto nopadding" style="display: none;">
             <div class="fixed-top d-flex flex-column border-end border-2 borde-pagina-principal 
-            justify-content-between flex-shrink-0 p-1 barra-lateral-fondo" style="max-width: 380px; height: 100vh; left: 282px;">
+            justify-content-between flex-shrink-0 p-1 barra-lateral-fondo" style="max-width: 400px; height: 100vh; left: 282px;">
               
               {% include 'solicitante/contenedor_notif.html' %}         
 

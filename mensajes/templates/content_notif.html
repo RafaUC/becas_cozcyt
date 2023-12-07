@@ -1,5 +1,8 @@
 {% for notif in currentPage %}
-    <div class="cont-notif">
-        {% include notif.plantilla %}
+    <div >
+        <a href="{{notif.redireccion}}" class="cont-notif" data-notification-id="{{ notif.id }}" onclick="marcarLeido(this)">
+            {% include notif.plantilla %}
+        </a>    
     </div>
 {% endfor %}
+

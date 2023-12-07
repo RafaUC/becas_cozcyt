@@ -813,6 +813,11 @@ i.rechazado:before {
   color: var(--gris-7);
 }
 
+.leidoTrue:hover .leidoFalse:hover {
+  background-color: var(--pagina-fondo);
+  color: var(--negro);
+}
+
 .circular-image {
   border-radius: 50%;
   object-fit: cover; 
