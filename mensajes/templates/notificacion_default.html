@@ -1,0 +1,20 @@
+{% load static %}
+{% load custom_filters %}    
+    <div class="leido{{notif.leido}} row m-0 p-2">
+        <div class="col-2 p-0 m-0">
+            <img class="img-fluid w-75 circular-image m-0 p-0" src="{% static 'images\iconCozcyt.png' %}" alt="iconCozcyt">
+        </div>
+        <div class="col p-0 m-0 font-xs">
+            <div class="row m-0 p-0">
+                <div class="col font-bold p-0 m-0">
+                    {{ notif.titulo }}
+                </div>
+                <div class="col-3 text-end p-0 m-0">
+                    {{ notif.timestamp|elapsed_time }}
+                </div>
+            </div>
+            <div class="row m-0 p-0">
+                {{ notif.mensaje }}
+            </div>
+        </div>        
+    </div>    

@@ -10,11 +10,11 @@ class Notificacion(models.Model):
     titulo = models.CharField(max_length=255, blank=True, null=True, default=TITULO_DEFAULT)
     mensaje = models.TextField()
     redireccion = models.URLField( blank=True, null=True)
-    plantilla = models.CharField(max_length=255, default='notificacion.html')
+    plantilla = models.CharField(max_length=255, default='notificacion_default.html')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['solicitante', 'timestamp']
+        ordering = ['solicitante', '-timestamp']
 
     def __str__(self):
         return f'Notificación de {self.solicitante} - {self.timestamp}'

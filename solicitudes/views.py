@@ -64,12 +64,12 @@ def documentos_convocatorias(request, modalidad_id):
     if url: 
         return redirect(url)
     
-    if Solicitud.objects.filter(solicitante=solicitante, modalidad=modalidad_id).exists():
+    if Solicitud.objects.filter(solicitante=solicitante, modalidad=modalidad_id, ciclo=ciclo_actual()).exists():
         usuario = get_object_or_404(Usuario, pk=request.user.id) 
         solicitante = usuario.solicitante
         modalidad = Modalidad.objects.get(pk = modalidad_id)
         documentos = Documento.objects.filter(modalidad__id=modalidad_id)
-        solicitud = Solicitud.objects.get(solicitante=solicitante, modalidad_id=modalidad)
+        solicitud = Solicitud.objects.get(solicitante=solicitante, modalidad_id=modalidad, ciclo=ciclo_actual())
         documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)
         listaDocumentos = zip(documentos, documentosResp) #Mete las dos listas de documentos y documentosRespuesta en una sola lista
 
