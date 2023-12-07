@@ -19,4 +19,5 @@ from . import views, viewsAdmin
 app_name = 'mensajes'
 urlpatterns = [
     path('cargar_notificaciones/',views.renderNotificaciones, name='cNotif'),    
+    path('marcar_leida_notif/',views.marcar_notificacion_leida, name='MLNotif'),   
 ]

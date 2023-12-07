@@ -1,7 +1,9 @@
 <div id='contenedor-notificacion' class="overflow-auto">
     <!-- Aquí se cargará la paginación a través de AJAX -->    
 </div>
-
+<form id="csrf-form">
+    {% csrf_token %}
+</form>
 <script>
     var loading = false;
     var page = 1;  
@@ -18,24 +20,42 @@
                 success: function(data) {                                      
                     $('#contenedor-notificacion').append(data.html_response);
                     console.log('cargados los mensajes')
-                    //console.log(data.html_response)
+                    
                     page = data.next_page;                    
                 },
                 error: function () {
                     console.log('Ha ocurrido un error al Asignar puntuacion a municipio.');
                 },
-                complete: function() {
-                    console.log('terminado carga')
+                complete: function() {                    
                     loading = false;
                 }
             });
-        } else {
-            console.log('No hay next_page')
-        }
+        } 
     }
 
-    $(document).ready(function() {
-        //loadMore();
+    function marcarLeido(source){        
+        
+        var notificationId = $(source).data('notification-id');        
+        var csrfToken = $("#csrf-form input[name='csrfmiddlewaretoken']").val();
+        // Realizar una solicitud AJAX para marcar la notificación como leída
+        $.ajax({
+            type: "POST",
+            url: "{% url 'mensajes:MLNotif' %}",  // Ajusta la URL de tu vista Django
+            data: {
+                'notification_id': notificationId,
+                'csrfmiddlewaretoken': csrfToken
+            },
+            success: function (data) {
+                // Manejar la respuesta del servidor si es necesario
+                console.log('Notificación marcada como leída');
+            },
+            error: function () {
+                console.error('Error al marcar la notificación como leída');
+            }
+        });
+    }
+
+    $(document).ready(function() {        
         // Carga inicial
         var primeraCarga = false;
         $("#boton-mensajes").click(function() {
@@ -46,10 +66,7 @@
             }
         });
         
-
-        console.log('aaa')
-        console.log($(document))
-        console.log('zzz')
+        
         $(document).on('scroll', function(e){
             var t = $(this);            
             //if ((t[0].scrollHeight - t.scrollTop() - t.outerHeight()) < 5) {
@@ -58,5 +75,6 @@
                 loadMore();
             } 
         });
+        
     });
 </script>
