@@ -111,9 +111,11 @@ def documentos_convocatorias(request, modalidad_id):
             for doc in request.FILES:
                 files={'file':request.FILES[doc]}
                 documento = Documento.objects.get(id=doc)
+                estado = "pendiente"
                 data={
                     'solicitud':solicitud,
-                    'documento': documento
+                    'documento': documento,
+                    'estado': estado,
                 }
                 formRespDocs = DocumentoRespForm(data=data,files=files)
                 
