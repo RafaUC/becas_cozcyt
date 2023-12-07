@@ -1,8 +1,5 @@
-<div id='contenedor-notificacion' class="">
-    <!-- Aquí se cargará la paginación a través de AJAX -->
-    <div class="spinner-border text-primary " role="status" id="cargandoNotificacion" style="display: none;">
-        <span class="visually-hidden">Cargando...</span>
-    </div>
+<div id='contenedor-notificacion' class="overflow-auto">
+    <!-- Aquí se cargará la paginación a través de AJAX -->    
 </div>
 
 <script>
@@ -38,6 +35,7 @@
     }
 
     $(document).ready(function() {
+        //loadMore();
         // Carga inicial
         var primeraCarga = false;
         $("#boton-mensajes").click(function() {
