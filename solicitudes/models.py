@@ -133,8 +133,6 @@ def calcular_puntaje(sender, instance, **kwargs):
     
     instance.puntaje = nuevoPuntaje
 
-    def __str__(self):
-        return f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
 
 
 def validador_pdf(value):
