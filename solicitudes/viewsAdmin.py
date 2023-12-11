@@ -16,7 +16,7 @@ from usuarios.models import Usuario
 from modalidades.models import ciclo_actual
 from .forms import FiltroForm
 from modalidades.models import Modalidad
-from .models import Solicitud
+from .models import *
 
 from usuarios.models import Solicitante
 
@@ -85,7 +85,7 @@ def listaSolicitudes(request):
         if 'select-soli-check' in request.POST:
             seleccion = request.POST.getlist('select-soli-check')
             seleccion = [int(id_str) for id_str in seleccion]
-        #print(f'{accion} - {todo} - {seleccion}')
+        print(f'{accion} - {todo} - {seleccion}')
         #print(f'{type(accion)} - {type(todo)} - {type(seleccion)}')
 
         if accion and seleccion:            
@@ -122,3 +122,30 @@ def listaSolicitudes(request):
         'filtroModForm': filtroModForm
     }    
     return render(request, 'admin/solicitudes.html', context)
+
+def documentos_solicitante(request, pk):
+    solicitante = get_object_or_404(Solicitante, pk=pk)  
+    solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo=ciclo_actual())
+    modalidad = Modalidad.objects.get(pk = solicitud.modalidad.pk)
+    documentos = Documento.objects.filter(modalidad=solicitud.modalidad)
+    documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)
+    listaDocumentos = zip(documentos, documentosResp)
+    # print(documentos)
+    # print(documentosResp)
+    # print(solicitud.modalidad.pk)
+    context = {
+        'solicitante': solicitante,
+        'listaDocumentos' : listaDocumentos,
+        'modalidad' : modalidad,
+    }
+    accion = None
+    if request.method == 'POST':
+        print(1)
+        if 'boton-presionado' in request.POST:
+            accion = request.POST['boton-presionado']
+            print("boton presionado")
+            print(f'{accion}')
+            if accion == 'aprobado':
+                print("aprobado")
+        messages.success(request, "Documentos de solicitud revisados con éxito.")
+    return render(request, 'admin/documentosSolicitante.html', context)

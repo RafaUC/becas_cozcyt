@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block titulo %}
-    Documentos
+    Documentos Solicitante
 {% endblock titulo %}
 
 {% block body %}
@@ -9,10 +9,11 @@
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h3 tituloModulo">
-                    Subir documentos <i>{{ modalidad.nombre }}</i>
+                    Documentación de 
+                    <b style="font-weight: 700;">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</b>
                 </p>
-                <div class="a fa-user-info px-3 align-self-center">
-                    {{ modalidad.descripcion}}
+                <div class="a fa-user-info px-3 align-self-center h5">
+                    Modalidad de <b style="font-weight: 700;">{{ modalidad.nombre}}</b>
                 </div>
                 <!-- <hr> -->
             </div>
@@ -21,9 +22,9 @@
             {% csrf_token %}
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
-                    {% for documento in documentos %}
+                    {% for documento, documentoResp in listaDocumentos %}
                     <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
-                        <div class="card card-documento">
+                        <div class="card card-documento-solicitante">
                             <div class="card-body" id="{{documento.id}}">
                                 <div class="row" style="height: 100px;">
                                     <!-- {{modalidad.id}} -->
@@ -39,18 +40,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <a href="" class="btn btnSubirDoc">
-                                Subir documento --> 
-                                <!-- Obtener el id del documento -->
-                                <!-- <div>
-                                    <label for="file-upload" class="btnSubirDoc">
-                                    {{ documentoForm.file }}
-                                    </label>
-                                </div> -->
                                 <div class="subir-documento">
-                                    <button type="button" class="btnSubirDoc">Subir documento</button>
-                                    <input type="file" name="{{documento.id}}" id="files" accept=".pdf" required>
-                                    <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
+                                    <!-- <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button> -->
+                                    <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
+                                    <input type="file" name="{{documento.id}}" id="files" accept=".pdf">
+                                    <br>
+                                    <button class="btnAceptarDocumento" type="button" value="aprobado" name="{{documentoResp.estado}}" id="botonEstado"> Aprobar </button>
+                                    <button class="btnRechazarDocumento" type="button" value="denegado" name="{{documentoResp.estado}}" id="botonEstado"> Denegar </button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -59,13 +56,14 @@
                 </div>
                 <div class="row" style="text-align: center; padding-top: 10px; padding-bottom: 20px;">
                     <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
-                        <a href="{% url 'solicitudes:convocatorias' %}" class="btn btnCancelar">
-                            Cancelar
-                        </a>
+                        {% if request.session.anterior %}
+                            <a href="{{ request.session.anterior }}" class="btn btnCancelar" role="button">
+                                Regresar
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
-                        <button type="submit" class="btn btnSubirDocs" name="guardar">Subir documentos</button>
-                    </div>
+                        <button type="submit" class="btn btnSubirDocs" name="guardar">Confirmar</button>
                 </div>
             </div>
         </form>
@@ -94,11 +92,11 @@
         })
     </script>
     <script>
-        function PreviewFile() {
-            pdffile=document.getElementById("files").files[0];
-            pdffile_url=URL.createObjectURL(pdffile);
-            $('#viewer').attr('src',pdffile_url);
-        }
+        // function PreviewFile() {
+        //     pdffile=document.getElementById("files").files[0];
+        //     pdffile_url=URL.createObjectURL(pdffile);
+        //     $('#viewer').attr('src',pdffile_url);
+        // }
     </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 {% endblock body %}
