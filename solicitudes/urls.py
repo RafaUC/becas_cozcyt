@@ -26,5 +26,6 @@ urlpatterns = [
 
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
     path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
+    path('documentosSolicitante/<int:pk>', viewsAdmin.documentos_solicitante, name="ADocumentos"),
     path('convocatorias/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
 ]

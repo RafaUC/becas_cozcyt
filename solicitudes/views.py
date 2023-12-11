@@ -56,7 +56,12 @@ def convocatorias(request):
         return redirect(url)
     
     modalidades = Modalidad.objects.all()
-    return render(request, 'usuario_solicitud/convocatorias.html', {'modalidades':modalidades})
+    convocatoria = Convocatoria.objects.all().first()
+    context = {
+        'modalidades' : modalidades,
+        'convocatoria' : convocatoria
+    }
+    return render(request, 'usuario_solicitud/convocatorias.html', context)
 
 def documentos_convocatorias(request, modalidad_id):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
@@ -83,6 +88,7 @@ def documentos_convocatorias(request, modalidad_id):
                 documento = Documento.objects.get(id=doc) 
                 documentoRespuesta = RespuestaDocumento.objects.get(documento=doc, solicitud=solicitud)
                 files=request.FILES[doc] #Se obtiene el documento que se sube
+                print(files)
                 documentoRespuesta.file.delete() #Se elimina el documento que va a ser modificado
                 documentoRespuesta.file = files #Se agrega el nuevo documento
                 documentoRespuesta.save() 
@@ -111,9 +117,11 @@ def documentos_convocatorias(request, modalidad_id):
             for doc in request.FILES:
                 files={'file':request.FILES[doc]}
                 documento = Documento.objects.get(id=doc)
+                estado = "pendiente"
                 data={
                     'solicitud':solicitud,
-                    'documento': documento
+                    'documento': documento,
+                    'estado' : estado,
                 }
                 formRespDocs = DocumentoRespForm(data=data,files=files)
                 

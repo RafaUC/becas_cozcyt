@@ -42,8 +42,11 @@ class Solicitud(models.Model):
         verbose_name_plural = 'Solicitudes'
         unique_together = ('modalidad', 'ciclo','solicitante')
     
+    # def __str__(self):
+    #     return f'Solicitud object ({self.id}) p:{self.puntaje}'
+
     def __str__(self):
-        return f'Solicitud object ({self.id}) p:{self.puntaje}'
+        return f'{self.modalidad}/  {self.solicitante}/  {self.ciclo} / p:{self.puntaje}'
 
 
 #Señal para calcular y actualizar el puntaje de una solicitud y su tipo
@@ -133,10 +136,6 @@ def calcular_puntaje(sender, instance, **kwargs):
     
     instance.puntaje = nuevoPuntaje
 
-    def __str__(self):
-        return f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
-
-
 def validador_pdf(value):
     ext = os.path.splitext(value.name)[1]  # Obtener la extensión del archivo
     valid_extensions = ['.pdf']  # Lista de extensiones permitidas
@@ -160,8 +159,15 @@ class RespuestaDocumento(models.Model):
     file = models.FileField(upload_to=documentoMediaPath, validators=[validador_pdf])
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
 
+    # def __str__(self):
+    #     return f"DocRespuesta: s:{self.solicitud_id} - {self.id} {self.documento} - {self.estado}"
+    
     def __str__(self):
-        return f"DocRespuesta: s:{self.solicitud_id} - {self.id} {self.documento} - {self.estado}"
+        return f'{self.solicitud}/ {self.documento}'
+    
+    @property
+    def filename(self) -> str:
+        return os.path.basename(self.file.name)
 
     class Meta:
         verbose_name = 'Documento de Respuesta'
@@ -201,10 +207,3 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
             solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docRevicion'      
 
     solicitud.save()
-    def __str__(self):
-        return f'{self.solicitud}/ {self.documento}'
-    
-    @property
-    def filename(self) -> str:
-        return os.path.basename(self.file.name)
-        

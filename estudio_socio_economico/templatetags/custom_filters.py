@@ -3,6 +3,8 @@ from estudio_socio_economico.models import Elemento
 import logging
 from django.db import models
 from django import forms
+from datetime import datetime
+from datetime import date
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -54,3 +56,10 @@ def model_verbose_name(obj):
     except Exception as e:
         print(e)
         return ' '
+    
+# @register.filter
+# def fecha_convocatoria(convocatoria):
+#     if (date.today() >= convocatoria.fecha_inicio) and (date.today() <= convocatoria.fecha_cierre):
+#         return True
+#     else:
+#         return False
