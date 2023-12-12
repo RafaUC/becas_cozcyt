@@ -81,14 +81,27 @@
 }
 
 .btnAceptarDocumento{
-    background-color: var(--verdeBtns);
-    border-radius: 15px; 
-    border-color: #d1d1d1;
+    background-color: var(--blanco); 
+    color: var(--btnActivo);
+    width: auto; 
+    padding: 6px;
+    font-size: small;
+    border-color: var(--letraGeneral); 
+    border-radius: 50px; 
+    border: 1.5px solid; 
+    font-weight: 530;
 }
 
 .btnRechazarDocumento{
-    background-color: var(--rosaM);
-    
+    background-color: var(--blanco); 
+    color: var(--rosaF);
+    width: auto; 
+    padding: 6px;
+    font-size: small;
+    border-color: var(--letraGeneral); 
+    border-radius: 50px; 
+    border: 1.5px solid; 
+    font-weight: 530;
 }
 
 /* Vistas usuario */
