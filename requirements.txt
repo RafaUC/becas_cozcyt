@@ -9,3 +9,5 @@ django-model-utils==4.3.1
 django-htmx==1.16.0
 django-debug-toolbar==4.2.0
 weasyprint==59.0
+django-crontab==0.7.1
+channels==4.0.0

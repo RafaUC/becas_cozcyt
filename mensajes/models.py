@@ -1,5 +1,10 @@
 from django.db import models
 from usuarios.models import Solicitante
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 # Create your models here.
 
 class Notificacion(models.Model):
@@ -18,3 +23,18 @@ class Notificacion(models.Model):
 
     def __str__(self):
         return f'Notificación de {self.solicitante} - {self.timestamp}'
+
+@receiver(post_save, sender=Notificacion)
+def notificar_nueva_notificacion(sender, instance, created, **kwargs):    
+    print('llamada a notificar_nueva_notificacion')
+    return
+    if created:
+        # Lógica para enviar la notificación al usuario
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f'user_{instance.solicitante.id}',
+            {
+                'type': 'actualizar.notificacion',
+                'mensaje': 'Has recibido una nueva notificación',
+            }
+        )

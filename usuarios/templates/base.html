@@ -105,10 +105,12 @@
                 </a>
               </li>
               <li class="nav-item">
-                <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center ">
-                  <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"> </i>
-                  mensajes
-                </button>
+                <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center position-relative">
+                  <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"></i>
+                  mensajes&nbsp;
+                  <!-- Agrega el badge de Bootstrap aquí -->
+                  <span id="badge-mensajes" class="badge bg-danger font-xxs rounded-circle translate-middle"></span>
+              </button>
               </li>
               <li class="nav-item">
                 <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
@@ -171,6 +173,40 @@
     </div>
         
     {% include 'base_custom_js.html' %}
+
+    <script>
+      function obtenerMensajesNoLeidos() {
+      // Realiza una solicitud AJAX al servidor para obtener la información
+      $.ajax({
+        url: "{% url 'mensajes:numNotifNL' %}",
+        method: "GET",
+        success: function(data) {
+          console.log(data.numero_mensajes_no_leidos)
+          // Actualiza el badge con la cantidad de mensajes no leídos
+          actualizarBadge(data.numero_mensajes_no_leidos);
+        },
+        error: function(error) {
+          console.log("Error al obtener mensajes no leídos:", error);
+        }
+      });
+    }
+
+    function actualizarBadge(numeroMensajesNoLeidos) {
+      // Oculta el badge si no hay mensajes no leídos
+      if (numeroMensajesNoLeidos > 0) {
+        $("#badge-mensajes").text(numeroMensajesNoLeidos);
+        $("#badge-mensajes").show();
+      } else {
+        $("#badge-mensajes").hide();
+      }
+    }
+
+    $(document).ready(function() {
+      // Llama a la función para obtener el número de mensajes no leídos
+      obtenerMensajesNoLeidos();
+    });
+
+    </script>
 
   </body>
 </html>
