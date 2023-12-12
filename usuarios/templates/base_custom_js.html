@@ -1,31 +1,42 @@
 <script> 
-    function isNumberKey(evt) {
-      var charCode = (evt.which) ? evt.which : evt.keyCode
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
+
+  const socket = new WebSocket('ws://' + window.location.host + '/ws/notificaciones/');
+
+  socket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      // Actualizar la interfaz de usuario con el mensaje recibido
+      console.log(data.mensaje);
+  }
+
+  function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+      return false;
+    return true;
+  }
+
+  function isNumberPuntKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode === 46 || charCode === 58) 
       return true;
-    }
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+      return false;
+    return true;
+  }
 
-    function isNumberPuntKey(evt) {
-      var charCode = (evt.which) ? evt.which : evt.keyCode
-      if (charCode === 46 || charCode === 58) 
-        return true;
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
-      return true;
-    }
+  function updateTooltips(){
+      $('[data-bs-original-title]').each(function(){
+          $(this).tooltip('update');
+      });
+  }
 
-    function updateTooltips(){
-        $('[data-bs-original-title]').each(function(){
-            $(this).tooltip('update');
-        });
-    }
+  $(document).ready(function() {      
+    updateTooltips();
+        
+    $('.hidden-ready').removeClass('hidden-ready');
+    $('#modal-base-modal').modal('hide');
+  });
 
-    $(document).ready(function() {      
-      updateTooltips();
-          
-      $('.hidden-ready').removeClass('hidden-ready');
-      $('#modal-base-modal').modal('hide');
-    });
+    
 
   </script>
