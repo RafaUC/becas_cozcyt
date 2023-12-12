@@ -44,10 +44,11 @@
                                     <!-- <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button> -->
                                     <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
                                     <input type="file" name="{{documento.id}}" id="files" accept=".pdf">
-                                    <br>
+                                    <p></p>
+                                    <!-- Cambiar aqui a inputs -->
                                     <button class="btnAceptarDocumento" type="button" value="aprobado" name="{{documentoResp.estado}}" id="botonEstado"> Aprobar </button>
-                                    <button class="btnRechazarDocumento" type="button" value="denegado" name="{{documentoResp.estado}}" id="botonEstado"> Denegar </button>
-                                    
+                                    <button class="btnRechazarDocumento" type="button" value="denegado" name="{{documentoResp.estado}}" id="botonEstado"> Rechazar </button>
+                                    <p></p>{{ documentoResp.estado }}
                                 </div>
                             </div>
                         </div>

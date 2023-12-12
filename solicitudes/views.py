@@ -69,7 +69,8 @@ def documentos_convocatorias(request, modalidad_id):
     if url: 
         return redirect(url)
     
-    if Solicitud.objects.filter(solicitante=solicitante, modalidad=modalidad_id).exists():
+    #Si el usuario ya subió su documentación se le muestra la vista para modificar sus documentos
+    if Solicitud.objects.filter(solicitante=solicitante, modalidad=modalidad_id, ciclo = ciclo_actual()).exists():
         usuario = get_object_or_404(Usuario, pk=request.user.id) 
         solicitante = usuario.solicitante
         modalidad = Modalidad.objects.get(pk = modalidad_id)
@@ -98,37 +99,46 @@ def documentos_convocatorias(request, modalidad_id):
 
         return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)
       
+    #Si el usuario aún no sube documentación para la modalidad elegida, se le muestra la vista para subir sus documentos
     else:      
         usuario = get_object_or_404(Usuario, pk=request.user.id) 
         solicitante = usuario.solicitante
         modalidad = Modalidad.objects.get(pk = modalidad_id)
         documentos = Documento.objects.filter(modalidad__id=modalidad_id)
+        convocatoria = Convocatoria.objects.all().first()
         
         context ={
             'modalidad': modalidad,
-            'documentos': documentos
+            'documentos': documentos,
+            'convocatoria' : convocatoria,
         }
         
         if request.method == 'POST':
-            solicitud = Solicitud.objects.create(
-                modalidad=modalidad,
-                solicitante = solicitante
-            )
-            for doc in request.FILES:
-                files={'file':request.FILES[doc]}
-                documento = Documento.objects.get(id=doc)
-                estado = "pendiente"
-                data={
-                    'solicitud':solicitud,
-                    'documento': documento,
-                    'estado' : estado,
-                }
-                formRespDocs = DocumentoRespForm(data=data,files=files)
-                
-                if formRespDocs.is_valid():
-                    formRespDocs.save()
-            messages.success(request, "Solicitud creada con éxito")
-            return redirect("solicitudes:convocatorias")
+            
+            if Solicitud.objects.filter(solicitante=solicitante, ciclo = ciclo_actual()).exists(): #El solicitante ya tiene una solicitud del ciclo actual
+                solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
+                messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+            
+            else: #El solicitante no ha hecho una solicitud en el ciclo actual
+                solicitud = Solicitud.objects.create(
+                    modalidad=modalidad,
+                    solicitante = solicitante
+                )
+                for doc in request.FILES:
+                    files={'file':request.FILES[doc]}
+                    documento = Documento.objects.get(id=doc)
+                    estado = "pendiente"
+                    data={
+                        'solicitud':solicitud,
+                        'documento': documento,
+                        'estado' : estado,
+                    }
+                    formRespDocs = DocumentoRespForm(data=data,files=files)
+                    
+                    if formRespDocs.is_valid():
+                        formRespDocs.save()
+                messages.success(request, "Solicitud creada con éxito")
+                return redirect("solicitudes:convocatorias")
         
         return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
     

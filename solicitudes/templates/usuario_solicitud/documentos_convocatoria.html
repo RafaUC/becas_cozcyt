@@ -26,7 +26,6 @@
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
                                 <div class="row" style="height: 100px;">
-                                    <!-- {{modalidad.id}} -->
                                     <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
                                     <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
                                 </div>
@@ -39,14 +38,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <a href="" class="btn btnSubirDoc">
-                                Subir documento --> 
-                                <!-- Obtener el id del documento -->
-                                <!-- <div>
-                                    <label for="file-upload" class="btnSubirDoc">
-                                    {{ documentoForm.file }}
-                                    </label>
-                                </div> -->
                                 <div class="subir-documento">
                                     <button type="button" class="btnSubirDoc">Subir documento</button>
                                     <input type="file" name="{{documento.id}}" id="files" accept=".pdf" required>
@@ -64,7 +55,11 @@
                         </a>
                     </div>
                     <div class="col-md" style="padding-top: 10px; padding-bottom: 10px;">
+                        {% if convocatoria.fecha_convocatoria %}
                         <button type="submit" class="btn btnSubirDocs" name="guardar">Subir documentos</button>
+                        {% else %}
+                        <button type="button" class="btn btnSubirDocs" name="guardar" disabled>Subir documentos</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
