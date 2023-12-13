@@ -22,14 +22,20 @@
                             <h5 class="card-title">{{modalidad.nombre}}</h5>
                             <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
                             <br>
-                            {% if convocatoria.fecha_convocatoria %} 
+                            {% if modalidad.pk == solicitud_existe.modalidad.pk %} 
+                                <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
+                                    <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 170px; border-radius: 50px;">
+                                    Mis documentos
+                                    </button>
+                                </a>
+                            {% elif convocatoria.fecha_convocatoria %}
                                 <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
                                     <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 170px; border-radius: 50px;">
                                     Solicitar
                                     </button>
                                 </a>
                             {% else %}
-                                <button href="" class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 170px; border-radius: 50px;" disabled>
+                                <button class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 170px; border-radius: 50px;" disabled>
                                 Solicitar
                                 </button>
                             {% endif %}

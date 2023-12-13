@@ -17,25 +17,10 @@ class ConvocatoriaForm(ModelForm):
             'presupuesto' : '',
             }
         widgets = {
-            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'placeholder' : '$999,999.99', 'style':'resize:none; width:auto;'}),
+            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
             'fecha_inicio': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_inicio', 'type':'date', 'style':'width:auto;'}),
             'fecha_cierre': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_cierre', 'type':'date', 'style':'width:auto;'}),
         }
-    # fecha_inicio = forms.DateField(
-    #     widget = forms.DateInput(
-    #         attrs={
-    #             'class':'config-general-inputs form-control', 'id':'fecha_inicio', 'type':'date', 'style':'width:auto;'
-    #         }
-    #     )
-    # )
-    # fecha_cierre = forms.DateField(
-    #     widget = forms.DateInput(
-    #         attrs={
-    #             'class':'config-general-inputs form-control', 'id':'fecha_cierre', 'type':'date', 'style':'width:auto;'
-    #         }
-    #     )
-    # )
-
 
 class ModalidadForm(ModelForm):
     error_css_class = 'error-field'
