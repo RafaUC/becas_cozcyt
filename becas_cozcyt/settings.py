@@ -26,10 +26,6 @@ SECRET_KEY = 'django-insecure-%l2!-7+%fqz_(bmjzm=@($a_ys5oq=-t#v%f2=^tt0(8s%1a0&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if False: #if DEBUG: #
-    import socket  # only if you haven't already imported this
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -51,12 +47,10 @@ INSTALLED_APPS = [
     'modalidades',
     'solicitudes',
     'estudio_socio_economico',
-    'debug_toolbar',
     'django_crontab',    
 ]
 
-MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+MIDDLEWARE = [    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -176,7 +170,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 9000
 
 #Tareas periodicas a ejecutar
 CRONJOBS = [    
-    ('0 0 * * *', 'mensajes.management.commands.delete_old_notifications.delete_old_notif'),    
+    ('0 0 * * *', 'mensajes.management.commands.delete_old_notifications.delete_old_notif'),    #ejecutar a media noche todos los dias
 ]
 
 
