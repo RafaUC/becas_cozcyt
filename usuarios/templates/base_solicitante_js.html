@@ -1,0 +1,44 @@
+<script>   
+
+    function obtenerMensajesNoLeidos() {
+        // Realiza una solicitud AJAX al servidor para obtener la información
+        $.ajax({
+        url: "{% url 'mensajes:numNotifNL' %}",
+        method: "GET",
+        success: function(data) {            
+            // Actualiza el badge con la cantidad de mensajes no leídos
+            actualizarBadge(data.numero_mensajes_no_leidos);
+        },
+        error: function(error) {
+            console.log("Error al obtener mensajes no leídos:", error);
+        }
+        });
+    }
+
+    function actualizarBadge(numeroMensajesNoLeidos) {
+        // Oculta el badge si no hay mensajes no leídos
+        if (numeroMensajesNoLeidos > 0) {
+            $("#badge-mensajes").text(numeroMensajesNoLeidos);
+            $("#badge-mensajes").show();
+        } else {
+            $("#badge-mensajes").hide();
+        }
+    }
+
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/notificaciones/');
+
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        // Actualizar la interfaz de usuario con el mensaje recibido        
+        if (data.mensaje == 'nuevaNotificacion'){
+            obtenerMensajesNoLeidos()
+            resetMessages()
+        }
+    }
+
+    $(document).ready(function() {
+        // Llama a la función para obtener el número de mensajes no leídos
+        obtenerMensajesNoLeidos();
+    });
+
+  </script>

@@ -9,9 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-from django.urls.base import reverse_lazy
 import os
-from pathlib import Path
 
 
 
@@ -39,6 +37,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'solicitudes',
     'estudio_socio_economico',
     'debug_toolbar',
+    'django_crontab',    
 ]
 
 MIDDLEWARE = [
@@ -171,3 +172,20 @@ EMAIL_USE_TLS = True
 PASSWORD_RESET_TIMEOUT = 86400 #El usuario cuenta con 24 horas para confirmar su cuenta.
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 9000
+
+
+#Tareas periodicas a ejecutar
+CRONJOBS = [    
+    ('0 0 * * *', 'mensajes.management.commands.delete_old_notifications.delete_old_notif'),    
+]
+
+
+ASGI_APPLICATION = 'becas_cozcyt.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
