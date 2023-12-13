@@ -47,8 +47,7 @@ urlpatterns = [
 
 
     ### urls Administrador ###
-    path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),    
-    path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
+    path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),        
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
     path('administracion/instituciones', viewsAdmin.listaInstituciones, name='AInstituciones'),
     path('administracion/crearInstitucion/', viewsAdmin.crearEditarInstitucion, name='ACrearInstitucion'),

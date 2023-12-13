@@ -25,14 +25,6 @@ def inicio(request):
 
 
 
-@login_required
-def estadisticas(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
-    return render(request, 'admin/estadisticas.html')
 
 
 CLASE_CAMPOS_BUSQUEDA = {'foreignKey': models.ForeignKey, 'manyToOne': models.ManyToOneRel, 'manyToMany': models.ManyToManyField, 'oneToOne': models.OneToOneRel}
