@@ -809,8 +809,8 @@ i.rechazado:before {
 }
 
 .leidoTrue {
-  background-color: var(--barra-lateral-fondo);
-  color: var(--gris-7);
+  background-color: var(--gris-1);
+  color: var(--gris-5);
 }
 
 .leidoTrue:hover .leidoFalse:hover {

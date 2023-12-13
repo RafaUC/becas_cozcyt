@@ -1,13 +1,5 @@
 <script> 
 
-  const socket = new WebSocket('ws://' + window.location.host + '/ws/notificaciones/');
-
-  socket.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      // Actualizar la interfaz de usuario con el mensaje recibido
-      console.log(data.mensaje);
-  }
-
   function isNumberKey(evt) {
     var charCode = (evt.which) ? evt.which : evt.keyCode
     if (charCode > 31 && (charCode < 48 || charCode > 57))

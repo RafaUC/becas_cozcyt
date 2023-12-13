@@ -25,16 +25,14 @@ class Notificacion(models.Model):
         return f'Notificación de {self.solicitante} - {self.timestamp}'
 
 @receiver(post_save, sender=Notificacion)
-def notificar_nueva_notificacion(sender, instance, created, **kwargs):    
-    print('llamada a notificar_nueva_notificacion')
-    return
+def notificar_nueva_notificacion(sender, instance, created, **kwargs):        
     if created:
         # Lógica para enviar la notificación al usuario
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             f'user_{instance.solicitante.id}',
             {
-                'type': 'actualizar.notificacion',
-                'mensaje': 'Has recibido una nueva notificación',
+                'type': 'notificar_notificacion',
+                'mensaje': 'nuevaNotificacion',
             }
-        )
+        )        
