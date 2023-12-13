@@ -12,5 +12,5 @@ class Command(BaseCommand):
 
 def delete_old_notif():
     print('Borrando notificaciones mas antiguas a 3 meses')
-    three_months_ago = timezone.now() - timedelta(days=1)
+    three_months_ago = timezone.now() - timedelta(days=90)
     Notificacion.objects.filter(timestamp__lt=three_months_ago).delete()
