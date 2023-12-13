@@ -56,6 +56,7 @@
     margin-left: 10px;
     margin-right: 10px;
     width: auto;
+    font-size: medium !important;
 }
 #documentoMod{
     text-align: right; 
@@ -69,6 +70,38 @@
     /* border-color: #a3a3a3; */
     border: 1px solid;
     padding: 5px 5px 5px 5px;
+}
+
+/* Documentos Solicitante */
+.card-documento-solicitante{
+    text-align: center; 
+    height: 420px;
+    border-radius: 15px; 
+    border-color: #d1d1d1;
+}
+
+.btnAceptarDocumento{
+    background-color: var(--blanco); 
+    color: var(--btnActivo);
+    width: auto; 
+    padding: 6px;
+    font-size: small;
+    border-color: var(--letraGeneral); 
+    border-radius: 50px; 
+    border: 1.5px solid; 
+    font-weight: 530;
+}
+
+.btnRechazarDocumento{
+    background-color: var(--blanco); 
+    color: var(--rosaF);
+    width: auto; 
+    padding: 6px;
+    font-size: small;
+    border-color: var(--letraGeneral); 
+    border-radius: 50px; 
+    border: 1.5px solid; 
+    font-weight: 530;
 }
 
 /* Vistas usuario */

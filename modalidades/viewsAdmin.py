@@ -12,7 +12,7 @@ from .utils import *
 
 # Create your views here.
 def configGeneral(request):
-    obj = Convocatoria.objects.all().first()
+    obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
 
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere

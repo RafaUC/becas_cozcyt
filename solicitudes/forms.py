@@ -25,6 +25,7 @@ class DocumentoRespForm(ModelForm):
         fields = '__all__'
         labels = {
             'file' : '',
+            'estado' : '',
         }
         # exclude = ('solicitud','documento',)
         widgets = {
