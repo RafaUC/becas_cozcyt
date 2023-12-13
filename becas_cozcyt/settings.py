@@ -176,7 +176,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 9000
 
 #Tareas periodicas a ejecutar
 CRONJOBS = [    
-    ('0 0 * * *', 'mensajes.management.commands.delete_old_notifications.delete_old_notif'),    
+    ('0 0 * * *', 'mensajes.management.commands.delete_old_notifications.delete_old_notif'),    #ejecutar a media noche todos los dias
 ]
 
 
