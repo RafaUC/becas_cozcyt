@@ -27,6 +27,15 @@ from usuarios.models import Solicitante
 ##########################################
 
 @login_required
+def estadisticas(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    return render(request, 'estadisticas/estadisticas.html')
+
+@login_required
 def historialSolicitante(request, pk):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
