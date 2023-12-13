@@ -140,3 +140,4 @@ dmypy.json
 
 #.png
 #.pdf
+*.rdb

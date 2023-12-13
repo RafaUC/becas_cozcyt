@@ -11,12 +11,31 @@ from django.urls import reverse
 from django.http import JsonResponse
 from usuarios.views import verificarRedirect
 from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
+
+
 
 from usuarios.models import Usuario, Solicitante
 from .models import Notificacion
 from . import notificaciones as notif
 
 # Create your views here.
+
+@require_http_methods(["GET"])
+def numNotifNL(request):
+    # Lógica para contar los mensajes no leídos (ajusta según tu modelo)
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
+    notificaciones = Notificacion.objects.filter(solicitante=solicitante) 
+    numero_mensajes_no_leidos = 0
+    for notificacion in notificaciones:
+        if notificacion.leido:            
+            break
+        else:            
+            numero_mensajes_no_leidos += 1
+
+
+    # Devuelve la respuesta como JSON
+    return JsonResponse({'numero_mensajes_no_leidos': numero_mensajes_no_leidos})
 
 
 def renderNotificaciones(request):
@@ -27,7 +46,7 @@ def renderNotificaciones(request):
     
     page = request.GET.get('page', 1)    
     notificaciones = Notificacion.objects.filter(solicitante=solicitante)    
-    paginator = Paginator(notificaciones, 12)
+    paginator = Paginator(notificaciones, 20)
     currentPage = paginator.get_page(page)
     if currentPage.has_next():
         next_page_number = currentPage.next_page_number()
