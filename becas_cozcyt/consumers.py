@@ -18,7 +18,7 @@ class NotificacionConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def actualizar_notificacion(self, event):
+    async def notificar_notificacion(self, event):
         mensaje = event['mensaje']
 
         # Envía el mensaje al cliente

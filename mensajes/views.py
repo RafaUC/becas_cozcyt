@@ -46,7 +46,7 @@ def renderNotificaciones(request):
     
     page = request.GET.get('page', 1)    
     notificaciones = Notificacion.objects.filter(solicitante=solicitante)    
-    paginator = Paginator(notificaciones, 12)
+    paginator = Paginator(notificaciones, 20)
     currentPage = paginator.get_page(page)
     if currentPage.has_next():
         next_page_number = currentPage.next_page_number()

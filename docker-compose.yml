@@ -4,7 +4,7 @@ services:
         build: .
         container_name: sistema_becas
         #restart: always
-        command: sh -c "cron && python3 manage.py crontab add && python3 manage.py runserver 0.0.0.0:8000"
+        command: sh -c "cron && python3 manage.py crontab add && redis-server & python3 manage.py runserver 0.0.0.0:8000"
         depends_on:
             - db-becas
         links:

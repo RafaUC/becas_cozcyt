@@ -37,6 +37,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,8 +52,7 @@ INSTALLED_APPS = [
     'solicitudes',
     'estudio_socio_economico',
     'debug_toolbar',
-    'django_crontab',
-    'channels',
+    'django_crontab',    
 ]
 
 MIDDLEWARE = [
@@ -180,3 +181,11 @@ CRONJOBS = [
 
 
 ASGI_APPLICATION = 'becas_cozcyt.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

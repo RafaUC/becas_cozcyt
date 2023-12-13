@@ -174,39 +174,11 @@
         
     {% include 'base_custom_js.html' %}
 
-    <script>
-      function obtenerMensajesNoLeidos() {
-      // Realiza una solicitud AJAX al servidor para obtener la información
-      $.ajax({
-        url: "{% url 'mensajes:numNotifNL' %}",
-        method: "GET",
-        success: function(data) {
-          console.log(data.numero_mensajes_no_leidos)
-          // Actualiza el badge con la cantidad de mensajes no leídos
-          actualizarBadge(data.numero_mensajes_no_leidos);
-        },
-        error: function(error) {
-          console.log("Error al obtener mensajes no leídos:", error);
-        }
-      });
-    }
+    {% if not perms.usuarios.permiso_administrador or not request.user.is_superuser == 1 %}
+      {% include 'base_solicitante_js.html' %}
+    {% endif %}
 
-    function actualizarBadge(numeroMensajesNoLeidos) {
-      // Oculta el badge si no hay mensajes no leídos
-      if (numeroMensajesNoLeidos > 0) {
-        $("#badge-mensajes").text(numeroMensajesNoLeidos);
-        $("#badge-mensajes").show();
-      } else {
-        $("#badge-mensajes").hide();
-      }
-    }
-
-    $(document).ready(function() {
-      // Llama a la función para obtener el número de mensajes no leídos
-      obtenerMensajesNoLeidos();
-    });
-
-    </script>
+    
 
   </body>
 </html>

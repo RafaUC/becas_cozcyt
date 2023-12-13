@@ -9,8 +9,7 @@
     var page = 1;  
     const nurl = "{% url 'mensajes:cNotif'%}"
 
-    function loadMore() {
-        console.log(`${page} -- ${!loading && page != null}`)
+    function loadMore() {        
         if (!loading && page != null) {
             loading = true;
             $.ajax({
@@ -18,8 +17,7 @@
                 data: { page: page },      
                 dataType: 'json',          
                 success: function(data) {                                      
-                    $('#contenedor-notificacion').append(data.html_response);
-                    console.log('cargados los mensajes')
+                    $('#contenedor-notificacion').append(data.html_response);                    
                     
                     page = data.next_page;                    
                 },
@@ -79,8 +77,7 @@
         $('#contenedor-notificacion').on('scroll', function(e){
             var t = $(this);            
             if ((t[0].scrollHeight - t.scrollTop() - t.outerHeight()) < 5) {
-            //if ((t.outerHeight() - $(window).scrollTop() - $(window).height() ) < 5) {
-                console.log('scroll bottom');
+            //if ((t.outerHeight() - $(window).scrollTop() - $(window).height() ) < 5) {                
                 loadMore();
             } 
         });

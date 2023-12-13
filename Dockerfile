@@ -5,7 +5,8 @@ RUN apt update
 RUN apt -y upgrade
 RUN apt-get -y install python3 python3-pip libmariadb-dev \
     python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 \
-    nano cron
+    nano cron \
+    lsb-release curl gpg redis
     
 # Configure timezone
 ENV TZ=America/Mexico_City
