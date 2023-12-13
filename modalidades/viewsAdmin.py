@@ -14,6 +14,10 @@ from .utils import *
 def configGeneral(request):
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
+    
+    convocatoria_existe = None
+    if Convocatoria.objects.exists():
+            convocatoria_existe = True
 
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
         convocatoriaForm = ConvocatoriaForm(request.POST or None, instance = obj)
@@ -31,6 +35,7 @@ def configGeneral(request):
 
 
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
+        
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(data = request.POST)
             if convocatoriaForm.is_valid():
@@ -49,7 +54,7 @@ def configGeneral(request):
             else:
                 print("convocatoria no valida")
 
-    context = {'convocatoria':convocatoriaForm }
+    context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
     return render(request, 'admin/config_general.html', context)
 
 def configModalidades(request): #se muestran las modalidades
