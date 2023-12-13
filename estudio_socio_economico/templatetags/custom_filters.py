@@ -5,6 +5,8 @@ from django.db import models
 from django import forms
 from django.utils.timesince import timesince
 from django.utils import timezone
+from datetime import datetime
+from datetime import date
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -78,3 +80,9 @@ def elapsed_time(timestamp):
         formatted_time += f"{minutes}m"
 
     return formatted_time.strip()
+# @register.filter
+# def fecha_convocatoria(convocatoria):
+#     if (date.today() >= convocatoria.fecha_inicio) and (date.today() <= convocatoria.fecha_cierre):
+#         return True
+#     else:
+#         return False
