@@ -31,9 +31,9 @@ class Solicitud(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=False)
     solicitante = models.ForeignKey(Solicitante, on_delete=models.CASCADE, null=False)
     ciclo = models.CharField(max_length=50, default=ciclo_actual(), editable=False, null=False)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='docPendiente')
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default=ESTADO_CHOICES[0][0])
     puntaje = models.IntegerField(default=0) 
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='ingreso')
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[1][0])
 
     readonly_fields = ('ciclo',)
     class Meta:

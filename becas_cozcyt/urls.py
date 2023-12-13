@@ -33,6 +33,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)
 
 
-if False: # if settings.DEBUG:#
-    urlpatterns += path("__debug__/", include("debug_toolbar.urls")),
 
