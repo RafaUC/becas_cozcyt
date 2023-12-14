@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 import colorsys
+from django.db.models import Count
 
 
 from usuarios.views import verificarRedirect
@@ -40,8 +41,7 @@ def GeneradorColores(color_inicial, incremento_luminosidad, min_luminosidad, max
     """
     r, g, b = color_inicial
 
-    while True:
-        hswitch = False
+    while True:        
         # Convertir RGB a HSL
         h, l, s = colorsys.rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
 
@@ -50,22 +50,21 @@ def GeneradorColores(color_inicial, incremento_luminosidad, min_luminosidad, max
         h += incremento_hue
 
         # Verificar límites de luminosidad
-        if l < min_luminosidad:
-            hswitch = True 
+        if l < min_luminosidad:            
             l = max_luminosidad - (min_luminosidad-l) 
             if l < min_luminosidad:
                 l = min_luminosidad            
-        elif l > max_luminosidad:
-            hswitch = True
+        elif l > max_luminosidad:            
             l = min_luminosidad + (l-max_luminosidad)
             if l > max_luminosidad:
                 l = max_luminosidad
-            
-        if hswitch:
-            h += incremento_hue
+                    
+        h += incremento_hue
         # Verificar límite de tono (Hue)
         if h > 1.0 or h < 0.0:
             h %= 1.0
+
+        s = l
 
         # Convertir HSL a RGB
         r, g, b = [int(x * 255.0) for x in colorsys.hls_to_rgb(h, l, s)]        
@@ -140,8 +139,60 @@ def estadisticaSolicitudes(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return HttpResponse("", status=401)
 
+    #config colores
+    colorInicial = (1, 0, 0)  # Color inicial en formato RGB
+    incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
+    minLuminosidad = 0.35  # Límite de la luminosidad antes de cambiar el tono
+    maxLuminosidad = 0.75  # Límite de la luminosidad antes de cambiar el tono    
+    incrementoHue = 0.011  # Incremento/decremento en el tono
+
+    conjuntosEstadisticos = []
+    valoresFrecuencias = Solicitud.objects.values('estado').annotate(frecuencia=Count('estado'))
+    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
+    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['estado'], item['estado']) for item in valoresFrecuencias ]    
+    data = [item['frecuencia'] for item in valoresFrecuencias]
+    dataLabel = 'Solicitudes'
+
+    '''
+    import random
+    labels = [f"label {i + 1}" for i in range(50)]    
+    data = [random.randint(1, 100) for _ in range(50)]
+    data = sorted(data, reverse=True)
+    #'''
+
+    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)    
+    listaColores = [next(generadorColores) for _ in data]
+
+    conjuntoEst = {
+        'grafico': {
+            'type': 'pie',
+            'data': {
+                'labels': labels,
+                'datasets': [{
+                    'label': dataLabel,
+                    'data': data,
+                    'backgroundColor': [f'rgba({r}, {g}, {b}, 1)' for r, g, b in listaColores], 
+                    'borderColor': 'rgba(255,255,255,0.2)', 
+                    'borderWidth': 2,
+                    'hoverOffset': 20,
+                }]
+            },
+            'options': {
+                'plugins': {
+                    'legend': {
+                        'display': False
+                    }, 
+                },
+                'layout': {
+                    'padding': 10
+                }               
+            }
+        }
+    }
+    conjuntosEstadisticos.append(conjuntoEst)
+
     context = {
-        
+        'conjuntosEstadisticos': conjuntosEstadisticos
     }
     
     return render(request, 'estadisticas/eSolicitudes.html', context)
