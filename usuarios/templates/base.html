@@ -107,13 +107,13 @@
               <li class="nav-item">
                 <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center position-relative">
                   <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"></i>
-                  mensajes&nbsp;
+                  Mensajes&nbsp;
                   <!-- Agrega el badge de Bootstrap aquí -->
                   <span id="badge-mensajes" class="badge bg-danger font-xxs rounded-circle translate-middle"></span>
               </button>
               </li>
               <li class="nav-item">
-                <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if url_name == 'convocatorias' %}active{% endif %} h4">
+                <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if 'onvocatoria' in url_name %}active{% endif %} h4">
                   <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
                   Convocatoria
                 </a>
