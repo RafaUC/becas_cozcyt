@@ -30,4 +30,5 @@ urlpatterns = [
     path('convocatorias/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
 
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
+    path('administracion/estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
 ]
