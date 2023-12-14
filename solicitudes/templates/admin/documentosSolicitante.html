@@ -44,25 +44,27 @@
                                     <div class="row">
                                         <div class="documentoSolicitante">
                                             <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
-                                            <input type="file" name="{{documento.id}}" id="files" accept=".pdf">
-                                            <p></p>
+                                            
                                         </div>
                                     </div>
-                                    <!-- Cambiar aqui a inputs -->
                                     <div class="row">
                                         <div class="botonesEstado">
-                                            <button type="button" class="btnAceptarDocumento" value="aprobado" name="estado" id="botonEstado"> 
-                                                <i class="fa fa-check px-2 align-self-center" aria-hidden="true"></i> 
-                                            </button>
-                                            <input class="checkbox-principal" type="checkbox" id="boton-estado" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
-                                            <!-- <input type="button" name="{{documento.id}}" value="aceptado" id="botonEstado"> -->
-                                        
-                                            <button type="button" class="btnRechazarDocumento" value="denegado" name="estado" id="botonEstado"> 
-                                                <i class="fa fa-warning px-2 align-self-center" aria-hidden="true"></i> </button>
-                                            </button>
-                                            <input class="checkbox-principal" type="checkbox" id="boton-estado" name="estado-boton-denegado" value="{{ documentoResp.id }}">    
-                                            <!-- <input type="button" name="{{documento.id}}" value="denegado" id="botonEstado"> -->
-                                            <p></p>
+                                            <div class="div" style="text-align: center !important; padding-top: 5px;">
+                                                <div class="child col-sm-3" style="display: inline-block;">
+                                                    {% if documentoResp.estado == "aprobado" %}
+                                                    <input class="checkbox-docs-aceptar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-aceptado" value="{{ documentoResp.id }}" checked>
+                                                    {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "denegado"%}
+                                                    <input class="checkbox-docs-aceptar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="child col-sm-3" style="display: inline-block;">
+                                                    {% if documentoResp.estado == "denegado" %}
+                                                    <input class="checkbox-docs-rechazar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-denegado" value="{{ documentoResp.id }}" checked>
+                                                    {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "aprobado"%}
+                                                    <input class="checkbox-docs-rechazar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
+                                                    {% endif %}
+                                                </div>
+                                            </div>
                                             {{ documentoResp.estado }}
                                         </div>
                                     </div>
