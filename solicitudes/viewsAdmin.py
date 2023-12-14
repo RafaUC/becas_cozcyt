@@ -2,17 +2,19 @@ from django.shortcuts import render, get_object_or_404
 import os
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.http import HttpResponse
 from django.http import FileResponse
 from .models import RespuestaDocumento, Solicitud
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
+import colorsys
 
 
 from usuarios.views import verificarRedirect
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
-from usuarios.models import Usuario
+from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual
 from .forms import FiltroForm
 from modalidades.models import Modalidad
@@ -26,14 +28,124 @@ from usuarios.models import Solicitante
 #no cache a las subidas al servidor
 ##########################################
 
+def GeneradorColores(color_inicial, incremento_luminosidad, min_luminosidad, max_luminosidad, incremento_hue):
+    """
+    Genera colores a partir de un color inicial, ajustando luminosidad y tono.
+    
+    :param color_inicial: Tupla (r, g, b) con valores en el rango [0, 255].
+    :param incremento_luminosidad: Incremento/decremento en la luminosidad en el rango [-1, 1].
+    :param limite_luminosidad: Límite de la luminosidad antes de cambiar el tono.
+    :param incremento_hue: Incremento/decremento en el tono en el rango [-1, 1].
+    :return: Generador de colores (tuplas) en formato (r, g, b).
+    """
+    r, g, b = color_inicial
+
+    while True:
+        hswitch = False
+        # Convertir RGB a HSL
+        h, l, s = colorsys.rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
+
+        # Ajustar luminosidad y hue
+        l += incremento_luminosidad
+        h += incremento_hue
+
+        # Verificar límites de luminosidad
+        if l < min_luminosidad:
+            hswitch = True 
+            l = max_luminosidad - (min_luminosidad-l) 
+            if l < min_luminosidad:
+                l = min_luminosidad            
+        elif l > max_luminosidad:
+            hswitch = True
+            l = min_luminosidad + (l-max_luminosidad)
+            if l > max_luminosidad:
+                l = max_luminosidad
+            
+        if hswitch:
+            h += incremento_hue
+        # Verificar límite de tono (Hue)
+        if h > 1.0 or h < 0.0:
+            h %= 1.0
+
+        # Convertir HSL a RGB
+        r, g, b = [int(x * 255.0) for x in colorsys.hls_to_rgb(h, l, s)]        
+        yield r, g, b
+
+
+
 @login_required
 def estadisticas(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
+
+    colorInicial = (190, 70, 53)  # Color inicial en formato RGB
+    incrementoIuminosidad = 0.1  # Incremento/decremento en la luminosidad
+    minLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono
+    maxLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono    
+    incrementoHue = 0.03  # Incremento/decremento en el tono
     
-    return render(request, 'estadisticas/estadisticas.html')
+    solicitudes = Solicitud.objects.filter(ciclo=ciclo_actual()).select_related('solicitante__municipio')
+    municipiosParticipando = solicitudes.values('solicitante__municipio__id').distinct().count()
+
+    tarjetasEstadisticas = [ #Lista de diccionarios que contienen la informacion de las tarjetas de cada estadistica
+        {
+            'titulo': 'Solicitudes recibidas',
+            'iconCSS': 'fa-inbox',
+            'valor': solicitudes.count(),
+            'url': 'solicitudes:ESolicitudes'
+        },
+        {
+            'titulo': 'Modalidades',
+            'iconCSS': 'fa-object-group',
+            'valor': Modalidad.objects.all().count(),
+            'url': 'solicitudes:ESolicitudes'
+        },
+        {
+            'titulo': 'Instituciones registradas',
+            'iconCSS': 'fa-object-group',
+            'valor': Institucion.objects.all().count(),
+            'url': 'solicitudes:ESolicitudes'
+        },
+        {
+            'titulo': 'Carreras registradas',
+            'iconCSS': 'fa-object-group',
+            'valor': Carrera.objects.all().count(),
+            'url': 'solicitudes:ESolicitudes'
+        },        
+        {
+            'titulo': 'Municipios participantes',
+            'iconCSS': 'fa-object-group',
+            'valor': municipiosParticipando,
+            'url': 'solicitudes:ESolicitudes'
+        },
+        
+    ]
+
+    # Asignar los colores de fondo
+    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)    
+    for tarjetaDict in tarjetasEstadisticas:
+        tarjetaDict['rgb'] = next(generadorColores)
+
+    context = {
+        'tarjetasEstadisticas': tarjetasEstadisticas
+    }
+    
+    return render(request, 'estadisticas/estadisticas.html', context)
+
+
+def estadisticaSolicitudes(request):
+    url = verificarRedirect(request.user, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+
+    context = {
+        
+    }
+    
+    return render(request, 'estadisticas/eSolicitudes.html', context)
+
 
 @login_required
 def historialSolicitante(request, pk):
