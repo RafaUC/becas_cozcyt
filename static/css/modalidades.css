@@ -114,6 +114,45 @@
     color: var(--blanco);
 }
 
+/* Documentos solicitante - Checkbox */
+/* input[type="checkbox"] { 
+    display: none;
+} */
+
+.checkbox-docs-aceptar{
+    height: 35px;
+    width: 35px;
+    border-radius: 20px !important;
+    border-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar{
+    height: 35px;
+    width: 35px;
+    border-radius: 20px !important;
+    border-color: var(--rosaF);
+}
+
+.checkbox-docs-aceptar.form-check-input:hover{
+    background-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar.form-check-input:hover{
+    background-color: var(--rosaF);
+}
+
+.checkbox-docs-aceptar.form-check-input:checked{
+    background-color: var(--btnActivo);
+    border-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar.form-check-input:checked{
+    background-color: var(--rosaF);
+    border-color: var(--rosaF);
+}
+
+
+
 /* Vistas usuario */
 /* Convocatorias - Modalidades */
 .tituloModulo{
@@ -186,10 +225,6 @@
 input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
     display: none;
 } 
-
-/* input[id="boton-estado"]{
-    display: none;
-} */
 
 .btnSubirDocs{
     background-color: var(--btnActivo);
