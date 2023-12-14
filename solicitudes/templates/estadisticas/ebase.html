@@ -4,10 +4,36 @@ no es necesario heredar de ella si se busca otra cosa o se quiere contruir la pr
 {% endcomment %} 
 
 {% load static %}
-<style>    
-    
 
-</style>
+<script>
+    function dibujarGrafico(idCanvas, grafico){
+        var ctx = document.getElementById(idCanvas).getContext('2d');
+        var myChart = new Chart(ctx, grafico);
+    }
+</script>
+
+<div>
+    {% block panelOpciones %}
+    {% endblock panelOpciones %}
+</div>
+
+{% for conjuntoEst in conjuntosEstadisticos %}
+    <div id="contMosaico-{{ forloop.counter0 }}" class="contenedor-mosaico">    
+        {% with conjuntoEst.grafico as grafico %}
+            <div class="tile">                
+                    <canvas id="grafico-{{ forloop.counter0 }}"></canvas>
+                    {% with flc=forloop.counter0|stringformat:"s" %}
+                    {% with 'grafico-json-'|add:flc as idg %}
+                        {{ grafico|json_script:idg }}                                      
+                        <script>dibujarGrafico("grafico-{{ forloop.counter0 }}", JSON.parse(document.getElementById('{{idg}}').textContent))</script>                                
+                    {% endwith %}
+                    {% endwith %}  
+            </div>
+        {% endwith %}
+    </div>
+{% endfor %}
+
+
 
 <div id="container" class="contenedor-mosaico">
     <div class="tile">

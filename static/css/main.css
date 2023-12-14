@@ -839,7 +839,7 @@ i.rechazado:before {
   grid-gap: 1rem;
 }
 
-.tile img, .tile div{
+.tile img, .tile div, .tile canvas{
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -856,7 +856,12 @@ i.rechazado:before {
 }
 
 .tile:nth-child(4),
-.tile:nth-child(5){
+.tile:nth-child(5),
+.tile:nth-child(6),
+.tile:nth-child(7),
+.tile:nth-child(8),
+.tile:nth-child(9),
+.tile:nth-child(10){
   grid-column: span 3;
 }
 
