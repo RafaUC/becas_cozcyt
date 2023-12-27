@@ -75,7 +75,7 @@
 /* Documentos Solicitante */
 .card-documento-solicitante{
     text-align: center; 
-    height: 420px;
+    height: 430px;
     border-radius: 15px; 
     border-color: #d1d1d1;
 }
@@ -85,11 +85,16 @@
     color: var(--btnActivo);
     width: auto; 
     padding: 6px;
-    font-size: small;
+    font-size: medium;
     border-color: var(--letraGeneral); 
     border-radius: 50px; 
     border: 1.5px solid; 
     font-weight: 530;
+}
+
+.btnAceptarDocumento:hover{
+    background-color: var(--btnActivo); 
+    color: var(--blanco);
 }
 
 .btnRechazarDocumento{
@@ -97,12 +102,56 @@
     color: var(--rosaF);
     width: auto; 
     padding: 6px;
-    font-size: small;
+    font-size: medium;
     border-color: var(--letraGeneral); 
     border-radius: 50px; 
     border: 1.5px solid; 
     font-weight: 530;
 }
+
+.btnRechazarDocumento:hover{
+    background-color: var(--rosaF); 
+    color: var(--blanco);
+}
+
+/* Documentos solicitante - Checkbox */
+/* input[type="checkbox"] { 
+    display: none;
+} */
+
+.checkbox-docs-aceptar{
+    height: 35px;
+    width: 35px;
+    border-radius: 20px !important;
+    border-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar{
+    height: 35px;
+    width: 35px;
+    border-radius: 20px !important;
+    border-color: var(--rosaF);
+}
+
+.checkbox-docs-aceptar.form-check-input:hover{
+    background-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar.form-check-input:hover{
+    background-color: var(--rosaF);
+}
+
+.checkbox-docs-aceptar.form-check-input:checked{
+    background-color: var(--btnActivo);
+    border-color: var(--btnActivo);
+}
+
+.checkbox-docs-rechazar.form-check-input:checked{
+    background-color: var(--rosaF);
+    border-color: var(--rosaF);
+}
+
+
 
 /* Vistas usuario */
 /* Convocatorias - Modalidades */
@@ -129,11 +178,6 @@
 .btnSolicitar:hover{
     background-color: var(--blanco); 
     color: var(--rosaF);
-    width: 170px; 
-    border-radius: 50px;
-    border-color:var(--rosaF);
-    border-width: 1.5px; 
-    font-weight: 530;
 }
 
 
@@ -181,7 +225,6 @@
 input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
     display: none;
 } 
-
 
 .btnSubirDocs{
     background-color: var(--btnActivo);
