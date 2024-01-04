@@ -56,11 +56,10 @@
     <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">
       <div class="row flex-nowrap" style="margin: 0px; ">
-        <div class="col-auto nopadding border-end border-2 borde-pagina-principal">
+        <div class="col-auto nopadding border-end border-1">
           <div class="sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo" style="max-width: 280px; height: 100vh;">
             <a href="#" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-              <img class="img-fluid w-75" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" >              
-              <span class="fs-4 h4">Sistema de impulso <br> al Talento</span>
+              <img class="img-fluid" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
             </a>
             <hr>
             {% with url_name=request.resolver_match.url_name %}
@@ -99,10 +98,12 @@
 
               {% else %}
               <li class="nav-item">
-                <a href="{% url 'usuarios:perfil' %}" class="nav-link d-flex link-dark {% if url_name == 'perfil' %}active{% endif %} h4" aria-current="page">
-                  <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
-                  Perfil
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'perfil' %}active{% endif %} h4">
+                  <a href="{% url 'usuarios:perfil' %}" class="nav-link d-flex link-dark h4" aria-current="page">
+                    <i class="fa fa-user-circle px-2 align-self-center" aria-hidden="true"> </i>
+                    Perfil
+                  </a>
+                </div>
               </li>
               <li class="nav-item">
                 <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center position-relative">
@@ -113,22 +114,28 @@
               </button>
               </li>
               <li class="nav-item">
-                <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark {% if 'onvocatoria' in url_name %}active{% endif %} h4">
-                  <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
-                  Convocatoria
-                </a>
+                <div class="seccion-sidebar {% if 'onvocatoria' in url_name %}active{% endif %} h4">
+                  <a href="{% url 'solicitudes:convocatorias' %}" class="nav-link d-flex link-dark h4">
+                    <i class="fa fa-list-alt px-2 align-self-center" aria-hidden="true"> </i>
+                    Convocatoria
+                  </a>
+                </div>
               </li>
               <li class="nav-item ">
-                <a href="{% url 'estudioSE:estudioSE' %}" class="nav-link d-flex link-dark {% if url_name == 'estudioSE' %}active{% endif %} h4" style="text-align: left;">
-                  <i class="fa fa-id-card-o px-2 align-self-center" aria-hidden="true"> </i>
-                  Estudio Socioeconómico
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'estudioSE' %}active{% endif %} h4">
+                  <a href="{% url 'estudioSE:estudioSE' %}" class="nav-link d-flex link-dark h4" style="text-align: left;">
+                    <i class="fa fa-id-card-o px-2 align-self-center" aria-hidden="true"> </i>
+                    Estudio Socioeconómico
+                  </a>
+                </div> 
               </li>
               <li class="nav-item">
-                <a href="{% url 'solicitudes:historial' %}" class="nav-link d-flex {% if url_name == 'historial' %}active{% endif %} link-dark h4">
-                  <i class="fa fa-clock-o px-2 align-self-center" aria-hidden="true"> </i>
-                  Historial
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'historial' %}active{% endif %} h4">
+                  <a href="{% url 'solicitudes:historial' %}" class="nav-link d-flex link-dark h4">
+                    <i class="fa fa-clock-o px-2 align-self-center" aria-hidden="true"> </i>
+                    Historial
+                  </a>
+                </div>
               </li>
               {% endif %}
             </ul>
@@ -164,8 +171,37 @@
           
           <!-- Pie de pagina -->
           <footer>
-            <div class="container-fluid text-center pagina-fuerte">
-              <p class=" nomargin" style="color: #fff;">Este es el pie página.</p>
+            <div class="section-footer container-fluid">
+              <div class="section-footer__row" style="padding: 5px;">
+                <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
+                  <div class="section-footer__icons" style="padding: 0 0 5px 0;">
+                    <img  src="{% static 'images/LogosLabsol2023-02.png' %}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
+                    <img src="{% static 'images/GPLv3_Logo.svg.png' %}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
+                  </div>
+                  <div class="section-footer__list">
+                    <ul class="list-section-footer">
+                      <li class="list-section-footer-object">
+                        <a href="" style="color: #fff;">Acerca de </a>
+                      </li>
+                      <li class="list-section-footer-object">
+                        <a href="" style="color: #fff;">Manual de usuario </a>
+                      </li>
+                      <li class="list-section-footer-object">
+                        <a href="" style="color: #fff;">Mapa del sitio </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="section-footer__row__col" style="padding: 10px;">
+                  <div>
+                    <p class=" nomargin" style="color: #fff;">
+                      © 2023 
+                      <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
+                    </p>
+                      <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </footer>
         </div>                
