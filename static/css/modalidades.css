@@ -254,3 +254,55 @@ input[id="files"] { /*Desaparece los botones que trae por defecto django, pero s
     background-color: #F0F0F0;
     color: #C9C9C9; 
 }
+
+.seccion-sidebar.active{
+    border-left: 10px solid var(--rosaF);
+}
+
+/* Footer */
+
+.section-footer{
+    background-color: var(--rosaM);
+}
+
+@media (min-width: 768px){
+    .section-footer__row__col:first-child{
+        order: 1;
+        text-align: center;
+    }
+    .section-.section-footer__row__col{
+        text-align: left;
+    }
+}
+
+.section-footer__row__col{
+    padding: 0 20px;
+    flex-basis: auto;
+    display: inline-block;
+}
+
+.section-footer__icons{
+    margin-top: 0; 
+    padding: 0; 
+    list-style: none; 
+    line-height: 1.6; 
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.section-footer__list{
+    margin-top: 0; 
+    padding: 0; 
+    list-style: none; 
+    line-height: 1.6; 
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.list-section-footer{
+    margin: 0;
+}
+.list-section-footer-object{
+    display: inline-block;
+    padding: 0 15px;
+}
