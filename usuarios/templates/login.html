@@ -36,7 +36,7 @@
               <input class="form-control form-control-lg mt-3" type="text" required id="curp" name="curp"  placeholder="Curp">
               <input  class="form-control form-control-lg my-3" type="password" required id="id_password" name="password"   placeholder="Contraseña">
               -->
-              <p class="h6"><a href="#">¿Olvidaste tu contraseña?</a></p>
+              <p class="h6"><a href="{%url 'usuarios:reset_password' %}">¿Olvidaste tu contraseña?</a></p>
               <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="iniciar sesion">Iniciar Sesión</button>
               <p class="h6 mb-4"><a href="{% url 'usuarios:register' %}">Registrarse</a></p>
               

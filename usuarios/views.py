@@ -266,4 +266,6 @@ def sMensajes(request):
 
     return render(request, 'solicitante/sMensajes.html')
 
-
+def resetPasswordSendEmail(request):
+    
+    return render(request, 'email_reset_password.html')
