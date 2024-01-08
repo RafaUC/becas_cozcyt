@@ -15,6 +15,7 @@ Including another URLconf
 """
 from . import views, viewsAdmin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 app_name = 'usuarios'
 urlpatterns = [    
@@ -37,6 +38,12 @@ urlpatterns = [
                  'orderBy': 'nombre'}, 
          name='cargar_select_carreras'),  
     path('logout', views.cerrarSesion, name='logout'),
+
+    path('restablecer_contraseña/', auth_views.PasswordResetView.as_view(template_name="reset_password_form.html", success_url = 'enviado/'), name="reset_password"), # Muestra la form del email para restablecer la contraseña
+    path('restablecer_contraseña/enviado/', auth_views.PasswordResetDoneView.as_view(template_name="reset_password_done.html"), name="reset_password_done"), #Mensaje de que se envió el correo de manera exitosa
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_confirm.html', success_url = 'restablecer_contraseña_exito/'), name="password_reset_confirm"), #Link de la nueva contraseña, email
+    path('reset/<uidb64>/<token>/restablecer_contraseña_exito/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_complete.html"), name="password_reset_complete"), #Mensaje de que se cambió la contraseña con éxito
+
     
     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
     
