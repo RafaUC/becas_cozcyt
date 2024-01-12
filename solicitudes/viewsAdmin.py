@@ -206,7 +206,7 @@ def historialSolicitante(request, pk):
         return redirect(url)
     
     solicitante = get_object_or_404(Solicitante, pk=pk)  
-    solicitudes = Solicitud.objects.filter(solicitante = solicitante)
+    solicitudes = Solicitud.objects.filter(solicitante = solicitante).order_by('-id')
 
     context = {
         'solicitudes': solicitudes,
