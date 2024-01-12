@@ -30,10 +30,10 @@ def load_data_from_sql(sqlFile):
 # el argumento mapeo campos es un diccionario donde la clave de 
 # la isquierda es el el nombre atributo del modelo y el valor de la derecha es
 # el nombre de la columna del csv al que corresponde
-def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos):
+def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos, separador=','):
     print(f'Importando "{archivo_csv}".')    
     with open(archivo_csv, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = csv.DictReader(csvfile, delimiter=separador)
         for row in reader:
             datos_a_guardar = {}
             for campo, columna_csv in mapeo_campos.items():

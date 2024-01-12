@@ -27,12 +27,13 @@ class Notificacion(models.Model):
 @receiver(post_save, sender=Notificacion)
 def notificar_nueva_notificacion(sender, instance, created, **kwargs):        
     if created:
-        # Lógica para enviar la notificación al usuario
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'user_{instance.solicitante.id}',
-            {
-                'type': 'notificar_notificacion',
-                'mensaje': 'nuevaNotificacion',
-            }
-        )        
+        if instance.solicitante.is_authenticated:
+            # Lógica para enviar la notificación al usuario
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f'user_{instance.solicitante.id}',
+                {
+                    'type': 'notificar_notificacion',
+                    'mensaje': 'nuevaNotificacion',
+                }
+            )        
