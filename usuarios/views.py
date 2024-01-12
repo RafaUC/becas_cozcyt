@@ -266,4 +266,3 @@ def sMensajes(request):
 
     return render(request, 'solicitante/sMensajes.html')
 
-
