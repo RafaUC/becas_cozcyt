@@ -168,7 +168,7 @@ body {
 }
 
 .cancelar-desactivado {
-  background-color: var(---cancelar-desactivado) !important;
+  background-color: var(--cancelar-desactivado) !important;
 }
 
 .cancelar-activado {
