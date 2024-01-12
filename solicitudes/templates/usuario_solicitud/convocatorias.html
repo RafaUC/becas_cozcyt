@@ -21,8 +21,10 @@
         <div class="rounded-2 mx-4">          
             <div class="row">
                 {% for modalidad in modalidades%}
+                {% if modalidad.mostrar == True %} 
+                <!-- {{ modalidad.tipo }} Condicional para mostrar la modalidad correspondiente al usuario -->
                 <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
-                    <div class="card" style="">
+                    <div class="card">
                         <div class="card-body" style="text-align: center; height: 320px;">
                             <h5 class="card-title">{{modalidad.nombre}}</h5>
                             <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" style="width: 170px; padding-bottom: 20px;" alt="Card image cap">
@@ -47,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>

@@ -67,6 +67,45 @@ def configModalidades(request): #se muestran las modalidades
     
     return render(request, 'admin/config_modalidad.html', {'modalidades':modalidades})
 
+# Función que permite mostrar u ocultar una modalidad 
+def mostrar_modalidad(request, modalidad_id):
+    # messages.success(request, "Modalidad actualizada.")
+    if request.method == "POST":
+        modalidad = Modalidad.objects.get(pk = modalidad_id)
+        # print(modalidad)
+        seleccion_exitosa = False
+
+        # Muestra u oculta la modalidad
+        if (request.POST.get("mostrar", None) == "mostrar_modalidad"):
+            print(modalidad)
+            if request.POST.get("set_value", None) is not None:
+                print(modalidad, "mostrar")
+                modalidad.mostrar = True
+                modalidad.save()
+                seleccion_exitosa = True
+                return HttpResponse((
+                    '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left;" id="hideMe">'
+                    "Modalidad <strong>", modalidad.nombre ,"</strong> se mostrará en convocatoria."
+                    "</div>"
+                ), status=200, content_type="text/html",)
+            elif request.POST.get("set_value", None) is None:
+                print(modalidad,"ocultar")
+                modalidad.mostrar = False
+                modalidad.save()
+                seleccion_exitosa = True
+                return HttpResponse(( ""
+                    '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left;" id="hideMe">'
+                    "Modalidad <strong>", modalidad.nombre ,"</strong> no se mostrará en convocatoria."
+                    "</div>"
+                ), status=200, content_type="text/html",)
+            # Si solo se desea mostrar una notificación y no dos, eliminar los dos httpresponse y descomentar el siguiente
+            # if seleccion_exitosa:
+            #     return HttpResponse((
+            #         '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left; ">'
+            #         "Modalidad <strong>", modalidad.nombre ,"</strong> actualizada."
+            #         "</div>"
+            #     ), status=200, content_type="text/html",)
+
 
 def agregarModalidad(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
@@ -95,6 +134,7 @@ def agregarModalidad(request):
             else:
                 messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
                 return redirect("modalidades:AConfigAgregarModalidad")
+            messages.success(request, "Modalidad creada con éxito.")
             return redirect("modalidades:AConfigModalidades")
     context = {
             'form' : form,
