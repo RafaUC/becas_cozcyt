@@ -7,17 +7,16 @@ from datetime import datetime
 from datetime import date
 
 
-def ciclo_actual():
-        now = datetime.now()
-        mes = now.month
-        # Determinar el ciclo actual
-        if mes >= 8:
-            ciclo = "Agosto - Diciembre"
-        else:
-            ciclo = "Enero - Junio"
-        # Obtener el año actual
-        año = now.year
-        return f"{ciclo} {año}"
+def ciclo_actual(offset=0):
+    now = datetime.now()
+    mes = (now.month + offset) % 12
+    año = now.year + ((now.month + offset) // 12)
+    # Determinar el ciclo actual
+    if mes >= 8:
+        ciclo = "Agosto - Diciembre"
+    else:
+        ciclo = "Enero - Junio"    
+    return f"{ciclo} {año}"
 
 def modalidadMediaPath(instance, filename):
     ext = filename.split('.')[-1]  # Obtiene la extensión del archivo
