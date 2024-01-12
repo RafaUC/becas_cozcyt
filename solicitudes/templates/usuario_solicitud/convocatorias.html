@@ -12,11 +12,18 @@
                 <p class="col h3" style="font-weight: 600; padding-top: 40px;" id="ciclo-escolar"></p>
                 <!-- <hr> -->
             </div>
+            <div class="row">
+                <p class="col h5" style="font-weight: 400; padding-top: 10px">Modalidades</p>
+                <hr>
+                <!-- <hr> -->
+            </div>
         </div>
-        <div class="rounded-2 mx-4" style="padding-top: 30px;">          
+        <div class="rounded-2 mx-4">          
             <div class="row">
                 {% for modalidad in modalidades%}
-                <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                {% if modalidad.mostrar == True %} 
+                <!-- {{ modalidad.tipo }} Condicional para mostrar la modalidad correspondiente al usuario -->
+                <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                     <div class="card">
                         <div class="card-body" style="text-align: center; height: 320px;">
                             <h5 class="card-title">{{modalidad.nombre}}</h5>
@@ -42,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
