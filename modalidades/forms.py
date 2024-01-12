@@ -27,17 +27,19 @@ class ModalidadForm(ModelForm):
     required_css_class = 'required-field'
     class Meta:
         model = Modalidad
-        fields = ('nombre', 'imagen', 'descripcion', "monto", )
+        fields = ('nombre', 'imagen', 'descripcion', "monto", "tipo", )
         labels = {
             'nombre': '',
             'imagen' : '',
             'descripcion': '',
             'monto': '',
+            'tipo': '',
         }
         widgets = {
             'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Talento especial, LABSOL...'}),
             'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Modalidad que se le otorga a los estudiantes que...', 'rows':3, 'cols':1}),
             'monto' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. 4500.00'}),
+            'tipo': forms.Select(attrs={'class': 'form-control border-1 form-select'}),
         }
 
 class DocumentoForm(ModelForm):
