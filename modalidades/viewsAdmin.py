@@ -14,6 +14,10 @@ from .utils import *
 def configGeneral(request):
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
+    
+    convocatoria_existe = None
+    if Convocatoria.objects.exists():
+            convocatoria_existe = True
 
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
         convocatoriaForm = ConvocatoriaForm(request.POST or None, instance = obj)
@@ -31,6 +35,7 @@ def configGeneral(request):
 
 
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
+        
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(data = request.POST)
             if convocatoriaForm.is_valid():
@@ -49,7 +54,7 @@ def configGeneral(request):
             else:
                 print("convocatoria no valida")
 
-    context = {'convocatoria':convocatoriaForm }
+    context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
     return render(request, 'admin/config_general.html', context)
 
 def configModalidades(request): #se muestran las modalidades
@@ -61,6 +66,45 @@ def configModalidades(request): #se muestran las modalidades
         return redirect(url)
     
     return render(request, 'admin/config_modalidad.html', {'modalidades':modalidades})
+
+# Función que permite mostrar u ocultar una modalidad 
+def mostrar_modalidad(request, modalidad_id):
+    # messages.success(request, "Modalidad actualizada.")
+    if request.method == "POST":
+        modalidad = Modalidad.objects.get(pk = modalidad_id)
+        # print(modalidad)
+        seleccion_exitosa = False
+
+        # Muestra u oculta la modalidad
+        if (request.POST.get("mostrar", None) == "mostrar_modalidad"):
+            print(modalidad)
+            if request.POST.get("set_value", None) is not None:
+                print(modalidad, "mostrar")
+                modalidad.mostrar = True
+                modalidad.save()
+                seleccion_exitosa = True
+                return HttpResponse((
+                    '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left;" id="hideMe">'
+                    "Modalidad <strong>", modalidad.nombre ,"</strong> se mostrará en convocatoria."
+                    "</div>"
+                ), status=200, content_type="text/html",)
+            elif request.POST.get("set_value", None) is None:
+                print(modalidad,"ocultar")
+                modalidad.mostrar = False
+                modalidad.save()
+                seleccion_exitosa = True
+                return HttpResponse(( ""
+                    '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left;" id="hideMe">'
+                    "Modalidad <strong>", modalidad.nombre ,"</strong> no se mostrará en convocatoria."
+                    "</div>"
+                ), status=200, content_type="text/html",)
+            # Si solo se desea mostrar una notificación y no dos, eliminar los dos httpresponse y descomentar el siguiente
+            # if seleccion_exitosa:
+            #     return HttpResponse((
+            #         '<div class="jq-toast-single jq-has-icon jq-icon-success" role="alert" style="color: rgb(103, 103, 103); text-align: left; ">'
+            #         "Modalidad <strong>", modalidad.nombre ,"</strong> actualizada."
+            #         "</div>"
+            #     ), status=200, content_type="text/html",)
 
 
 def agregarModalidad(request):
@@ -90,6 +134,7 @@ def agregarModalidad(request):
             else:
                 messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
                 return redirect("modalidades:AConfigAgregarModalidad")
+            messages.success(request, "Modalidad creada con éxito.")
             return redirect("modalidades:AConfigModalidades")
     context = {
             'form' : form,

@@ -44,10 +44,16 @@ class Convocatoria(models.Model):
             return False
 
 class Modalidad(models.Model):
+    TIPO_CHOICES = [
+        ('Renovacion', 'Renovación'),
+        ('Ingreso', 'Nuevo Ingreso')
+    ]
     nombre = models.CharField(max_length=255, verbose_name="Nombre", null=False)
     imagen = models.ImageField(upload_to=modalidadMediaPath, verbose_name="Imagen", null=False)
     descripcion = models.TextField(verbose_name="Descripción", null=False)
     monto = models.DecimalField(max_digits=6, decimal_places=2,verbose_name="monto", null=True)
+    mostrar = models.BooleanField(default=True)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[0][0])
 
     def __str__(self):
         return self.nombre

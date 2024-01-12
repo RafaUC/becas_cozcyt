@@ -310,14 +310,45 @@ def documentos_solicitante(request, pk):
         'listaDocumentos' : listaDocumentos,
         'modalidad' : modalidad,
     }
-    accion = None
+
     if request.method == 'POST':
-        print(1)
-        if 'boton-presionado' in request.POST:
-            accion = request.POST['boton-presionado']
-            print("boton presionado")
-            print(f'{accion}')
-            if accion == 'aprobado':
-                print("aprobado")
+        seleccionAceptados = None
+        seleccionDenegados = None
+        if 'estado-boton-aceptado' in request.POST:
+            seleccionAceptados = request.POST.getlist('estado-boton-aceptado')
+            seleccionAceptados = [int(id_str) for id_str in seleccionAceptados]
+        if 'estado-boton-denegado' in request.POST:
+            seleccionDenegados = request.POST.getlist('estado-boton-denegado')
+            seleccionDenegados = [int(id_str) for id_str in seleccionDenegados]
+            print(f'{seleccionDenegados}')
+
+        #**Hacer una condicional para que el estado de la solicitud no cambie a documentación aprobada, cuando hay documentos denegados**
+        #Existieron documentos con error y otros fueron aprobados
+        if seleccionDenegados != None and seleccionAceptados != None: 
+            docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
+            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
+            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])
+            solicitud.estado = Solicitud.ESTADO_CHOICES[1][0]
+            solicitud.save()
+
+        #Todos los documentos fueron denegados
+        if seleccionAceptados == None:
+            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])
+            messages.success(request, f'Se aceptaron las {docsDenegadosToUpdate.count()} solicitudes seleccionadas con éxito')
+            solicitud.estado = Solicitud.ESTADO_CHOICES[1][0]
+            solicitud.save()
+            
+        #Todos los documentos fueron aceptados
+        if seleccionDenegados == None: 
+            docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
+            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
+            solicitud.estado = Solicitud.ESTADO_CHOICES[2][0]
+            solicitud.save()
+            print(solicitud.estado)
+            
+        
         messages.success(request, "Documentos de solicitud revisados con éxito.")
+        return redirect("solicitudes:ASolicitudes")
     return render(request, 'admin/documentosSolicitante.html', context)

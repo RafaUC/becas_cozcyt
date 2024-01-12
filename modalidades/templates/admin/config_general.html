@@ -44,7 +44,9 @@
                     </div>
                     <div class="row" style="padding-bottom: 10px; text-align: center;">
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="button" class="btn btnEditar" name="editar" id="enableFormConvocatoria">Editar</button>  
+                            {% if convocatoria_existe %}
+                            <button type="button" class="btn btnEditar" name="editar" id="enableFormConvocatoria">Editar</button>
+                            {% endif %} 
                         </div>
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
                             <button type="submit" class="btn btn-guardar" id="guardar">Confirmar</button>  
