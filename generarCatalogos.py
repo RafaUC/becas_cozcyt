@@ -54,7 +54,7 @@ def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos):
 
 ###Importacion de datos
 while True:
-    respuesta = input("Esto restablece la configuracion por defecto del Sistema. \n¿Proceder? (Sí/No): ").strip().lower()
+    respuesta = input("Esto restablece la configuracion por defecto del Sistema, Tambien eliminara los registros de los usuarios. \n¿Proceder? (Sí/No): ").strip().lower()
     if respuesta in {'s', 'si'}:
         
         Estado.objects.all().delete()

@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from usuarios.models import PuntajeGeneral, PuntajeMunicipio, Usuario, Institucion, Carrera
+from usuarios.models import PuntajeGeneral, PuntajeMunicipio
 from estudio_socio_economico.models import Elemento, RNumerico
 # Create your models here.
 
@@ -37,7 +37,7 @@ class Solicitud(models.Model):
 
     readonly_fields = ('ciclo',)
     class Meta:
-        ordering = ['-puntaje','id']
+        ordering = ['-puntaje','-id']
         verbose_name = 'Solicitud'
         verbose_name_plural = 'Solicitudes'
         unique_together = ('modalidad', 'ciclo','solicitante')
@@ -86,9 +86,8 @@ def calcular_puntaje(sender, instance, **kwargs):
     except Exception as e:        
         print(f"Se produjo una excepción calculando el puntaje de Ingresos : {e}")
     #tipo de solicitud
-    try:        
-        existe_solicitud = Solicitud.objects.filter(solicitante=solicitante, estado=Solicitud.ESTADO_CHOICES[3][0]).filter(~Q(ciclo=ciclo_actual())).exists()
-        if existe_solicitud:
+    try:                
+        if solicitante.es_renovacion:
             puntaje = PuntajeGeneral.objects.get(tipo = seccionChoices[2][0], nombre='Renovación')
             instance.tipo = Solicitud.TIPO_CHOICES[0][0]
             nuevoPuntaje += puntaje.puntos

@@ -4,6 +4,9 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
+from modalidades.models import ciclo_actual
+from django.db.models import Q
+from datetime import datetime
 
 
 class Estado(models.Model):
@@ -168,6 +171,17 @@ class Solicitante(Usuario):
     email_verified_at = models.DateTimeField(verbose_name="email_verified_at", null=True)
     created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)
+
+    @property
+    def es_renovacion(self):
+        from solicitudes.models import Solicitud
+        mes = datetime.now().month
+        if mes >= 6 and mes <= 7:                
+            offset = -7
+        else:
+            offset = -5
+        cicloPrevio = ciclo_actual(offset=offset)                
+        return Solicitud.objects.filter(solicitante=self, estado=Solicitud.ESTADO_CHOICES[3][0], ciclo=cicloPrevio).exists()
 
     def __str__(self):
         return self.nombre + " " + self.ap_paterno
