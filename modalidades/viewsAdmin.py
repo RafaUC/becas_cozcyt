@@ -77,9 +77,8 @@ def mostrar_modalidad(request, modalidad_id):
 
         # Muestra u oculta la modalidad
         if (request.POST.get("mostrar", None) == "mostrar_modalidad"):
-            print(modalidad)
             if request.POST.get("set_value", None) is not None:
-                print(modalidad, "mostrar")
+                # print(modalidad, "mostrar")
                 modalidad.mostrar = True
                 modalidad.save()
                 seleccion_exitosa = True
@@ -89,7 +88,7 @@ def mostrar_modalidad(request, modalidad_id):
                     "</div>"
                 ), status=200, content_type="text/html",)
             elif request.POST.get("set_value", None) is None:
-                print(modalidad,"ocultar")
+                # print(modalidad,"ocultar")
                 modalidad.mostrar = False
                 modalidad.save()
                 seleccion_exitosa = True

@@ -40,11 +40,15 @@
                 </div>   
             </div>
             <div class="row">
+                <!-- Div con el que se muestra el mensaje de confirmación-checkbox modalidad -->
+                <div class="jq-toast-wrap top-right" role="alert" aria-live="polite" id="mostrar_mod">
+                </div>
                 <!-- ciclo for que muestra una card por cada modalidad que hay -->
                 {% for modalidad in modalidades%}
                 <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
                     <div class="card">
                         <div class="card-body" style="text-align: center; height: 320px;">
+                            {{ modalidad.tipo }}
                             <!-- Checkbox que funciona sin que la página se refresque usando HTMX y ajax -->
                             <form method="POST">
                             {% csrf_token %}
@@ -55,9 +59,7 @@
                             hx-trigger="click" hx-target="#mostrar_mod" >
                             <input type="hidden" name="mostrar" value="mostrar_modalidad">
                             </form>
-                            <!-- Div con el que se muestra el mensaje de confirmación -->
-                            <div class="jq-toast-wrap top-right" role="alert" aria-live="polite" id="mostrar_mod">
-                            </div>
+
                             <!-- Resto del card de la modalidad -->
                             <h5 class="card-title" id="tituloCard">{{modalidad.nombre}}</h5>
                             <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
