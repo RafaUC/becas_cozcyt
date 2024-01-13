@@ -7,6 +7,7 @@ import csv
 import sys
 from usuarios.models import Estado, Municipio, Institucion, Carrera, PuntajeGeneral, PuntajeMunicipio   # Importa el modelo de tu base de datos
 from estudio_socio_economico.models import Seccion, Elemento, Opcion
+from modalidades.models import Modalidad
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'becas_cozcyt.settings')
 django.setup()
@@ -16,13 +17,18 @@ django.setup()
 def load_data_from_sql(sqlFile):
     print(f'Importando "{sqlFile}".')
     try:
-        file_path = os.path.join(os.path.dirname(__file__), sqlFile)        
-        sql_statement = open(file_path).read()            
-        with connection.cursor() as c:
-            print(c.execute(sql_statement))                        
+        file_path = os.path.join(os.path.dirname(__file__), sqlFile)                        
+        with open(file_path, 'r') as file:
+            sql_statements = file.read().split(';')
+            with connection.cursor() as c:
+                for statement in sql_statements:
+                    statement = statement.strip()
+                    if statement: # Ignore empty statements       
+                        print(f'Sentencia sql: {statement[:80]}...')                 
+                        print(f'Output: {c.execute(statement)}')                     
         with connection.cursor() as c:
             c.execute('UNLOCK TABLES;')             
-        print(f'Terminado de importar "{sqlFile}".')
+        print(f'Terminado de importar "{sqlFile}".\n')
     except Exception as e:    
         print(f"Se produjo un error: {e} \nEs posible que los datos se hayan importado erroneamente.")
     
@@ -56,7 +62,7 @@ def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos, separador=','):
 while True:
     respuesta = input("Esto restablece la configuracion por defecto del Sistema, Tambien eliminara los registros de los usuarios. \n¿Proceder? (Sí/No): ").strip().lower()
     if respuesta in {'s', 'si'}:
-        
+        '''
         Estado.objects.all().delete()
         importar_datos_desde_csv('catalogos/CatalogoInegiEstatal.csv', Estado, {
             'id': 'CVE_ENT',
@@ -89,12 +95,18 @@ while True:
             'puntos': 'puntos'
         })
         
+        
+        '''        
         Seccion.objects.all().delete()        
         Elemento.objects.all().delete()  
         Opcion.objects.all().delete()  
         load_data_from_sql('catalogos/estudioSE.sql')
+
         PuntajeMunicipio.objects.all().delete()
         load_data_from_sql('catalogos/puntos_municipios.sql')
+
+        Modalidad.objects.all().delete()
+        load_data_from_sql('catalogos/modalidades.sql')
         break
     elif respuesta in {'n', 'no'}:
         break
