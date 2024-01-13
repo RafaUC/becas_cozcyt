@@ -22,8 +22,43 @@
             <div class="row">
                 {% for modalidad in modalidades%}
                 {% if modalidad.mostrar == True %} 
-                <!-- {{ modalidad.tipo }} Condicional para mostrar la modalidad correspondiente al usuario -->
+                {% if solicitante.es_renovacion == True and modalidad.tipo == "Renovacion" %}
                 <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                    <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
+                    <div class="card">
+                        <div class="card-body" style="text-align: center; height: 30%;">
+                            <h5 class="card-title">{{modalidad.nombre}}</h5>
+                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" style="width: 70%; padding-bottom: 20px;" alt="Card image cap">
+                            <br>
+                            {% if modalidad.pk == solicitud_existe.modalidad.pk %} 
+                            <div style="padding-bottom: 10px;">
+                                <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
+                                    <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 70%; border-radius: 50px; font-size: 1rem;">
+                                    Mis documentos
+                                    </button>
+                                </a>
+                            </div>
+                            {% elif convocatoria.fecha_convocatoria %}
+                            <div style="padding-bottom: 10px;">
+                                <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
+                                    <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 70%; border-radius: 50px; font-size: 1rem;">
+                                    Solicitar
+                                    </button>
+                                </a>
+                            </div>
+                            {% else %}
+                            <div style="padding-bottom: 10px;">
+                                <button class="btn" style="background-color: #E4756F; color: #FFFFFF;  width: 70%; border-radius: 50px; font-size: 1rem;" disabled>
+                                Solicitar
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% elif solicitante.es_renovacion == False and modalidad.tipo == "Ingreso" %}
+                <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                    <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                     <div class="card">
                         <div class="card-body" style="text-align: center; height: 320px;">
                             <h5 class="card-title">{{modalidad.nombre}}</h5>
@@ -49,6 +84,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             </div>
