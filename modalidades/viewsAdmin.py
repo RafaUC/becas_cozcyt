@@ -175,6 +175,7 @@ def editarModalidad(request, modalidad_id):
             messages.success(request, "Cambios guardados.")
         else:
             messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
+            messages.error(request, [form.errors,formset.errors])
             return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
         return redirect("modalidades:AConfigModalidades")
     return render(request, 'admin/editar_modalidad.html', context)

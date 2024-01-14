@@ -4,4 +4,9 @@ INSERT INTO `modalidades_modalidad` (id, nombre, imagen, descripcion, mostrar, t
 (02, 'Excelencia académica', 'media/excelencia-academica.png', 'Beca para alumnos que cuentan con excelencia academica',1, 'Ingreso'),
 (03, 'Talento especial', 'media/talento-especial.png', 'Beca para alumnos que cuentan con un desempeño excepcional',1, 'Ingreso'),
 (04, 'Labsol', 'media/labsol.png', 'Beca para alumnos que se encuentran desarrollando un proyecto dentro del Laboratorio de software libre',1, 'Ingreso'),
-(05, 'Posgrado', 'media/posgrado.png', 'Beca para alumnos que se encuentran realizando estudios de posgrado',1, 'Ingreso');
+(05, 'Posgrado', 'media/posgrado.png', 'Beca para alumnos que se encuentran realizando estudios de posgrado',1, 'Ingreso')
+ON DUPLICATE KEY UPDATE
+nombre = VALUES(nombre),
+descripcion = VALUES(descripcion),
+mostrar = VALUES(mostrar),
+tipo = VALUES(tipo);

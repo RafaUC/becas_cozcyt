@@ -35,7 +35,7 @@ Lista de usuarios
             <p class="h4 mx-3">Administradores</p>
             <thead>
                 <tr>
-                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
+                    <th class="borde-pagina-gris text-center" style="width: 1%; border-bottom: 2px solid;"></th>
                     <th class="borde-pagina-gris" style="width: 42%; border-bottom: 2px solid;"> Nombre</th>
                     <th class="borde-pagina-gris" style="width: 11rem; border-bottom: 2px solid;"> CURP</th>
                     <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Correo Electrónico</th>
@@ -45,7 +45,7 @@ Lista de usuarios
             <tbody>
                 {% for usuario in page_admin %}
                 <tr>
-                    <td class="text-center">{{ usuario.id }}</td>
+                    <td class="text-center"></td>
                     <td>{{ usuario.nombre }}
                         {% if usuario.is_superuser %}
                             <span class="badge bg-success">Admin</span>
@@ -86,7 +86,7 @@ Lista de usuarios
             <p class="h4 mx-3">Solicitantes</p>
             <thead>
                 <tr>
-                    <th class="borde-pagina-gris text-center" style="width: 8%; border-bottom: 2px solid;"> ID</th>
+                    <th class="borde-pagina-gris text-center" style="width: 1%; border-bottom: 2px solid;"></th>
                     <th class="borde-pagina-gris" style="width: 42%; border-bottom: 2px solid;"> Nombre</th>
                     <th class="borde-pagina-gris" style="width: 11rem; border-bottom: 2px solid;"> CURP</th>
                     <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Correo Electrónico</th>
@@ -96,7 +96,7 @@ Lista de usuarios
             <tbody>
                 {% for usuario in page_soli %}                
                 <tr>                    
-                    <td class="text-center">{{ usuario.id }}</td>
+                    <td class="text-center"></td>
                     <td>{{ usuario.ap_paterno }} {{ usuario.ap_materno }} {{ usuario.nombre }}
                         {% if usuario.is_superuser %}
                             <span class="badge bg-success">Admin</span>
@@ -106,9 +106,26 @@ Lista de usuarios
                     <td >{{ usuario.email }}</td>
                     <td style="text-align: right;">
                         <div class="d-flex align-items-center">
-                            <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center font-lg " data-bs-original-title="Ver información del usuario">
-                                <i class="fa fa-user-circle align-self-bottom" aria-hidden="true"></i>
-                            </a>
+                            <div class="d-flex align-items-center justify-content-center me-2">                                
+                                <button class="btn btn-outline-secondary dropdown-toggle me-0 p-1" type="button" id="dropdownMenuButton{{solicitante.id}}"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
+                                    <i class="fa fa-user-circle align-self-center font-lg" data-bs-original-title="Opciones" aria-hidden="true"></i>
+                                </button>                            
+                                <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item">
+                                            <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
+                                            <span class="align-self-center">Información del usuario</span>
+                                        </a>
+                                    </li>                                                                        
+                                    <li>
+                                        <a href="{% url 'solicitudes:AHistorial' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item" >
+                                            <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
+                                            <span class="align-self-center">Historial de solicitudes</span>
+                                        </a>  
+                                    </li>                                                                                                                                 
+                                </ul>                                                                                                            
+                                
+                            </div>                            
                             <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
                                 <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
                                     <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
@@ -121,20 +138,27 @@ Lista de usuarios
                 {% endfor %}
             </tbody>
         </table>
-        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
-            <span class="step-links">                                
-                <span class="current font-xs me-1">
-                    Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
-                </span>                
-                {% if page_soli.has_previous %}                    
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
-                {% endif %}
-                {% if page_soli.has_next %}
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
-                {% endif %}                
+        <div class="row pagination mx-3 font-semi-bold font-md ">
+            <span class="col step-links">           
+                <span class="row current font-xs ms-1 pt-1">         
+                {{ page_soli.start_index }} a {{ page_soli.end_index }} de {{ page_soli.paginator.count }} resultados.              
+                </span>
             </span>
-        </div>
+            <div class="col d-flex justify-content-end">
+                <span class="step-links">                                
+                    <span class="current font-xs me-1">
+                        Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
+                    </span>                
+                    {% if page_soli.has_previous %}                    
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                    {% endif %}
+                    {% if page_soli.has_next %}
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                    {% endif %}                
+                </span>
+            </div>
+        </div> 
     </div>
 {% endblock body %}
