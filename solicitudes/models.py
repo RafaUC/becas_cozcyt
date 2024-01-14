@@ -65,7 +65,7 @@ def calcular_puntaje(sender, instance, **kwargs):
                 nuevoPuntaje += puntaje.puntos
                 break
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de generos: {e}")
+        print(f"No se pudo calcular el puntaje de generos: {e}")
     #Ingresos
     try:
         puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[1][0])
@@ -84,7 +84,7 @@ def calcular_puntaje(sender, instance, **kwargs):
                 nuevoPuntaje += puntaje.puntos
                 break
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de Ingresos : {e}")
+        print(f"No se pudo calcular el puntaje de Ingresos : {e}")
     #tipo de solicitud
     try:                
         if solicitante.es_renovacion:
@@ -96,7 +96,7 @@ def calcular_puntaje(sender, instance, **kwargs):
             instance.tipo = Solicitud.TIPO_CHOICES[1][0]
             nuevoPuntaje += puntaje.puntos
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje y tipo de Tipo Solicitud: {e}")
+        print(f"No se pudo calcular el puntaje y tipo de Tipo Solicitud: {e}")
     #periodo
     try:
         puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[3][0])
@@ -106,7 +106,7 @@ def calcular_puntaje(sender, instance, **kwargs):
                 nuevoPuntaje += puntaje.puntos
                 break
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de periodo: {e}")
+        print(f"No se pudo calcular el puntaje de periodo: {e}")
     #promedio
     try:
         puntajes = PuntajeGeneral.objects.filter(tipo = seccionChoices[4][0])        
@@ -116,7 +116,7 @@ def calcular_puntaje(sender, instance, **kwargs):
                 nuevoPuntaje += puntaje.puntos
                 break
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de promedio: {e}")
+        print(f"No se pudo calcular el puntaje de promedio: {e}")
     #municipio
     try:
         puntajeMun = PuntajeMunicipio.objects.get(municipio=solicitante.municipio_id)
@@ -124,14 +124,14 @@ def calcular_puntaje(sender, instance, **kwargs):
     except PuntajeMunicipio.DoesNotExist:
         print(f"puntaje municipio 0:")
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de municipio: {e}")
+        print(f"No se pudo calcular el puntaje de municipio: {e}")
     #Institucion y carrera
     try:
         carrera = solicitante.carrera
         nuevoPuntaje += carrera.puntos
         nuevoPuntaje += carrera.institucion.puntos
     except Exception as e:        
-        print(f"Se produjo una excepción calculando el puntaje de Institución y carrera: {e}")
+        print(f"No se pudo calcular el puntaje de Institución y carrera: {e}")
     
     instance.puntaje = nuevoPuntaje
 

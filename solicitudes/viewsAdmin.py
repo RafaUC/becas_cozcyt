@@ -147,9 +147,9 @@ def estadisticaSolicitudes(request):
     incrementoHue = 0.011  # Incremento/decremento en el tono
 
     conjuntosEstadisticos = []
-    valoresFrecuencias = Solicitud.objects.values('estado').annotate(frecuencia=Count('estado'))
+    valoresFrecuencias = Solicitud.objects.values('ciclo').annotate(frecuencia=Count('ciclo'))
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
-    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['estado'], item['estado']) for item in valoresFrecuencias ]    
+    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['ciclo'], item['ciclo']) for item in valoresFrecuencias ]    
     data = [item['frecuencia'] for item in valoresFrecuencias]
     dataLabel = 'Solicitudes'
 
@@ -165,7 +165,7 @@ def estadisticaSolicitudes(request):
 
     conjuntoEst = {
         'grafico': {
-            'type': 'pie',
+            'type': 'bar',
             'data': {
                 'labels': labels,
                 'datasets': [{
@@ -297,8 +297,8 @@ def listaSolicitudes(request):
 
 def documentos_solicitante(request, pk):
     solicitante = get_object_or_404(Solicitante, pk=pk)  
-    solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo=ciclo_actual())
-    modalidad = Modalidad.objects.get(pk = solicitud.modalidad.pk)
+    solicitud = get_object_or_404(Solicitud, solicitante=solicitante, ciclo=ciclo_actual())
+    modalidad = get_object_or_404(Modalidad, pk = solicitud.modalidad.pk)
     documentos = Documento.objects.filter(modalidad=solicitud.modalidad)
     documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)
     listaDocumentos = zip(documentos, documentosResp)

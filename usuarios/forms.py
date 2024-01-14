@@ -125,9 +125,10 @@ class SolicitanteForm(forms.ModelForm):
                 self.fields['municipio'].queryset = municipios
             except (ValueError, TypeError) as e:            
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk and ('municipio' in self.fields):            
-            municipios = self.instance.municipio.estado.municipio_set.all().order_by('nombre')                
-            self.fields['municipio'].queryset = municipios       
+        elif self.instance.pk and ('municipio' in self.fields):  
+            if self.instance.municipio:          
+                municipios = self.instance.municipio.estado.municipio_set.all().order_by('nombre')                
+                self.fields['municipio'].queryset = municipios       
 
         if ('carrera' in self.data) and ('carrera' in self.fields):
             try:
@@ -136,9 +137,10 @@ class SolicitanteForm(forms.ModelForm):
                 self.fields['carrera'].queryset = carreras
             except (ValueError, TypeError) as e:            
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk and ('carrera' in self.fields) :            
-            carreras = self.instance.carrera.institucion.carrera_set.all().order_by('nombre')                
-            self.fields['carrera'].queryset = carreras    
+        elif self.instance.pk and ('carrera' in self.fields) :         
+            if self.instance.carrera:
+                carreras = self.instance.carrera.institucion.carrera_set.all().order_by('nombre')                
+                self.fields['carrera'].queryset = carreras    
 
 class SolicitantePersonalesForm(SolicitanteForm):    
 

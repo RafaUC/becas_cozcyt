@@ -159,7 +159,7 @@ class Solicitante(Usuario):
         verbose_name="Colonia/Fraccionamiento", max_length=255,blank=False, null=True)
     calle = models.CharField(
         verbose_name="Calle", max_length=255, blank=False, null=True)
-    numero = models.CharField(verbose_name="Numero", max_length=5, blank=False, null=True)
+    numero = models.CharField(verbose_name="Numero Domicilio", max_length=25, blank=False, null=True)
     codigo_postal = models.CharField(verbose_name="Codigo Postal", max_length=5, blank=False, null=True, validators=[MinLengthValidator(5), MaxLengthValidator(5)])
     tel_cel = models.CharField(verbose_name="Telefono Celular", max_length=10, null=True, blank=False, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
     tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=False, validators=[MinLengthValidator(5), MaxLengthValidator(10)])    
@@ -190,6 +190,7 @@ class Solicitante(Usuario):
         # Generar el folio si no está establecido        
         curp_prefix = self.curp[:4].upper()
         if self.id:            
+            self.id = int(self.id)
             numero_con_padding = f"{self.id:04d}" if self.id <= 9999 else str(self.id)
         else:
             ultima_instancia = Solicitante.objects.order_by('-id').first()
