@@ -40,7 +40,7 @@ def load_data_from_sql(sqlFile):
 # el argumento mapeo campos es un diccionario donde la clave de 
 # la isquierda es el el nombre atributo del modelo y el valor de la derecha es
 # el nombre de la columna del csv al que corresponde
-def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos, separador=','):
+def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos, separador=',', on_duplicate_update=False):
     print(f'Importando "{archivo_csv}".')    
     with open(archivo_csv, 'r', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=separador)
@@ -48,23 +48,32 @@ def importar_datos_desde_csv(archivo_csv, modelo, mapeo_campos, separador=','):
             datos_a_guardar = {}
             for campo, columna_csv in mapeo_campos.items():
                 datos_a_guardar[campo] = row.get(columna_csv)
+            #print(row)
             #print(datos_a_guardar)            
 
-            nuevo_registro = modelo(**datos_a_guardar)            
-            #print(f'nuevo: {nuevo_registro} -- {nuevo_registro.id} -- {nuevo_registro.pk}')
-
             try:
-                nuevo_registro.save()
-                if nuevo_registro.id:
-                    sys.stdout.write(f'+{nuevo_registro.id}')  # Imprime un símbolo de más para indicar éxito
+                # Intenta obtener el registro existente
+                registro_existente = modelo.objects.get(id=datos_a_guardar.get('id',-1))
+                if on_duplicate_update:
+                    # Si el registro existe y on_duplicate_update es True, actualiza el registro
+                    for campo, valor in datos_a_guardar.items():
+                        setattr(registro_existente, campo, valor)
+                    registro_existente.save()
+                    sys.stdout.write(f'+U:{registro_existente.id}') # Imprime un símbolo de U para indicar actualización
                 else:
-                    sys.stdout.write(f'+ ')  # Imprime un símbolo de más para indicar éxito
-            except Exception as e:                
-                sys.stdout.write(f'-{nuevo_registro}')  # Imprime un símbolo de menos para indicar fallo                
-                traceback.print_exc()
-                
+                    # Si el registro existe y on_duplicate_update es False, no hace nada
+                    sys.stdout.write(f'+E:{registro_existente.id}') # Imprime un símbolo de E para indicar existencia
+            except modelo.DoesNotExist:
+                # Si el registro no existe, crea uno nuevo
+                nuevo_registro = modelo(**datos_a_guardar)           
+                try:
+                    nuevo_registro.save()
+                    sys.stdout.write(f'+{nuevo_registro.id}') # Imprime un símbolo de más para indicar éxito
+                except Exception as e:               
+                    sys.stdout.write(f'-{nuevo_registro}') # Imprime un símbolo de menos para indicar fallo               
+                    traceback.print_exc()
 
-            sys.stdout.flush()     
+            sys.stdout.flush()    
         print(f'Terminado de importar "{archivo_csv}".')
     
 def GenerarNotificacionesUsuarios(mensaje, archivo_csv, idHeader, separador=','):
@@ -87,54 +96,49 @@ def GenerarNotificacionesUsuarios(mensaje, archivo_csv, idHeader, separador=',')
 
 ###Importacion de datos
 while True:
-    respuesta = input("Esto restablece la configuracion por defecto del Sistema, Tambien eliminara los registros de los usuarios. \n¿Proceder? (Sí/No): ").strip().lower()
+    respuesta = input("Esto restablece la configuracion por defecto de el estudio Socio-economico y borrara sus registros y no afectara registros existentes de otros modulos, pero podrian regresar registros eliminados existentes en la configuraccion por defecto. \n¿Proceder? (Sí/No): ").strip().lower()
     if respuesta in {'s', 'si'}:
 
         Seccion.objects.all().delete()        
         Elemento.objects.all().delete()  
         Opcion.objects.all().delete()  
         load_data_from_sql('catalogos/estudioSE.sql')
-
-        #PuntajeMunicipio.objects.all().delete()
+        
         load_data_from_sql('catalogos/puntos_municipios.sql')
-
-        #Modalidad.objects.all().delete()
+        
         load_data_from_sql('catalogos/modalidades.sql')
         
-        #Estado.objects.all().delete()
         importar_datos_desde_csv('catalogos/CatalogoInegiEstatal.csv', Estado, {
             'id': 'CVE_ENT',
             'nombre': 'NOM_ENT'
         })
-        #Municipio.objects.all().delete()
+        
         importar_datos_desde_csv('catalogos/CatalogoInegiMunicipal.csv', Municipio, {
             'cve_mun': 'CVE_MUN',
             'estado_id': 'CVE_ENT',
             'nombre': 'NOM_MUN'
         })
-        
-        #Institucion.objects.all().delete()
+                
         importar_datos_desde_csv('catalogos/institutos.csv', Institucion, {
             'id': 'id',
             'nombre': 'instituto',
             'puntos': 'puntos'
         })
-        #Carrera.objects.all().delete()
+        
         importar_datos_desde_csv('catalogos/carreras.csv', Carrera, {
             'id': 'id',
             'institucion_id': 'instituto',
             'nombre': 'carrera',
             'puntos': 'puntos'
         })        
-        #PuntajeGeneral.objects.all().delete()
+        
         importar_datos_desde_csv('catalogos/PuntajesGeneral.csv', PuntajeGeneral, {
             'id': 'id',
             'tipo': 'tipo',
             'nombre': 'nombre',
             'puntos': 'puntos'
         })                
-              
-        #Solicitante.objects.all().delete()
+        
         importar_datos_desde_csv('catalogos/SolicitantesReingreso.csv', Solicitante, {
             'id' : 'id',
             'nombre' : 'personalData.name',
@@ -153,8 +157,11 @@ while True:
             'tel_cel' : 'addressData.mobilePhoneNumber',
             'tel_fijo' : 'addressData.housePhoneNumber',                        
         }, separador=';')
-        
-        #Solicitud.objects.all().delete()
+          
+        GenerarNotificacionesUsuarios('Como solicitante aplicable para renovación, se le pide que por favor revise y actualice su información personal en su perfil.', 
+                                      'catalogos/SolicitantesReingreso.csv', 'id', separador=';')
+
+        input('A continuacion se crearan los registros de solicitudes pre existentes. Se espera que aparescan mensajes de errores. \n Pulse enter para continuar.')
         importar_datos_desde_csv('catalogos/SolicitantesReingreso.csv', Solicitud, {
             'id' : 'id',
             'modalidad_id' : 'scholarshipRecord',
@@ -163,8 +170,7 @@ while True:
             'estado' : 'estadoSolicitud'
         }, separador=';')
 
-        GenerarNotificacionesUsuarios('Como solicitante aplicable para renovación sel le pide que porfavor revise y actualize su informacion personal en su perfil.', 
-                                      'catalogos/SolicitantesReingreso.csv', 'id', separador=';')
+        
         print('\n\n')
         
         break

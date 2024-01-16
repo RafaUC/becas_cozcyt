@@ -1,4 +1,4 @@
-﻿id,tipo,nombre,puntos
+"id","tipo","nombre","puntos"
 1,"1-Genero","Hombre",0
 2,"1-Genero","Mujer",1
 3,"1-Genero","Otro",1
