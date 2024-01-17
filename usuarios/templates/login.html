@@ -15,14 +15,6 @@
               Bienvenido al sistema de impulso al talento
             </p>
           </div>
-          {% for message in messages %}
-              
-            <div class="alert alert-danger">
-                <a class="close" href="#" data-dismiss="alert">×</a>
-                  {{ message }}
-            </div>
-
-          {% endfor %}
           <div class="col text-center">
             <form method="POST">
               {% csrf_token %}
@@ -36,9 +28,9 @@
               <input class="form-control form-control-lg mt-3" type="text" required id="curp" name="curp"  placeholder="Curp">
               <input  class="form-control form-control-lg my-3" type="password" required id="id_password" name="password"   placeholder="Contraseña">
               -->
-              <p class="h6"><a href="{%url 'usuarios:reset_password' %}">¿Olvidaste tu contraseña?</a></p>
-              <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="iniciar sesion">Iniciar Sesión</button>
-              <p class="h6 mb-4"><a href="{% url 'usuarios:register' %}">Registrarse</a></p>
+              <p class="h6"><a class="enlace-login" href="{%url 'usuarios:reset_password' %}">¿Olvidaste tu contraseña?</a></p>
+              <button type="submit" class="btn create-user btn-lg " name="iniciar sesion">Iniciar Sesión</button>
+              <p class="h6 mb-4"><a class="enlace-login" href="{% url 'usuarios:register' %}">Registrarse</a></p>
               
             </form>
           </div>
