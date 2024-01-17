@@ -96,7 +96,7 @@ def GenerarNotificacionesUsuarios(mensaje, archivo_csv, idHeader, separador=',')
 
 ###Importacion de datos
 while True:
-    respuesta = input("Esto restablece la configuracion por defecto de el estudio Socio-economico y borrara sus registros y no afectara registros existentes de otros modulos, pero podrian regresar registros eliminados existentes en la configuraccion por defecto. \n¿Proceder? (Sí/No): ").strip().lower()
+    respuesta = input("Esto restablece la configuracion por defecto de el estudio Socio-economico y borrara sus registros. No afectara registros existentes de otros modulos, pero podrian regresar registros eliminados existentes en la configuraccion por defecto. \n¿Proceder? (Sí/No): ").strip().lower()
     if respuesta in {'s', 'si'}:
 
         Seccion.objects.all().delete()        
