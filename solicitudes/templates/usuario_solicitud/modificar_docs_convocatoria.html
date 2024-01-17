@@ -11,7 +11,7 @@
                 <p class="col h3 tituloModulo">
                     Mis documentos <i>{{ modalidad.nombre }}</i>
                 </p>
-                <div class="a fa-user-info px-3 align-self-center">
+                <div class="h5 a fa-user-info px-3 align-self-center modalidad-descripcion">
                     {{ modalidad.descripcion}}
                 </div>
                 <!-- <hr> -->
@@ -22,7 +22,7 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoResp in listaDocumentos %}
-                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
                                 <div class="row" style="height: 100px;">

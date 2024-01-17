@@ -542,6 +542,10 @@ a {
   font-size: 1.857rem; /* 26px / 14px */
 }
 
+.font-xxL {
+  font-size: 3.25rem; /* 26px / 14px */
+}
+
 .font-sl {
   font-size: 4rem; /* 26px / 14px */
 }
