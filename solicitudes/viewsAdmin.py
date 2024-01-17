@@ -257,27 +257,28 @@ def listaSolicitudes(request):
         if 'select-soli-check' in request.POST:
             seleccion = request.POST.getlist('select-soli-check')
             seleccion = [int(id_str) for id_str in seleccion]
-        print(f'{accion} - {todo} - {seleccion}')
+        #print(f'{accion} - {todo} - {seleccion}')
         #print(f'{type(accion)} - {type(todo)} - {type(seleccion)}')
 
         if accion and seleccion:            
             if todo:
-                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])                
-                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[1][0])  
+                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])      
+                counts = soliToUpdate.count()                          
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
-                    messages.success(request, f'Se aceptaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+                    messages.success(request, f'Se aceptaron todas las {counts} solicitudes filtradas con éxito')
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
-                    messages.success(request, f'Se rechazaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+                    messages.success(request, f'Se rechazaron todas las {counts} solicitudes filtradas con éxito')
             else:
-                soliToUpdate = soliToUpdate.filter(id__in=seleccion)                
+                soliToUpdate = soliToUpdate.filter(id__in=seleccion)     
+                counts = soliToUpdate.count()                
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
-                    messages.success(request, f'Se aceptaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se aceptaron las {counts} solicitudes seleccionadas con éxito')    
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
-                    messages.success(request, f'Se rechazaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se rechazaron las {counts} solicitudes seleccionadas con éxito')    
         else:
             messages.error(request, 'No se seleccionaron solicitudes')    
 
