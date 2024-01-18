@@ -96,7 +96,9 @@ def register(request):
             )  
             email.content_subtype = 'html'
             email.send()  #comentar esta linea para si no se desea mandar el correo
-            return render(request, 'confirmar_email.html')
+            messages.success(request, 'Le enviamos un correo a su dirección de email para verificar su cuenta.')
+            return redirect("usuarios:login")  
+            # return render(request, 'confirmar_email.html')
             #return HttpResponse('Please confirm your email address to complete the registration') 
         else:
             #print('not valid')
@@ -118,7 +120,10 @@ def activate(request, uidb64, token):
         user.save()
 
         print('Correo confirmado')
-        return HttpResponse('Gracias por verificar su email. Ya puede iniciar sesión en el sitio.')  
+        messages.success(request, 'Correo electrónico y cuenta confirmados. Ya puede iniciar sesión.')
+        return redirect("usuarios:login")
+        # return render(request,'confirmar_email.html')
+        # return HttpResponse('Gracias por verificar su email. Ya puede iniciar sesión en el sitio.') 
     else:  
         return HttpResponse('Link inválido o no disponible.')  
 

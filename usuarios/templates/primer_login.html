@@ -6,15 +6,15 @@
 
 {% block body %}
 
-<div class="border border-2 rounded-2 p-4 m-4 borde-pagina-principal">
+<div class="border border-1 rounded-2 p-4 m-4 borde-tabla principal" style="background-color: white;">
     <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>
         
         {% csrf_token %}        
     
-        <p class="h4" style="color: var(--pagina-principal);">Complete Sus Datos Personales </p>
+        <p class="h4" style="color: var(--rosaF);">Complete sus datos personales </p>
         <div class="row">
             <div class="row align-items-center p-2">
-                <p class="h5">Datos Personales</p>
+                <p class="h5">Datos personales</p>
                 <div class="col-4">
                     {{ form.nombre.label }} *
                     {{ form.nombre }}
@@ -59,7 +59,7 @@
         <hr>
         <div class="row">            
             <div class="row align-items-center p-2">
-                <p class="h5">Datos Domicilio</p>    
+                <p class="h5">Datos domicilio</p>    
                 <div class="col-4">
                     {{ form.calle.label }} *
                     {{ form.calle }}
@@ -100,7 +100,7 @@
                     {{ form.tel_cel.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.tel_fijo.label }}
+                    {{ form.tel_fijo.label }} *
                     {{ form.tel_fijo }}
                     {{ form.tel_fijo.error }}
                 </div>
@@ -109,7 +109,7 @@
         <hr>
         <div class="row">
             <div class="row align-items-center p-2">
-                <p class="h5">Datos Escolares</p>
+                <p class="h5">Datos escolares</p>
                 <div class="col-6">
                     {{ institucionSelectForm.institucion.label }} *
                     {{ institucionSelectForm.institucion }}
@@ -136,7 +136,7 @@
         </div>
         <div class="row">
             <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar">Guardar</button>    
+                <button type="submit" class="btn btn-guardar btn-lg my-3 " name="guardar">Guardar</button>    
             </div>            
         </div>
         

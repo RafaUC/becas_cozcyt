@@ -1,37 +1,4 @@
-:root {
-  /* Color styles */
-  --pagina-blanco: rgba(255, 255, 255, 1);
-  --pagina-fuerte: rgba(120, 21, 15, 1);
-  --pagina-principal: rgba(190, 70, 53, 1);
-  --pagina-tenue: rgba(228, 117, 111, 1);
-  --pagina-tenue-claro: rgba(254, 225, 229, 1);
-  --aceptado-desactivado: #ABEBC6;
-  --aceptado-activado: rgb(49, 185, 81);
-  --aceptado-hover: rgb(30, 139, 56);
-  --cancelar-desactivado: rgb(209, 134, 129);
-  --cancelar-activado: rgb(223, 87, 87);
-  --cancelar-hover: rgb(182, 65, 65);
-  --pagina-fondo: #EEE5E5/*#EEE5E5 #F1ECEC #F8F9FA*/;
-  --barra-lateral-fondo: #F8F9FA/*#EEE5E5 #F1ECEC #F8F9FA*/;
-  --pagina-gris: #b9b4b4;
 
-  --soli-doc-aprovada: #dfeafc;
-  --soli-doc-error: #f6face;
-  --soli-aceptada: #def8e3;
-  --soli-rechazada: #ffe1df;
-  --icon-solicitudes: rgba(27, 2, 37, 0.35);
-
-  --gris-0: #f8f8f8; /* Blanco apagado */
-  --gris-1: #efefef; /* Blanco apagado */
-  --gris-2: #e0e0e0; /* Gris claro */
-  --gris-3: #c0c0c0; /* Gris medio */
-  --gris-4: #a0a0a0; /* Gris */
-  --gris-5: #808080; /* Gris neutro */
-  --gris-6: #606060; /* Gris oscuro */
-  --gris-7: #404040; /* Gris profundo */
-  --gris-8: #202020; /* Gris intenso */
-  --negro: #000000; /* Negro absoluto */
-}
 
 :root {
   font-size: 14px; /* Establecer la fuente base */
@@ -299,7 +266,6 @@ body {
 /* Componenetes */
 
 .btn-guardar{
-  width: auto; 
   font-size: medium; 
   color: #676767; 
   font-weight: 400; 
@@ -535,6 +501,10 @@ a {
 
 .font-xxl {
   font-size: 1.857rem; /* 26px / 14px */
+}
+
+.font-xxL {
+  font-size: 3.25rem; /* 26px / 14px */
 }
 
 .font-sl {

@@ -1,15 +1,214 @@
-:root {
-    /* Color styles */
-    --verdeBtns: #D5F5E2;
-    --letraGeneral: #676767;
-    --bordesCard: #d1d1d1;
-    --rosaF: #E4756F;
-    --rosaM: #E1B2AF;
-    --rosaC: #E9C3C1;
-    --cancelar: #DCCBCA;
-    --blanco: #FFFFFF;
-    --btnActivo: #B9E2C1;
+
+
+.borde-tabla {
+    border-color: #E1BEBC !important;
+}
+
+.btn-editar-perfil{
+    background-color: var(--rosaF); 
+}
+
+.btn-guardar{
+    font-size: medium; 
+    color: #676767; 
+    font-weight: 400; 
+    background-color: #D5F5E2;
+    border-radius: 10px;
   }
+
+
+/**** Vistas solicitante ****/
+/* Login */
+.create-user {   
+    background-color: #ABEBC6;
+    border-radius: 10px;
+    width: auto;  
+    color: #FFFFFF;   
+    padding: 10px;   
+    margin: 10px 0px;   
+    border: none;   
+    cursor: pointer;
+    font-size: 17px; 
+    font-weight: bold;
+  } 
+
+  .create-user:hover {   
+    opacity: 0.7;   
+    color: var(--blanco);
+  }
+
+  .enlace-login{
+    color: var(--rosaM);
+  }
+
+  .enlace-login:hover{
+    color: var(--rosaF);
+  }
+
+/* Crear cuenta */
+
+/* Primer login */
+
+/* Perfil */
+ 
+.btn-editar-perfil{
+    color: #FFFFFF;  
+    padding: 0.5rem 1rem;
+    width: auto; 
+    border-radius: 50px; 
+    font-size: 1rem;
+}
+.btn-editar-perfil:hover{
+    background-color: #e68580; 
+    color: var(--blanco); 
+}
+
+.btn-guardar-perfil{
+    background-color: var(--btnActivo);
+    color: var(--blanco);
+    border-width: 1.5px; 
+    font-weight: 530;
+    border-radius: 20px;
+}
+
+.btn-guardar-perfil:hover{
+    background-color: var(--blanco);
+    color: var(--btnActivo);
+    border-color: var(--btnActivo);
+}
+
+/* Convocatoria */
+.tituloModulo{
+    font-weight: 600; 
+    padding-top: 40px;
+}
+
+.imagen-modalidad{
+    width: 70%; 
+    padding-bottom: 20px;
+}
+
+.card-modalidad{
+    text-align: center; 
+    height: 30%;
+}
+
+.btnConvocatoria{
+    background-color: var(--rosaF); 
+    color: #FFFFFF;  
+    width: 70%; 
+    border-radius: 50px; 
+    font-size: 1rem;
+}
+
+.btnConvocatoria:hover{
+    background-color: #e68580; 
+    color: var(--blanco); 
+}
+
+    /* Subir documentos */
+    .modalidad-descripcion{
+        font-weight: 400;
+        font-size: 15px;
+    }
+    .card-documento{
+        text-align: center; 
+        height: 380px;
+        border-radius: 15px; 
+        border-color: #d1d1d1;
+    }
+    #tituloCard{
+        font-weight:600; 
+        padding-bottom: 0px;
+    }
+    #contenidoCard{
+        font-weight: 400; 
+        padding-top: 0px; 
+        padding-bottom: 0px;
+    }
+    #previewDoc{
+        height: 200px; 
+        color: var(--letraGeneral);;
+    }
+    
+    .btnSubirDoc{
+        background-color: var(--blanco);; 
+        color: var(--rosaM);
+        width: 70%; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--rosaM); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+        overflow: hidden; 
+        white-space: nowrap;
+        /* display: block; Este lo bloquee ya que hace que el botón no esté centrado*/
+        text-overflow: ellipsis;
+    }
+    .btnSubirDoc:hover{
+        background-color: var(--rosaM);
+        color: var(--blanco); 
+    }
+    
+    input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
+        display: none;
+    } 
+    
+    .btnSubirDocs{
+        background-color: var(--btnActivo);
+        color: #676767;
+        color: var(--blanco); 
+        width: auto;
+        border-radius: 50px; 
+        border-width: 1.5px; 
+        font-weight: 530;
+    }
+    
+    .btnSubirDocs:hover{
+        background-color: var(--blanco);
+        color: var(--btnActivo);
+        border-color: var(--btnActivo);
+    }
+    
+    .btnCancelar{
+        background-color: #DFDFDF;
+        color: #A8A8A8; 
+        width: 40%;
+        border-radius: 50px; 
+        border-width: 1.5px; 
+        font-weight: 530;
+    }
+    .btnCancelar:hover{
+        background-color: #F0F0F0;
+        color: #C9C9C9; 
+    }
+    
+    .seccion-sidebar.active{
+        border-left: 10px solid var(--rosaF);
+    }
+
+/* Estudio socioeconómico */
+
+/* Historial */
+
+
+/**** Vistas administrador ****/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .principal{
     color: var(--letraGeneral);
@@ -187,114 +386,10 @@
 
 
 /* Vistas usuario */
-/* Convocatorias - Modalidades */
-.tituloModulo{
-    font-weight: 600; 
-    padding-top: 40px;
-}
-.card-modalidad{
-    text-align: center; 
-    height: 320px;
-}
-.imagen-modalidad{
-    width: 170px; 
-    padding-bottom: 20px;
-}
-.btnSolicitar{
-    background-color: var(--rosaF); 
-    color: var(--blanco);
-    width: 170px; 
-    border-radius: 50px;
-    border-width: 1.5px; 
-    font-weight: 530;
-}
-.btnSolicitar:hover{
-    background-color: var(--blanco); 
-    color: var(--rosaF);
-}
 
 
 /* Documentos */
-.card-documento{
-    text-align: center; 
-    height: 380px;
-    border-radius: 15px; 
-    border-color: #d1d1d1;
-}
-#tituloCard{
-    font-weight:600; 
-    padding-bottom: 0px;
-}
-#contenidoCard{
-    font-weight: 400; 
-    padding-top: 0px; 
-    padding-bottom: 0px;
-}
-#previewDoc{
-    height: 200px; 
-    color: var(--letraGeneral);;
-}
 
-.btnSubirDoc{
-    background-color: var(--blanco);; 
-    color: var(--rosaM);
-    width: 170px; 
-    padding: 6px;
-    font-size: medium;
-    border-color: var(--rosaM); 
-    border-radius: 50px; 
-    border: 1.5px solid; 
-    font-weight: 530;
-    overflow: hidden; 
-    white-space: nowrap;
-    /* display: block; Este lo bloquee ya que hace que el botón no esté centrado*/
-    text-overflow: ellipsis;
-}
-.btnSubirDoc:hover{
-    background-color: var(--rosaM);
-    color: var(--blanco); 
-}
-
-input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
-    display: none;
-} 
-
-.btnSubirDocs{
-    background-color: var(--btnActivo);
-    color: #676767;
-    color: var(--blanco); 
-    width: auto;
-    border-radius: 50px; 
-    border-width: 1.5px; 
-    font-weight: 530;
-}
-
-.btnSubirDocs:hover{
-    background-color: var(--blanco);
-    color: var(--btnActivo);
-    border-color: var(--btnActivo);
-}
-
-.btnCancelar{
-    background-color: #DFDFDF;
-    color: #A8A8A8; 
-    width: 170px;
-    border-radius: 50px; 
-    border-width: 1.5px; 
-    font-weight: 530;
-}
-.btnCancelar:hover{
-    background-color: #F0F0F0;
-    color: #C9C9C9; 
-}
-
-.seccion-sidebar{
-    border-left: 10px solid var(--barra-lateral-fondo);
-}
-
-.seccion-sidebar.active{
-    border-left: 10px solid var(--rosaF);
-}
 
 /* Footer */
 

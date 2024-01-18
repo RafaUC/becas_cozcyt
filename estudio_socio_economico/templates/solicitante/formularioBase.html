@@ -6,10 +6,10 @@
 
 {% for seccion in preguntasEstudio %}
     {% if seccion.tipo == 'agregacion' %}
-    <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
+    <div class="cont-agregacion prin" id="agregacion-{{ seccion.id }}">
     {% endif %}
-    <div class=" cont-seccion border border-2 rounded-2 p-0 pb-2 mx-3 mb-5 borde-pagina-principal ">
-        <h2 class="m-3 mb-4">{{ seccion.nombre }}</h2>      
+    <div class=" cont-seccion border border-1 rounded-2 p-0 pb-2 mx-3 mb-5 borde-tabla principal">
+        <h3 class="m-3 mb-4">{{ seccion.nombre }}</h3>      
         <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
             {% for elemento in seccion.elemento_set.all %}
                 {% if elemento.tipo == 'separador' %}
@@ -85,18 +85,18 @@
     
     {% if seccion.tipo == 'agregacion' %}
         {% with registrosA|hashD:seccion.id as registros %}
-            <div class="col d-flex align-items-center justify-content-center text-center ">
-                <button  type="button" class="btn rounded-4 btn-a-seccion btn-aceptado p-2 px-3 font-md" onclick="agregarRegistro(this)">Agregar Registro</button>
+            <div class="col d-flex align-items-center justify-content-center text-center p-2">
+                <button  type="button" class="btn rounded-4 btn-a-seccion btn-guardar p-2 px-3 font-md" onclick="agregarRegistro(this)">Agregar Registro</button>
             </div>                  
-            <p class="h4 mx-3 mb-2">Registros</p>               
-            <div class="border border-1 rounded-2 p-0 mx-2 mb-2 borde-pagina-principal horizontal-scroll ">
+            <p class="h4 mx-3 mb-2 p-2">Registros</p>               
+            <div class="border border-0 rounded-2 p-0 mx-2 mb-2 horizontal-scroll ">
                 <table class="custom-table-se">                                     
                     <thead>
                         <tr>
                             {% for elemento in seccion.elemento_set.all %}                                   
-                            <th class="borde-pagina-gris font-xs font-semi-bold" style="border-bottom: 2px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                            <th class="borde-pagina-gris font-xs font-semi-bold" style="border-bottom: 1px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
                             {% endfor %}
-                            <th class="borde-pagina-gris font-xs " style="width: 32px; border-bottom: 2px solid;"> </th>
+                            <th class="borde-pagina-gris font-xs " style="width: 32px; border-bottom: 1px solid;"> </th>
                         </tr>
                     </thead>                            
                     <tbody>

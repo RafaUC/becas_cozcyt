@@ -61,15 +61,18 @@ def convocatorias(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
     
+    usuario = Solicitante.objects.get(pk=request.user.id)
     modalidades = Modalidad.objects.all()
     convocatoria = Convocatoria.objects.all().first()
     solicitud = None
     if Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists():
         solicitud = Solicitud.objects.get(solicitante = solicitante, ciclo = ciclo_actual())
+    
     context = {
         'modalidades' : modalidades,
         'convocatoria' : convocatoria,
         'solicitud_existe' : solicitud,
+        'solicitante' : usuario,
     }
     return render(request, 'usuario_solicitud/convocatorias.html', context)
 

@@ -8,10 +8,18 @@
     <div class="rounded-2 p-1 mx-4 principal">
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h3 tituloModulo">
-                    Documentación de 
-                    <b style="font-weight: 700;">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</b>
-                </p>
+                <div class="col">
+                    <p class="col h3 tituloModulo">
+                        Documentación de 
+                        <b style="font-weight: 700;">{{ solicitante.nombre }} {{ solicitante.ap_paterno }} {{ solicitante.ap_materno }}</b>
+                    </p>
+                </div>
+                <div class="col-md-auto">
+                    <p class="col h4 text-end tituloModulo">
+                        Folio: 
+                        <b style="font-weight: 700;">{{ solicitante.folio }}</b>
+                    </p>     
+                </div>  
                 <div class="a fa-user-info px-3 align-self-center h5">
                     Modalidad de <b style="font-weight: 700;">{{ modalidad.nombre}}</b>
                 </div>

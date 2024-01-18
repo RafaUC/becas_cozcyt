@@ -5,197 +5,205 @@
 {% endblock titulo %}
 
 {% block body %}
-
+<div class="rounded-2 p-1 principal">
     {% block nombreUsuario %}
-    <div class="row align-items-center m-0">
-        <p class="col mx-5 my-4 h3" >Mi Perfil</p>
-        <p class="col h2 mx-4 mt-4 text-end">Folio: {{ formPersonal.instance.folio }}</p>     
-    </div>    
+    <div class="rounded-2 mx-5" style="padding-bottom: 20px;">
+        <div class="row tituloModulo">
+            <div class="col-md">
+            <p class="h3"> Mi perfil</p>
+            </div>
+            <div class="col-md">
+            <p class="h4 text-end" style="font-weight: 500; padding-top: 5px">Folio: <b style="font-weight: 700;">{{ formPersonal.instance.folio }}</b></p> 
+            </div>  
+            <hr>
+        </div>
+    </div>
     {% endblock nombreUsuario %}
 
-<div class="border border-2 rounded-2 p-4 mx-5 mb-4 borde-pagina-principal red-errors">
-    <div class="row">
-        <p class="col h5">Datos Personales</p>
-        <div class="collapse show multi-collapse col text-end" id="collapse1-1">
-            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1-1, #collapse2-1, #collapse3-1, #collapse1-2" aria-expanded="false" aria-controls="collapse1-1 collapse1-2">
-                Editar
-                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
-            </button>
-        </div>  
-    </div>
-      
-    <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>        
-        {% csrf_token %}                
-        <div>
-            <div class="row align-items-center p-2">
-                
-                <div class="col-4">
-                    {{ formPersonal.nombre.label }} 
-                    {{ formPersonal.nombre }}
-                    {{ formPersonal.nombre.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formPersonal.ap_paterno.label }} 
-                    {{ formPersonal.ap_paterno }}
-                    {{ formPersonal.ap_paterno.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formPersonal.ap_materno.label }}
-                    {{ formPersonal.ap_materno }}
-                    {{ formPersonal.ap_materno.errors }}
-                </div>
-            </div>
-            <div class="row align-items-center p-2">
-                <div class="col-4">
-                    {{ formPersonal.fecha_nacimiento.label }} 
-                    {{ formPersonal.fecha_nacimiento }}
-                    {{ formPersonal.fecha_nacimiento.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formPersonal.genero.label }} 
-                    {{ formPersonal.genero }}
-                    {{ formPersonal.genero.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formPersonal.g_etnico.label }}
-                    {{ formPersonal.g_etnico }}
-                    {{ formPersonal.g_etnico.errors }}
-                </div>
-            </div>
-            <div class="row align-items-center p-2">
-                <div class="col-4">
-                    {{ formPersonal.rfc.label }}
-                    {{ formPersonal.rfc }}
-                    {{ formPersonal.rfc.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">            
-            <div class="collapse multi-collapse" id="collapse1-2">
-                <div class="d-grid gap-2 col-4 mx-auto ">
-                    <button  id="submitPersonal" type="submit"  class="btn btn-aceptado btn-lg my-3 " name="guardar" value="personal">Guardar</button>    
-                </div>     
-            </div>                   
-        </div>
-    </form>
-</div>
-
-<div class="border border-2 rounded-2 p-4 mx-5 mb-4 borde-pagina-principal red-errors">
-    <div class="row">
-        <p class="h5 col">Datos Domicilio</p>    
-        <div class="collapse show multi-collapse text-end col" id="collapse2-1">
-            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2-1, #collapse1-1, #collapse3-1, #collapse2-2" aria-expanded="false" aria-controls="collapse2-1 collapse2-2">
-                Editar
-                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
-            </button>
-        </div>  
-    </div>
-    <form method="POST" id="domicilioForm" novalidate>
-        {% csrf_token %}           
-        <div>            
-            <div class="row align-items-center p-2">                
-                <div class="col-4">
-                    {{ formDomicilio.calle.label }} 
-                    {{ formDomicilio.calle }}
-                    {{ formDomicilio.calle.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formDomicilio.numero.label }} 
-                    {{ formDomicilio.numero }}
-                    {{ formDomicilio.numero.errors }}                    
-                </div>
-                <div class="col-4">
-                    {{ formDomicilio.colonia.label }} 
-                    {{ formDomicilio.colonia }}
-                    {{ formDomicilio.colonia.errors }}
-                </div>
-            </div>    
-            <div class="row align-items-center p-2">
-                <div class="col-4">
-                    {{ estadoSelectForm.estado.label }} 
-                    {{ estadoSelectForm.estado }}
-                    {{ estadoSelectForm.estado.errors }}
-                </div>
-                <div class="col-4">                    
-                    {{ formDomicilio.municipio.label }} 
-                    {{ formDomicilio.municipio }}
-                    {{ formDomicilio.municipio.errors }}
-                </div>   
-                <div class="col-4">
-                    {{ formDomicilio.codigo_postal.label }} 
-                    {{ formDomicilio.codigo_postal }}
-                    {{ formDomicilio.codigo_postal.errors }}
-                </div>             
-            </div>    
-            <div class="row align-items-center p-2">
-                <div class="col-4">
-                    {{ formDomicilio.tel_cel.label }} 
-                    {{ formDomicilio.tel_cel }}
-                    {{ formDomicilio.tel_cel.errors }}
-                </div>
-                <div class="col-4">
-                    {{ formDomicilio.tel_fijo.label }}
-                    {{ formDomicilio.tel_fijo }}
-                    {{ formDomicilio.tel_fijo.error }}
-                </div>
-            </div>
-        </div>
+    <div class="border border-1 rounded-2 p-3 mx-4 mb-4 borde-tabla red-errors">
         <div class="row">
-            <div class="collapse multi-collapse" id="collapse2-2">
-                <div class="d-grid gap-2 col-4 mx-auto">
-                    <button id="submitdomicilio" type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="domicilio">Guardar</button>    
-                </div>            
-            </div>
+            <p class="col h5">Datos Personales</p>
+            <div class="collapse show multi-collapse col text-end" id="collapse1-1">
+                <button class="btn btn-editar-perfil" id="enableFormButton1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1-1, #collapse2-1, #collapse3-1, #collapse1-2" aria-expanded="false" aria-controls="collapse1-1 collapse1-2">
+                    Editar
+                    <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+                </button>
+            </div>  
         </div>
-    </form>
-</div>
+        
+        <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>        
+            {% csrf_token %}                
+            <div>
+                <div class="row align-items-center p-2">
+                    
+                    <div class="col-4">
+                        {{ formPersonal.nombre.label }} 
+                        {{ formPersonal.nombre }}
+                        {{ formPersonal.nombre.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formPersonal.ap_paterno.label }} 
+                        {{ formPersonal.ap_paterno }}
+                        {{ formPersonal.ap_paterno.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formPersonal.ap_materno.label }}
+                        {{ formPersonal.ap_materno }}
+                        {{ formPersonal.ap_materno.errors }}
+                    </div>
+                </div>
+                <div class="row align-items-center p-2">
+                    <div class="col-4">
+                        {{ formPersonal.fecha_nacimiento.label }} 
+                        {{ formPersonal.fecha_nacimiento }}
+                        {{ formPersonal.fecha_nacimiento.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formPersonal.genero.label }} 
+                        {{ formPersonal.genero }}
+                        {{ formPersonal.genero.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formPersonal.g_etnico.label }}
+                        {{ formPersonal.g_etnico }}
+                        {{ formPersonal.g_etnico.errors }}
+                    </div>
+                </div>
+                <div class="row align-items-center p-2">
+                    <div class="col-4">
+                        {{ formPersonal.rfc.label }}
+                        {{ formPersonal.rfc }}
+                        {{ formPersonal.rfc.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">            
+                <div class="collapse multi-collapse" id="collapse1-2">
+                    <div class="d-grid gap-2 col-4 mx-auto ">
+                        <button  id="submitPersonal" type="submit"  class="btn btn-guardar-perfil btn-lg my-3 " name="guardar" value="personal">Guardar</button>    
+                    </div>     
+                </div>                   
+            </div>
+        </form>
+    </div>
 
-<div class="border border-2 rounded-2 p-4 mx-5 mb-4 borde-pagina-principal red-errors">
-    <div class="row">
-        <p class="h5 col">Datos Escolares</p>
-        <div class="collapse show multi-collapse text-end col" id="collapse3-1">
-            <button class="btn-pagina-tenue rounded-pill " id="enableFormButton3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3-1, #collapse2-1, #collapse1-1, #collapse3-2" aria-expanded="false" aria-controls="collapse3-1 collapse3-2">
-                Editar
-                <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
-            </button>
-        </div>   
-    </div>    
-    <form method="POST" id="escolarForm" novalidate>
-        {% csrf_token %}  
-        <div>
-            <div class="row align-items-center p-2">                
-                <div class="col-6">
-                    {{ institucionSelectForm.institucion.label }} 
-                    {{ institucionSelectForm.institucion }}
-                    {{ institucionSelectForm.institucion.errors }}
-                </div>
-                <div class="col-6">
-                    {{ formEscolar.carrera.label }} 
-                    {{ formEscolar.carrera }}
-                    {{ formEscolar.carrera.errors }}
-                </div>                
-            </div>
-            <div class="row align-items-center p-2">
-                <div class="col-6">
-                    {{ formEscolar.grado.label }} 
-                    {{ formEscolar.grado }}
-                    {{ formEscolar.grado.errors }}
-                </div>
-                <div class="col-6">
-                    {{ formEscolar.promedio.label }} 
-                    {{ formEscolar.promedio }}
-                    {{ formEscolar.promedio.errors }}
-                </div>
-            </div>
-        </div>
+    <div class="border border-1 rounded-2 p-3 mx-4 mb-4 borde-tabla red-errors">
         <div class="row">
-            <div class="collapse multi-collapse" id="collapse3-2">
-                <div class="d-grid gap-2 col-4 mx-auto">
-                    <button id="submitEscolar" type="submit" class="btn btn-aceptado btn-lg my-3 " name="guardar" value="escolar">Guardar</button>    
+            <p class="h5 col">Datos Domicilio</p>    
+            <div class="collapse show multi-collapse text-end col" id="collapse2-1">
+                <button class="btn btn-editar-perfil" id="enableFormButton2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2-1, #collapse1-1, #collapse3-1, #collapse2-2" aria-expanded="false" aria-controls="collapse2-1 collapse2-2">
+                    Editar
+                    <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+                </button>
+            </div>  
+        </div>
+        <form method="POST" id="domicilioForm" novalidate>
+            {% csrf_token %}           
+            <div>            
+                <div class="row align-items-center p-2">                
+                    <div class="col-4">
+                        {{ formDomicilio.calle.label }} 
+                        {{ formDomicilio.calle }}
+                        {{ formDomicilio.calle.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formDomicilio.numero.label }} 
+                        {{ formDomicilio.numero }}
+                        {{ formDomicilio.numero.errors }}                    
+                    </div>
+                    <div class="col-4">
+                        {{ formDomicilio.colonia.label }} 
+                        {{ formDomicilio.colonia }}
+                        {{ formDomicilio.colonia.errors }}
+                    </div>
                 </div>    
+                <div class="row align-items-center p-2">
+                    <div class="col-4">
+                        {{ estadoSelectForm.estado.label }} 
+                        {{ estadoSelectForm.estado }}
+                        {{ estadoSelectForm.estado.errors }}
+                    </div>
+                    <div class="col-4">                    
+                        {{ formDomicilio.municipio.label }} 
+                        {{ formDomicilio.municipio }}
+                        {{ formDomicilio.municipio.errors }}
+                    </div>   
+                    <div class="col-4">
+                        {{ formDomicilio.codigo_postal.label }} 
+                        {{ formDomicilio.codigo_postal }}
+                        {{ formDomicilio.codigo_postal.errors }}
+                    </div>             
+                </div>    
+                <div class="row align-items-center p-2">
+                    <div class="col-4">
+                        {{ formDomicilio.tel_cel.label }} 
+                        {{ formDomicilio.tel_cel }}
+                        {{ formDomicilio.tel_cel.errors }}
+                    </div>
+                    <div class="col-4">
+                        {{ formDomicilio.tel_fijo.label }}
+                        {{ formDomicilio.tel_fijo }}
+                        {{ formDomicilio.tel_fijo.error }}
+                    </div>
+                </div>
             </div>
-        </div>
-    </form>
+            <div class="row">
+                <div class="collapse multi-collapse" id="collapse2-2">
+                    <div class="d-grid gap-2 col-4 mx-auto">
+                        <button id="submitdomicilio" type="submit" class="btn btn-guardar-perfil btn-lg my-3 " name="guardar" value="domicilio">Guardar</button>    
+                    </div>            
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="border border-1 rounded-2 p-3 mx-4 mb-4 borde-tabla red-errors">
+        <div class="row">
+            <p class="h5 col">Datos Escolares</p>
+            <div class="collapse show multi-collapse text-end col" id="collapse3-1">
+                <button class="btn btn-editar-perfil" id="enableFormButton3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3-1, #collapse2-1, #collapse1-1, #collapse3-2" aria-expanded="false" aria-controls="collapse3-1 collapse3-2">
+                    Editar
+                    <i class="fa fa-pencil-square-o " aria-hidden="true"> </i>
+                </button>
+            </div>   
+        </div>    
+        <form method="POST" id="escolarForm" novalidate>
+            {% csrf_token %}  
+            <div>
+                <div class="row align-items-center p-2">                
+                    <div class="col-6">
+                        {{ institucionSelectForm.institucion.label }} 
+                        {{ institucionSelectForm.institucion }}
+                        {{ institucionSelectForm.institucion.errors }}
+                    </div>
+                    <div class="col-6">
+                        {{ formEscolar.carrera.label }} 
+                        {{ formEscolar.carrera }}
+                        {{ formEscolar.carrera.errors }}
+                    </div>                
+                </div>
+                <div class="row align-items-center p-2">
+                    <div class="col-6">
+                        {{ formEscolar.grado.label }} 
+                        {{ formEscolar.grado }}
+                        {{ formEscolar.grado.errors }}
+                    </div>
+                    <div class="col-6">
+                        {{ formEscolar.promedio.label }} 
+                        {{ formEscolar.promedio }}
+                        {{ formEscolar.promedio.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="collapse multi-collapse" id="collapse3-2">
+                    <div class="d-grid gap-2 col-4 mx-auto">
+                        <button id="submitEscolar" type="submit" class="btn btn-guardar-perfil btn-lg my-3 " name="guardar" value="escolar">Guardar</button>    
+                    </div>    
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 {% include "carga_municipios_script.html" %}

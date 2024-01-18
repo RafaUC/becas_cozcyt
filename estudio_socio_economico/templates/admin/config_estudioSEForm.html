@@ -646,13 +646,24 @@
 
 <form method="post" id="ESE_Form" class="hidden-ready">
     {% csrf_token %}
-    <button id="submitButton" onclick="desactivar(this)" type="submit" value="Guardar" class="btn btn-aceptado m-3 p-2"> Guardar cambios </button>
+    <div class="rounded-2 mx-5">
+        <form method="post">          
+        <div class="row">
+            <div class="gap-1 col-2 mx-auto" style="margin-right: 0 !important">
+                <div class="col d-flex align-items-center flex-row-reverse text-center" style="padding-bottom: 15px;">
+                    <button id="submitButton" onclick="desactivar(this)" type="submit" value="Guardar" class="btn btn-guardar"> Guardar </button>
+                    <!-- <button  type="submit" value="Guardar" class="btn btn-guardar px-4 py-2" style="width: auto"> Guardar </button> -->
+                </div>   
+            </div>   
+        </div>
+    </div>
+
     <div id="secciones" >
         
         {{seccionFormset.management_form}}
         {% for seccion in seccionFormset %}
         {% with pDiv=seccion.prefix|splitPop:'-' %}
-            <div id="parentDiv-{{ pDiv }}" class=" cont-seccion border border-2 rounded-2 p-0 mx-3 mb-5 pagina-fondo borde-pagina-principal text-center">
+            <div id="parentDiv-{{ pDiv }}" class=" cont-seccion border border-1 rounded-2 p-0 mx-3 mb-5 pagina-fondo borde-tabla text-center">
                 
                 
                 <div class="row m-0 pt-2 text-center pagina-blanco"> 
@@ -712,7 +723,7 @@
                                         {% for elemento in  elementoFormSet%}
                                             {% with eID=forloop.counter0 %}
                                                                                                                                                                         
-                                                <div id="elem-{{ pDiv }}-{{ eID }}" class="col cont-elem p-0 m-1 pagina-blanco border border-3 rounded rounded-3 borde-pagina-blanco" >
+                                                <div id="elem-{{ pDiv }}-{{ eID }}" class="col cont-elem p-0 m-1 pagina-blanco border border-1 rounded rounded-3 borde-pagina-blanco" >
                                                     
                                                     <div class="px-3 py-1 m-0 ">
                                                         <div class="row text-center mb-1"> 
@@ -851,11 +862,11 @@
                                         revisarFilasVacias('parentDiv-{{ pDiv }}')
                                     </script>  
                                     <div class="row btn-a-elem m-0 p-3 align-items-center pagina-blanco">
-                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-aceptado mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
+                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-guardar mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
                                     </div>                                                                              
                                 {% else %}                                        
                                     <div class="row btn-a-elem m-0 p-3 align-items-center pagina-blanco">
-                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-aceptado mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
+                                        <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-guardar mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
                                     </div>
                                 {% endif %}
                             {% endwith %}
@@ -865,7 +876,7 @@
         {% endwith%}
         {% endfor %}
         <div id="botonASeccion" class="row px-5 element-fixed mx-0">
-            <button  type="button" onclick="agregarNuevaSeccion()" class="btn btn-a-seccion btn-aceptado element-fixed mb-4 p-3 ps-2 font-xxl">+ Agregar Sección</button>
+            <button  type="button" onclick="agregarNuevaSeccion()" class="btn btn-a-seccion btn-guardar element-fixed mb-4 p-3 ps-2 font-xxl">+ Agregar Sección</button>
         </div>            
     </div>
 </form>
