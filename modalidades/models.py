@@ -26,7 +26,7 @@ def modalidadMediaPath(instance, filename):
 class Convocatoria(models.Model):
     fecha_inicio = models.DateField(null=False, blank=True)
     fecha_cierre = models.DateField(null=False, blank=True)
-    presupuesto = models.DecimalField(max_digits=10, decimal_places=2)
+    presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
 
     def __str__(self):
         return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #date.today()
@@ -51,7 +51,7 @@ class Modalidad(models.Model):
     nombre = models.CharField(max_length=255, verbose_name="Nombre", null=False)
     imagen = models.ImageField(upload_to=modalidadMediaPath, verbose_name="Imagen", null=False)
     descripcion = models.TextField(verbose_name="Descripción", null=False)
-    monto = models.DecimalField(max_digits=6, decimal_places=2,verbose_name="monto", null=True)
+    monto = models.DecimalField(max_digits=7, decimal_places=2,verbose_name="monto", null=True)
     mostrar = models.BooleanField(default=True)
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[0][0])
 

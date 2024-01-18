@@ -18,8 +18,8 @@ from . import views, viewsAdmin
 
 app_name = 'solicitudes'
 urlpatterns = [
-    path('convocatorias/',views.convocatorias, name='convocatorias'),
-    path('convocatorias/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
+    path('convocatoria/',views.convocatorias, name='convocatorias'),
+    path('convocatoria/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
     path('documento_respuesta/<int:pk>',views.documentoRespuesta, name='documento-respuesta'),
     path('documento/<int:soli>/<int:file>',views.verPDF, name='verPdf'),
     path('historial/',views.historial, name='historial'),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
     path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
     path('documentosSolicitante/<int:pk>', viewsAdmin.documentos_solicitante, name="ADocumentos"),
-    path('convocatorias/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
+    path('convocatoria/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
 
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
