@@ -47,7 +47,7 @@
             const currenFormCount = currentDocumentoForms.length // + 1
             const formCopyTarget = document.getElementById('documentos-list')
             const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-            copyEmptyFormEl.setAttribute('class', 'documento-form col-sm-4')
+            copyEmptyFormEl.setAttribute('class', 'documento-form col-md-4')
             copyEmptyFormEl.setAttribute('id', `form-${currenFormCount}`)
             const regex = new RegExp('__prefix__', 'g')
             copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currenFormCount)

@@ -1,12 +1,10 @@
 <form action='' id="orderingForm" method="POST" enctype="multipart/form-data">
     {% csrf_token %}    
     <div class="row">
-        <div class="d-grid gap col-2 mx-auto" style="margin-right: 0 !important;">
+        <div class="text-end mx-3">
             <a href="{% url 'modalidades:AConfigModalidades' %}" class ="btn btn-regresar">
                     Cancelar  
-            </a> 
-        </div>
-        <div class="d-grid gap-1 col-2" style="margin-right: 0 !important">
+            </a>
             <button type="submit" class="btn btn-guardar" name="guardar" id="saveOrdering">Guardar</button>    
         </div>   
     </div>
@@ -36,10 +34,16 @@
     </div>
 
     <div class="row" style="padding-top: 40px; ">
-        <p class="agregarMod" id="documento-mods" style="display: inline-block; width:auto"> Documentos </p>
-        <div class="d-grid gap-1 col-2 mx-auto" style="margin-right: 0 !important">
-            <button id = 'add-more' type="button" class="btn btn-guardar" name="agregar">Agregar</button>    
-        </div>   
+        <div class="row">
+            <div class="col">
+                <p class="agregarMod" id="documento-mods" style="display: inline-block; width:auto"> Documentos </p>
+            </div>
+            <div class="col-sm-auto">
+                <div class="gap-1 col-2">
+                    <button id = 'add-more' type="button" class="btn btn-guardar" name="agregar">Agregar</button>    
+                </div>   
+            </div>
+        </div>    
         <div class="row" id='documentos-list'>
             {% if formset %}
             {{ formset.management_form}}

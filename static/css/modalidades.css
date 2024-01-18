@@ -1,16 +1,4 @@
-:root {
-    /* Color styles */
-    --verdeBtns: #D5F5E2;
-    --letraGeneral: #676767;
-    --bordesCard: #d1d1d1;
-    --rosaF: #E4756F;
-    --rosaM: #E1B2AF;
-    --rosaC: #E9C3C1;
-    
-    --cancelar: #DCCBCA;
-    --blanco: #FFFFFF;
-    --btnActivo: #B9E2C1;
-}
+
 
 .borde-tabla {
     border-color: #E1BEBC !important;

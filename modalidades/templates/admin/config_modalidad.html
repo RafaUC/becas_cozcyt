@@ -47,7 +47,7 @@
                 {% for modalidad in modalidades%}
                 <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                     <div class="card">
-                        <div class="card-body" style="text-align: center; height: 320px;">
+                        <div class="card-body card-modalidad">
                             {{ modalidad.tipo }}
                             <!-- Checkbox que funciona sin que la página se refresque usando HTMX y ajax -->
                             <form method="POST">
