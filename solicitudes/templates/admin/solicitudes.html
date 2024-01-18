@@ -6,16 +6,16 @@ Administrar solicitudes
 
 {% block body %}    
 
-    <div class="row align-items-center m-0">
-        <p class="col h2 mx-3 mt-4">Solicitudes {{ ciclo }}</p>
-              
+    <div class="row align-items-center principal">
+        <p class=" mx-4 my-4 h3">Solicitudes {{ ciclo }}</p>
     </div>
 
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal">    
         <div class="row mx-0">
             <div class="col-3 ps-0">
-                <p class="h4 mx-3">Solicitudes</p>           
-            </div>            
+                <p class="h4 mx-3"><strong>Solicitudes</strong></p>           
+            </div>    
+            <p></p>   
             <div class="col mt-1 mb-4 mx-3">
                 <form role="search" method="GET"> 
                     <div class="row align-items-center">
@@ -61,8 +61,8 @@ Administrar solicitudes
             </div> 
         </div>
         <div class="text-end mx-3">
-            <button class="btn btn-aceptado font-md" type="submit" value="aceptar" onclick="enviarFormulario('seleccionadosForm', this)">Aceptar seleccionados</button>
-            <button class="btn btn-cancelar font-md" type="submit" value="rechazar"onclick="enviarFormulario('seleccionadosForm', this)">Rechazar seleccionados</button>            
+            <button class="btn btn-guardar font-md" type="submit" value="aceptar" onclick="enviarFormulario('seleccionadosForm', this)">Aceptar seleccionados</button>
+            <button class="btn btnEditar font-md" type="submit" value="rechazar"onclick="enviarFormulario('seleccionadosForm', this)">Rechazar seleccionados</button>            
         </div>
         <div class="horizontal-scroll">
                 <form id="seleccionadosForm" role="search" method="POST"> 
@@ -71,19 +71,19 @@ Administrar solicitudes
                     <table class="table custom-table-simple">            
                         <thead>
                             <tr>                    
-                                <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> Folio</th>  
-                                <th class="borde-pagina-gris" style="border-bottom: 2px solid;"> Nombre</th>
-                                <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> CURP</th>                                        
-                                <th class="borde-pagina-gris text-center" style="width: 3rem; border-bottom: 2px solid;"> Puntaje</th>
-                                <th class="borde-pagina-gris text-center" style="width: 10rem; border-bottom: 2px solid;"> Modalidad</th>  
-                                <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>  
-                                <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>  
-                                <th class="borde-pagina-gris text-end px-0" style="white-space: nowrap; width: 1rem; border-bottom: 2px solid;">
+                                <th class="borde-tabla text-center" style="width: 7rem; border-bottom: 2px solid; color: #676767;"> Folio</th>  
+                                <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767;"> Nombre</th>
+                                <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> CURP</th>                                        
+                                <th class="borde-tabla text-center" style="width: 3rem; border-bottom: 2px solid; color: #676767;"> Puntaje</th>
+                                <th class="borde-tabla text-center" style="width: 10rem; border-bottom: 2px solid; color: #676767;"> Modalidad</th>  
+                                <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> Tipo</th>  
+                                <th class="borde-tabla text-center" style="width: 8rem; border-bottom: 2px solid; color: #676767;"> Estado</th>  
+                                <th class="borde-tabla text-end px-0" style="white-space: nowrap; width: 1rem; border-bottom: 2px solid; color: #676767;">
                                     <label class="font-normal" for="id-select-todo-check" data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda">
                                         Selec. todo
                                     </label>
                                 </th>
-                                <th class="borde-pagina-gris text-start " data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda" style="width: 2rem; border-bottom: 2px solid;">                             
+                                <th class="borde-tabla text-start " data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda" style="width: 2rem; border-bottom: 2px solid;">                             
                                     <input class="checkbox-principal form-check-input me-3" type="checkbox" id="id-select-todo-check" name="select-todo-check" value="todo">                        
                                 </th>
                             </tr>
