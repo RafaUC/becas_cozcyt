@@ -179,24 +179,30 @@ class RespuestaDocumento(models.Model):
 #cumple con las condiciones para pasar a estado docAprobada o no
 @receiver(post_save, sender=RespuestaDocumento)
 def actualizar_estado_solicitud(sender, instance, **kwargs):
+    print('actualizar_estado_solicitud')
+    print(f'instance: {instance} - {instance.estado}')
     # Verificar condiciones y actualizar estado de la solicitud       
     opc = -1    
-    solicitud = instance.solicitud
-    if instance.estado == RespuestaDocumento.ESTADO_CHOICES[1][0]: #'aprobado'        
-        # Verificar que existan todas las instancias necesarias de RespuestaDocumento
-        documentos_modalidad = solicitud.modalidad.documento_set.all()
-        respuestas_documentos_solicitud = RespuestaDocumento.objects.filter(solicitud=solicitud)                
-        if set(documentos_modalidad) == set({resp.documento for resp in respuestas_documentos_solicitud}):
-            # Todas las instancias necesarias de RespuestaDocumento existen
+    solicitud = instance.solicitud    
+          
+    # Verificar que existan todas las instancias necesarias de RespuestaDocumento
+    documentos_modalidad = solicitud.modalidad.documento_set.all()
+    respuestas_documentos_solicitud = RespuestaDocumento.objects.filter(solicitud=solicitud)                
+    # si Todas las instancias necesarias de RespuestaDocumento existen
+    if set(documentos_modalidad) == set({resp.documento for resp in respuestas_documentos_solicitud}):        
 
-            # Verificar que todas las instancias de RespuestaDocumento de la solicitud estén aprobadas            
-            if respuestas_documentos_solicitud.filter(estado='aprobado').count() == respuestas_documentos_solicitud.count():
-                # Todas las instancias de RespuestaDocumento de la solicitud están aprobadas
-                opc = 0
-    elif instance.estado == RespuestaDocumento.ESTADO_CHOICES[2][0]: #'denegado'
-        opc = 1    
+        # Verificar que todas las instancias de RespuestaDocumento de la solicitud estén aprobadas            
+        if respuestas_documentos_solicitud.filter(estado=RespuestaDocumento.ESTADO_CHOICES[1][0]).count() == respuestas_documentos_solicitud.count():
+            # Todas las instancias de RespuestaDocumento de la solicitud están aprobadas
+            opc = 0
+        #si existe algun documento como denegado entonces es denegado
+        elif respuestas_documentos_solicitud.filter(estado=RespuestaDocumento.ESTADO_CHOICES[2][0]).exists():
+            opc = 1            
+    else: #falta algun documento                
+        opc = 1
+      
     
-
+    print(f'opc: {opc}')
     if opc == 0:
         solicitud.estado = Solicitud.ESTADO_CHOICES[2][0] #'docAprobada'   
     elif opc == 1:
