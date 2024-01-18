@@ -23,7 +23,7 @@
                             <h5 class="card-title" id="tituloCard">
                                 {{modalidad.nombre}}
                             </h5>
-                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
+                            <img class="imagen-modalidad mt-auto" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
                             <br>
                             <a href="{% url 'usuarios:documentos_convocatoria' modalidad.id %}" class="btn btnSolicitar" >
                             Solicitar
