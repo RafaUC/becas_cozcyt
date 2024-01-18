@@ -66,34 +66,44 @@
             <ul class="nav nav-pills flex-column mb-auto ">              
               {% if perms.usuarios.permiso_administrador and request.user.is_superuser == 1 %}
               <li class="nav-item">
-                <a href="{% url 'usuarios:AInicio' %}" class="nav-link d-flex link-dark {% if url_name == 'AInicio' %}active{% endif %} h4">
-                  <i class="fa fa-shield px-2 align-self-center" aria-hidden="true"> </i>
-                  Inicio
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'AInicio' %}active{% endif %} h4">
+                  <a href="{% url 'usuarios:AInicio' %}" class="nav-link d-flex link-dark h4">
+                    <i class="fa fa-shield px-2 align-self-center" aria-hidden="true"> </i>
+                    Inicio
+                  </a>
+                </div>
               </li>
               <li class="nav-item">
-                <a href="{% url 'solicitudes:ASolicitudes' %}" class="nav-link d-flex link-dark {% if url_name == 'ASolicitudes' %}active{% endif %} h4">
-                  <i class="fa fa-list-ul px-2 align-self-center" aria-hidden="true"> </i>
-                  Solicitudes
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'ASolicitudes' %}active{% endif %} h4">
+                  <a href="{% url 'solicitudes:ASolicitudes' %}" class="nav-link d-flex link-dark  h4">
+                    <i class="fa fa-list-ul px-2 align-self-center" aria-hidden="true"> </i>
+                    Solicitudes
+                  </a>
+                </div> 
               </li>
               <li class="nav-item">
-                <a href="{% url 'solicitudes:AEstadisticas' %}" class="nav-link d-flex link-dark {% if url_name == 'AEstadisticas' %}active{% endif %} h4">
-                  <i class="fa fa-bar-chart px-2 align-self-center" aria-hidden="true"> </i>
-                  Estadisticas
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'AEstadisticas' %}active{% endif %} h4">
+                  <a href="{% url 'solicitudes:AEstadisticas' %}" class="nav-link d-flex link-dark  h4">
+                    <i class="fa fa-bar-chart px-2 align-self-center" aria-hidden="true"> </i>
+                    Estadisticas
+                  </a>
+                </div> 
               </li>
               <li class="nav-item">
-                <a href="{% url 'usuarios:AUsuarios' %}" class="nav-link d-flex link-dark {% if url_name == 'AUsuarios' %}active{% endif %} h4">
-                  <i class="fa fa-users px-2 align-self-center" aria-hidden="true"> </i>
-                  Lista Usuarios
-                </a>
+                <div class="seccion-sidebar {% if url_name == 'AUsuarios' %}active{% endif %} h4">
+                  <a href="{% url 'usuarios:AUsuarios' %}" class="nav-link d-flex link-dark h4">
+                    <i class="fa fa-users px-2 align-self-center" aria-hidden="true"> </i>
+                    Lista Usuarios
+                  </a>
+                </div>
               </li>
               <li class="nav-item">
-                <a href="{% url 'modalidades:AConfigGeneral' %}" class="nav-link d-flex link-dark {% if 'onfig' in url_name %}active{% endif %} h4">
-                  <i class="fa fa-cog px-2 align-self-center" aria-hidden="true"> </i>
-                  Configuracion
-                </a>
+                <div class="seccion-sidebar {% if 'onfig' in url_name %}active{% endif %} h4">
+                  <a href="{% url 'modalidades:AConfigGeneral' %}" class="nav-link d-flex link-dark h4">
+                    <i class="fa fa-cog px-2 align-self-center" aria-hidden="true"> </i>
+                    Configuracion
+                  </a>
+                </div>
               </li>
 
               {% else %}
@@ -106,12 +116,14 @@
                 </div>
               </li>
               <li class="nav-item">
-                <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center position-relative">
-                  <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"></i>
-                  Mensajes&nbsp;
-                  <!-- Agrega el badge de Bootstrap aquí -->
-                  <span id="badge-mensajes" class="badge bg-danger font-xxs rounded-circle translate-middle"></span>
-              </button>
+                <div class="seccion-sidebar">
+                  <button id="boton-mensajes" class="nav-link d-flex link-dark pe-auto h4 btn-barra-lateral full-width-btn align-items-center position-relative">
+                    <i class="fa fa-envelope px-2 align-self-center" aria-hidden="true"></i>
+                    Mensajes&nbsp;
+                    <!-- Agrega el badge de Bootstrap aquí -->
+                    <span id="badge-mensajes" class="badge bg-danger font-xxs rounded-circle translate-middle"></span>
+                  </button>
+                </div>
               </li>
               <li class="nav-item">
                 <div class="seccion-sidebar {% if 'onvocatoria' in url_name %}active{% endif %} h4">
@@ -214,7 +226,20 @@
       {% include 'base_solicitante_js.html' %}
     {% endif %}
 
-    
+    <script>
+      function isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+      var mobil = isMobile()
+
+      function updateMobile() {
+        mobil = isMobile()
+        console.log(mobil)
+      }                      
+      
+      window.onresize = updateMobile;
+
+    </script>
 
   </body>
 </html>

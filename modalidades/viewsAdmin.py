@@ -30,6 +30,8 @@ def configGeneral(request):
                 fechaC = convocatoriaForm.cleaned_data['fecha_cierre']
                 presup = convocatoriaForm.cleaned_data['presupuesto']
                 convocatoriaForm.save()
+            else:
+                messages.error(request, convocatoriaForm.errors)
             messages.success(request, "Convocatoria actualizada.")
             return redirect("modalidades:AConfigGeneral")
 
@@ -52,6 +54,7 @@ def configGeneral(request):
                 messages.success(request, "Convocatoria agregada con éxito.")
                 return redirect("modalidades:AConfigGeneral")
             else:
+                messages.error(request, convocatoriaForm.errors)
                 print("convocatoria no valida")
 
     context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
@@ -175,6 +178,7 @@ def editarModalidad(request, modalidad_id):
             messages.success(request, "Cambios guardados.")
         else:
             messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
+            messages.error(request, [form.errors,formset.errors])
             return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
         return redirect("modalidades:AConfigModalidades")
     return render(request, 'admin/editar_modalidad.html', context)

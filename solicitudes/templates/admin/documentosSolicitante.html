@@ -23,54 +23,59 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoResp in listaDocumentos %}
-                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
-                        <div class="card card-documento-solicitante">
-                            <div class="card-body" id="{{documento.id}}">
-                                <div class="row" style="height: 100px;">
-                                    <!-- {{modalidad.id}} -->
-                                    <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
-                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
-                                </div>
-                                <div class="row" style="padding-bottom: 10px;">
-                                    <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
-                                    <div class="card" id="previewDoc">
-                                        <div class="clear:both">
-                                            <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
-                                            <iframe type="application/pdf" width="220" height="200"></iframe>
+                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">                        
+                        <a class="texto-negro" {% if documentoResp %} href="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                            <div class="card card-documento-solicitante">
+                                <div class="card-body" id="{{documento.id}}">                                
+                                    <div class="row" style="height: 100px;">
+                                        <!-- {{modalidad.id}} -->
+                                        <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
+                                    </div>
+                                    <div class="row" style="padding-bottom: 10px;">
+                                        <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                        <div class="card p-0" id="previewDoc">                                        
+                                                <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
+                                                {% if documentoResp %}
+                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" type="application/pdf" height="500"></iframe>                                        
+                                                {% else %}
+                                                    <p class="text-center"> La respuesta a este documento no existe. </p>
+                                                    <iframe src="" type="application/pdf" height="500"></iframe>   
+                                                {% endif %}
                                         </div>
                                     </div>
-                                </div>
-                                <div class="subir-documento">
-                                    <div class="row">
-                                        <div class="documentoSolicitante">
-                                            <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="botonesEstado">
-                                            <div class="div" style="text-align: center !important; padding-top: 5px;">
-                                                <div class="child col-sm-3" style="display: inline-block;">
-                                                    {% if documentoResp.estado == "aprobado" %}
-                                                    <input class="checkbox-docs-aceptar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-aceptado" value="{{ documentoResp.id }}" checked>
-                                                    {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "denegado"%}
-                                                    <input class="checkbox-docs-aceptar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
-                                                    {% endif %}
-                                                </div>
-                                                <div class="child col-sm-3" style="display: inline-block;">
-                                                    {% if documentoResp.estado == "denegado" %}
-                                                    <input class="checkbox-docs-rechazar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-denegado" value="{{ documentoResp.id }}" checked>
-                                                    {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "aprobado"%}
-                                                    <input class="checkbox-docs-rechazar form-check-input" type="checkbox" id="boton-estado" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
-                                                    {% endif %}
-                                                </div>
+                                    <div class="subir-documento">
+                                        <div class="row">
+                                            <div class="documentoSolicitante">
+                                                <button style="width: 100%;" type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
+                                                
                                             </div>
-                                            {{ documentoResp.estado }}
+                                        </div>
+                                        <div class="row">
+                                            <div class="botonesEstado">
+                                                <div class="div" style="text-align: center !important; padding-top: 5px;">
+                                                    <div class="child col-sm-3" style="display: inline-block;">
+                                                        {% if documentoResp.estado == "aprobado" %}
+                                                        <input class="checkbox-docs-aceptar form-check-input" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}" checked>
+                                                        {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "denegado"%}
+                                                        <input class="checkbox-docs-aceptar form-check-input" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="child col-sm-3" style="display: inline-block;">
+                                                        {% if documentoResp.estado == "denegado" %}
+                                                        <input class="checkbox-docs-rechazar form-check-input" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}" checked>
+                                                        {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "aprobado"%}
+                                                        <input class="checkbox-docs-rechazar form-check-input" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                {{ documentoResp.estado }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
@@ -94,22 +99,23 @@
         // const label = document.querySelector("label[for=files]");
         // label.innerText = fileName ?? "Subir documentos";
         // };
-        const fileBlocks = document.querySelectorAll('.subir-documento')
-        const buttons = document.querySelectorAll('.btnSubirDoc')
+        //const fileBlocks = document.querySelectorAll('.subir-documento')
+        //const buttons = document.querySelectorAll('.btnSubirDoc')
 
-        ;[...buttons].forEach(function (btn) {
-        btn.onclick = function () {
-            btn.parentElement.querySelector('input[type="file"]').click()
-        }
-        })
+        //;[...buttons].forEach(function (btn) {
+        //btn.onclick = function () {
+        //    console.log('btn.parentElement')
+        //    btn.parentElement.querySelector('input[type="file"]').click()
+        //}
+        //})
 
-        ;[...fileBlocks].forEach(function (block) {
-        block.querySelector('input[type="file"]').onchange = function () {
-            const filename = this.files[0].name
+        //;[...fileBlocks].forEach(function (block) {
+        //block.querySelector('input[type="file"]').onchange = function () {
+        //    const filename = this.files[0].name
 
-            block.querySelector('.btnSubirDoc').textContent = filename
-        }
-        })
+        //    block.querySelector('.btnSubirDoc').textContent = filename
+        //}
+        //})
     </script>
     <script>
         // function PreviewFile() {

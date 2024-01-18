@@ -22,38 +22,45 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoResp in listaDocumentos %}
-                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-sm-4" style="padding-top: 10px; padding-bottom: 20px;">                        
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <div class="row" style="height: 100px;">
-                                    <!-- {{modalidad.id}} -->
-                                    <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
-                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
-                                </div>
-                                <div class="row" style="padding-bottom: 10px;">
-                                    <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
-                                    <div class="card" id="previewDoc">
-                                        <div class="clear:both">
-                                            <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
-                                            <iframe type="application/pdf" width="220" height="200"></iframe>
-                                        </div>
+                                <a class="texto-negro" {% if documentoResp %} href="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                    <div class="row" style="height: 100px;">
+                                        <!-- {{modalidad.id}} -->
+                                        <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>                                    
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
                                     </div>
-                                </div>
-                                <!-- <a href="" class="btn btnSubirDoc">
-                                Subir documento --> 
-                                <!-- Obtener el id del documento -->
-                                <!-- <div>
-                                    <label for="file-upload" class="btnSubirDoc">
-                                    {{ documentoForm.file }}
-                                    </label>
-                                </div> -->
-                                <div class="subir-documento">
-                                    <button type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
-                                    <input type="file" name="{{documento.id}}" id="files" accept=".pdf">
+                                    <div class="row" style="padding-bottom: 10px;">
+                                        <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                        
+                                            <div class="card p-0" id="previewDoc">
+                                                {% if documentoResp %}
+                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" type="application/pdf" height="500"></iframe>                                        
+                                                {% else %}
+                                                    <p class="text-center text-nofile"> La respuesta a este documento no existe. </p>
+                                                    <iframe src="" type="application/pdf" height="500"></iframe>                                        
+                                                {% endif %}
+                                            </div>
+                                        
+                                    </div>
+                                </a>
+                                    <!-- <a href="" class="btn btnSubirDoc">
+                                    Subir documento --> 
+                                    <!-- Obtener el id del documento -->
+                                    <!-- <div>
+                                        <label for="file-upload" class="btnSubirDoc">
+                                        {{ documentoForm.file }}
+                                        </label>
+                                    </div> -->
+                                <div class="subir-documento" >
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
+                                    <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf">
                                     <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     {% endfor %}
                 </div>
@@ -96,6 +103,18 @@
             block.querySelector('.btnSubirDoc').textContent = filename
         }
         })
+        
+        $('.pdfInput').change(function() {            
+            var file = this.files[0];            
+            var reader = new FileReader();
+            var frame = $(this).closest('.card-body').find('iframe');                        
+            $(this).closest('.card-body').find('.text-nofile').remove(); 
+            reader.onload = function (e) {                
+                frame.attr('src', e.target.result).show();
+            };
+            reader.readAsDataURL(file);
+        });
+
     </script>
     <script>
         // function PreviewFile() {
