@@ -32,15 +32,12 @@
                                 </div>
                                 <div class="row" style="padding-bottom: 10px;">
                                     <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
-                                    <div class="card" id="previewDoc">
-                                        <div class="clear:both">
-                                            <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
-                                            <iframe type="application/pdf" width="220" height="200"></iframe>
-                                        </div>
-                                    </div>
+                                    <div class="card p-0" id="previewDoc">
+                                        <iframe src="" type="application/pdf" height="500"></iframe>  
+                                    </div>                                    
                                 </div>
                                 <div class="subir-documento">
-                                    <button type="button" class="btnSubirDoc" disabled>Subir documento</button>
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc" disabled>Subir documento</button>
                                 </div>
                             </div>
                         </div>
@@ -71,16 +68,13 @@
                                 </div>
                                 <div class="row" style="padding-bottom: 10px;">
                                     <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
-                                    <div class="card" id="previewDoc">
-                                        <div class="clear:both">
-                                            <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
-                                            <iframe type="application/pdf" width="220" height="200"></iframe>
-                                        </div>
-                                    </div>
+                                    <div class="card p-0" id="previewDoc">
+                                        <iframe src="" type="application/pdf" height="500"></iframe>  
+                                    </div>  
                                 </div>
                                 <div class="subir-documento">
-                                    <button type="button" class="btnSubirDoc">Subir documento</button>
-                                    <input type="file" name="{{documento.id}}" id="files" accept=".pdf" required>
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc">Subir documento PDF</button>
+                                    <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf" required>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +117,18 @@
             block.querySelector('.btnSubirDoc').textContent = filename
         }
         })
+
+        $('.pdfInput').change(function() {            
+            var file = this.files[0];            
+            var reader = new FileReader();
+            var frame = $(this).closest('.card-body').find('iframe');                        
+            $(this).closest('.card-body').find('.text-nofile').remove(); 
+            reader.onload = function (e) {                
+                frame.attr('src', e.target.result).show();
+            };
+            reader.readAsDataURL(file);
+        });
+
     </script>
     <script>
         function PreviewFile() {

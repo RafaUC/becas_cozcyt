@@ -22,6 +22,7 @@ from modalidades.models import Modalidad
 from .models import *
 
 from usuarios.models import Solicitante
+from .views import notificar_si_falta_documentos
 
 # Create your views here.
 #########################################
@@ -147,9 +148,9 @@ def estadisticaSolicitudes(request):
     incrementoHue = 0.011  # Incremento/decremento en el tono
 
     conjuntosEstadisticos = []
-    valoresFrecuencias = Solicitud.objects.values('estado').annotate(frecuencia=Count('estado'))
+    valoresFrecuencias = Solicitud.objects.values('ciclo').annotate(frecuencia=Count('ciclo'))
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
-    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['estado'], item['estado']) for item in valoresFrecuencias ]    
+    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['ciclo'], item['ciclo']) for item in valoresFrecuencias ]    
     data = [item['frecuencia'] for item in valoresFrecuencias]
     dataLabel = 'Solicitudes'
 
@@ -165,7 +166,7 @@ def estadisticaSolicitudes(request):
 
     conjuntoEst = {
         'grafico': {
-            'type': 'pie',
+            'type': 'bar',
             'data': {
                 'labels': labels,
                 'datasets': [{
@@ -257,27 +258,28 @@ def listaSolicitudes(request):
         if 'select-soli-check' in request.POST:
             seleccion = request.POST.getlist('select-soli-check')
             seleccion = [int(id_str) for id_str in seleccion]
-        print(f'{accion} - {todo} - {seleccion}')
+        #print(f'{accion} - {todo} - {seleccion}')
         #print(f'{type(accion)} - {type(todo)} - {type(seleccion)}')
 
         if accion and seleccion:            
             if todo:
-                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])                
-                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[1][0])  
+                soliToUpdate = soliToUpdate.exclude(estado=Solicitud.ESTADO_CHOICES[0][0])      
+                counts = soliToUpdate.count()                          
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
-                    messages.success(request, f'Se aceptaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+                    messages.success(request, f'Se aceptaron todas las {counts} solicitudes filtradas con éxito')
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
-                    messages.success(request, f'Se rechazaron todas las {soliToUpdate.count()} solicitudes filtradas con éxito')
+                    messages.success(request, f'Se rechazaron todas las {counts} solicitudes filtradas con éxito')
             else:
-                soliToUpdate = soliToUpdate.filter(id__in=seleccion)                
+                soliToUpdate = soliToUpdate.filter(id__in=seleccion)     
+                counts = soliToUpdate.count()                
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
-                    messages.success(request, f'Se aceptaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se aceptaron las {counts} solicitudes seleccionadas con éxito')    
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
-                    messages.success(request, f'Se rechazaron las {soliToUpdate.count()} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se rechazaron las {counts} solicitudes seleccionadas con éxito')    
         else:
             messages.error(request, 'No se seleccionaron solicitudes')    
 
@@ -295,17 +297,29 @@ def listaSolicitudes(request):
     }    
     return render(request, 'admin/solicitudes.html', context)
 
-def documentos_solicitante(request, pk):
+def documentos_solicitante(request, pk):   
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
     solicitante = get_object_or_404(Solicitante, pk=pk)  
-    solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo=ciclo_actual())
-    modalidad = Modalidad.objects.get(pk = solicitud.modalidad.pk)
+    solicitud = get_object_or_404(Solicitud, solicitante=solicitante, ciclo=ciclo_actual())
+    if notificar_si_falta_documentos(solicitud):
+        messages.warning(request, 'Esta solicitud no tiene uno o varios archivos validos adjuntos, se notificó al solicitante que lo revise.')        
+    modalidad = get_object_or_404(Modalidad, pk = solicitud.modalidad.pk)
     documentos = Documento.objects.filter(modalidad=solicitud.modalidad)
+    listaDocumentos = []
+    for documento in documentos:
+        tupla = (documento, RespuestaDocumento.objects.filter(solicitud=solicitud, documento=documento).first())
+        listaDocumentos.append(tupla)
     documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)
-    listaDocumentos = zip(documentos, documentosResp)
+    
     # print(documentos)
     # print(documentosResp)
     # print(solicitud.modalidad.pk)
     context = {
+        'solicitud': solicitud,
         'solicitante': solicitante,
         'listaDocumentos' : listaDocumentos,
         'modalidad' : modalidad,
@@ -328,27 +342,28 @@ def documentos_solicitante(request, pk):
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])
-            solicitud.estado = Solicitud.ESTADO_CHOICES[1][0]
-            solicitud.save()
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])            
+            #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
+            #lo hacen automaticamente
 
         #Todos los documentos fueron denegados
-        if seleccionAceptados == None:
+        if seleccionAceptados == None and seleccionDenegados != None:
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])
-            messages.success(request, f'Se aceptaron las {docsDenegadosToUpdate.count()} solicitudes seleccionadas con éxito')
-            solicitud.estado = Solicitud.ESTADO_CHOICES[1][0]
-            solicitud.save()
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])            
+            #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
+            #lo hacen automaticamente
             
         #Todos los documentos fueron aceptados
-        if seleccionDenegados == None: 
+        if seleccionDenegados == None and seleccionAceptados != None: 
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
-            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
-            solicitud.estado = Solicitud.ESTADO_CHOICES[2][0]
-            solicitud.save()
+            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])            
+            #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
+            #lo hacen automaticamente
             print(solicitud.estado)
-            
+        if documentosResp.first():
+            #el metodo .update()  en querysets no llama los recivers asi que se debe hacer almenos un save()
+            documentosResp.first().save()
         
         messages.success(request, "Documentos de solicitud revisados con éxito.")
-        return redirect("solicitudes:ASolicitudes")
+        return redirect(request.session['anterior'])
     return render(request, 'admin/documentosSolicitante.html', context)

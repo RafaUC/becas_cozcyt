@@ -240,8 +240,14 @@ def editarUsuario(request, pk):
     formPersonal = SolicitantePersonalesForm(instance = solicitante) #asegurarse de no modificar el rfc
     formDomicilio = SolicitanteDomicilioForm(instance = solicitante)
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
-    estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})
-    institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})
+    if solicitante.municipio:
+        estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})
+    else :
+        estadoSelectForm = EstadoSelectForm()
+    if solicitante.carrera:
+        institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})
+    else:
+        institucionSelectForm = InstitucionSelectForm()
     
 
     if request.method == 'POST':

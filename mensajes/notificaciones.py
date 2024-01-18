@@ -1,7 +1,7 @@
 from .models import Notificacion
 from django.urls import reverse
 
-# importar como: form mensajes import notificaciones as notif
+# importar como: from mensajes import notificaciones as notif
 
 """
  Ejemplos:
