@@ -6,44 +6,52 @@
 
 {% block body %}
 
+<div class="rounded-2 p-1 principal">
     {% block nombreUsuario %}    
-    <div class="row align-items-center m-0">
-        <p class="col h2 mx-4 mt-4">Mis solicitudes</p>              
-        <p class="col h2 mx-4 mt-4 text-end">Folio: {{ solicitante.folio }}</p>       
+    <div class="rounded-2 mx-5" style="padding-bottom: 20px;">
+        <div class="row tituloModulo">
+            <div class="col-md">
+            <p class="h3"> Mi historial de solicitudes</p>
+            </div>
+            <div class="col-md">
+            <p class="h4 text-end" style="font-weight: 500; padding-top: 5px">Folio: <b style="font-weight: 700;">{{ solicitante.folio }}</b></p> 
+            </div>  
+            <hr>
+        </div>
     </div>
     {% endblock nombreUsuario %}
 
     
     
 
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-pagina-principal  horizontal-scroll">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-1 borde-tabla  horizontal-scroll">    
         <div class="row mx-0">
             <div class="col-3 ps-0">
                 <p class="h4 mx-3">Solicitudes</p>           
             </div>                        
         </div>                
-        <table class="table custom-table-simple">            
+        <table class="table custom-table-simple principal">            
             <thead>
                 <tr>                    
-                    <th class="borde-pagina-gris text-center" style="width: 7rem; border-bottom: 2px solid;"> </th>  
-                    <th class="borde-pagina-gris text-center" style="width: 8rem; border-bottom: 2px solid;"> Estado</th>
-                    <th class="borde-pagina-gris text-center" style="width: 12rem; border-bottom: 2px solid;"> Modalidad</th>  
-                    <th class="borde-pagina-gris text-center" style="width: 15rem; border-bottom: 2px solid;"> Convocatoria</th> 
-                    <th class="borde-pagina-gris text-center" style="width: 5rem; border-bottom: 2px solid;"> Tipo</th>                                         
-                    <th class="borde-pagina-gris text-end px-0" style="white-space: nowrap; width: 2rem; border-bottom: 2px solid;"></th>                                    
+                    <th class="borde-tabla text-center" style="width: 7rem; border-bottom: 2px solid;"> </th>  
+                    <th class="borde-tabla text-center" style="width: 8rem; border-bottom: 2px solid; color: #676767;"> Estado</th>
+                    <th class="borde-tabla text-center" style="width: 12rem; border-bottom: 2px solid; color: #676767;"> Modalidad</th>  
+                    <th class="borde-tabla text-center" style="width: 15rem; border-bottom: 2px solid; color: #676767;"> Convocatoria</th> 
+                    <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> Tipo</th>                                         
+                    <th class="borde-tabla text-end px-0" style="white-space: nowrap; width: 2rem; border-bottom: 2px solid; color: #676767;"></th>                                    
                 </tr>
             </thead>
             <tbody>
                 {% for solicitud in solicitudes %}                
-                <tr class="{{ solicitud.estado }} font-md">                    
+                <tr class="{{ solicitud.estado }} font-md borde-tabla">                    
                     {% with solicitud.solicitante as solicitante %}
-                    <td class="text-center"><i class="fa {{ solicitud.estado }} align-self-center font-sl my-2" aria-hidden="true"></i></td>                                   
-                    <td class="text-center font-semi-bold">{{ solicitud.get_estado_display }}</td>                        
-                    <td class="text-center">{{ solicitud.modalidad.nombre }}</td>  
-                    <td class="text-center">{{ solicitud.ciclo }}</td>     
-                    <td class="text-center">{{ solicitud.get_tipo_display }}</td>                             
+                    <td class="borde-tabla text-center"><i class="fa {{ solicitud.estado }} align-self-center font-xxL my-2" aria-hidden="true"></i></td>                                   
+                    <td class="borde-tabla text-center font-semi-bold">{{ solicitud.get_estado_display }}</td>                        
+                    <td class="borde-tabla text-center">{{ solicitud.modalidad.nombre }}</td>  
+                    <td class="borde-tabla text-center">{{ solicitud.ciclo }}</td>     
+                    <td class="borde-tabla text-center">{{ solicitud.get_tipo_display }}</td>                             
                     
-                    <td >
+                    <td class="borde-tabla" >
                         {% block ultimaCol %}                                                   
                         {% endblock ultimaCol %}
                     </td>     
@@ -54,5 +62,5 @@
             </tbody>
         </table>                     
     </div>
-    
+</div>
 {% endblock body %}

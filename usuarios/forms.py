@@ -25,6 +25,11 @@ class CreateUserForm(UserCreationForm):
         model = Usuario
         exclude = ('nombre', 'is_staff')
         fields = ('curp', 'email', 'password1', 'password2')
+    curp = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'CURP'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Correo electrónico'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Contraseña'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Confirme su contraseña'}))
+    
 
 class EstadoSelectForm(forms.ModelForm):
     class Meta:
@@ -73,23 +78,23 @@ class SolicitanteForm(forms.ModelForm):
                   'promedio', 
                   'carrera']        
         widgets = {            
-            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese Nombre'}),
-            'rfc': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el RFC'}),
-            'ap_paterno': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el apellido paterno'}),
-            'ap_materno': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el apellido materno'}),
-            'fecha_nacimiento': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control border-3', 'type': 'date'}),
-            'genero': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
-            'g_etnico': forms.CheckboxInput(attrs={'class': 'form-check-input border-3'}),
-            'municipio': forms.Select(attrs={'class': 'form-control form-select border-3'}),
-            'colonia': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la colonia'}),
-            'calle': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese la calle'}),
-            'numero': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese el número'}),
-            'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeydown': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
-            'tel_cel': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
-            'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
-            'grado': forms.Select(attrs={'class': 'form-control border-3 form-select'}),
-            'promedio': forms.NumberInput(attrs={'class': 'form-control border-3', 'onkeypress': "return isNumberPuntKey(event)", 'placeholder': 'Ingrese el promedio'}),
-            'carrera': forms.Select(attrs={'class': 'form-control border-3 form-select'}),        
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese Nombre'}),
+            'rfc': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el RFC'}),
+            'ap_paterno': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el apellido paterno'}),
+            'ap_materno': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el apellido materno'}),
+            'fecha_nacimiento': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control border-1', 'type': 'date'}),
+            'genero': forms.Select(attrs={'class': 'form-control border-1 form-select'}),
+            'g_etnico': forms.CheckboxInput(attrs={'class': 'form-check-input border-1'}),
+            'municipio': forms.Select(attrs={'class': 'form-control form-select border-1'}),
+            'colonia': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese la colonia'}),
+            'calle': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese la calle'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el número'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control border-1', 'onkeydown': "return isNumberKey(event)", 'placeholder': 'Ingrese el código postal'}),
+            'tel_cel': forms.TextInput(attrs={'class': 'form-control border-1', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono celular'}),
+            'tel_fijo': forms.TextInput(attrs={'class': 'form-control border-1', 'onkeypress': "return isNumberKey(event)", 'placeholder': 'Ingrese el teléfono fijo'}),
+            'grado': forms.Select(attrs={'class': 'form-control border-1 form-select'}),
+            'promedio': forms.NumberInput(attrs={'class': 'form-control border-1', 'onkeypress': "return isNumberPuntKey(event)", 'placeholder': 'Ingrese el promedio'}),
+            'carrera': forms.Select(attrs={'class': 'form-control border-1 form-select'}),        
         }
         labels = {
             'nombre': 'Nombre',
@@ -215,8 +220,8 @@ class PuntajeMunicipioForm(forms.ModelForm):
         model = PuntajeMunicipio
         fields = ['municipio', 'puntos']
         widgets = {
-            'municipio': forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}),
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 text-center m-auto', 'style': 'width: 5rem;'}),            
+            'municipio': forms.Select(attrs={'class': 'form-control border-1 form-select', 'onchange': 'cargarMunicipio()'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1 text-center m-auto', 'style': 'width: 5rem;'}),            
         }
     
     estado = forms.ModelChoiceField(queryset=Estado.objects.all(), empty_label="Selecciona un estado", widget=forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}))
@@ -262,8 +267,8 @@ class InstitucionForm(forms.ModelForm):
             'puntos': 'Puntos',  
         }
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese nombre de la institución'}),  
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3' }),  
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese nombre de la institución'}),  
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1' }),  
         }
 
 class CarreraForm(forms.ModelForm):
@@ -276,8 +281,8 @@ class CarreraForm(forms.ModelForm):
             
         }
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'style': 'width: 21rem;','placeholder': 'Nombre de la carrera'}),
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 m-0', 'style': 'width: 5rem;'}),            
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-1', 'style': 'width: 21rem;','placeholder': 'Nombre de la carrera'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1 m-0', 'style': 'width: 5rem;'}),            
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
