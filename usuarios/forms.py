@@ -218,8 +218,8 @@ class PuntajeMunicipioForm(forms.ModelForm):
         model = PuntajeMunicipio
         fields = ['municipio', 'puntos']
         widgets = {
-            'municipio': forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}),
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 text-center m-auto', 'style': 'width: 5rem;'}),            
+            'municipio': forms.Select(attrs={'class': 'form-control border-1 form-select', 'onchange': 'cargarMunicipio()'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1 text-center m-auto', 'style': 'width: 5rem;'}),            
         }
     
     estado = forms.ModelChoiceField(queryset=Estado.objects.all(), empty_label="Selecciona un estado", widget=forms.Select(attrs={'class': 'form-control border-3 form-select', 'onchange': 'cargarMunicipio()'}))
@@ -265,8 +265,8 @@ class InstitucionForm(forms.ModelForm):
             'puntos': 'Puntos',  
         }
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'placeholder': 'Ingrese nombre de la institución'}),  
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3' }),  
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese nombre de la institución'}),  
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1' }),  
         }
 
 class CarreraForm(forms.ModelForm):
@@ -279,8 +279,8 @@ class CarreraForm(forms.ModelForm):
             
         }
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control border-3', 'style': 'width: 21rem;','placeholder': 'Nombre de la carrera'}),
-            'puntos': forms.NumberInput(attrs={'class': 'form-control border-3 m-0', 'style': 'width: 5rem;'}),            
+            'nombre': forms.TextInput(attrs={'class': 'form-control border-1', 'style': 'width: 21rem;','placeholder': 'Nombre de la carrera'}),
+            'puntos': forms.NumberInput(attrs={'class': 'form-control border-1 m-0', 'style': 'width: 5rem;'}),            
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

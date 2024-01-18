@@ -44,7 +44,7 @@
             {% if formset %}
             {{ formset.management_form}}
             {% for documento in formset %}
-            <div class="documento-form col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+            <div class="documento-form col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                 <input type="hidden" id="orderingInput" name="ordering" value="{{ documento.id.value }}">
                 <div class="card">
                     <div class="card-body" id="documentoMod">                                       
@@ -55,7 +55,7 @@
                 </div>
             </div>
             {% endfor %}
-            <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+            <div id='empty-form' class="hidden col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="card">
                     <div class="card-body" id="documentoMod">
                         <button id='cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)" >X</button>

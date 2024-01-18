@@ -36,7 +36,7 @@
                 </div>
                 <div class="row">
                     <div class="child col-4" style="display: inline-block;">
-                        <p class="agregarMod" id="titulo-mods"> Titulo de la modalidad </p>
+                        <p class="agregarMod" id="titulo-mods"> Título de la modalidad </p>
                         {{ form.nombre }}
                     </div>
                     <div class="child col-4" style="display: inline-block; margin: 0 0 2% 20%;">
@@ -66,7 +66,7 @@
                         {{ formset.management_form}}
                         {% for documento in formset %} 
                         {{documento.order}}
-                        <div class="documento-form col-sm-4">
+                        <div class="documento-form col-md-4">
                             <div class="card">
                                 <div class="card-body" id="documentoMod" style="padding-top: 10px; padding-bottom: 10px;">
                                     <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <div id='empty-form' class="hidden col-sm-4" style="padding-top: 10px; padding-bottom: 10px;">
+                        <div id='empty-form' class="hidden col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                             <div class="card">
                                 <div class="card-body" id="documentoMod">
                                     <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
@@ -104,7 +104,7 @@
             const currenFormCount = currentDocumentoForms.length // + 1
             const formCopyTarget = document.getElementById('documentos-list')
             const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-            copyEmptyFormEl.setAttribute('class', 'documento-form col-sm-4')
+            copyEmptyFormEl.setAttribute('class', 'documento-form col-md-4')
             copyEmptyFormEl.setAttribute('id', `form-${currenFormCount}`)
             const regex = new RegExp('__prefix__', 'g')
             copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currenFormCount)

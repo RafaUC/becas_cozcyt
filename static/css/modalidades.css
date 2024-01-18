@@ -20,6 +20,14 @@
     background-color: var(--rosaF); 
 }
 
+.btn-guardar{
+    font-size: medium; 
+    color: #676767; 
+    font-weight: 400; 
+    background-color: #D5F5E2;
+    border-radius: 10px;
+  }
+
 
 /**** Vistas solicitante ****/
 /* Login */
@@ -214,7 +222,7 @@
 
 
 
-  .principal{
+.principal{
     color: var(--letraGeneral);
 }
 
