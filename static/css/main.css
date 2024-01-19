@@ -413,6 +413,11 @@ body {
   cursor: move;  
 }
 
+.nav .nav-link.active {
+  border-color: var(--pagina-principal);  
+  background-color: var(--pagina-fuerte);
+}
+
 
 
 .nav-pills-opciones .nav-link.active{  

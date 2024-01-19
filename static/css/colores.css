@@ -1,9 +1,11 @@
 :root {
     /* Color styles */
     /* Paleta de colores */
-    --rosaClaro: #E4756F;;
-
-
+    --pantene651: rgb(252,226,228);
+    --pantene592: rgb(245,173,171);
+    --pantene5513: rgb(226,116,110);
+    --pantene4914: rgb(187,68,51);
+    --pantene5016: rgb(120,16,5);
 
     --verdeBtns: #D5F5E2;
     --letraGeneral: #676767;

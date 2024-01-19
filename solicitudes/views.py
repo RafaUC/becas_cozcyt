@@ -174,13 +174,13 @@ def documentos_convocatorias(request, modalidad_id):
             'convocatoria' : convocatoria,
             'solicitud_existe': solicitud_existe
         }
-        
-        if Solicitud.objects.filter(solicitante=solicitante, ciclo = ciclo_actual()).exists(): #El solicitante ya tiene una solicitud del ciclo actual
-                solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
-                messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+        #El solicitante ya tiene una solicitud del ciclo actual
+        if Solicitud.objects.filter(solicitante=solicitante, ciclo = ciclo_actual()).exists():
+            solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
+            messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+            return redirect('solicitudes:convocatorias')
             
-            # else: #El solicitante no ha hecho una solicitud en el ciclo actual
-        
+        # else: #El solicitante no ha hecho una solicitud en el ciclo actual
         if request.method == 'POST':
             solicitud = Solicitud.objects.create(
                 modalidad=modalidad,

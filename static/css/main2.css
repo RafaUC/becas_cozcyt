@@ -1,0 +1,1244 @@
+:root {
+    font-size: 14px; /* Establecer la fuente base */
+  }
+  
+  body {
+    font-size: 14px;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+
+/* Tamaño y grosor letra */
+.font-normal {
+    font-weight: normal !important;
+}
+
+.font-bold {
+    font-weight: bold !important;
+}
+  
+.font-semi-bold {
+    font-weight: 600 !important;
+}
+  
+.font-light {
+    font-weight: lighter !important;
+}
+  
+.font-bolder {
+    font-weight: bolder !important;
+}
+  
+.font-custom-weight {
+    font-weight: 700 !important; 
+}
+  
+.font-xxs {
+    font-size: 0.714rem; 
+}
+  
+.font-xs {
+    font-size: 0.857rem; 
+}
+  
+.font-sm {
+    font-size: 1rem; 
+}
+  
+.font-md {
+    font-size: 1.143rem; 
+}
+  
+.font-lg {
+    font-size: 1.286rem; 
+}
+  
+ .font-xl {
+    font-size: 1.429rem; 
+}
+  
+.font-xxl {
+    font-size: 1.857rem; 
+}
+  
+.font-xxL {
+    font-size: 3.25rem; 
+}
+  
+.font-sl {
+    font-size: 4rem;
+}
+
+/* Color letra */
+.texto-gris-1 {
+  color: var(--gris-1) !important;
+}
+
+.texto-gris-2 {
+  color: var(--gris-2) !important;
+}
+
+.texto-gris-3 {
+  color: var(--gris-3) !important;
+}
+
+.texto-gris-4 {
+  color: var(--gris-4) !important;
+}
+
+.texto-gris-5 {
+  color: var(--gris-5) !important;
+}
+
+.texto-gris-6 {
+  color: var(--gris-6) !important;
+}
+
+.texto-gris-7 {
+  color: var(--gris-7) !important;
+}
+
+.texto-gris-8 {
+  color: var(--gris-8) !important;
+}
+
+.texto-negro {
+  color: var(--negro) !important;
+}
+
+.texto-pagina-blanco {
+  color: var(--pagina-blanco);
+}
+
+.texto-pagina-fuerte {
+  color: var(--pagina-fuerte);
+}
+
+.texto-pagina-principal {
+  color: var(--pagina-principal);
+}
+
+.texto-pagina-tenue {
+  color: var(--pagina-tenue);
+}
+
+.texto-pagina-tenue-claro {
+  color: var(--pagina-tenue-claro);
+}
+
+.texto-aceptado-desactivado {
+  color: var(--aceptado-desactivado);
+}
+
+.texto-aceptado-activado {
+  color: var(--aceptado-activado);
+}
+
+.texto-aceptado-hover {
+  color: var(--aceptado-hover);
+}
+
+.texto-cancelar-desactivado {
+  color: var(--cancelar-desactivado);
+}
+
+.texto-cancelar-activado {
+  color: var(--cancelar-activado);
+}
+
+.texto-pagina-fondo {
+  color: var(--pagina-fondo);
+}
+
+.texto-pagina-gris {
+  color: var(--pagina-gris);
+}
+
+/* Clases para aplicar colores de fondo */
+.fondo-gris-0 {
+    background-color: var(--gris-0) !important;
+}
+  
+.fondo-gris-1 {
+    background-color: var(--gris-1) !important;
+}
+  
+.fondo-gris-2 {
+    background-color: var(--gris-2) !important;
+}
+  
+.fondo-gris-3 {
+    background-color: var(--gris-3) !important;
+}
+  
+.fondo-gris-4 {
+    background-color: var(--gris-4) !important;
+}
+  
+.fondo-gris-5 {
+    background-color: var(--gris-5) !important;
+}
+  
+.fondo-gris-6 {
+    background-color: var(--gris-6) !important;
+}
+  
+.fondo-gris-7 {
+    background-color: var(--gris-7) !important;
+}
+  
+.fondo-gris-8 {
+    background-color: var(--gris-8) !important;
+}
+  
+.fondo-negro {
+    background-color: var(--negro) !important;
+}
+
+/* colores de fondo  */
+.pagina-blanco {
+    background-color: var(--pagina-blanco) !important;
+}
+
+.pagina-fondo {
+    background-color: var(--pagina-fondo) !important;
+}
+
+.barra-lateral-fondo {
+    background-color: var(--barra-lateral-fondo) !important;
+}
+
+.pagina-fuerte {
+    background-color: var(--pagina-fuerte) !important;
+}
+
+.pagina-principal {
+    background-color: var(--pagina-principal) !important;
+}
+
+.pagina-tenue {
+    background-color: var(--pagina-tenue) !important;
+}
+
+.pagina-tenue-claro {
+    background-color: var(--pagina-tenue-claro) !important;
+}
+
+.pagina-gris {
+    background-color: var(--pagina-gris) !important;
+}
+
+/* Bordes de tabla */
+.borde-tabla {
+    border-color: #E1BEBC !important;
+}
+
+.borde-pagina-blanco {
+  border-color: var(--pagina-blanco) !important;
+}
+
+.borde-pagina-gris {
+  border-color: var(--pagina-gris) !important;
+}
+
+.borde-pagina-fuerte {
+  border-color: var(--pagina-fuerte) !important;
+}
+
+.borde-pagina-principal {
+  border-color: var(--pagina-principal) !important;
+}
+
+.borde-pagina-tenue {
+  border-color: var(--pagina-tenue) !important;
+}
+
+.borde-pagina-tenue-claro {
+  border-color: var(--pagina-tenue-claro) !important;
+}
+
+.borde-aceptado-desactivado {
+  border-color: var(--aceptado-desactivado) !important;
+}
+
+.borde-aceptado-activado {
+  border-color: var(--aceptado-activado) !important;
+}
+
+.borde-aceptado-hover {
+  border-color: var(--aceptado-hover) !important;
+}
+
+.borde-cancelar-desactivado {
+  border-color: var(--cancelar-desactivado) !important;
+}
+
+.borde-cancelar-activado {
+  border-color: var(--cancelar-activado) !important;
+}
+
+.borde-punteado {
+  border: 1px dashed #000; /* Puedes ajustar el color y el grosor según tus necesidades */
+}
+
+
+/* Colores componentes individuales */
+.aceptado-desactivado {
+  background-color: var(--aceptado-desactivado) !important;
+}
+
+.aceptado-activado {
+  background-color: var(--aceptado-activado) !important;
+}
+
+.aceptado-hover {
+  background-color: var(--aceptado-hover) !important;
+}
+
+.cancelar-desactivado {
+  background-color: var(--cancelar-desactivado) !important;
+}
+
+.cancelar-activado {
+  background-color: var(--cancelar-activado) !important;
+}
+
+a {
+    color: var(--rosaM); /* Color del enlace normal */
+    text-decoration: none; /* Eliminar subrayado de los enlaces */  
+}
+
+a:hover {
+    color: var(--rosaF); 
+    text-decoration: none; 
+}
+
+.principal{
+    color: var(--letraGeneral) !important;
+}
+
+.btn-guardar{
+    font-size: medium; 
+    color: #676767; 
+    font-weight: 400; 
+    background-color: var(--verdeBtns);
+    border-radius: 10px;
+}
+
+.btn-regresar{
+    background-color: var(--rosaC);
+}
+
+.conte-sort {
+  min-height: 0px;
+}
+
+.altura-min-conte-sort-edge{
+  min-height: 3px;
+}
+
+.btn-aceptado {
+  color: #fff;
+  background-color: var(--aceptado-activado);
+  border-color: var(--aceptado-activado);
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 17px; 
+}
+
+.btn-aceptado:hover {
+  color: #fff;
+  background-color: var(--aceptado-hover);
+  border-color: var(--aceptado-hover);
+}
+/*
+.btn-aceptado:focus, .btn-aceptado.focus {
+  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
+}*/
+
+.btn-aceptado.disabled, .btn-aceptado:disabled {
+  color: #fff;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-aceptado:not(:disabled):not(.disabled):active, .btn-aceptado:not(:disabled):not(.disabled).active,
+.show > .btn-aceptado.dropdown-toggle {
+  color: #fff;
+  background-color: var(--aceptado-hover);
+  border-color: var(--aceptado-hover);
+}
+
+.btn-cancelar {
+  color: #fff;
+  background-color: var(--cancelar-activado);
+  border-color: var(--cancelar-activado);
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 17px; 
+}
+
+.btn-cancelar:hover {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
+}
+/*
+.btn-aceptado:focus, .btn-aceptado.focus {
+  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
+}*/
+
+.btn-cancelar.disabled, .btn-cancelar:disabled {
+  color: #fff;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-cancelar:not(:disabled):not(.disabled):active, .btn-cancelar:not(:disabled):not(.disabled).active,
+.show > .btn-cancelar.dropdown-toggle {
+  color: #fff;
+  background-color: var(--cancelar-hover);
+  border-color: var(--cancelar-hover);
+}
+
+/*
+.btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
+.show > .btn-aceptado.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem var(--aceptado-hover);
+} */
+
+/* btn-pagina-tenue */
+
+.btn-pagina-tenue {
+  color: #fff; 
+  background-color: var(--pagina-tenue); 
+  border-color: var(--pagina-tenue); 
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  margin: 0.5rem;
+}
+
+.btn-pagina-tenue:hover {
+  /* Estilos para el estado hover (al pasar el cursor sobre el botón) */
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-principal);
+  color: #fff; 
+}
+
+/*
+.btn-pagina-tenue:focus,
+.btn-pagina-tenue.focus {
+  /* Estilos para el estado de enfoque (al hacer clic en el botón) 
+  box-shadow: 0 0 0 0.0rem var(--pagina-tenue); 
+} */
+
+.btn-pagina-tenue:active,
+.btn-pagina-tenue.active {
+  /* Estilos para el estado activo (al presionar el botón) */
+  background-color: var(--pagina-tenue); 
+  border-color: var(--pagina-tenue); 
+}
+
+/* Estilo para el checkbox principal */
+.checkbox-principal.form-check-input:checked {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-fuerte);
+}
+
+/*
+.checkbox-principal.form-check-input:checked:focus {
+  box-shadow: 0 0 0 0.25rem var(--pagina-fuerte);
+}*/
+
+.checkbox-principal.form-check-input:checked:hover {
+  background-color: var(--pagina-principal);
+  border-color: var(--pagina-principal);
+}
+
+/* Estilo para el label (etiqueta) del checkbox principal */
+.checkbox-principal.form-check-label {
+  color: var(--pagina-fuerte);
+}
+
+.checkbox-principal.form-check-input:disabled {
+  background-color: var(--pagina-principal);
+  opacity: 0.65;
+}
+
+.handle {
+  cursor: move;  
+}
+
+.handle2 {
+  cursor: move;  
+}
+
+.handle3 {
+  cursor: move;  
+}
+
+.nav-pills-opciones .nav-link.active{  
+  background-color: var(--rosaF);
+  color: var(--pagina-blanco);
+  /*box-shadow: 0px 2px 1px #e1e1e1;*/
+
+}
+
+.confpage-ul a {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-bottom: 0.7rem;
+}
+
+.nopadding {
+  padding: 0 !important;  
+}
+
+.nomargin {  
+  margin: 0 !important;
+}
+
+.line-height-normal {
+  line-height: normal; /* O el valor que desees para el line-height */
+}
+
+.hidden-ready {  
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out; /* Animación de transición suave */
+}
+
+.opcion-text {    
+  text-align: center;
+}
+
+.opcion-digit {
+  max-width: 3.5rem;
+}
+
+.elem-tipo-select {
+  min-width: 6rem;
+}
+
+.form-control-label {
+  border: none;
+  margin: 2px; 
+  
+}
+
+.red-errors .errorlist li {
+  color: #dc3545; /* Este es el color por defecto de 'text-danger' en Bootstrap */
+}
+
+
+/**** Vistas solicitante ****/
+/* Login */
+.login-contenedor {  
+  max-width: 500px;
+  border-radius: 20px;
+  border: 0.5px solid #5E5858;
+}
+
+.create-user {   
+    background-color: #ABEBC6;
+    border-radius: 10px;
+    width: auto;  
+    color: #FFFFFF;   
+    padding: 10px;   
+    margin: 10px 0px;   
+    border: none;   
+    cursor: pointer;
+    font-size: 17px; 
+    font-weight: bold;
+} 
+
+.create-user:hover {   
+    opacity: 0.7;   
+    color: var(--blanco);
+}
+
+.enlace-login{
+    color: var(--rosaM);
+}
+
+.enlace-login:hover{
+    color: var(--rosaF);
+}
+
+
+/* Crear cuenta */
+.register-contenedor
+{  
+  max-width: 460px;
+  border-radius: 20px;
+  border: 0.5px solid #5E5858;
+}
+
+
+/* Primer login */
+
+/* Perfil */
+
+.btn-editar-perfil{
+    background-color: var(--rosaF); 
+    color: #FFFFFF;  
+    padding: 0.5rem 1rem;
+    width: auto; 
+    border-radius: 50px; 
+    font-size: 1rem;
+}
+.btn-editar-perfil:hover{
+    background-color: #e68580; 
+    color: var(--blanco); 
+}
+
+.btn-guardar-perfil{
+    background-color: var(--btnActivo);
+    color: var(--blanco);
+    border-width: 1.5px; 
+    font-weight: 530;
+    border-radius: 20px;
+}
+
+.btn-guardar-perfil:hover{
+    background-color: var(--blanco);
+    color: var(--btnActivo);
+    border-color: var(--btnActivo);
+}
+
+/* Convocatoria */
+.tituloModulo{
+    font-weight: 600; 
+    padding-top: 40px;
+}
+
+.imagen-modalidad{
+    width: 70%; 
+    padding-bottom: 20px;
+}
+
+.card-modalidad{
+    text-align: center; 
+    height: 30%;
+}
+
+.btnConvocatoria{
+    background-color: var(--rosaF); 
+    color: #FFFFFF;  
+    width: 70%; 
+    border-radius: 50px; 
+    font-size: 1rem;
+}
+
+.btnConvocatoria:hover{
+    background-color: #e68580; 
+    color: var(--blanco); 
+}
+
+/* Subir documentos */
+    .modalidad-descripcion{
+        font-weight: 400;
+        font-size: 15px;
+    }
+    .card-documento{
+        text-align: center; 
+        height: 380px;
+        border-radius: 15px; 
+        border-color: #d1d1d1;
+    }
+    #tituloCard{
+        font-weight:600; 
+        padding-bottom: 0px;
+    }
+    #contenidoCard{
+        font-weight: 400; 
+        padding-top: 0px; 
+        padding-bottom: 0px;
+    }
+    #previewDoc{
+        height: 200px; 
+        color: var(--letraGeneral);;
+    }
+    
+    .btnSubirDoc{
+        background-color: var(--blanco);; 
+        color: var(--rosaM);
+        width: 70%; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--rosaM); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+        overflow: hidden; 
+        white-space: nowrap;
+        /* display: block; Este lo bloquee ya que hace que el botón no esté centrado*/
+        text-overflow: ellipsis;
+    }
+    .btnSubirDoc:hover{
+        background-color: var(--rosaM);
+        color: var(--blanco); 
+    }
+    
+    input[id="files"] { /*Desaparece los botones que trae por defecto django, pero solo los botones de la vista de subir documentos. */
+        display: none;
+    } 
+    
+    .btnSubirDocs{
+        background-color: var(--btnActivo);
+        color: #676767;
+        color: var(--blanco); 
+        width: auto;
+        border-radius: 50px; 
+        border-width: 1.5px; 
+        font-weight: 530;
+    }
+    
+    .btnSubirDocs:hover{
+        background-color: var(--blanco);
+        color: var(--btnActivo);
+        border-color: var(--btnActivo);
+    }
+    
+    .btnCancelar{
+        background-color: #DFDFDF;
+        color: #A8A8A8; 
+        width: 40%;
+        border-radius: 50px; 
+        border-width: 1.5px; 
+        font-weight: 530;
+    }
+    .btnCancelar:hover{
+        background-color: #F0F0F0;
+        color: #C9C9C9; 
+    }
+    
+    .seccion-sidebar.active{
+        border-left: 10px solid var(--rosaF);
+    }
+
+
+/* Historial */
+.docRevicion {
+    background-color: var(--pagina-blanco); 
+  }
+  
+  .docError {
+    background-color: var(--soli-doc-error); 
+  }
+  
+  .docAprobada {
+    background-color: var(--soli-doc-aprovada);  
+  }
+  
+  .aceptado {
+    background-color: var(--soli-aceptada);  
+  }
+  
+  .rechazado {
+    background-color: var(--soli-rechazada);  
+  }
+  
+  i.docRevicion:before {
+    content: "\f251";
+    color: var(--icon-solicitudes)
+  }
+  
+  i.docError:before {
+    content: "\f071";
+    color: var(--icon-solicitudes)
+    
+  }
+  
+  i.docAprobada:before {
+    content: "\f250";
+    color: var(--icon-solicitudes)
+  }
+  
+  i.aceptado:before {
+    content: "\f05d";
+    color: var(--icon-solicitudes)
+  }
+  
+  i.rechazado:before {
+    content: "\f05c";
+    color: var(--icon-solicitudes)
+  }
+
+
+
+/**** Vistas administrador ****/
+/* Solicitudes */
+/* Documentos solicitante */
+    .card-documento-solicitante{
+        text-align: center; 
+        height: 430px;
+        border-radius: 15px; 
+        border-color: #d1d1d1;
+    }
+
+    .btnAceptarDocumento{
+        background-color: var(--blanco); 
+        color: var(--btnActivo);
+        width: auto; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--letraGeneral); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+    }
+
+    .btnAceptarDocumento:hover{
+        background-color: var(--btnActivo); 
+        color: var(--blanco);
+    }
+
+    .btnRechazarDocumento{
+        background-color: var(--blanco); 
+        color: var(--rosaF);
+        width: auto; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--letraGeneral); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+    }
+
+    .btnRechazarDocumento:hover{
+        background-color: var(--rosaF); 
+        color: var(--blanco);
+    }
+
+    .card-documento-solicitante{
+        text-align: center; 
+        height: 430px;
+        border-radius: 15px; 
+        border-color: #d1d1d1;
+    }
+    
+    .btnAceptarDocumento{
+        background-color: var(--blanco); 
+        color: var(--btnActivo);
+        width: auto; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--letraGeneral); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+    }
+    
+    .btnAceptarDocumento:hover{
+        background-color: var(--btnActivo); 
+        color: var(--blanco);
+    }
+    
+    .btnRechazarDocumento{
+        background-color: var(--blanco); 
+        color: var(--rosaF);
+        width: auto; 
+        padding: 6px;
+        font-size: medium;
+        border-color: var(--letraGeneral); 
+        border-radius: 50px; 
+        border: 1.5px solid; 
+        font-weight: 530;
+    }
+    
+    .btnRechazarDocumento:hover{
+        background-color: var(--rosaF); 
+        color: var(--blanco);
+    }
+    
+    /* Documentos solicitante - Checkbox */
+    /* input[type="checkbox"] { 
+        display: none;
+    } */
+    
+    .checkbox-docs-aceptar{
+        height: 35px;
+        width: 35px;
+        border-radius: 20px !important;
+        border-color: var(--btnActivo);
+    }
+    
+    .checkbox-docs-rechazar{
+        height: 35px;
+        width: 35px;
+        border-radius: 20px !important;
+        border-color: var(--rosaF);
+    }
+    
+    .checkbox-docs-aceptar.form-check-input:hover{
+        background-color: var(--btnActivo);
+    }
+    
+    .checkbox-docs-rechazar.form-check-input:hover{
+        background-color: var(--rosaF);
+    }
+    
+    .checkbox-docs-aceptar.form-check-input:checked{
+        background-color: var(--btnActivo);
+        border-color: var(--btnActivo);
+    }
+    
+    .checkbox-docs-rechazar.form-check-input:checked{
+        background-color: var(--rosaF);
+        border-color: var(--rosaF);
+    }
+    
+
+
+/* Configuración */
+/* General */
+.subtitulo-config-general{
+    font-weight: 500; 
+    font-size: 15px;
+}
+.btnEditar{
+    border-radius: 10px;
+    background-color: var(--rosaC);
+    color: var(--letraGeneral) !important; 
+    margin-left: 10px;
+    margin-right: 10px;
+    width: auto;
+    font-size: medium !important;
+}
+#documentoMod{
+    text-align: right; 
+    height: 230px;
+}
+
+.config-general-inputs{
+    border-radius: 5px;
+    color: var(--letraGeneral) !important; 
+    font-size: 15px;
+    /* border-color: #a3a3a3; */
+    border: 1px solid;
+    padding: 5px 5px 5px 5px;
+}
+
+/* Modalidades */
+#btnAgregarMod{
+    padding: 6px 0 6px; 
+    text-align: center; 
+    color: var(--letraGeneral) !important; 
+    text-decoration: none; 
+    background-color: var(--verdeBtns) !important; 
+    font-size: medium; 
+    border-radius: 10px;
+}
+.checkbox-modalidades{
+    height: 25px;
+    width: 25px;
+    border-radius: 20px !important;
+    border-color: var(--rosaC);
+    float: right;
+}
+
+.checkbox-modalidades.form-check-input:hover{
+    background-color: var(--rosaC);
+}
+
+.checkbox-modalidades.form-check-input:checked{
+    background-color: var(--rosaC);
+    border-color: var(--rosaC);
+}
+/* Agregar-Editar modalidad */
+    .agregarMod{
+        font-weight: 600; 
+        font-size: 17px;
+    }
+    .subtitulo-mod{
+        font-weight: bold;
+    }
+    .btnEliminar{
+        background-color: var(--rosaC);
+        color: var(--letraGeneral) !important; 
+    }
+    #documentoMod{
+        text-align: right; 
+        height: 230px;
+    }
+
+
+/* Footer */
+.section-footer{
+    background-color: var(--rosaM);
+}
+
+@media (min-width: 768px){
+    .section-footer__row__col:first-child{
+        order: 1;
+        text-align: center;
+    }
+    .section-.section-footer__row__col{
+        text-align: left;
+    }
+}
+
+.section-footer__row__col{
+    padding: 0 20px;
+    flex-basis: auto;
+    display: inline-block;
+}
+
+.section-footer__icons{
+    margin-top: 0; 
+    padding: 0; 
+    list-style: none; 
+    line-height: 1.6; 
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.section-footer__list{
+    margin-top: 0; 
+    padding: 0; 
+    list-style: none; 
+    line-height: 1.6; 
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.list-section-footer{
+    margin: 0;
+}
+.list-section-footer-object{
+    display: inline-block;
+    padding: 0 15px;
+}
+
+
+
+/* Tablas */
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse; /* Combina los bordes de las celdas */
+}
+
+/* Estilo para las celdas en el cuerpo de la tabla */
+td {    
+  padding: 5px; /* Agrega relleno para separar contenido de bordes */  
+  overflow: hidden; /* Ocultar el contenido que desborda */
+  white-space: nowrap; /* Evitar saltos de línea */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si se corta el texto */
+}
+
+th {    
+  padding: 5px; /* Agrega relleno para separar contenido de bordes */  
+  overflow: hidden; /* Ocultar el contenido que desborda */
+  white-space: nowrap; /* Evitar saltos de línea */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si se corta el texto */
+}
+
+.custom-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.form-check-inline-custom{
+  display: inline-block;
+}
+
+.horizontal-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Estilo para la tabla */
+.custom-table-se {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;  
+}
+
+/* Estilo para las celdas del encabezado de la tabla */
+.custom-table-se th {  
+  color: var(--negro); /* Color del texto del encabezado */
+  font-weight: normal;
+  padding: 3px; /* Espaciado interno en el encabezado */
+  text-align: center; /* Alineación del texto en el encabezado */
+  border: 1px solid; /* División vertical y borde alrededor de las celdas del encabezado */
+  border-color: var(--gris-5);
+  white-space: normal; 
+  word-wrap: break-word;
+  background-color: #acacac7c; /* Color de fondo del encabezado */
+}
+
+/* Estilo para las celdas de datos de la tabla */
+.custom-table-se td {
+  padding: 3px; /* Espaciado interno en las celdas de datos */  
+  text-align: center; /* Alinea el texto en el centro */
+  border: 1px solid; /* División vertical y borde alrededor de las celdas de datos */
+  border-color: var(--gris-3);
+  white-space: normal;
+  word-wrap: break-word;
+  word-break:break-all
+}
+
+/* Estilo para filas alternas (para un efecto de rayas) */
+.custom-table-se tr:nth-child(even) {
+  background-color: var(--gris-1); /* Color de fondo para filas pares */
+}
+
+/* Estilo para filas alternas (para un efecto de rayas) */
+.custom-table-se tr:nth-child(odd) {
+  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
+}
+
+/* Estilo para la tabla */
+.custom-table-simple {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;  
+}
+
+/* Estilo para las celdas del encabezado de la tabla */
+.custom-table-simple th {  
+  color: var(--negro); /* Color del texto del encabezado */
+  font-weight: bold;
+  padding: 0.5rem 0.5rem;/* Espaciado interno en el encabezado */  
+  border: 0px solid; /* División vertical y borde alrededor de las celdas del encabezado */  
+  border-bottom: 2px solid;
+  border-color: var(--pagina-gris);
+  white-space: normal; 
+  word-wrap: break-word;
+  background-color: var(--pagina-blanco); /* Color de fondo del encabezado */
+}
+
+/* Estilo para las celdas de datos de la tabla */
+.custom-table-simple td {
+  padding: 0.5rem 0.5rem;/* Espaciado interno en las celdas de datos */    
+  border: 1px solid; /* División vertical y borde alrededor de las celdas de datos */
+  border-left: 0px solid;
+  border-right: 0px solid;
+  border-color: var(--gris-3);
+  vertical-align: middle;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Mensajes */
+.bold-legends legend {
+  font-weight: bold;
+  font-size: 1.143rem; /* 16px / 14px */
+  margin: 0;
+}
+
+.full-width-btn {
+  display: block;
+  width: 100%;
+  text-align: left; /* Alinea el texto a la izquierda dentro del botón */
+}
+
+.btn-barra-lateral {
+  color: #000;  
+}
+
+.btn-barra-lateral:hover {
+  color: #000;
+  background-color: var(--pagina-tenue-claro);
+  border-color: var(--pagina-tenue-claro);
+}
+
+.btn-barra-lateral.disabled, .btn-barra-lateral:disabled {
+  color: #000;
+  background-color: #a7a7a7;
+  border-color: #a7a7a7;
+}
+
+.btn-barra-lateral:not(:disabled):not(.disabled):active, .btn-barra-lateral:not(:disabled):not(.disabled).active,
+.show > .btn-barra-lateral.dropdown-toggle {
+  color: #fff;
+  background-color: var(--pagina-fuerte);
+  border-color: var(--pagina-fuerte);
+}
+
+.leidoFalse {
+  background-color: var(--pagina-blanco);  
+  color: var(--negro);
+}
+
+.leidoTrue {
+  background-color: var(--gris-1);
+  color: var(--gris-5);
+}
+
+.leidoTrue:hover .leidoFalse:hover {
+  background-color: var(--pagina-fondo);
+  color: var(--negro);
+}
+
+.circular-image {
+  border-radius: 50%;
+  object-fit: cover; 
+  width: 100%; 
+  height: 100%; 
+}
+
+.tarjetaContenedor {
+  transition: transform 0.3s ease-in-out;
+}
+
+
+/*Estilos de mosaico */
+
+.contenedor-mosaico{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 1rem;
+  }
+  
+  .tile img, .tile div, .tile canvas{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .tile:nth-child(1){
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+  
+  .tile:nth-child(2),
+  .tile:nth-child(3){
+    grid-column: span 2;
+  }
+  
+  .tile:nth-child(4),
+  .tile:nth-child(5),
+  .tile:nth-child(6),
+  .tile:nth-child(7),
+  .tile:nth-child(8),
+  .tile:nth-child(9),
+  .tile:nth-child(10){
+    grid-column: span 3;
+  }
+  
+  @media screen and (max-width: 650px){
+    .contenedor-mosaico{
+        display: block;
+    }
+    .tile{
+        margin-bottom: 1rem;
+    }
+  }
