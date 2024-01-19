@@ -83,7 +83,7 @@ def notificar_si_falta_documentos(solicitud):
     if set(documentos_modalidad) != set({resp.documento for resp in respuestas_documentos_solicitud}):        
         notif.nueva(solicitud.solicitante, 'Falta uno o mas documentos requeridos en su solicitud. Favor de revisar su solicitud', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])
         solicitud.estado=Solicitud.ESTADO_CHOICES[1][0]
-        solicitud.save
+        solicitud.save()
         return True
     else:
         return False

@@ -434,23 +434,6 @@
   padding-bottom: 0.7rem;
 }
 
-@keyframes slideInFromLeft {
-  0% {
-  transform: translateX(-100%);
-  }
-  100% {
-  transform: translateX(0);
-  }
- }
-
- @keyframes slideOutFromLeft {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-  transform: translateX(-100%);
-  }
- }
 
  .logo-barra {
   max-width: 250px;   
@@ -489,9 +472,7 @@
 .barra-mensajes-movil {
   position: fixed; 
   width: 100vw; 
-  height: 100vh; 
-  left: 282px;
-  animation: slideInFromLeft 0.5s ease-in-out;
+  height: 100vh;     
 }
 
 
@@ -667,9 +648,14 @@ th {
 }
 
 .horizontal-scroll {
+  transform: rotateX(180deg);
   max-width: 100%;
   overflow-x: auto;
 }
+
+.horizontal-scroll > * {
+  transform: rotateX(180deg);
+ }
 
 /* Estilo para la tabla */
 .custom-table-se {
