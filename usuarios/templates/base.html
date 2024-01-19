@@ -42,7 +42,7 @@
     </title>
   </head>
 
-  <body>
+  <body class="hidden-ready">
     {% include "mensajes.html" %}
     {% include "custom_confirm.html" %}
     <div >
@@ -57,10 +57,13 @@
     <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">
       <div class="row flex-nowrap" style="margin: 0px; ">
-        <div class="col-auto nopadding border-end border-1">
-          <div class="sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo" style="max-width: 280px; height: 100vh;">
+        <button id="menu-show-button" class="btn btnConvocatoria menu-button-float w-auto h-auto font-lg" type="button" data-bs-toggle="collapse" data-bs-target="#barraLateral-containter">
+          <i class="fa fa-bars align-self-center" aria-hidden="true"></i>
+        </button>
+        <div id="barraLateral-containter" class="col-auto nopadding collapse collapse-horizontal">          
+          <div id="barraLateral-body" class="barra-lateral-desktop sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo border-end border-1">            
             <a href="{% url 'usuarios:rootRedirect' %}" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-              <img class="img-fluid" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
+              <img class="img-fluid logo-barra" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
             </a>
             <hr>
             {% with url_name=request.resolver_match.url_name %}
@@ -165,8 +168,8 @@
 
         {% if not perms.usuarios.permiso_administrador or not request.user.is_superuser == 1 %}
           <div id="barraMensajes" class="col-auto nopadding" style="display: none;">
-            <div class="fixed-top d-flex flex-column border-end border-2 borde-pagina-principal 
-            justify-content-between flex-shrink-0 p-1 barra-lateral-fondo" style="max-width: 400px; height: 100vh; left: 282px;">
+            <div id="barraMensajes-body" class="barra-mensajes-desktop fixed-top d-flex flex-column border-end border-2 
+            justify-content-between flex-shrink-0 p-1 barra-lateral-fondo" >
               
               {% include 'solicitante/contenedor_notif.html' %}         
 
@@ -236,8 +239,26 @@
       function updateMobile() {
         mobil = isMobile()
         console.log(mobil)
-      }                      
-      
+        if (mobil){
+          $('#menu-show-button').show()
+          $('#barraLateral-body').removeClass('barra-lateral-desktop');
+          $('#barraLateral-body').addClass('barra-lateral-movil');
+          $('#barraLateral-containter').addClass('collapse barra-lateral-container-movil');
+
+          $('#barraMensajes-body').removeClass('barra-mensajes-desktop');          
+          $('#barraMensajes-body').addClass('barra-mensajes-movil');
+        }else {
+          $('#menu-show-button').hide()
+          $('#barraLateral-body').removeClass('barra-lateral-movil');          
+          $('#barraLateral-body').addClass('barra-lateral-desktop');
+          $('#barraLateral-containter').removeClass('collapse barra-lateral-container-movil');
+
+          $('#barraMensajes-body').removeClass('barra-mensajes-movil');          
+          $('#barraMensajes-body').addClass('barra-mensajes-desktop');
+        }
+      }       
+
+      updateMobile();
       window.onresize = updateMobile;
 
     </script>
