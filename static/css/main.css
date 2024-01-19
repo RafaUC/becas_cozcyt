@@ -10,7 +10,7 @@
 /* Estilo para móviles */
 @media (max-width: 767px) {
   html {
-      font-size: 16px;
+      font-size: 18px;
   }
 }
 
@@ -18,6 +18,11 @@
   box-sizing: border-box;
 }
 
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
 
 /*Clases de estolo de Colores*/
 
@@ -453,7 +458,7 @@
  }
 
  .logo-barra {
-  max-width: 280px; 
+  max-width: 250px;   
 }
 
 .menu-button-float {
@@ -905,4 +910,8 @@ i.rechazado:before {
   .tile{
       margin-bottom: 1rem;
   }
+}
+
+.jq-toast-single{
+  font-size: 1.1rem !important;
 }
