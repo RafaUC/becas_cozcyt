@@ -15,43 +15,32 @@ def configGeneral(request):
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
     
-    convocatoria_existe = None
+    convocatoria_existe = False
     if Convocatoria.objects.exists():
             convocatoria_existe = True
-
+    print(convocatoria_existe)
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
-        convocatoriaForm = ConvocatoriaForm(request.POST or None, instance = obj)
+        convocatoriaForm = ConvocatoriaForm(instance = obj)
         context = {'convocatoria' : convocatoriaForm}
         for field in convocatoriaForm.fields.values():
             field.widget.attrs['disabled'] = 'disabled'
         if request.method == "POST":
-            if convocatoriaForm.is_valid():
-                fechaI = convocatoriaForm.cleaned_data['fecha_inicio']
-                fechaC = convocatoriaForm.cleaned_data['fecha_cierre']
-                presup = convocatoriaForm.cleaned_data['presupuesto']
+            convocatoriaForm = ConvocatoriaForm(request.POST, instance = obj)
+            if convocatoriaForm.is_valid():                
                 convocatoriaForm.save()
+                messages.success(request, "Convocatoria actualizada.")            
+                return redirect("modalidades:AConfigGeneral")
             else:
                 messages.error(request, convocatoriaForm.errors)
-            messages.success(request, "Convocatoria actualizada.")
-            return redirect("modalidades:AConfigGeneral")
-
+            
 
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
         
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(data = request.POST)
             if convocatoriaForm.is_valid():
-                fechaI = convocatoriaForm.cleaned_data['fecha_inicio']
-                fechaC = convocatoriaForm.cleaned_data['fecha_cierre']
-                presup = convocatoriaForm.cleaned_data['presupuesto']
-
-                convocatoria = Convocatoria.objects.create(
-                    fecha_inicio = fechaI,
-                    fecha_cierre = fechaC,
-                    presupuesto = presup
-                )
-                convocatoria.save()
-                messages.success(request, "Convocatoria agregada con éxito.")
+                convocatoriaForm.save()
+                messages.success(request, "Convocatoria agregada con éxito.")                
                 return redirect("modalidades:AConfigGeneral")
             else:
                 messages.error(request, convocatoriaForm.errors)

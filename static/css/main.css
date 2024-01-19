@@ -1,11 +1,17 @@
 
 
-:root {
-  font-size: 14px; /* Establecer la fuente base */
+/* Estilo para PC */
+@media (min-width: 768px) {
+  html {
+      font-size: 14px;
+  }
 }
 
-body {
-  font-size: 14px;
+/* Estilo para móviles */
+@media (max-width: 767px) {
+  html {
+      font-size: 18px;
+  }
 }
 
 * {
@@ -433,6 +439,68 @@ body {
   padding-bottom: 0.7rem;
 }
 
+@keyframes slideInFromLeft {
+  0% {
+  transform: translateX(-100%);
+  }
+  100% {
+  transform: translateX(0);
+  }
+ }
+
+ @keyframes slideOutFromLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+  transform: translateX(-100%);
+  }
+ }
+
+ .logo-barra {
+  max-width: 250px;   
+}
+
+.menu-button-float {
+  position: fixed; 
+  top: 15px; 
+  left: 15px; 
+  z-index: 9999; 
+  border-radius: 5px !important; 
+}
+
+.barra-lateral-container-movil{
+  position: fixed; 
+  z-index: 9998; 
+}
+
+.barra-lateral-desktop {
+  max-width: 280px; 
+  height: 100vh;
+}
+
+.barra-lateral-movil {  
+  width: 100vw; 
+  height: 100vh;
+  /*animation: slideInFromLeft 0.5s ease-in-out;*/
+}
+
+.barra-mensajes-desktop {
+  max-width: 400px; 
+  height: 100vh; 
+  left: 282px;
+}
+
+.barra-mensajes-movil {
+  position: fixed; 
+  width: 100vw; 
+  height: 100vh; 
+  left: 282px;
+  animation: slideInFromLeft 0.5s ease-in-out;
+}
+
+
+
 .nopadding {
   padding: 0 !important;  
 }
@@ -842,4 +910,8 @@ i.rechazado:before {
   .tile{
       margin-bottom: 1rem;
   }
+}
+
+.jq-toast-single{
+  font-size: 1.1rem !important;
 }
