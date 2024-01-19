@@ -24,8 +24,8 @@ def modalidadMediaPath(instance, filename):
     return os.path.join('media/', filename)  # Ruta de almacenamiento deseada
 
 class Convocatoria(models.Model):
-    fecha_inicio = models.DateField(null=False, blank=True)
-    fecha_cierre = models.DateField(null=False, blank=True)
+    fecha_inicio = models.DateField(null=False, blank=False)
+    fecha_cierre = models.DateField(null=False, blank=False)
     presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
 
     def __str__(self):

@@ -184,6 +184,10 @@
         color: #C9C9C9; 
     }
     
+    .seccion-sidebar{
+        border-left: 10px solid var(--barra-lateral-fondo);
+    }
+
     .seccion-sidebar.active{
         border-left: 10px solid var(--rosaF);
     }
