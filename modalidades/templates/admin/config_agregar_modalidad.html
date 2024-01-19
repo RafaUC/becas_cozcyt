@@ -25,7 +25,7 @@
             <form method="POST" enctype="multipart/form-data" htmx-trigger = 'end'>
                 {% csrf_token %}    
                 <div class="text-end mx-3">
-                    <a href="{% url 'modalidades:AConfigModalidades' %}" class ="btn btn-regresar">
+                    <a href="{% url 'modalidades:AConfigModalidades' %}" class ="btn btnEditar">
                             Cancelar  
                     </a>
                     <button type="submit" class="btn btn-guardar" name="guardar">Guardar</button>    
