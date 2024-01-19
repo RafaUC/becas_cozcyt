@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" >
   <head>
     {% load static %}
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -63,7 +64,7 @@
         <div id="barraLateral-containter" class="col-auto nopadding collapse collapse-horizontal">          
           <div id="barraLateral-body" class="barra-lateral-desktop sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo border-end border-1">            
             <a href="{% url 'usuarios:rootRedirect' %}" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-              <img class="img-fluid logo-barra" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
+              <img class="img-fluid logo-barra my-2" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
             </a>
             <hr>
             {% with url_name=request.resolver_match.url_name %}
@@ -177,14 +178,14 @@
           </div>
         {% endif %}
 
-        <div class="col nopadding nomargin d-flex flex-column justify-content-between overflow-auto">
+        <div class="col nopadding nomargin d-flex flex-column justify-content-between overflow-auto" style="min-height: 100vh;">
           <div class="mb-auto ">
 
             {% block body %}
             {% endblock body %}
 
           </div>
-          
+                    
           <!-- Pie de pagina -->
           <footer>
             <div class="section-footer container-fluid">
@@ -257,7 +258,7 @@
           $('#barraMensajes-body').addClass('barra-mensajes-desktop');
         }
       }       
-
+      
       updateMobile();
       window.onresize = updateMobile;
 
