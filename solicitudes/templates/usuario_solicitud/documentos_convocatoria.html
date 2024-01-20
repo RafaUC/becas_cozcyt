@@ -19,10 +19,10 @@
         </div>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {% if solicitud_existe and convocatoria.fecha_convocatoria %}
+            {% if otra_solicitud_existe and convocatoria.fecha_convocatoria %}
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
-                    {% for documento in documentos %}
+                    {% for documento, documentoRespForm in listaDocumentos %}
                     <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
@@ -58,13 +58,13 @@
             {% elif convocatoria.fecha_convocatoria %}
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
-                    {% for documento in documentos %}
-                    <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">
+                    {% for documento, documentoRespForm in listaDocumentos %}
+                    <div class="col-md-4 red-errors" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <div class="row" style="height: 100px;">
+                                <div class="row " style="height: 100px;">
                                     <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
-                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
+                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>                                    
                                 </div>
                                 <div class="row" style="padding-bottom: 10px;">
                                     <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
@@ -72,12 +72,15 @@
                                         <iframe src="" type="application/pdf" height="500"></iframe>  
                                     </div>  
                                 </div>
-                                <div class="subir-documento">
+                                <div class="subir-documento ">
                                     <button style="width: 100%;" type="button" class="btnSubirDoc">Subir documento PDF</button>
-                                    <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf" required>
+                                    <!-- <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf" required> -->
+                                    {{ documentoRespForm.file }}
+                                    
                                 </div>
                             </div>
                         </div>
+                        {{ documentoRespForm.file.errors }}
                     </div>
                     {% endfor %}
                 </div>

@@ -83,7 +83,7 @@ def notificar_si_falta_documentos(solicitud):
     if set(documentos_modalidad) != set({resp.documento for resp in respuestas_documentos_solicitud}):        
         notif.nueva(solicitud.solicitante, 'Falta uno o mas documentos requeridos en su solicitud. Favor de revisar su solicitud', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])
         solicitud.estado=Solicitud.ESTADO_CHOICES[1][0]
-        solicitud.save
+        solicitud.save()
         return True
     else:
         return False
@@ -93,120 +93,78 @@ def documentos_convocatorias(request, modalidad_id):
     url = verificarRedirect(solicitante)    
     if url: 
         return redirect(url)
-    
-    #Si el usuario ya subió su documentación se le muestra la vista para modificar sus documentos
-    if Solicitud.objects.filter(solicitante=solicitante, modalidad=modalidad_id, ciclo = ciclo_actual()).exists():
-        usuario = get_object_or_404(Usuario, pk=request.user.id) 
-        solicitante = usuario.solicitante
-        modalidad = Modalidad.objects.get(pk = modalidad_id)
-        documentos = Documento.objects.filter(modalidad__id=modalidad_id)
-        solicitud = Solicitud.objects.get(solicitante=solicitante, modalidad_id=modalidad, ciclo=ciclo_actual())        
+        
+    solicitante = solicitante.solicitante
+    modalidad = get_object_or_404(Modalidad, pk=modalidad_id)
+    documentos = Documento.objects.filter(modalidad__id=modalidad_id)
+    try:
+        solicitud = Solicitud.objects.get(solicitante=solicitante, modalidad=modalidad, ciclo=ciclo_actual())        
+    except Solicitud.DoesNotExist:
+        solicitud = Solicitud(modalidad=modalidad, solicitante=solicitante, ciclo=ciclo_actual())
+    otra_solicitud_existe = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists()
+    convocatoria = Convocatoria.objects.all().first()
+
+    if request.method == 'GET':    
         listaDocumentos = []
         for documento in documentos:
-            tupla = (documento, RespuestaDocumento.objects.filter(solicitud=solicitud, documento=documento).first())
-            listaDocumentos.append(tupla)        
+            try:
+                instance = RespuestaDocumento.objects.get(solicitud=solicitud, documento=documento)
+                form = DocumentoRespForm(instance=instance, prefix=documento.id)
+            except RespuestaDocumento.DoesNotExist:
+                instance = RespuestaDocumento(solicitud=solicitud, documento=documento)
+                form = DocumentoRespForm(instance=instance, prefix=documento.id)
+            tupla = (documento, form)
+            listaDocumentos.append(tupla)            
 
-        convocatoria = Convocatoria.objects.all().first()
-
-        context ={
-            'solicitud': solicitud,
-            'modalidad': modalidad,
-            'listaDocumentos': listaDocumentos,
-            'convocatoria': convocatoria,
-        }
-
-        if request.method == 'POST':
-            for doc in request.FILES:
-                documento = Documento.objects.get(id=doc) 
-                try:
-                    documentoRespuesta = RespuestaDocumento.objects.get(documento=doc, solicitud=solicitud)
-                    files=request.FILES[doc] #Se obtiene el documento que se sube
-                    print(files)
-                    ext = os.path.splitext(files.name)[1][1:]                    
-                    if ext == 'pdf':
-                        documentoRespuesta.file.delete() #Se elimina el documento que va a ser modificado
-                        documentoRespuesta.file = files #Se agrega el nuevo documento
-                        documentoRespuesta.save() 
-                        messages.success(request, f"Exito al guardar el documento {documento.nombre}")
-                    else:
-                        messages.error(request, f'No se pudo guardar el documento {documento.nombre}: Sólo se permiten archivos en formato PDF.')                        
-                except RespuestaDocumento.DoesNotExist:
-                    print('Documento no existe')
-                    files={'file':request.FILES[doc]}
-                    documento = Documento.objects.get(id=doc)
-                    estado = RespuestaDocumento.ESTADO_CHOICES[0][0]
-                    data={
-                        'solicitud':solicitud,
-                        'documento': documento,
-                        'estado' : estado,
-                    }
-                    formRespDocs = DocumentoRespForm(data=data,files=files)
-                    
-                    if formRespDocs.is_valid():
-                        formRespDocs.save()
-                        messages.success(request, f"Exito al guardar el documento {documento.nombre}")
-                    else:
-                        messages.error(request, f'No se pudo guardar el documento {documento.nombre}')
-                        messages.error(request, formRespDocs.errors)
-                
-                
-            #messages.success(request, "Documentos modificados con éxito")
-            notificar_si_falta_documentos(solicitud)
-            return redirect("solicitudes:convocatorias")
+    if request.method == 'POST':                
+        listaDocumentos = []
+        for documento in documentos:            
+            try:
+                instance = RespuestaDocumento.objects.get(solicitud=solicitud, documento=documento)
+                form = DocumentoRespForm(request.POST, request.FILES, instance=instance, prefix=documento.id)
+            except RespuestaDocumento.DoesNotExist:
+                instance = RespuestaDocumento(solicitud=solicitud, documento=documento)
+                form = DocumentoRespForm(request.POST, request.FILES, instance=instance, prefix=documento.id)
+            tupla = (documento, form)
+            listaDocumentos.append(tupla)  
         
-        return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)
-      
-    #Si el usuario aún no sube documentación para la modalidad elegida, se le muestra la vista para subir sus documentos
-    else:      
-        usuario = get_object_or_404(Usuario, pk=request.user.id) 
-        solicitante = usuario.solicitante
-        modalidad = Modalidad.objects.get(pk = modalidad_id)
-        documentos = Documento.objects.filter(modalidad__id=modalidad_id)
-        
-        convocatoria = Convocatoria.objects.all().first()
-        solicitud_existe = None
-        if Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists():
-            solicitud_existe = True
-        
-        context ={
-            'modalidad': modalidad,
-            'documentos': documentos,
-            'convocatoria' : convocatoria,
-            'solicitud_existe': solicitud_existe
-        }
-        
-        if Solicitud.objects.filter(solicitante=solicitante, ciclo = ciclo_actual()).exists(): #El solicitante ya tiene una solicitud del ciclo actual
-                solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
-                messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
-            
-            # else: #El solicitante no ha hecho una solicitud en el ciclo actual
-        
-        if request.method == 'POST':
-            solicitud = Solicitud.objects.create(
-                modalidad=modalidad,
-                solicitante = solicitante
-            )
-            for doc in request.FILES:
-                files={'file':request.FILES[doc]}
-                documento = Documento.objects.get(id=doc)
-                estado = RespuestaDocumento.ESTADO_CHOICES[0][0]
-                data={
-                    'solicitud':solicitud,
-                    'documento': documento,
-                    'estado' : estado,
-                }
-                formRespDocs = DocumentoRespForm(data=data,files=files)
-                
-                if formRespDocs.is_valid():
-                    formRespDocs.save()
-                    messages.success(request, f"Exito al guardar el documento {documento.nombre}")
+        #si ya existe una solicitud y no es esta
+        if (not solicitud.id) and otra_solicitud_existe:
+            pass
+        else:
+            todoValido = True
+            for documento, respDocForm in listaDocumentos:
+                if not respDocForm.is_valid():
+                    todoValido = False
+                    messages.error(request, respDocForm.errors)
                 else:
-                    messages.error(request, f'No se pudo guardar el documento {documento.nombre}')
-                    messages.error(request, formRespDocs.errors)
-            notificar_si_falta_documentos(solicitud)
-            messages.success(request, "Solicitud creada con éxito")
-            return redirect("solicitudes:convocatorias")
-        
+                    if not solicitud.id:
+                        solicitud.save()
+                    if respDocForm.instance.id and respDocForm.instance.file is not None:                                                
+                        oldFile = RespuestaDocumento.objects.get(id=respDocForm.instance.id).file
+                        if respDocForm.instance.file != oldFile:                            
+                            oldFile.delete()                            
+                    respDocForm.save()
+            if todoValido:
+                notif.nueva(solicitante,'Solicitud generada con éxito y esperando por revisión. Favor de estar al tanto de actualizaciones.', 'solicitudes:historial')                
+                messages.success(request, "Solicitud generada con éxito.")
+                return redirect("solicitudes:convocatorias")
+            if solicitud.id:
+                notificar_si_falta_documentos(solicitud)
+
+    context ={
+        'solicitud': solicitud,
+        'modalidad': modalidad,
+        'listaDocumentos': listaDocumentos,
+        'convocatoria': convocatoria,
+        'otra_solicitud_existe': otra_solicitud_existe
+    }
+
+    #si ya existe la solicitud se muestra la vista para modificar los documentos
+    if solicitud.id:
+        return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)
+    #si no existe la solicitud se muestra la vista para crear la solicitud
+    else:
         return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
     
 
