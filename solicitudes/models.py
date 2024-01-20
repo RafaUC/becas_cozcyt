@@ -143,6 +143,11 @@ def validador_pdf(value):
     if ext.lower() not in valid_extensions:
         raise ValidationError(_('Sólo se permiten archivos en formato PDF.'))
 
+def validate_file_size(value):
+   filesize = value.size
+   if filesize > 1048576: # 1MB
+       raise ValidationError("El archivo es demasiado grande. El tamaño máximo permitido es 1MB.")
+
 def documentoMediaPath(instance, filename):
     ext = filename.split('.')[-1]  # Obtiene la extensión del archivo
     filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
@@ -157,11 +162,9 @@ class RespuestaDocumento(models.Model):
     ]
     solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
     documento = models.ForeignKey(Documento, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=documentoMediaPath, validators=[validador_pdf])
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    file = models.FileField(upload_to=documentoMediaPath, validators=[validador_pdf, validate_file_size])
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default=ESTADO_CHOICES[0][0])
 
-    # def __str__(self):
-    #     return f"DocRespuesta: s:{self.solicitud_id} - {self.id} {self.documento} - {self.estado}"
     
     def __str__(self):
         return f'{self.solicitud}/ {self.documento}'
@@ -178,9 +181,7 @@ class RespuestaDocumento(models.Model):
 #Signal que despues guardar algun RespuestaDocumento verifica que la solicitud a la que pertenece
 #cumple con las condiciones para pasar a estado docAprobada o no
 @receiver(post_save, sender=RespuestaDocumento)
-def actualizar_estado_solicitud(sender, instance, **kwargs):
-    print('actualizar_estado_solicitud')
-    print(f'instance: {instance} - {instance.estado}')
+def actualizar_estado_solicitud(sender, instance, **kwargs):    
     # Verificar condiciones y actualizar estado de la solicitud       
     opc = -1    
     solicitud = instance.solicitud    
@@ -201,8 +202,7 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
     else: #falta algun documento                
         opc = 1
       
-    
-    print(f'opc: {opc}')
+        
     if opc == 0:
         solicitud.estado = Solicitud.ESTADO_CHOICES[2][0] #'docAprobada'   
     elif opc == 1:
