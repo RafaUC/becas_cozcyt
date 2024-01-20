@@ -17,20 +17,19 @@ class SolicitudForm(ModelForm):
         exclude = ('modalidad', 'solicitante',)
         
 class DocumentoRespForm(ModelForm):
-    file = forms.FileField()
-    file.widget.attrs.update({'id': 'file-upload'})
+    file = forms.FileField(required=False ,widget=forms.FileInput(attrs={'class': 'pdfInput', 'accept': '.pdf', 'hidden': True}))
     class Meta:
         model = RespuestaDocumento
-        # fields = ('file',)
-        fields = '__all__'
+        fields = ['file']        
+
         labels = {
-            'file' : '',
-            'estado' : '',
+            'file': 'Archivo',
         }
-        # exclude = ('solicitud','documento',)
-        widgets = {
-            # 'file' :  forms.FileField(attrs={'class': 'btn btnSubirDoc',})
-        }
+    def clean_file(self):        
+        r = self.cleaned_data.get('file')        
+        if not r :
+            raise forms.ValidationError("Este campo es Obligatorio.")
+        return r
 
 class FiltroForm(forms.Form):
     opc = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False)

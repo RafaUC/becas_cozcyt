@@ -67,6 +67,9 @@
         var primeraCarga = false;
         $("#boton-mensajes").click(function() {
             $("#barraMensajes").toggle(); // Alternar visibilidad
+            if (mobil){
+                $('#barraLateral-containter').collapse('toggle');
+            }
             if (!primeraCarga) {
                 loadMore();
                 primeraCarga = true; // Marcar que la función se ha ejecutado

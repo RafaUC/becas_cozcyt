@@ -21,22 +21,23 @@
             {% csrf_token %}
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
-                    {% for documento, documentoResp in listaDocumentos %}
-                    <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">
+                    {% for documento, documentoRespForm in listaDocumentos %}
+                    <div class="col-md-4 red-errors" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <a class="texto-negro" {% if documentoResp %} href="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" target="_blank" {% else %} href="#" {% endif %} >
-                                    <div class="row" style="height: 100px;">
+                                <a class="texto-negro " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                    <div class="row " style="height: 100px;">
                                         <!-- {{modalidad.id}} -->
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>                                    
                                         <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
+                                        
                                     </div>
                                     <div class="row" style="padding-bottom: 10px;">
                                         <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
                                         
                                             <div class="card p-0" id="previewDoc">
-                                                {% if documentoResp %}
-                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" type="application/pdf" height="500"></iframe>                                        
+                                                {% if documentoRespForm.instance.id %}
+                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" type="application/pdf" height="500"></iframe>                                        
                                                 {% else %}
                                                     <p class="text-center text-nofile"> La respuesta a este documento no existe. </p>
                                                     <iframe src="" type="application/pdf" height="500"></iframe>                                        
@@ -45,22 +46,15 @@
                                         
                                     </div>
                                 </a>
-                                    <!-- <a href="" class="btn btnSubirDoc">
-                                    Subir documento --> 
-                                    <!-- Obtener el id del documento -->
-                                    <!-- <div>
-                                        <label for="file-upload" class="btnSubirDoc">
-                                        {{ documentoForm.file }}
-                                        </label>
-                                    </div> -->
-                                <div class="subir-documento" >
-                                    <button style="width: 100%;" type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
-                                    <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf">
+                                    
+                                <div class="subir-documento " >
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
+                                    {{ documentoRespForm.file }}                                    
                                     <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                 </div>
                             </div>
                         </div>
-                        
+                        {{ documentoRespForm.file.errors }}
                     </div>
                     {% endfor %}
                 </div>
