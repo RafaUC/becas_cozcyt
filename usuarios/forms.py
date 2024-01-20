@@ -290,3 +290,27 @@ class CarreraForm(forms.ModelForm):
             field.widget.attrs['title'] = self[field_name].value()
 
 CarreraInlineFormSet = inlineformset_factory(Institucion, Carrera, form=CarreraForm, extra=1, can_delete=True)
+
+class AgregarAdminForm(UserCreationForm):
+    class Meta:
+        model = Usuario
+        fields = ['curp', 'nombre' , 'email', 'password1', 'password2','is_staff', 'is_superuser']
+        labels = {
+            'curp': 'CURP',
+            'nombre': 'Nombre/Alias',
+            'email' : 'Correo electrónico',
+            'password1' : 'Contraseña',
+            'password2' : 'Confirmar contraseña',
+            'is_staff' : 'Es parte del departamento de estimulos',
+            'is_superuser' : 'Administrador',
+        }
+        widgets = {
+            'curp' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese su CURP'}),
+            'nombre' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese un nombre o alias'}),
+            'email' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese su correo electrónico'}),
+            'is_staff' : forms.CheckboxInput(attrs={'class': ''}),
+            'is_superuser' : forms.CheckboxInput(attrs={'class': '', }),
+        }
+    
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Contraseña'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Confirme su contraseña'}))

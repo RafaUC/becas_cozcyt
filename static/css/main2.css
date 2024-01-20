@@ -1242,3 +1242,7 @@ th {
         margin-bottom: 1rem;
     }
   }
+
+.jq-toast-single{
+  font-size: 0.93rem !important;
+}
