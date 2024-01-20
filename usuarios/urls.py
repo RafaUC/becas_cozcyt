@@ -62,6 +62,7 @@ urlpatterns = [
     path('administracion/eliminarInstitucion/<int:pk>/', viewsAdmin.eliminarInstitucion, name='AEliminarInstitucion'),
     path('administracion/carreras/<int:pkInst>/', viewsAdmin.listaCarreras, name='AListaCarreras'),
     path('administracion/configuracion', viewsAdmin.configuracion, name='AConfigGeneral'), 
+    path('administracion/crearAdmin/', viewsAdmin.agregarAdmin, name='AAgregarAdmin'),
     path('administracion/config/puntajes', viewsAdmin.puntajes, name='AConfigPuntajes'),
     path('administracion/config/puntajes/cargarMunicipio', viewsAdmin.cargar_municipio_puntos, name='AConfigPuntajesCargarM'),
     path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
