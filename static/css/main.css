@@ -419,6 +419,11 @@
   cursor: move;  
 }
 
+.nav .nav-link.active {
+  border-color: var(--pagina-principal);  
+  background-color: var(--pagina-fuerte);
+}
+
 
 
 .nav-pills-opciones .nav-link.active{  
@@ -894,5 +899,5 @@ i.rechazado:before {
 }
 
 .jq-toast-single{
-  font-size: 1.1rem !important;
+  font-size: 0.93rem !important;
 }

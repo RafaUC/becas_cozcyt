@@ -5,31 +5,30 @@ Lista de usuarios
 {% endblock titulo %}
 
 {% block body %}
-    
-    <div class="row m-0 p-0 align-items-center principal">
-        <p class="col-4 mx-4 my-4 h3">Lista de usuarios</p>
-        <div class="col mt-5 mx-3">
-            <div class="row align-items-center">
-                <div class="col-auto p-0">
-                    <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="<b>Puede buscar cambiando las palabras o contenido y en los atributos que necesite</b><br><br><b>juan zacatecas</b><br>Busca elementos que contengan 'juan' y 'zacatecas'<br><br><b>nombre:juan</b><br>Busca elementos cuyo atributo nombre contenga 'juan'<br><br><b>~juan ~maria</b><br>Busca elementos que contengan o 'juan' o 'maria'<br><br><b>juan -zacatecas</b><br>Busca elementos que contengan 'juan' y no contengan 'zacatecas'" data-bs-html="true" ></i>
-                </div>
-                <div class="col">
-                    <form class="d-flex" role="search" method="GET">                
-                        <input
-                        class="form-control me-2"
-                        type="search"
-                        placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
-                        name="search"
-                        aria-label="Search"
-                        value="{{ request.GET.search}}"
-                        >
-                        <button class="btn btn-outline-success" type="submit">Buscar</button>
-                    </form>
-                </div>                
-            </div>
-        </div>        
+<div class="rounded-2 p-1 my-4 principal">
+    <div class="row align-items-center principal">
+        <p class="col mx-4 my-4 h3">Lista de usuarios</p>
     </div>
-    
+    <div class="col mx-5">
+        <div class="row align-items-center">
+            <div class="col-auto p-0">
+                <i class="fa fa-info-circle font-md" aria-hidden="true" data-bs-original-title="<b>Puede buscar cambiando las palabras o contenido y en los atributos que necesite</b><br><br><b>juan zacatecas</b><br>Busca elementos que contengan 'juan' y 'zacatecas'<br><br><b>nombre:juan</b><br>Busca elementos cuyo atributo nombre contenga 'juan'<br><br><b>~juan ~maria</b><br>Busca elementos que contengan o 'juan' o 'maria'<br><br><b>juan -zacatecas</b><br>Busca elementos que contengan 'juan' y no contengan 'zacatecas'" data-bs-html="true" ></i>
+            </div>
+            <div class="col">
+                <form class="d-flex" role="search" method="GET">                
+                    <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Buscar por Nombre, Curp, Correo, Datos, etc."
+                    name="search"
+                    aria-label="Search"
+                    value="{{ request.GET.search}}"
+                    >
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>                
+        </div>
+    </div>  
     
     
     <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla horizontal-scroll principal">            
@@ -163,4 +162,5 @@ Lista de usuarios
             </div>
         </div> 
     </div>
+</div>
 {% endblock body %}

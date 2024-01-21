@@ -397,3 +397,49 @@ def eliminarUsuario(request, user_id):
     #print('usuario '+ str(user_to_delete) + ' eliminado')    
     anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
     return redirect(anterior_url)
+
+@login_required
+def agregarAdmin(request, pk=None):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+    
+    if pk:
+        instancia = get_object_or_404(Institucion, pk=pk)
+        postUrl = request.build_absolute_uri(reverse('usuarios:AAgregarAdmin', args=[pk]))
+        modalTitle = 'Editar Admin'
+    else:
+        instancia = None
+        postUrl = request.build_absolute_uri(reverse('usuarios:AAgregarAdmin'))
+        modalTitle = 'Agregar Admin'
+
+    if request.method == 'GET':        
+        form = AgregarAdminForm(instance=instancia)
+
+    if request.method == 'POST':        
+        form = AgregarAdminForm(request.POST, instance=instancia)
+
+        if form.is_valid():
+            form.is_staff = True
+            form.is_superuser =True
+            instancia = form.save()      
+            messages.success(request, 'Administrador creado con éxito')            
+            context = {       
+                'redirectAfter': request.session['anterior'],
+                'modalTitle': modalTitle,
+                'mensajes' : 'mensajes.html',
+                'postUrl': postUrl,
+                'modalForm': form,
+            }
+            return render(request, 'modal_base.html', context)
+        else:
+            messages.error(request, form.errors)
+    
+    context = {     
+        'modalTitle': modalTitle,
+        'mensajes' : 'mensajes.html',
+        'postUrl': postUrl,
+        'modalForm': form,
+    }
+    return render(request, 'modal_base.html', context)
