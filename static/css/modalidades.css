@@ -42,7 +42,7 @@
   }
 
   .enlace-login:hover{
-    color: var(--rosaF);
+    color: var(--pantene5513);
   }
 
 /* Crear cuenta */
@@ -94,7 +94,7 @@
 }
 
 .btnConvocatoria{
-    background-color: var(--rosaF); 
+    background-color: var(--pantene5513); 
     color: #FFFFFF;  
     width: 70%; 
     border-radius: 50px; 
@@ -109,7 +109,7 @@
     /* Subir documentos */
     .modalidad-descripcion{
         font-weight: 400;
-        font-size: 15px;
+        font-size: 17px;
     }
     .card-documento{
         text-align: center; 
@@ -189,7 +189,7 @@
     }
 
     .seccion-sidebar.active{
-        border-left: 10px solid var(--rosaF);
+        border-left: 10px solid var(--pantene5513);
     }
 
 /* Estudio socioeconómico */
@@ -215,7 +215,7 @@
 
 
 .principal{
-    color: var(--letraGeneral);
+    color: var(--letraGeneral) !important;
 }
 
 .btn-regresar{
