@@ -32,40 +32,45 @@ Lista de usuarios
     
     
     
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla horizontal-scroll principal">            
-        <table class="table custom-table-simple principal">
-            <p class="h4 mx-3">Administradores</p>
-            <thead>
-                <tr>
-                    <th class="borde-tabla text-center" style="width: 8%; border-bottom: 2px solid; color: #676767"> ID</th>
-                    <th class="borde-tabla" style="width: 42%; border-bottom: 2px solid; color: #676767"> Nombre</th>
-                    <th class="borde-tabla" style="width: 11rem; border-bottom: 2px solid; color: #676767"> CURP</th>
-                    <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767"> Correo Electrónico</th>
-                    <th class="borde-tabla" style="width: 30px; border-bottom: 2px solid; color: #676767"> </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in page_admin %}
-                <tr>
-                    <td class="text-center"></td>
-                    <td>{{ usuario.nombre }}
-                        {% if usuario.is_superuser %}
-                            <span class="badge bg-success">Admin</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ usuario.curp }} </td>
-                    <td>{{ usuario.email }}</td>
-                    <td  style="text-align: right;">                        
-                        <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
-                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                            </button>                                
-                        </form>
-                    </td>  
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal"> 
+        <p class="h4 mx-3">Administradores</p>     
+        <div class="horizontal-scroll">
+            <div>
+                <table class="table custom-table-simple principal">
+                    
+                    <thead>
+                        <tr>
+                            <th class="borde-tabla text-center" style="width: 1%; border-bottom: 2px solid; color: #676767"></th>
+                            <th class="borde-tabla" style="width: 42%; border-bottom: 2px solid; color: #676767"> Nombre</th>
+                            <th class="borde-tabla" style="width: 11rem; border-bottom: 2px solid; color: #676767"> CURP</th>
+                            <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767"> Correo Electrónico</th>
+                            <th class="borde-tabla" style="width: 30px; border-bottom: 2px solid; color: #676767"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in page_admin %}
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>{{ usuario.nombre }}
+                                {% if usuario.is_superuser %}
+                                    <span class="badge bg-success">Admin</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ usuario.curp }} </td>
+                            <td>{{ usuario.email }}</td>
+                            <td  style="text-align: right;">                        
+                                <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                                    <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                    </button>                                
+                                </form>
+                            </td>  
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
             <span class="step-links">                                
                 <span class="current font-xs me-1">
@@ -80,66 +85,71 @@ Lista de usuarios
                     <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                 {% endif %}
             </span>
-        </div>
+        </div>            
     </div>
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla horizontal-scroll principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla  principal">    
+        <p class="h4 mx-3">Solicitantes</p>
+        <div class="horizontal-scroll">
+            <div>
+                <table class="table custom-table-simple principal">
+            
+                    <thead>
+                        <tr>
+                            <th class="borde-tabla text-center" style="width: 8%; border-bottom: 2px solid; color: #676767">Folio</th>
+                            <th class="borde-tabla" style="width: 42%; border-bottom: 2px solid; color: #676767"> Nombre</th>
+                            <th class="borde-tabla" style="width: 11rem; border-bottom: 2px solid; color: #676767"> CURP</th>
+                            <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767"> Correo Electrónico</th>
+                            <th class="borde-tabla" style="width: 60px; border-bottom: 2px solid; color: #676767"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in page_soli %}                
+                        <tr>                    
+                            <td class="text-center">{{ usuario.folio }}</td>
+                            <td>{{ usuario.ap_paterno }} {{ usuario.ap_materno }} {{ usuario.nombre }}
+                                {% if usuario.is_superuser %}
+                                    <span class="badge bg-success">Admin</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ usuario.curp }}</td>
+                            <td >{{ usuario.email }}</td>
+                            <td style="text-align: right;">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-center me-2 desplegable">                                
+                                        <button class="btn btn-outline-secondary dropdown-toggle me-0 p-1" type="button" id="dropdownMenuButton{{solicitante.id}}"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
+                                            <i class="fa fa-user-circle align-self-center font-lg" data-bs-original-title="Opciones" aria-hidden="true"></i>
+                                        </button>                            
+                                        <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item">
+                                                    <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
+                                                    <span class="align-self-center">Información del usuario</span>
+                                                </a>
+                                            </li>                                                                        
+                                            <li>
+                                                <a href="{% url 'solicitudes:AHistorial' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item" >
+                                                    <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
+                                                    <span class="align-self-center">Historial de solicitudes</span>
+                                                </a>  
+                                            </li>                                                                                                                                 
+                                        </ul>                                                                                                            
+                                        
+                                    </div>                            
+                                    <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                                        <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                        </button>                                
+                                    </form>
+                                </div>
+                            </td>               
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         
-        <table class="table custom-table-simple principal">
-            <p class="h4 mx-3">Solicitantes</p>
-            <thead>
-                <tr>
-                    <th class="borde-tabla text-center" style="width: 8%; border-bottom: 2px solid; color: #676767"> ID</th>
-                    <th class="borde-tabla" style="width: 42%; border-bottom: 2px solid; color: #676767"> Nombre</th>
-                    <th class="borde-tabla" style="width: 11rem; border-bottom: 2px solid; color: #676767"> CURP</th>
-                    <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767"> Correo Electrónico</th>
-                    <th class="borde-tabla" style="width: 60px; border-bottom: 2px solid; color: #676767"> </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in page_soli %}                
-                <tr>                    
-                    <td class="text-center"></td>
-                    <td>{{ usuario.ap_paterno }} {{ usuario.ap_materno }} {{ usuario.nombre }}
-                        {% if usuario.is_superuser %}
-                            <span class="badge bg-success">Admin</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ usuario.curp }}</td>
-                    <td >{{ usuario.email }}</td>
-                    <td style="text-align: right;">
-                        <div class="d-flex align-items-center">
-                            <div class="d-flex align-items-center justify-content-center me-2">                                
-                                <button class="btn btn-outline-secondary dropdown-toggle me-0 p-1" type="button" id="dropdownMenuButton{{solicitante.id}}"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                
-                                    <i class="fa fa-user-circle align-self-center font-lg" data-bs-original-title="Opciones" aria-hidden="true"></i>
-                                </button>                            
-                                <ul class="px-1 py-1 dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a href="{% url 'usuarios:AEditarUsuario' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item">
-                                            <i class="fa fa-user-circle align-self-center font-lg" aria-hidden="true"></i>
-                                            <span class="align-self-center">Información del usuario</span>
-                                        </a>
-                                    </li>                                                                        
-                                    <li>
-                                        <a href="{% url 'solicitudes:AHistorial' usuario.id %}" class="m-0 me-2 align-items-center dropdown-item" >
-                                            <i class="fa fa-clock-o align-self-center font-lg" aria-hidden="true"></i> 
-                                            <span class="align-self-center">Historial de solicitudes</span>
-                                        </a>  
-                                    </li>                                                                                                                                 
-                                </ul>                                                                                                            
-                                
-                            </div>                            
-                            <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
-                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                    <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                </button>                                
-                            </form>
-                        </div>
-                    </td>               
-                </tr>
-                
-                {% endfor %}
-            </tbody>
-        </table>
         <div class="row pagination mx-3 font-semi-bold font-md ">
             <span class="col step-links">           
                 <span class="row current font-xs ms-1 pt-1">         

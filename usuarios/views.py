@@ -114,8 +114,8 @@ def activate(request, uidb64, token):
         user = usuario.objects.get(pk=uid)
     except:
         user = None
-
-    if user is not None and account_activation_token.check_token(user,token):
+    #print(f'{uid} {token} || user {user}, accval {account_activation_token.check_token(user,token)} ')
+    if user is not None and account_activation_token.check_token(user,token):        
         user.is_active = True    
         user.save()
 
