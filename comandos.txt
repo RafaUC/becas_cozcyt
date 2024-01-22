@@ -1,4 +1,4 @@
-Comandos útiles para correro el programa
+Comandos útiles para correr el programa
 
 docker-compose up --build
 docker-compose up
@@ -8,5 +8,7 @@ docker-compose exec app bash
 python3 manage.py check
 python3 manage.py makemigrations
 python3 manage.py migrate
+
+python3 manage.py createsuperuser
 
 python3 manage.py runserver 0:8000
