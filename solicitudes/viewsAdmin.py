@@ -24,6 +24,7 @@ from .models import *
 from usuarios.models import Solicitante
 from .views import notificar_si_falta_documentos
 
+from mensajes import notificaciones as notif
 # Create your views here.
 #########################################
 # Nota: Recordar
@@ -342,14 +343,16 @@ def documentos_solicitante(request, pk):
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])            
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])   
+            notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifiquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
 
         #Todos los documentos fueron denegados
         if seleccionAceptados == None and seleccionDenegados != None:
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])            
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])  
+            notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
             
@@ -360,6 +363,7 @@ def documentos_solicitante(request, pk):
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
             print(solicitud.estado)
+            notif.nueva(solicitante, f'Estimado alumno, sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados', 'solicitudes:historial')                
         if documentosResp.first():
             #el metodo .update()  en querysets no llama los recivers asi que se debe hacer almenos un save()
             documentosResp.first().save()

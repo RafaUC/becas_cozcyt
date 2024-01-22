@@ -25,9 +25,9 @@
                     <div class="col-md-4 red-errors" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <a class="texto-negro " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
-                                    <div class="row " style="height: 100px;">
-                                        <!-- {{modalidad.id}} -->
+                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.estado }}</p>
+                                <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                    <div class="row " style="height: auto;">
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>                                    
                                         <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
                                         
@@ -47,7 +47,7 @@
                                     </div>
                                 </a>
                                     
-                                <div class="subir-documento " >
+                                <div class="subir-documento" style="padding-bottom: 10px;">
                                     <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
                                     {{ documentoRespForm.file }}                                    
                                     <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
