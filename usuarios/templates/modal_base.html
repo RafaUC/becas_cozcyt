@@ -22,49 +22,51 @@
                 <form method="post" id="base-modal-form">  
                     {% csrf_token %}     
             {% endif %}
-            <div id="base-modal-dialogo" class="modal-body font-md red-errors">                
-                {% if modalFormset %}
-                    
-                    {{ modalFormset.management_form }}
-                    <table class=" custom-table-simple">
-                        <thead>
-                            <tr>
-                            {% for field in modalFormset.empty_form.visible_fields %}
-                                <th >{{ field.label|capfirst }}</th>
-                            {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for form in modalFormset %}                            
-                                <tr>                                    
-                                    {% for field in form.visible_fields %}
-                                    <td class="text-center">
-                                        {% if form.instance.id is None %}                                            
-                                            <p class="text-start mb-1 mt-5 font-semi-bold">
-                                                {% if forloop.first %}
-                                                Crear nuevo
-                                                {% endif %}
-                                                &nbsp;
-                                            </p>                                            
-                                        {% endif %}
-                                        {{ field.errors }}
-                                        {{ field }}                                        
-                                    </td>
-                                    {% endfor %}
-                                    {% for field in form.hidden_fields %}
-                                        {{ field }}
-                                        {{ field.errors }}
-                                    {% endfor%}
-                                    {{ form.non_field_errors }}
+            <div class="horizontal-scroll">
+                <div id="base-modal-dialogo" class="modal-body font-md red-errors">                
+                    {% if modalFormset %}
+                        
+                        {{ modalFormset.management_form }}
+                        <table class=" custom-table-simple">
+                            <thead>
+                                <tr>
+                                {% for field in modalFormset.empty_form.visible_fields %}
+                                    <th >{{ field.label|capfirst }}</th>
+                                {% endfor %}
                                 </tr>
-                            {% endfor %}
-                            {{ modalFormset.non_form_errors }}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for form in modalFormset %}                            
+                                    <tr>                                    
+                                        {% for field in form.visible_fields %}
+                                        <td class="text-center">
+                                            {% if form.instance.id is None %}                                            
+                                                <p class="text-start mb-1 mt-5 font-semi-bold">
+                                                    {% if forloop.first %}
+                                                    Crear nuevo
+                                                    {% endif %}
+                                                    &nbsp;
+                                                </p>                                            
+                                            {% endif %}
+                                            {{ field.errors }}
+                                            {{ field }}                                        
+                                        </td>
+                                        {% endfor %}
+                                        {% for field in form.hidden_fields %}
+                                            {{ field }}
+                                            {{ field.errors }}
+                                        {% endfor%}
+                                        {{ form.non_field_errors }}
+                                    </tr>
+                                {% endfor %}
+                                {{ modalFormset.non_form_errors }}
+                            </tbody>
+                        </table>
 
-                {% elif modalForm %}
-                    {{ modalForm }}
-                {% endif %}
+                    {% elif modalForm %}
+                        {{ modalForm }}
+                    {% endif %}
+                </div>
             </div>
             <div class="modal-footer">                
                 {% if modalForm or modalFormset %}    

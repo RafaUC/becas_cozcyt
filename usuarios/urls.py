@@ -45,7 +45,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/restablecer_contraseña_exito/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_complete.html"), name="password_reset_complete"), #Mensaje de que se cambió la contraseña con éxito
 
     
-    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    #path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
     
 
     path('perfil/',views.perfil, name='perfil'),
