@@ -59,7 +59,7 @@ Lista de usuarios
                             <td>{{ usuario.email }}</td>
                             <td  style="text-align: right;">                        
                                 <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
-                                    <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'Desea eliminar este Usuario?')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                    <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
                                         <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
                                     </button>                                
                                 </form>
@@ -171,6 +171,61 @@ Lista de usuarios
                 </span>
             </div>
         </div> 
+    </div>
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal"> 
+        <p class="h4 mx-3">Usuarios no verificados</p>     
+        <div class="horizontal-scroll">
+            <div>
+                <table class="table custom-table-simple principal">
+                    
+                    <thead>
+                        <tr>
+                            <th class="borde-tabla text-center" style="width: 1%; border-bottom: 2px solid; color: #676767"></th>
+                            <th class="borde-tabla" style="width: 42%; border-bottom: 2px solid; color: #676767"> Nombre</th>
+                            <th class="borde-tabla" style="width: 11rem; border-bottom: 2px solid; color: #676767"> CURP</th>
+                            <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767"> Correo Electrónico</th>
+                            <th class="borde-tabla" style="width: 30px; border-bottom: 2px solid; color: #676767"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in page_nover %}
+                        <tr>
+                            <td class="text-center"></td>
+                            <td>{{ usuario.nombre }}
+                                {% if usuario.is_superuser %}
+                                    <span class="badge bg-success">Admin</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ usuario.curp }} </td>
+                            <td>{{ usuario.email }}</td>
+                            <td  style="text-align: right;">                        
+                                <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
+                                    <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
+                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                    </button>                                
+                                </form>
+                            </td>  
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
+            <span class="step-links">                                
+                <span class="current font-xs me-1">
+                    Página {{ page_nover.number }} / {{ page_nover.paginator.num_pages }}.
+                </span>                
+                {% if page_nover.has_previous %}                    
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                {% endif %}
+                {% if page_nover.has_next %}
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                {% endif %}
+            </span>
+        </div>            
     </div>
 </div>
 {% endblock body %}
