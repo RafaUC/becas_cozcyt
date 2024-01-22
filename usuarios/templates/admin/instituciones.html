@@ -38,51 +38,54 @@ Lista de instituciones
     </div>
     
     
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-1 borde-tabla  horizontal-scroll principal">    
-        
-        <table class="table custom-table-simple principal">
-            <div class="row mx-0">
-                <div class="col ps-0">
-                    <p class="h4 mx-3">Instituciones</p>           
-                </div>
-                <div class="col-auto">                    
-                    <button  type="button" class="btn rounded-4 btn-a-seccion btn-guardar p-1 px-3 mx-3 font-sm d-flex align-items-center" onclick="showFormModal('{% url 'usuarios:ACrearInstitucion' %}', 'GET')" > <p class="m-0 mb-1">Nueva Institución</p> </button>                                
-                </div>
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-1 borde-tabla principal">    
+        <div class="row mx-0">
+            <div class="col ps-0">
+                <p class="h4 mx-3">Instituciones</p>           
             </div>
-            <thead>
-                <tr>
-                    <th class="borde-tabla text-center" style="width: 8%; border-bottom: 2px solid; color: #676767;""> ID</th>
-                    <th class="borde-tabla" style="width: auto; max-width: 5rem; border-bottom: 2px solid; color: #676767;""> Nombre</th>
-                    <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;""> Puntos</th>                    
-                    <th class="borde-tabla" style="width: 10rem; border-bottom: 2px solid;"> </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for institucion in page_insti %}                
-                <tr>                    
-                    <td class="text-center">{{ institucion.id }}</td>
-                    <td class="text-start">{{ institucion.nombre }}</td>
-                    <td class="text-center">{{ institucion.puntos }}</td> 
-                    <td style="text-align: right;">
-                        <div class="d-flex align-items-center justify-content-center ">
-                            <button type="button" onclick="showFormModal('{% url 'usuarios:AListaCarreras' institucion.id %}', 'GET')" title="Lista de carreras" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Lista de carreras">
-                                <i class="fa fa-list-ol m-0 text-primary " style="font-size: 20px;"></i>
-                            </button>  
-                            <button type="button" onclick="showFormModal('{% url 'usuarios:AEditarInstitucion' institucion.id %}', 'GET')" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
-                                <i class="fa fa fa-pencil m-0 text-warning " style="font-size: 20px;"></i>
-                            </button>  
-                            <form class="p-0 m-0" action="{% url 'usuarios:AEliminarInstitucion' institucion.id %}" method="get" >                                                        
-                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución? <br> {{institucion.nombre}}')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
-                                    <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
-                                </button>                                
-                            </form>
-                        </div>
-                    </td>               
-                </tr>
-                
-                {% endfor %}
-            </tbody>
-        </table>
+            <div class="col-auto">                    
+                <button  type="button" class="btn rounded-4 btn-a-seccion btn-guardar p-1 px-3 mx-3 font-sm d-flex align-items-center" onclick="showFormModal('{% url 'usuarios:ACrearInstitucion' %}', 'GET')" > <p class="m-0 mb-1">Nueva Institución</p> </button>                                
+            </div>
+        </div>
+        <div class="horizontal-scroll">
+            <div>
+                <table class="table custom-table-simple principal">            
+                    <thead>
+                        <tr>
+                            <th class="borde-tabla text-center" style="width: 1%; border-bottom: 2px solid; color: #676767;"></th>
+                            <th class="borde-tabla" style="width: auto; max-width: 5rem; border-bottom: 2px solid; color: #676767;"> Nombre</th>
+                            <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> Puntos</th>                    
+                            <th class="borde-tabla" style="width: 10rem; border-bottom: 2px solid;"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for institucion in page_insti %}                
+                        <tr>                    
+                            <td class="text-center"></td>
+                            <td class="text-start">{{ institucion.nombre }}</td>
+                            <td class="text-center">{{ institucion.puntos }}</td> 
+                            <td style="text-align: right;">
+                                <div class="d-flex align-items-center justify-content-center ">
+                                    <button type="button" onclick="showFormModal('{% url 'usuarios:AListaCarreras' institucion.id %}', 'GET')" title="Lista de carreras" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Lista de carreras">
+                                        <i class="fa fa-list-ol m-0 text-primary " style="font-size: 20px;"></i>
+                                    </button>  
+                                    <button type="button" onclick="showFormModal('{% url 'usuarios:AEditarInstitucion' institucion.id %}', 'GET')" title="Editar" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Editar institución">
+                                        <i class="fa fa fa-pencil m-0 text-warning " style="font-size: 20px;"></i>
+                                    </button>  
+                                    <form class="p-0 m-0" action="{% url 'usuarios:AEliminarInstitucion' institucion.id %}" method="get" >                                                        
+                                        <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución? <br> {{institucion.nombre}}')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
+                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                        </button>                                
+                                    </form>
+                                </div>
+                            </td>               
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
             <span class="step-links">                                
                 <span class="current font-xs me-1">
