@@ -5,6 +5,7 @@ migrations/
 media/protected/
 media/protected_uploads/
 media/
+temp/
 protected_uploads/
 
 

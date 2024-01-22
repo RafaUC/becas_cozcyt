@@ -57,15 +57,15 @@ urlpatterns = [
     ### urls Administrador ###
     path('administracion/inicio', viewsAdmin.inicio, name='AInicio'),        
     path('administracion/usuarios', viewsAdmin.listaUsuarios, name='AUsuarios'),
-    path('administracion/instituciones', viewsAdmin.listaInstituciones, name='AInstituciones'),
+    path('administracion/configuracion/instituciones', viewsAdmin.listaInstituciones, name='AConfigInstituciones'),
     path('administracion/crearInstitucion/', viewsAdmin.crearEditarInstitucion, name='ACrearInstitucion'),
     path('administracion/editarInstitucion/<int:pk>/', viewsAdmin.crearEditarInstitucion, name='AEditarInstitucion'),
     path('administracion/eliminarInstitucion/<int:pk>/', viewsAdmin.eliminarInstitucion, name='AEliminarInstitucion'),
     path('administracion/carreras/<int:pkInst>/', viewsAdmin.listaCarreras, name='AListaCarreras'),
     path('administracion/configuracion', viewsAdmin.configuracion, name='AConfigGeneral'), 
     path('administracion/crearAdmin/', viewsAdmin.agregarAdmin, name='AAgregarAdmin'),
-    path('administracion/config/puntajes', viewsAdmin.puntajes, name='AConfigPuntajes'),
-    path('administracion/config/puntajes/cargarMunicipio', viewsAdmin.cargar_municipio_puntos, name='AConfigPuntajesCargarM'),
+    path('administracion/configuracion/puntajes', viewsAdmin.puntajes, name='AConfigPuntajes'),
+    path('administracion/configuracion/puntajes/cargarMunicipio', viewsAdmin.cargar_municipio_puntos, name='AConfigPuntajesCargarM'),
     path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
     path('administracion/eliminarUsuario/<int:user_id>/', viewsAdmin.eliminarUsuario, name='AEliminarUsuario'),
 ]

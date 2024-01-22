@@ -23,11 +23,12 @@ urlpatterns = [
     path('documento_respuesta/<int:pk>',views.documentoRespuesta, name='documento-respuesta'),
     path('documento/<int:soli>/<int:file>',views.verPDF, name='verPdf'),
     path('historial/',views.historial, name='historial'),
+    path('convocatoria/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
 
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
     path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
-    path('documentosSolicitante/<int:pk>', viewsAdmin.documentos_solicitante, name="ADocumentos"),
-    path('convocatoria/documentacion/<modalidad_id>', views.documentos_convocatorias, name='documentos_convocatoria'),
+    path('documentosSolicitante/<int:pk>', viewsAdmin.documentos_solicitante, name="ADocumentos"),    
+    path('administracion/concentrado/solicitud/<int:pk>', viewsAdmin.concentradoSolicitante, name='AConcentradoSoli'),
 
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
