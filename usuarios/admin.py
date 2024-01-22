@@ -44,15 +44,15 @@ class UsuarioAdmin(UserAdmin):
         ('Login info', {'fields': ('last_login',)}),
     )
     # Campos que se mostrarán en la lista de usuarios en el sitio de administración
-    list_display = ('curp', 'nombre', 'email', 'is_staff', 'is_superuser')
+    list_display = ('curp', 'nombre', 'email', 'is_staff', 'is_superuser', 'is_active')
     # Campos por los que se puede buscar en la lista de usuarios en el sitio de administración
-    search_fields = ('curp', 'nombre', 'email')
+    search_fields = ('curp', 'nombre', 'email', 'is_active')
     # Muestra el campo de contraseña como un campo de contraseña enmascarado
     #readonly_fields = ('password',)
     # Eliminar la configuración de ordering
-    ordering = ['curp']
+    ordering = ['id']
 
-    list_filter = ('is_staff', 'is_superuser')
+    list_filter = ('is_staff', 'is_superuser', 'is_active')
 
 # Registrar el modelo Usuario con la clase UsuarioAdmin personalizada
 admin.site.register(Usuario, UsuarioAdmin)

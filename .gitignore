@@ -4,7 +4,7 @@ migrations/
 #static/images/
 media/protected/
 media/protected_uploads/
-media/
+
 protected_uploads/
 
 

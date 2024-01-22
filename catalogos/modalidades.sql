@@ -1,9 +1,105 @@
 
-INSERT INTO `modalidades_modalidad` (id, nombre, imagen, descripcion, mostrar, tipo) VALUES 
-(01, 'Mejora académica', 'media/mejora-academica.png', 'Beca para alumnos de bajos recursos que buscan mejorar sus calificaciones',1, 'Ingreso'),
-(02, 'Excelencia académica', 'media/excelencia-academica.png', 'Beca para alumnos que cuentan con excelencia academica',1, 'Ingreso'),
-(03, 'Talento especial', 'media/talento-especial.png', 'Beca para alumnos que cuentan con un desempeño excepcional',1, 'Ingreso'),
-(04, 'Labsol', 'media/labsol.png', 'Beca para alumnos que se encuentran desarrollando un proyecto dentro del Laboratorio de software libre',1, 'Ingreso'),
-(05, 'Posgrado', 'media/posgrado.png', 'Beca para alumnos que se encuentran realizando estudios de posgrado',1, 'Ingreso')
+INSERT INTO `modalidades_modalidad` (id, nombre, imagen, descripcion, monto, mostrar, tipo) VALUES 
+(01, 'Mejora académica', 'media/mejora-academica.png', 'Modalidad que se le otorga a los estudiantes de enseñanza superior a partir del segundo semestre de su carrera y que cuenten con un promedio mínimo de 8.0 (ocho).',1234.99,1, 'Ingreso'),
+(02, 'Excelencia académica', 'media/excelencia-academica.png', 'Modalidad que se le otorga a los estudiantes de nivel superior a partir del segundo semestre de su carrera y con un promedio global de sus estudios superiores mínimo de 9.0 (nueve). ',1234.99,1, 'Ingreso'),
+(03, 'Talento especial', 'media/talento-especial.png', 'Modalidad que se le otorga a estudiantes de nivel medio superior y superior que cumplan con lo especificado en uno de los dos siguientes encisos: 1) Promedio mínimo de 9.0 y que cuenten con premios académicos de carácter estatal, nacional y/o internacional. 2) Estudiantes de nivel medio superior y superior que colaboren como Entrenadores o Asesores en entrenamientos o clases para estudiantes que participen en olimpiadas o competencias de las áreas de HCTI.',1234.99,1, 'Ingreso'),
+(04, 'Labsol', 'media/labsol.png', 'Modalidad que se le otorga a etudiantes que se encuentren colaborando o deseen colaborar en un Proyecto de Desarrollo Tecnológico en el Laboratorio de Software Libre del COZCYT.',1234.99,1, 'Ingreso'),
+(05, 'Posgrado', 'media/posgrado.png', 'Modalidad que se le otorga a los estudiantes sin beca CONACyT que su grado se encuentre en la Lista de Carreras y Posgrados aceptadas en BECAS COZCYT correspondiente a la convocatoria publicada en los medios correspondientes.',1234.99,1, 'Ingreso'),
+
+(06, 'Mejora académica', 'media/mejora-academica-re.png', 'Modalidad que se le otorga a los estudiantes de enseñanza superior a partir del segundo semestre de su carrera y que cuenten con un promedio mínimo de 8.0 (ocho).',1234.99,1, 'Renovacion'),
+(07, 'Excelencia académica', 'media/excelencia-academica-re.png', 'Modalidad que se le otorga a los estudiantes de nivel superior a partir del segundo semestre de su carrera y con un promedio global de sus estudios superiores mínimo de 9.0 (nueve). ',1234.99,1, 'Renovacion'),
+(08, 'Talento especial', 'media/talento-especial-re.png', 'Modalidad que se le otorga a estudiantes de nivel medio superior y superior que cumplan con lo especificado en uno de los dos siguientes encisos: 1) Promedio mínimo de 9.0 y que cuenten con premios académicos de carácter estatal, nacional y/o internacional. 2) Estudiantes de nivel medio superior y superior que colaboren como Entrenadores o Asesores en entrenamientos o clases para estudiantes que participen en olimpiadas o competencias de las áreas de HCTI.',1234.99,1, 'Renovacion'),
+(09, 'Labsol', 'media/labsol-re.png', 'Modalidad que se le otorga a etudiantes que se encuentren colaborando o deseen colaborar en un Proyecto de Desarrollo Tecnológico en el Laboratorio de Software Libre del COZCYT.',1234.99,1, 'Renovacion'),
+(10, 'Posgrado', 'media/posgrado-re.png', 'Modalidad que se le otorga a los estudiantes sin beca CONACyT que su grado se encuentre en la Lista de Carreras y Posgrados aceptadas en BECAS COZCYT correspondiente a la convocatoria publicada en los medios correspondientes.',1234.99,1, 'Renovacion')
+ON DUPLICATE KEY UPDATE
+nombre = nombre;
+
+INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad_id) VALUES 
+(1,'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 1),
+(2,'INE', 'Credencial de elector visible y vigente.', 2, 1),
+(3,'CURP', 'Clave Única de Registro de Población Oficial.', 3, 1),
+(4,'Carta de exposición de motivos', 'Una carta que exponga los motivos para solicitar la beca y qué beneficios tendría en su vida.', 4, 1),
+(5,'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 5, 1),
+(6,'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 1),
+(7,'Comprobante de ingresos', 'Documento que acredita que cuentas con ingresos mensuales, quincenales, o incluso temporales.', 7, 1),
+(8,'Constancia de situación fiscal', 'Documento que avala los ingresos familiares.', 8, 1),
+(9,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 1),
+
+(10, 'INE', 'Credencial de elector visible y vigente.', 1, 6 ),
+(11, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 6 ),
+(12, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 6 ),
+(13, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 6 ),
+(14, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 5, 6 ),
+(15, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 6 ),
+
+(16,'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 2 ),
+(17,'INE', 'Credencial de elector visible y vigente.', 2, 2 ),
+(18,'CURP', 'Clave Única de Registro de Población Oficial.', 3, 2 ),
+(19,'Carta de exposición de motivos', 'Una carta que exponga los motivos para solicitar la beca y qué beneficios tendría en su vida.', 4, 2 ),
+(20,'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 5, 2 ),
+(21,'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 2 ),
+(22,'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 2 ),
+(23,'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 8, 2 ),
+(24,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 2 ),
+
+(25, 'INE', 'Credencial de elector visible y vigente.', 1, 7 ),
+(26, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 7 ),
+(27, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 7 ),
+(28, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 7 ),
+(29, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 5, 7 ),
+(30, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 7 ),
+
+(31, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 3 ),
+(32, 'INE', 'Credencial de elector visible y vigente.', 2, 3 ),
+(33, 'CURP', 'Clave Única de Registro de Población Oficial.', 3, 3 ),
+(34, 'Carta de exposición de motivos', 'Una carta que exponga los motivos para solicitar la beca y qué beneficios tendría en su vida.', 4, 3 ),
+(35, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 5, 3 ),
+(36, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 3 ),
+(37, 'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 3 ),
+(38, 'Premio o contancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 8, 3 ),
+(39, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 9, 3 ),
+(40, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 10, 3 ),
+
+(41, 'INE', 'Credencial de elector visible y vigente.', 1, 8 ),
+(42, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 8 ),
+(43, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 8 ),
+(44, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 8 ),
+(45, 'Premio o contancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 5, 8 ),
+(46, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 6, 8 ),
+(47, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 7, 8 ),
+
+(48, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 4 ),
+(49, 'INE', 'Credencial de elector visible y vigente.', 2, 4 ),
+(50, 'CURP', 'Clave Única de Registro de Población Oficial.', 3, 4 ),
+(51, 'Carta de exposición de motivos', 'Una carta que exponga los motivos para solicitar la beca y qué beneficios tendría en su vida.', 4, 4 ),
+(52, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 5, 4 ),
+(53, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 4 ),
+(54, 'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 4 ),
+(55, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 8, 4 ),
+(56, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 4 ),
+
+(57, 'INE', 'Credencial de elector visible y vigente.', 1, 9 ),
+(58, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 9 ),
+(59, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 9 ),
+(60, 'Servicio colaborativo.', 'Servicio social colaborativo.', 4, 9 ),
+(61, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 5, 9 ),
+(62, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 9 ),
+
+(63, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 5 ),
+(64, 'INE', 'Credencial de elector visible y vigente.', 2, 5 ),
+(65, 'CURP', 'Clave Única de Registro de Población Oficial.', 3, 5 ),
+(66, 'Carta de aceptación oficial', 'Carta de aceptación oficial de un programa de posgrado.', 4, 5 ),
+(67, 'Certificado de estudios', 'Certificado de estudios del ultimo grado obtenido.', 5, 5 ),
+(68, 'Carta motivo y bajo protesta', 'Carta donde explique los motivos del porqué solicita la beca y de que no cuenta con otro tipo de apoyo.', 6, 5 ),
+(69, 'Cédula profesional', 'Cédula profesional.', 7, 5 ),
+(70, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 8, 5 ),
+(71, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 5 ),
+
+(72, 'INE', 'Credencial de elector visible y vigente.', 1, 10 ),
+(73, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 10 ),
+(74, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 10 ),
+(75, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 10 ),
+(76, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 5, 10 ),
+(77, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 10 )
 ON DUPLICATE KEY UPDATE
 nombre = nombre;
