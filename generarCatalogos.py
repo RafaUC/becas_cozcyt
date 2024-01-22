@@ -97,16 +97,7 @@ def GenerarNotificacionesUsuarios(mensaje, archivo_csv, idHeader, separador=',')
 ###Importacion de datos
 while True:
     respuesta = input("Esto restablece la configuracion por defecto de el estudio Socio-economico y borrara sus registros. No afectara registros existentes de otros modulos, pero podrian regresar registros eliminados existentes en la configuraccion por defecto. \n¿Proceder? (Sí/No): ").strip().lower()
-    if respuesta in {'s', 'si'}:
-
-        Seccion.objects.all().delete()        
-        Elemento.objects.all().delete()  
-        Opcion.objects.all().delete()  
-        load_data_from_sql('catalogos/estudioSE.sql')
-        
-        load_data_from_sql('catalogos/puntos_municipios.sql')
-        
-        load_data_from_sql('catalogos/modalidades.sql')
+    if respuesta in {'s', 'si'}:        
         
         importar_datos_desde_csv('catalogos/CatalogoInegiEstatal.csv', Estado, {
             'id': 'CVE_ENT',
@@ -137,7 +128,16 @@ while True:
             'tipo': 'tipo',
             'nombre': 'nombre',
             'puntos': 'puntos'
-        })                
+        })          
+
+        Seccion.objects.all().delete()        
+        Elemento.objects.all().delete()  
+        Opcion.objects.all().delete()  
+        load_data_from_sql('catalogos/estudioSE.sql')
+        
+        load_data_from_sql('catalogos/puntos_municipios.sql')   
+
+        load_data_from_sql('catalogos/modalidades.sql')   
         
         importar_datos_desde_csv('catalogos/SolicitantesReingreso.csv', Solicitante, {
             'id' : 'id',

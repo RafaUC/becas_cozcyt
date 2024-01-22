@@ -55,25 +55,29 @@ def verPDF(request, soli, file):
         response['Content-Disposition'] = f'inline; filename="{os.path.basename(ruta_path)}"'
         return response
 
+@login_required
 def convocatorias(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
     
-    usuario = Solicitante.objects.get(pk=request.user.id)
-    modalidades = Modalidad.objects.all()
+    solicitante = Solicitante.objects.get(pk=request.user.id)
+    #obtener modalidades que le corresponden al usuario
+    if solicitante.es_renovacion:
+        modalidades = Modalidad.objects.filter(mostrar=True, tipo=Modalidad.TIPO_CHOICES[0][0])
+    else:
+        modalidades = Modalidad.objects.filter(mostrar=True, tipo=Modalidad.TIPO_CHOICES[1][0])
     convocatoria = Convocatoria.objects.all().first()
-    solicitud = None
-    if Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists():
-        solicitud = Solicitud.objects.get(solicitante = solicitante, ciclo = ciclo_actual())
+    solicitud = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).first()    
     
     context = {
-        'modalidades' : modalidades,
-        'convocatoria' : convocatoria,
+        'ciclo_actual': ciclo_actual(),
+        'modalidades' : modalidades,        
         'solicitud_existe' : solicitud,
-        'solicitante' : usuario,
-    }
+        'solicitante' : solicitante,
+        'fecha_convocatoria': convocatoria.fecha_convocatoria
+    }    
     return render(request, 'usuario_solicitud/convocatorias.html', context)
 
 def notificar_si_falta_documentos(solicitud):
@@ -88,6 +92,7 @@ def notificar_si_falta_documentos(solicitud):
     else:
         return False
 
+@login_required
 def documentos_convocatorias(request, modalidad_id):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(solicitante)    
@@ -103,6 +108,13 @@ def documentos_convocatorias(request, modalidad_id):
         solicitud = Solicitud(modalidad=modalidad, solicitante=solicitante, ciclo=ciclo_actual())
     otra_solicitud_existe = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists()
     convocatoria = Convocatoria.objects.all().first()
+
+    #Si ya existe una solicitud e intenta solicitar otra
+    if not solicitud.id and otra_solicitud_existe:
+        solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
+        messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+        return redirect('solicitudes:convocatorias')
+
     if request.method == 'GET':    
         listaDocumentos = []
         for documento in documentos:
@@ -144,9 +156,8 @@ def documentos_convocatorias(request, modalidad_id):
                         if respDocForm.instance.file != oldFile:                            
                             oldFile.delete()                            
                     respDocForm.save()
-            if todoValido:
-                notif.nueva(solicitante,'Solicitud generada con éxito y esperando por revisión. Favor de estar al tanto de actualizaciones.', 'solicitudes:historial')                
-                messages.success(request, "Solicitud generada con éxito.")
+            if todoValido:                
+                messages.success(request, "Solicitud enviada con éxito.")
                 return redirect("solicitudes:convocatorias")
             if solicitud.id:
                 notificar_si_falta_documentos(solicitud)
@@ -161,12 +172,7 @@ def documentos_convocatorias(request, modalidad_id):
 
     #si ya existe la solicitud se muestra la vista para modificar los documentos
     if solicitud.id:
-        return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)
-    #Si ya existe una solicitud e intenta solicitar otra
-    elif otra_solicitud_existe:
-        solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
-        messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
-        return redirect('solicitudes:convocatorias')
+        return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)    
     #si no existe la solicitud se muestra la vista para crear la solicitud
     else:
         return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)

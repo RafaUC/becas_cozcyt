@@ -49,7 +49,7 @@
                             {% endif %} 
                         </div>
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="submit" class="btn btn-guardar" id="guardar">Confirmar</button>  
+                            <button type="submit" class="btn btn-guardar" id="guardar" {% if convocatoria_existe %}disabled{% endif %}>Confirmar</button>  
                         </div>
                     </div>
                 </div>    

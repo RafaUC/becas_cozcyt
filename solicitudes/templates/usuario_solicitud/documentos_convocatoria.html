@@ -23,10 +23,10 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoRespForm in listaDocumentos %}
-                    <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md-4 align-self-end" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <div class="row" style="height: 100px;">
+                                <div class="row" style="height: auto;">
                                     <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
                                     <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
                                 </div>
@@ -59,10 +59,10 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoRespForm in listaDocumentos %}
-                    <div class="col-md-4 red-errors" style="padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md-4 red-errors align-self-end" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
                             <div class="card-body" id="{{documento.id}}">
-                                <div class="row " style="height: 100px;">
+                                <div class="row " style="height: auto;">
                                     <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
                                     <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>                                    
                                 </div>
