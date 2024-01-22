@@ -135,7 +135,7 @@ def estadisticas(request):
     
     return render(request, 'estadisticas/estadisticas.html', context)
 
-
+@login_required
 def estadisticaSolicitudes(request):
     url = verificarRedirect(request.user, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
@@ -298,6 +298,7 @@ def listaSolicitudes(request):
     }    
     return render(request, 'admin/solicitudes.html', context)
 
+@login_required
 def documentos_solicitante(request, pk):   
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    

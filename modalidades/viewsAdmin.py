@@ -5,12 +5,14 @@ from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
 from django.http import HttpResponse  
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 from .forms import *
 from .models import *
 from .utils import *
 
 # Create your views here.
+@login_required
 def configGeneral(request):
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
@@ -49,6 +51,7 @@ def configGeneral(request):
     context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
     return render(request, 'admin/config_general.html', context)
 
+@login_required
 def configModalidades(request): #se muestran las modalidades
     usuario = get_object_or_404(Usuario, pk=request.user.id) 
     modalidades = Modalidad.objects.all()
@@ -60,6 +63,7 @@ def configModalidades(request): #se muestran las modalidades
     return render(request, 'admin/config_modalidad.html', {'modalidades':modalidades})
 
 # Función que permite mostrar u ocultar una modalidad 
+@login_required
 def mostrar_modalidad(request, modalidad_id):
     # messages.success(request, "Modalidad actualizada.")
     if request.method == "POST":
@@ -97,7 +101,7 @@ def mostrar_modalidad(request, modalidad_id):
             #         "</div>"
             #     ), status=200, content_type="text/html",)
 
-
+@login_required
 def agregarModalidad(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -133,6 +137,7 @@ def agregarModalidad(request):
     }
     return render(request, 'admin/config_agregar_modalidad.html', context)
 
+@login_required
 def editarModalidad(request, modalidad_id):
     usuario =  get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
@@ -171,6 +176,7 @@ def editarModalidad(request, modalidad_id):
         return redirect("modalidades:AConfigModalidades")
     return render(request, 'admin/editar_modalidad.html', context)
 
+@login_required
 def eliminarModalidad(request, modalidad_id):
     modalidad = Modalidad.objects.get(pk = modalidad_id)
     if len(modalidad.imagen) > 0:
@@ -179,6 +185,7 @@ def eliminarModalidad(request, modalidad_id):
     messages.success(request, "Modalidad eliminada correctamente")
     return redirect("modalidades:AConfigModalidades")
 
+@login_required
 def eliminarDocumento(request, modalidad_id ,documento_id):
     # print('ID documento',documento_id)
     # item_id = int(request.POST['modalidad_id'])
@@ -193,6 +200,7 @@ def eliminarDocumento(request, modalidad_id ,documento_id):
     messages.success(request, "Documento eliminado correctamente.")
     return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
 
+@login_required
 def ordenarDocumentos(request):
     documentos_id = request.POST.getlist('ordering')
     modalidad_id = request.POST.get('modalidad_id')

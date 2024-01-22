@@ -48,10 +48,10 @@
     <!-- Seccion de la barra lateral  -->    
     <div class="container-fluid" style="padding: 0px;">
       <div class="row flex-nowrap" style="margin: 0px; ">
-        <button id="menu-show-button" class="btn btnConvocatoria menu-button-float w-auto h-auto font-lg" type="button" data-bs-toggle="collapse" data-bs-target="#barraLateral-containter">
+        <button id="menu-show-button" class="btn btnConvocatoria menu-button-float w-auto h-auto font-lg" type="button" data-bs-toggle="collapse" data-bs-target="#barraLateral-containter" style="display: none;">
           <i class="fa fa-bars align-self-center" aria-hidden="true"></i>
         </button>
-        <div id="barraLateral-containter" class="col-auto nopadding collapse collapse-horizontal">          
+        <div id="barraLateral-containter" class="col-auto nopadding  collapse-horizontal">          
           <div id="barraLateral-body" class="barra-lateral-desktop sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo border-end border-1">            
             <a href="{% url 'usuarios:rootRedirect' %}" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
               <img class="img-fluid logo-barra my-2" src="{% static 'images/LogoCozcyt.png' %}" alt="Logo" > 
@@ -266,8 +266,7 @@
       var mobil = isMobile()
 
       function updateMobile() {
-        mobil = isMobile()
-        console.log(mobil)
+        mobil = isMobile()        
         if (mobil){
           $('#menu-show-button').show()
           $('#barraLateral-body').removeClass('barra-lateral-desktop');

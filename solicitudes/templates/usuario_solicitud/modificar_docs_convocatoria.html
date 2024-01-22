@@ -22,10 +22,9 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoRespForm in listaDocumentos %}
-                    <div class="col-md-4 red-errors" style="padding-top: 10px; padding-bottom: 20px;">
+                    <div class="col-md-4 red-errors align-self-end" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
-                            <div class="card-body" id="{{documento.id}}">
-                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.estado }}</p>
+                            <div class="card-body" id="{{documento.id}}">                                
                                 <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
                                     <div class="row " style="height: auto;">
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>                                    
@@ -46,7 +45,11 @@
                                         
                                     </div>
                                 </a>
-                                    
+                                {% if documentoRespForm.instance.id %}
+                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
+                                {% else %}
+                                <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                {% endif %}
                                 <div class="subir-documento" style="padding-bottom: 10px;">
                                     <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
                                     {{ documentoRespForm.file }}                                    
