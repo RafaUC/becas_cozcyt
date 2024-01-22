@@ -205,6 +205,7 @@ def listaUsuarios(request):
     request.session['anterior'] = request.build_absolute_uri()
     usuarios = Usuario.objects.filter(is_superuser=True)
     solicitantes = Solicitante.objects.all()
+    usrNoVerif = User.objects.all().exclude(pk__in=usuarios.values('pk')).exclude(pk__in=solicitantes.values('pk'))
 
     if (request.method == 'GET'):
         search_query = request.GET.get('search', '')    
@@ -212,6 +213,7 @@ def listaUsuarios(request):
         if search_query:                                      
             solicitantes = BusquedaEnCamposQuerySet(solicitantes, search_query)
             usuarios = BusquedaEnCamposQuerySet(usuarios, search_query)                             
+            usrNoVerif = BusquedaEnCamposQuerySet(usrNoVerif, search_query)    
 
     paginator = Paginator(usuarios, 10)  # Mostrar 10 usuarios por página
     page_number = request.GET.get('pageA')
@@ -221,9 +223,14 @@ def listaUsuarios(request):
     page_number = request.GET.get('pageS')
     page_soli= paginator.get_page(page_number)
 
+    paginator = Paginator(usrNoVerif, 10)  # Mostrar 10 usuarios por página
+    page_number = request.GET.get('pageS')
+    page_nover= paginator.get_page(page_number)
+
     context = {
         'page_admin': page_admin,
         'page_soli': page_soli,
+        'page_nover': page_nover
     }
     return render(request, 'admin/usuarios.html', context)
 
