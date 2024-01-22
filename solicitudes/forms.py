@@ -41,7 +41,10 @@ class FiltroForm(forms.Form):
         if choices:
             self.fields['opc'].choices = choices            
         elif queryset:
-            self.fields['opc'].choices = list(queryset.values_list('id', to_field_name))
+            if to_field_name == '__str__':
+                self.fields['opc'].choices = [(obj.id, str(obj)) for obj in queryset]
+            else:
+                self.fields['opc'].choices = list(queryset.values_list('id', to_field_name))
         if nombre:
             self.nombre = nombre
             self.fields['opc'].label = nombre

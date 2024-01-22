@@ -9,9 +9,10 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
+from django.conf import settings
 import colorsys
 from django.db.models import Count
-
+from zipfile import ZipFile
 
 from usuarios.views import verificarRedirect
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
@@ -231,11 +232,11 @@ def listaSolicitudes(request):
     solicitudes = Solicitud.objects.filter(ciclo = cicloActual)  
     modalidades = Modalidad.objects.all()
     filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
-    filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)
+    filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='__str__', selectedAll=False)
 
     if 'search' in request.GET:
         filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
-        filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='nombre', selectedAll=False)                               
+        filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='__str__', selectedAll=False)                               
                                 
         search_query = filtroSolForm.get_search_query()
         solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el primer filtro
@@ -362,8 +363,7 @@ def documentos_solicitante(request, pk):
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])            
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            #lo hacen automaticamente
-            print(solicitud.estado)
+            #lo hacen automaticamente            
             notif.nueva(solicitante, f'Estimado alumno, sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados', 'solicitudes:historial')                
         if documentosResp.first():
             #el metodo .update()  en querysets no llama los recivers asi que se debe hacer almenos un save()
@@ -372,3 +372,28 @@ def documentos_solicitante(request, pk):
         messages.success(request, "Documentos de solicitud revisados con éxito.")
         return redirect(request.session['anterior'])
     return render(request, 'admin/documentosSolicitante.html', context)
+
+@login_required
+def concentradoSolicitante(request,pk):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    temp_dir =  os.path.join(settings.BASE_DIR,'temp/')     
+    if not os.path.exists(temp_dir):# Si no existe, lo crea
+        os.makedirs(temp_dir)
+
+    solicitud = get_object_or_404(Solicitud, pk=pk)
+    documentosResp = RespuestaDocumento.objects.filter(solicitud=solicitud)    
+    zip_filename = f'concentrado-{solicitud.solicitante.folio}-{ciclo_actual()}.zip'
+    zip_filename = zip_filename.replace(' ','')
+    with ZipFile(temp_dir + zip_filename, 'w') as zipObj:
+        for resp in documentosResp:
+            originalName = os.path.basename(resp.file.name)
+            extension = os.path.splitext(originalName)[1]
+            filename = os.path.basename(resp.documento.nombre) + extension            
+            zipObj.write(resp.file.path, arcname=filename)
+    response = FileResponse(open(temp_dir+zip_filename, 'rb'), as_attachment=True)
+    os.remove(temp_dir+zip_filename) # Elimina el archivo temporal
+    return response
