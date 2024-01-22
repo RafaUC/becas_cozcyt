@@ -53,6 +53,7 @@
                             <form method="POST">
                             {% csrf_token %}
                             <input class="checkbox-modalidades form-check-input" type="checkbox" 
+                            data-bs-original-title="Habilitar/Deshabilitar"
                             id="boton-estado-mod" name="set_value" 
                             value="{{ modalidad.id }}" {% if modalidad.mostrar == True %}checked{% endif %}
                             hx-post="{% url 'modalidades:mostrar_modalidad' modalidad.id %}" 

@@ -55,6 +55,7 @@ def verPDF(request, soli, file):
         response['Content-Disposition'] = f'inline; filename="{os.path.basename(ruta_path)}"'
         return response
 
+@never_cache
 @login_required
 def convocatorias(request):
     solicitante = get_object_or_404(Usuario, pk=request.user.id)  
@@ -69,6 +70,7 @@ def convocatorias(request):
     else:
         modalidades = Modalidad.objects.filter(mostrar=True, tipo=Modalidad.TIPO_CHOICES[1][0])
     convocatoria = Convocatoria.objects.all().first()
+    fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
     solicitud = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).first()    
     
     context = {
@@ -76,7 +78,7 @@ def convocatorias(request):
         'modalidades' : modalidades,        
         'solicitud_existe' : solicitud,
         'solicitante' : solicitante,
-        'fecha_convocatoria': convocatoria.fecha_convocatoria
+        'fecha_convocatoria': fecha_convocatoria
     }    
     return render(request, 'usuario_solicitud/convocatorias.html', context)
 
