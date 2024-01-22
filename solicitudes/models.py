@@ -204,7 +204,7 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
     else: #falta algun documento                
         opc = 1
       
-        
+    estadoActual = solicitud.estado
     if opc == 0:
         solicitud.estado = Solicitud.ESTADO_CHOICES[2][0] #'docAprobada'   
     elif opc == 1:
@@ -213,8 +213,9 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
         respuestas_documentos_solicitud = RespuestaDocumento.objects.filter(solicitud=solicitud)      
         #Si no hay ninguna respuestaDocumento denegada setear a docRevicion
         if respuestas_documentos_solicitud.filter(estado='denegado').count() <= 0:   
-            if solicitud.estado != Solicitud.ESTADO_CHOICES[0][0]:
+            if estadoActual != Solicitud.ESTADO_CHOICES[0][0]:
                 notif.nueva(solicitud.solicitante,'Solicitud enviada con éxito y esperando por revisión. Favor de estar al tanto de actualizaciones.', 'solicitudes:historial')
             solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docRevicion'      
-
-    solicitud.save()
+    
+    if estadoActual != solicitud.estado:
+        solicitud.save()
