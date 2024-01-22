@@ -113,7 +113,7 @@
     }
     .card-documento{
         text-align: center; 
-        height: 380px;
+        height: auto;
         border-radius: 15px; 
         border-color: #d1d1d1;
     }
