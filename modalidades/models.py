@@ -53,10 +53,10 @@ class Modalidad(models.Model):
     descripcion = models.TextField(verbose_name="Descripción", null=False)
     monto = models.DecimalField(max_digits=7, decimal_places=2,verbose_name="monto", null=True)
     mostrar = models.BooleanField(default=True)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[0][0])
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[1][0])
 
     def __str__(self):
-        return self.nombre
+        return f'{self.nombre} ({self.tipo})'
     
     def get_documentos_children(self):
         return self.documento_set.all()
@@ -70,7 +70,7 @@ class Documento(models.Model):
     class Meta:
         verbose_name = _("Documento")
         verbose_name_plural = _("Documentos")
-        ordering = ['order']
+        ordering = ['order','id']
 
     def __str__(self):
         return self.nombre

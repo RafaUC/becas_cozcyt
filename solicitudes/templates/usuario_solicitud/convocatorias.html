@@ -2,14 +2,14 @@
 {% load custom_filters %}   
 
 {% block titulo %}
-    Convocatorias
+    Convocatoria
 {% endblock titulo %}
 
 {% block body %}
     <div class="rounded-2 p-1 mx-4 principal">
         <div class="rounded-2 mx-4">
             <div class="row">
-                <p class="col h3 tituloModulo" id="ciclo-escolar"></p>
+                <p class="col h3 tituloModulo" id="ciclo-escolar">Convocatoria {{ciclo_actual}}</p>
                 <!-- <hr> -->
             </div>
             <div class="row">
@@ -20,15 +20,13 @@
         </div>
         <div class="rounded-2 mx-4">          
             <div class="row">
-                {% for modalidad in modalidades%}
-                {% if modalidad.mostrar == True %} 
-                {% if solicitante.es_renovacion == True and modalidad.tipo == "Renovacion" %}
-                <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                {% for modalidad in modalidades%}                                
+                <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;" >
                     <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
-                    <div class="card">
+                    <div class="card" data-bs-original-title="{{ modalidad.descripcion }}">
                         <div class="card-body card-modalidad">
                             <h5 class="card-title">{{modalidad.nombre}}</h5>
-                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Card image cap">
+                            <img  class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Card image cap">
                             <br>
                             {% if modalidad.pk == solicitud_existe.modalidad.pk %} 
                             <div style="padding-bottom: 10px;">
@@ -38,7 +36,7 @@
                                     </button>
                                 </a>
                             </div>
-                            {% elif convocatoria.fecha_convocatoria %}
+                            {% elif fecha_convocatoria and not solicitud_existe%}
                             <div style="padding-bottom: 10px;">
                                 <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
                                     <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn btnConvocatoria">
@@ -55,61 +53,11 @@
                             {% endif %}
                         </div>
                     </div>
-                </div>
-                {% elif solicitante.es_renovacion == False and modalidad.tipo == "Ingreso" %}
-                <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
-                    <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
-                    <div class="card">
-                        <div class="card-body card-modalidad">
-                            <h5 class="card-title">{{modalidad.nombre}}</h5>
-                            <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Card image cap">
-                            <br>
-                            {% if modalidad.pk == solicitud_existe.modalidad.pk %} 
-                            <div style="padding-bottom: 10px;">
-                                <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
-                                    <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn btnConvocatoria">
-                                    Mis documentos
-                                    </button>
-                                </a>
-                            </div>
-                            {% elif convocatoria.fecha_convocatoria %}
-                            <div style="padding-bottom: 10px;">
-                                <a href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}">
-                                    <button href="{% url 'solicitudes:documentos_convocatoria' modalidad.id %}" class="btn btnConvocatoria">
-                                    Solicitar
-                                    </button>
-                                </a>
-                            </div>
-                            {% else %}
-                            <div style="padding-bottom: 10px;">
-                                <button class="btn btnConvocatoria" disabled>
-                                Solicitar
-                                </button>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                {% endif %}
+                </div>                                
                 {% endfor %}
             </div>
         </div>
-    </div>
-    <script>
-        window.onload = function (){
-            var fecha = new Date();
-            var mesActual = fecha.getMonth() + 1; //getMonth() regresa el index del mes, por lo que enero sería 0 así que hay que sumar 1
-            var cicloEscolar;
-            if(mesActual >= 8){
-                cicloEscolar = 'agosto - diciembre'
-            }
-            else{
-                cicloEscolar = 'enero - julio'
-            }
-            document.getElementById('ciclo-escolar').innerHTML = 'Convocatoria ' + cicloEscolar +' ' + fecha.getFullYear();
-        }
-    </script>
+    </div>    
     <script>
 
     </script>

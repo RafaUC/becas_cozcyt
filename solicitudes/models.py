@@ -12,12 +12,14 @@ from django.dispatch import receiver
 
 from usuarios.models import PuntajeGeneral, PuntajeMunicipio
 from estudio_socio_economico.models import Elemento, RNumerico
+
+from mensajes import notificaciones as notif
 # Create your models here.
 
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
-        ('docRevicion', 'Documentación en revisón'),
+        ('docRevicion', 'Documentación en revisión'),
         ('docError', 'Documentación erronea'),
         ('docAprobada', 'Documentación aprobada'),
         ('aceptado', 'Aceptado'),
@@ -156,7 +158,7 @@ def documentoMediaPath(instance, filename):
 
 class RespuestaDocumento(models.Model):
     ESTADO_CHOICES = [
-        ('pendiente', 'Pendiente'),
+        ('pendiente', 'Revisión pendiente'),
         ('aprobado', 'Aprobado'),
         ('denegado', 'Denegado'),
     ]
@@ -211,6 +213,8 @@ def actualizar_estado_solicitud(sender, instance, **kwargs):
         respuestas_documentos_solicitud = RespuestaDocumento.objects.filter(solicitud=solicitud)      
         #Si no hay ninguna respuestaDocumento denegada setear a docRevicion
         if respuestas_documentos_solicitud.filter(estado='denegado').count() <= 0:   
+            if solicitud.estado != Solicitud.ESTADO_CHOICES[0][0]:
+                notif.nueva(solicitud.solicitante,'Solicitud enviada con éxito y esperando por revisión. Favor de estar al tanto de actualizaciones.', 'solicitudes:historial')
             solicitud.estado = Solicitud.ESTADO_CHOICES[0][0] #'docRevicion'      
 
     solicitud.save()

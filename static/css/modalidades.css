@@ -310,8 +310,7 @@
 
 /* Documentos Solicitante */
 .card-documento-solicitante{
-    text-align: center; 
-    height: 430px;
+    text-align: center;     
     border-radius: 15px; 
     border-color: #d1d1d1;
 }

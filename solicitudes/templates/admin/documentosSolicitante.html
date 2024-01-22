@@ -31,10 +31,17 @@
             <div class="rounded-2 mx-4" style="padding-top: 10px; padding-bottom: 20px;">          
                 <div class="row">
                     {% for documento, documentoResp in listaDocumentos %}
-                    <div class="col-md-4" style="padding-top: 10px; padding-bottom: 20px;">                        
+                    <div class="col-md-4 align-self-end" style="padding-top: 10px; padding-bottom: 20px;">                        
                         <div class="card card-documento-solicitante">
-                            <div class="card-body" id="{{documento.id}}">                                
-                                <div class="row" style="height: 100px;">
+                            <div class="card-body" id="{{documento.id}}">    
+                                {% if documentoResp %}
+                                <!-- 
+                                <p class="text-center font-semi-bold" {% if documentoResp.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoResp.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoResp.get_estado_display }}</p>
+                                -->
+                                {% else %}
+                                <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                {% endif %}                            
+                                <div class="row" style="height: auto;">
                                     <!-- {{modalidad.id}} -->
                                     <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
                                     <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
