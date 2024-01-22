@@ -6,6 +6,7 @@ from usuarios.models import Usuario
 from django.http import HttpResponse  
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 
 from .forms import *
 from .models import *
@@ -51,6 +52,7 @@ def configGeneral(request):
     context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
     return render(request, 'admin/config_general.html', context)
 
+@never_cache
 @login_required
 def configModalidades(request): #se muestran las modalidades
     usuario = get_object_or_404(Usuario, pk=request.user.id) 

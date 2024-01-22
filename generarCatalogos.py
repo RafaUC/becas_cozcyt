@@ -161,6 +161,7 @@ while True:
         GenerarNotificacionesUsuarios('Como solicitante aplicable para renovación, se le pide que por favor revise y actualice su información personal en su perfil.', 
                                       'catalogos/SolicitantesReingreso.csv', 'id', separador=';')
 
+        print('\n')
         input('A continuacion se crearan los registros de solicitudes pre existentes. Se espera que aparescan mensajes de errores. \n Pulse enter para continuar.')
         importar_datos_desde_csv('catalogos/SolicitantesReingreso.csv', Solicitud, {
             'id' : 'id',
