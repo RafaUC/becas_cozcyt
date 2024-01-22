@@ -103,7 +103,6 @@ def documentos_convocatorias(request, modalidad_id):
         solicitud = Solicitud(modalidad=modalidad, solicitante=solicitante, ciclo=ciclo_actual())
     otra_solicitud_existe = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists()
     convocatoria = Convocatoria.objects.all().first()
-
     if request.method == 'GET':    
         listaDocumentos = []
         for documento in documentos:
@@ -163,6 +162,11 @@ def documentos_convocatorias(request, modalidad_id):
     #si ya existe la solicitud se muestra la vista para modificar los documentos
     if solicitud.id:
         return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)
+    #Si ya existe una solicitud e intenta solicitar otra
+    elif otra_solicitud_existe:
+        solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
+        messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+        return redirect('solicitudes:convocatorias')
     #si no existe la solicitud se muestra la vista para crear la solicitud
     else:
         return render(request, 'usuario_solicitud/documentos_convocatoria.html', context)
