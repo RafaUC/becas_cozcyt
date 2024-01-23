@@ -10,9 +10,9 @@
 {% endif %}
 
 
-        <div class="modal-content">
+        <div class="modal-content principal">
             <div class="modal-header">
-                <h5 class="modal-title" id="base-modal-titulo">
+                <h5 class="modal-title subtitulo-mod" id="base-modal-titulo">
                     {{ modalTitle|safe }}
                 
                 </h5>
@@ -31,7 +31,7 @@
                             <thead>
                                 <tr>
                                 {% for field in modalFormset.empty_form.visible_fields %}
-                                    <th >{{ field.label|capfirst }}</th>
+                                    <th style="color: #676767;">{{ field.label|capfirst }}</th>
                                 {% endfor %}
                                 </tr>
                             </thead>
