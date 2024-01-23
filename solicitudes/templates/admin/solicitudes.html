@@ -60,9 +60,16 @@ Administrar solicitudes
                 </form>
             </div> 
         </div>
-        <div class="text-end mx-3 mb-1">
-            <button class="btn btn-guardar font-md" type="submit" value="aceptar" onclick="enviarFormulario('seleccionadosForm', this)">Aceptar seleccionados</button>
-            <button class="btn btnEditar font-md" type="submit" value="rechazar"onclick="enviarFormulario('seleccionadosForm', this)">Rechazar seleccionados</button>            
+        <div class="row">
+            <div class="col-auto ms-2 mb-1">
+                <form class="p-0 m-0" action="{% url 'solicitudes:AConcentradoConv' ciclo %}" method="get" > 
+                <button class="btn btnCancelar m-0 w-100 font-normal principal" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Desea descargar el concentrado?')">Descargar concentrado</button>
+                </form>
+            </div>
+            <div class="col text-end me-3 mb-1">
+                <button class="btn btn-guardar m-0 font-md" type="submit" value="aceptar" onclick="enviarFormulario('seleccionadosForm', this)">Aceptar seleccionados</button>
+                <button class="btn btnEditar m-0 font-md" type="submit" value="rechazar"onclick="enviarFormulario('seleccionadosForm', this)">Rechazar seleccionados</button>            
+            </div>
         </div>
         <div class="horizontal-scroll">
                 <form id="seleccionadosForm" role="search" method="POST"> 
@@ -124,7 +131,7 @@ Administrar solicitudes
                                                 </a>  
                                             </li>
                                             <li>
-                                                <a href="#" class="m-0 me-2 align-items-center dropdown-item" >
+                                                <a href="#" onclick="location.href='{% url 'solicitudes:AConcentradoSoli' solicitud.id %}'" class="m-0 me-2 align-items-center dropdown-item" >
                                                     <i class="fa fa-file-archive-o align-self-center font-lg" aria-hidden="true"></i> 
                                                     <span class="align-self-center">Descargar docs solicitud</span>
                                                 </a>  

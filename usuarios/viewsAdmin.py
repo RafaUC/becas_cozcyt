@@ -237,7 +237,7 @@ def listaUsuarios(request):
     page_soli= paginator.get_page(page_number)
 
     paginator = Paginator(usrNoVerif, 10)  # Mostrar 10 usuarios por página
-    page_number = request.GET.get('pageS')
+    page_number = request.GET.get('pageN')
     page_nover= paginator.get_page(page_number)
 
     context = {

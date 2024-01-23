@@ -56,7 +56,7 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (35, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 5, 3 ),
 (36, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 3 ),
 (37, 'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 3 ),
-(38, 'Premio o contancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 8, 3 ),
+(38, 'Premio o constancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 8, 3 ),
 (39, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 9, 3 ),
 (40, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 10, 3 ),
 
@@ -64,7 +64,7 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (42, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 8 ),
 (43, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 8 ),
 (44, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 8 ),
-(45, 'Premio o contancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 5, 8 ),
+(45, 'Premio o constancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 5, 8 ),
 (46, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 6, 8 ),
 (47, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 7, 8 ),
 
