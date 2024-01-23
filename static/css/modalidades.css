@@ -198,7 +198,40 @@
 
 
 /**** Vistas administrador ****/
+/* Página de inicio */
+.card-inicio{
+    text-align: center; 
+    height: 30%;
+    border-radius: 10px;
+}
 
+.inicio-info {
+    transition: 0.5s;
+}
+.inicio-info:hover {
+    box-shadow: 0 2px 3px -1px;
+    -moz-transform: translate(0, -8px);
+    -ms-transform: translate(0, -8px);
+    -o-transform: translate(0, -8px);
+    -webkit-transform: translate(0, -8px);
+    transform: translate(0, -8px);
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+}
+
+.inicio-info:hover::after {
+    content: "";
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+    width: 100%;
+    display: block;
+    position: absolute;
+    z-index: -1;
+}
+.inicio-info::after {
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+}
 
 
 
