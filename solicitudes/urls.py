@@ -28,7 +28,8 @@ urlpatterns = [
     path('administracion/solicitudes', viewsAdmin.listaSolicitudes, name='ASolicitudes'),
     path('historialSolicitante/<int:pk>',viewsAdmin.historialSolicitante, name='AHistorial'),
     path('documentosSolicitante/<int:pk>', viewsAdmin.documentos_solicitante, name="ADocumentos"),    
-    path('administracion/concentrado/solicitud/<int:pk>', viewsAdmin.concentradoSolicitante, name='AConcentradoSoli'),
+    path('administracion/concentrado/solicitud/<int:pk>', viewsAdmin.concentradoSolicitud, name='AConcentradoSoli'),
+    path('administracion/concentrado/convocatoria/<str:ciclo>', viewsAdmin.concentradoConvocatoria, name='AConcentradoConv'),
 
     path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
     path('administracion/estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
