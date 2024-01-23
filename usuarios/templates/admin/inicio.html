@@ -1,5 +1,76 @@
 {% extends 'base.html' %}
+{% load custom_filters %}   
+
+{% block titulo %}
+    Inicio
+{% endblock titulo %}
 
 {% block body %}
-    <p class="h1"> Pagina inicio (implementacion pendiente)</p>
+{% load static %}
+<div class="rounded-2 p-1 my-4 principal">
+    <div class="row align-items-center principal">
+        <p class="col mx-4 my-4 h3">Página de inicio</p>
+        <p class="mx-5 h4 subtitulo-mod">Convocatoria {{ ciclo_actual }}</p>
+    </div>
+    <div class="rounded-2 mx-5">          
+        <div class="row">
+            <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                <a class="principal" href="{% url 'modalidades:AConfigGeneral' %}">
+                <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
+                    <div class="card-body card-inicio" style="background-color: var(--rosaC);">
+                        <div class="row" align="left">
+                            <div class="mx-3 mb-4" align="left">
+                                <img src="{% static 'images/icon_wallet.png' %}" style="width: 13%;">
+                            </div>
+                            <div class="mx-3 mb-2">
+                                <h5 class="card-title">Presupuesto global</h5>
+                                <h6 class="font-bold">${{ convocatoria.presupuesto }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                <a class="principal" href="{% url 'solicitudes:AEstadisticas' %}">
+                <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
+                    <div class="card-body card-inicio" style="background-color: var(--soli-rechazada);">
+                        <div class="row" align="left">
+                            <div class="mx-3 mb-4">
+                                <img src="{% static 'images/icon_coins.png' %}" style="width: 13%;">
+                            </div>
+                            <div class="mx-3 mb-2">
+                                <h5 class="card-title">Presupuesto restante</h5>
+                                <h6 class="font-bold">$999,999.00</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
+                <a class="principal" href="{% url 'solicitudes:ASolicitudes' %}">
+                <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
+                    <div class="card-body card-inicio" style="background-color: var(--rosaM);">
+                        <div class="row" align="left">
+                            <div class="mx-3 mb-4" align="left">
+                                <img src="{% static 'images/icon_versions.png' %}" style="width: 13%;">
+                            </div>
+                            <div class="mx-3 mb-2">
+                                <h5 class="card-title">Solicitudes recibidas</h5>
+                                <h6 class="font-bold">{{ solicitudes }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-2 mx-5 my-4" style="height: 300px; background-color: var(--gris-0);">    
+        <div class="row align-items-center principal">
+            <p class="col mx-4 my-4 h5 ">Solicitudes recibidas para el tipo de beca</p>
+        </div>
+    </div>
+</div>
 {% endblock body %}
