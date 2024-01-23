@@ -61,6 +61,9 @@ class Modalidad(models.Model):
     def get_documentos_children(self):
         return self.documento_set.all()
     
+    class Meta:        
+        ordering = ['nombre','tipo']
+    
 class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
