@@ -2,7 +2,7 @@
 PASOS:
 - docker compose up --build
 
-una ves completado ejecutar
+una vez completado, ejecutar:
 - docker exec -it sistema_becas /bin/bash
 - python3 manage.py makemigrations
 - python3 manage.py migrate
