@@ -14,14 +14,27 @@ from .forms import *
 from .models import *
 from .views import verificarRedirect, borrarSelect
 
+from modalidades.models import *
+from solicitudes.models import *
+
 @login_required
 def inicio(request):
     usuario = get_object_or_404(Usuario, pk=request.user.id)  
     url = verificarRedirect(usuario, 'permiso_administrador')    
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
+    
+    convocatoria = Convocatoria.objects.all().first()
+    solicitudesTotal = len(Solicitud.objects.filter(ciclo = ciclo_actual()))
+    solicitudes = Solicitud.objects.count()
 
-    return render(request, 'admin/inicio.html')
+    context = {
+        'ciclo_actual': ciclo_actual(),
+        'convocatoria' : convocatoria,
+        'solicitudes' : solicitudesTotal,
+    }
+
+    return render(request, 'admin/inicio.html', context)
 
 
 

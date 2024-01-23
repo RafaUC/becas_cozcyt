@@ -252,7 +252,7 @@ def listaSolicitudes(request):
             solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query)      
 
     if request.method == 'POST':
-        soliToUpdate = solicitudes        
+        soliToUpdate = solicitudes       
         accion = None
         todo = None
         seleccion = None
@@ -273,18 +273,48 @@ def listaSolicitudes(request):
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
                     messages.success(request, f'Se aceptaron todas las {counts} solicitudes filtradas con éxito')
+                    solicitante_pk = None
+                    modalidad_pk = None
+                    for f in soliToUpdate.values():
+                        solicitante_pk = f["solicitante_id"] 
+                        modalidad_pk = f["modalidad_id"]
+                        solicitante_inst = get_object_or_404(Solicitante, pk=solicitante_pk) 
+                        modalidad_inst = get_object_or_404(Modalidad, pk=modalidad_pk)   
+                        notif.nueva(solicitante_inst, f'Nos complace comunicarle que su solicitud para la modalidad de "{modalidad_inst.nombre}" ha sido ¡APROBADA!', 'solicitudes:historial')      
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
                     messages.success(request, f'Se rechazaron todas las {counts} solicitudes filtradas con éxito')
+                    solicitante_pk = None
+                    modalidad_pk = None
+                    for f in soliToUpdate.values():
+                        solicitante_pk = f["solicitante_id"] 
+                        modalidad_pk = f["modalidad_id"]
+                        solicitante_inst = get_object_or_404(Solicitante, pk=solicitante_pk) 
+                        modalidad_inst = get_object_or_404(Modalidad, pk=modalidad_pk)   
+                        notif.nueva(solicitante_inst, f'Desafortunadamente su solicitud para la modalidad de "{modalidad_inst.nombre}" ha sido RECHAZADA.', 'solicitudes:historial')      
             else:
                 soliToUpdate = soliToUpdate.filter(id__in=seleccion)     
                 counts = soliToUpdate.count()                
                 if accion == 'aceptar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[3][0])
-                    messages.success(request, f'Se aceptaron las {counts} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se aceptaron las {counts} solicitudes seleccionadas con éxito')
+                    solicitante_pk = None
+                    modalidad_pk = None
+                    for f in soliToUpdate.values():
+                        solicitante_pk = f["solicitante_id"] 
+                        modalidad_pk = f["modalidad_id"]
+                        solicitante_inst = get_object_or_404(Solicitante, pk=solicitante_pk) 
+                        modalidad_inst = get_object_or_404(Modalidad, pk=modalidad_pk)   
+                        notif.nueva(solicitante_inst, f'Nos complace comunicarle que su solicitud para la modalidad de "{modalidad_inst.nombre}" ha sido ¡APROBADA!', 'solicitudes:historial')      
                 elif accion == 'rechazar':
                     soliToUpdate.update(estado=Solicitud.ESTADO_CHOICES[4][0])
-                    messages.success(request, f'Se rechazaron las {counts} solicitudes seleccionadas con éxito')    
+                    messages.success(request, f'Se rechazaron las {counts} solicitudes seleccionadas con éxito') 
+                    for f in soliToUpdate.values():
+                        solicitante_pk = f["solicitante_id"] 
+                        modalidad_pk = f["modalidad_id"]
+                        solicitante_inst = get_object_or_404(Solicitante, pk=solicitante_pk) 
+                        modalidad_inst = get_object_or_404(Modalidad, pk=modalidad_pk)   
+                        notif.nueva(solicitante_inst, f'Desafortunadamente su solicitud para la modalidad de "{modalidad_inst.nombre}" ha sido RECHAZADA.', 'solicitudes:historial')         
         else:
             messages.error(request, 'No se seleccionaron solicitudes')    
 
@@ -366,8 +396,8 @@ def documentos_solicitante(request, pk):
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])            
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            #lo hacen automaticamente            
-            notif.nueva(solicitante, f'Estimado alumno, sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados', 'solicitudes:historial')                
+            notif.nueva(solicitante, f'Sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados.', 'solicitudes:historial')        
+            
         if documentosResp.first():
             #el metodo .update()  en querysets no llama los recivers asi que se debe hacer almenos un save()
             documentosResp.first().save()
