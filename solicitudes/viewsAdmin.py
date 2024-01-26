@@ -379,7 +379,7 @@ def documentos_solicitante(request, pk):
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
             docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])   
-            notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifiquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
+            notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
 
