@@ -392,6 +392,7 @@ def documentos_solicitante(request, pk):
             #lo hacen automaticamente
             
         #Todos los documentos fueron aceptados
+            #TOOODOS los documentos deben ser revisados y aprobados, no solo uno
         if seleccionDenegados == None and seleccionAceptados != None: 
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])            

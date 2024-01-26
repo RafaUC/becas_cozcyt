@@ -426,7 +426,7 @@ def agregarAdmin(request, pk=None):
         return HttpResponse("", status=401)
     
     if pk:
-        instancia = get_object_or_404(Institucion, pk=pk)
+        instancia = get_object_or_404(Usuario, pk=pk)
         postUrl = request.build_absolute_uri(reverse('usuarios:AAgregarAdmin', args=[pk]))
         modalTitle = 'Editar Admin'
     else:
@@ -441,13 +441,13 @@ def agregarAdmin(request, pk=None):
         form = AgregarAdminForm(request.POST, instance=instancia)
 
         if form.is_valid():
-            form.is_staff = True
-            form.is_superuser =True
+            instance = form.save(commit=False)
+            instance.is_superuser = True
+            instance.is_staff = True
             instancia = form.save()      
             messages.success(request, 'Administrador creado con éxito')            
             context = {       
-                'redirectAfter': request.session['anterior'],
-                'modalTitle': modalTitle,
+                'redirectAfter': request.build_absolute_uri(reverse('usuarios:AUsuarios')),
                 'mensajes' : 'mensajes.html',
                 'postUrl': postUrl,
                 'modalForm': form,
