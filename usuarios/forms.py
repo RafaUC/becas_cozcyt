@@ -111,7 +111,7 @@ class SolicitanteForm(forms.ModelForm):
             'codigo_postal': 'Codigo Postal',
             'tel_cel': 'Telefono Celular',
             'tel_fijo': 'Telefono Fijo',
-            'grado': 'Grado',
+            'grado': 'Semestre/Cuatrimestre',
             'promedio': 'Promedio',
             'carrera': 'Carrera',            
         }
