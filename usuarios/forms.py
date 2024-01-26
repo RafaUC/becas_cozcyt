@@ -38,7 +38,7 @@ class EstadoSelectForm(forms.ModelForm):
         widgets = {
             'estado': forms.Select(attrs={'class': 'form-control form-select'}),
         }
-        labels = {'estado': 'Estado', }
+        labels = {'estado': 'Estado *', }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,7 +51,7 @@ class InstitucionSelectForm(forms.ModelForm):
         widgets = {
             'institucion': forms.Select(attrs={'class': 'form-control form-select'}),
         }
-        labels = {'institucion': 'Institución', }
+        labels = {'institucion': 'Institución *', }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -97,23 +97,23 @@ class SolicitanteForm(forms.ModelForm):
             'carrera': forms.Select(attrs={'class': 'form-control border-1 form-select'}),        
         }
         labels = {
-            'nombre': 'Nombre',
-            'rfc': 'RFC',
-            'ap_paterno': 'Apellido Paterno',
+            'nombre': 'Nombre *',
+            'rfc': 'RFC *',
+            'ap_paterno': 'Apellido Paterno *',
             'ap_materno': 'Apellido Materno',
-            'fecha_nacimiento': 'Fecha de Nacimiento',
-            'genero': 'Genero',
-            'g_etnico': 'Grupo Etnico',
-            'municipio': 'Delegación/Municipio',
-            'colonia': 'Colonia/Fraccionamiento',
-            'calle': 'Calle',
-            'numero': 'Numero',
-            'codigo_postal': 'Codigo Postal',
-            'tel_cel': 'Telefono Celular',
-            'tel_fijo': 'Telefono Fijo',
-            'grado': 'Semestre/Cuatrimestre',
-            'promedio': 'Promedio',
-            'carrera': 'Carrera',            
+            'fecha_nacimiento': 'Fecha de nacimiento *',
+            'genero': 'Genero *',
+            'g_etnico': 'Grupo Étnico',
+            'municipio': 'Delegación/Municipio *',
+            'colonia': 'Colonia/Fraccionamiento *',
+            'calle': 'Calle *',
+            'numero': 'Número Domicilio*',
+            'codigo_postal': 'Código Postal *',
+            'tel_cel': 'Teléfono celular *',
+            'tel_fijo': 'Teléfono fijo',
+            'grado': 'Semestre/Cuatrimestre *',
+            'promedio': 'Promedio *',
+            'carrera': 'Carrera *',           
         }
 
     def __init__(self, *args, **kwargs):
