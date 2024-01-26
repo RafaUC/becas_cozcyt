@@ -6,6 +6,12 @@
 
 {% block body %}
 
+<style>
+    .errorlist{
+        color: var(--rosaF);
+    }
+</style>
+
 <div class="border border-1 rounded-2 p-4 m-4 borde-tabla principal" style="background-color: white;">
     <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>
         
@@ -100,7 +106,7 @@
                     {{ form.tel_cel.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.tel_fijo.label }} *
+                    {{ form.tel_fijo.label }}
                     {{ form.tel_fijo }}
                     {{ form.tel_fijo.error }}
                 </div>
