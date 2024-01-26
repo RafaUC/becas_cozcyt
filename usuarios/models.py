@@ -155,7 +155,7 @@ class Solicitante(Usuario):
     genero = models.CharField(verbose_name="Genero", max_length=255, choices=GENERO_CHOICES)    
     g_etnico = models.BooleanField(
         verbose_name="Origen Etnico", blank=False, null=True)    
-    municipio = models.ForeignKey(Municipio, verbose_name="Delegación/Municipio", null=True, blank=False, on_delete=models.CASCADE)
+    municipio = models.ForeignKey(Municipio, verbose_name="Delegación/Municipio", null=True, blank=False, on_delete=models.SET_NULL)
     colonia = models.CharField(
         verbose_name="Colonia/Fraccionamiento", max_length=255,blank=False, null=True)
     calle = models.CharField(
@@ -168,7 +168,7 @@ class Solicitante(Usuario):
 
     promedio = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Promedio", null=True, blank=False, validators=[MaxValueValidator(limit_value=10.0), MinValueValidator(limit_value=0.0)])
     carrera = models.ForeignKey(Carrera, 
-        verbose_name="Carrera",  null=True, blank=False, on_delete=models.CASCADE)
+        verbose_name="Carrera",  null=True, blank=False, on_delete=models.SET_NULL)
     email_verified_at = models.DateTimeField(verbose_name="email_verified_at", null=True)
     created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)

@@ -372,7 +372,7 @@ def documentos_solicitante(request, pk):
             seleccionDenegados = [int(id_str) for id_str in seleccionDenegados]
             print(f'{seleccionDenegados}')
 
-        #**Hacer una condicional para que el estado de la solicitud no cambie a documentación aprobada, cuando hay documentos denegados**
+        
         #Existieron documentos con error y otros fueron aprobados
         if seleccionDenegados != None and seleccionAceptados != None: 
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
@@ -624,8 +624,8 @@ def generarConcentradoXlsx(ciclo):
         #Edad
         try:
             hoy = date.today()
-            fecha_nacimiento = solicitud.solicitante.fecha_nacimiento
-            edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
+            fecha_nacimiento = solicitud.solicitante.fecha_nacimiento            
+            edad = round((hoy - fecha_nacimiento).days / 365.25)
             values.append(edad)
         except Exception as e:
             values.append(None)
