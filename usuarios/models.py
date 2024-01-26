@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from modalidades.models import ciclo_actual
 from django.db.models import Q
 from datetime import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Estado(models.Model):
@@ -162,10 +163,10 @@ class Solicitante(Usuario):
     numero = models.CharField(verbose_name="Numero Domicilio", max_length=25, blank=False, null=True)
     codigo_postal = models.CharField(verbose_name="Codigo Postal", max_length=5, blank=False, null=True, validators=[MinLengthValidator(5), MaxLengthValidator(5)])
     tel_cel = models.CharField(verbose_name="Telefono Celular", max_length=10, null=True, blank=False, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
-    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=False, validators=[MinLengthValidator(5), MaxLengthValidator(10)])    
-    grado = models.CharField(verbose_name="Grado", max_length=2, null=True, blank=False, choices=GRADO_CHOICES)
+    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=True, validators=[MinLengthValidator(10), MaxLengthValidator(10)])    
+    grado = models.CharField(verbose_name="Semestre/Cuatrimestre", max_length=2, null=True, blank=False, choices=GRADO_CHOICES)
 
-    promedio = models.FloatField(verbose_name="Promedio", null=True, blank=False)    
+    promedio = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Promedio", null=True, blank=False, validators=[MaxValueValidator(limit_value=10.0), MinValueValidator(limit_value=0.0)])
     carrera = models.ForeignKey(Carrera, 
         verbose_name="Carrera",  null=True, blank=False, on_delete=models.CASCADE)
     email_verified_at = models.DateTimeField(verbose_name="email_verified_at", null=True)

@@ -287,7 +287,7 @@ def getEstudioPDF(request):
                 else:
                     fAClasses = ['fa fa-circle-thin', 'fa fa-check-circle']
                 choices = [fAClasses]
-                if respuestas[elemento.id].respuesta and not isinstance(respuestas[elemento.id].respuesta, Opcion):
+                if (respuestas[elemento.id].respuesta and not isinstance(respuestas[elemento.id].respuesta, Opcion)):
                     multiples = respuestas[elemento.id].respuesta.all()                    
                 else :
                     multiples = None
