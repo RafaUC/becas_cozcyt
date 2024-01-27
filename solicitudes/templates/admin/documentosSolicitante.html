@@ -108,28 +108,28 @@
         </form>
     </div>
     <script>
-        // document.querySelector("#files").onchange = function() {
-        // const fileName = this.files[0]?.name;
-        // const label = document.querySelector("label[for=files]");
-        // label.innerText = fileName ?? "Subir documentos";
-        // };
-        //const fileBlocks = document.querySelectorAll('.subir-documento')
-        //const buttons = document.querySelectorAll('.btnSubirDoc')
+        
+        $(document).ready(function() {
+            // Registra la función al cambiar el estado de los checkboxes con clase checkbox-docs-aceptar
+            $('.checkbox-docs-aceptar').on('change', function() {
+                // Busca el div padre con clase botonesEstado
+                var $botonesEstado = $(this).closest('.botonesEstado');                
+                // Busca el checkbox con clase checkbox-docs-rechazar dentro del div padre
+                var $checkboxRechazar = $botonesEstado.find('.checkbox-docs-rechazar');                
+                // Marca o desmarca el checkbox de rechazar dependiendo del estado del checkbox de aceptar
+                $checkboxRechazar.prop('checked', !$(this).prop('checked'));
+            });
 
-        //;[...buttons].forEach(function (btn) {
-        //btn.onclick = function () {
-        //    console.log('btn.parentElement')
-        //    btn.parentElement.querySelector('input[type="file"]').click()
-        //}
-        //})
+            $('.checkbox-docs-rechazar').on('change', function() {
+                // Busca el div padre con clase botonesEstado
+                var $botonesEstado = $(this).closest('.botonesEstado');                
+                // Busca el checkbox con clase checkbox-docs-aceptar dentro del div padre
+                var $checkboxRechazar = $botonesEstado.find('.checkbox-docs-aceptar');                
+                // Marca o desmarca el checkbox de rechazar dependiendo del estado del checkbox de aceptar
+                $checkboxRechazar.prop('checked', !$(this).prop('checked'));
+            });
+        });
 
-        //;[...fileBlocks].forEach(function (block) {
-        //block.querySelector('input[type="file"]').onchange = function () {
-        //    const filename = this.files[0].name
-
-        //    block.querySelector('.btnSubirDoc').textContent = filename
-        //}
-        //})
     </script>
     <script>
         // function PreviewFile() {
