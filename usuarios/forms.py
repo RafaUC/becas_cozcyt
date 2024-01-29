@@ -301,15 +301,15 @@ class AgregarAdminForm(UserCreationForm):
             'email' : 'Correo electrónico',
             'password1' : 'Contraseña',
             'password2' : 'Confirmar contraseña',
-            'is_staff' : 'Es parte del departamento de estimulos',
-            'is_superuser' : 'Administrador',
+            'is_staff' : '',
+            'is_superuser' : '',
         }
         widgets = {
             'curp' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese su CURP'}),
             'nombre' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese un nombre o alias'}),
             'email' : forms.TextInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Ingrese su correo electrónico'}),
-            'is_staff' : forms.CheckboxInput(attrs={'class': ''}),
-            'is_superuser' : forms.CheckboxInput(attrs={'class': '', }),
+            'is_staff' : forms.CheckboxInput(attrs={'class': ' form-check-input' , 'style': 'display: None; width: 20px ; height: 20px; margin: 1% 10% 5% 2%;'}),
+            'is_superuser' : forms.CheckboxInput(attrs={'class': 'form-check-input', 'style' : 'display: None; width: 20px ; height: 20px; margin: 1% 1% 5% 2%;'}),
         }
     
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Contraseña'}))
