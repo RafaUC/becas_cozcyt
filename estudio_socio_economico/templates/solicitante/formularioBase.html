@@ -94,10 +94,12 @@
                     <table class="custom-table-se">                                     
                         <thead>
                             <tr>
-                                {% for elemento in seccion.elemento_set.all %}                                   
-                                <th class="borde-pagina-gris font-xs font-semi-bold" style="border-bottom: 1px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                {% for elemento in seccion.elemento_set.all %}       
+                                    {% if elemento.tipo != 'separador' %}
+                                    <th class="borde-pagina-gris font-xs font-semi-bold" style="border-bottom: 1px solid; white-space: normal; word-wrap: break-word;" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                    {% endif %}
                                 {% endfor %}
-                                <th class="borde-pagina-gris font-xs " style="width: 32px; border-bottom: 1px solid;"> </th>
+                                <th class="borde-pagina-gris font-xs " style="width: 20px; border-bottom: 1px solid;"> </th>
                             </tr>
                         </thead>                            
                         <tbody>
@@ -113,7 +115,7 @@
                                     {% endfor %}              
                                     <td class="font-xs " style="text-align: right;">                                                            
                                         <button id="btnEliminar-{{registro.first.rAgregacion.id}}" type="button" onclick="eliminarRegistro(this)" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                            <i class="fa fa-trash-o texto-cancelar-activado " style="font-size: 20px; margin-left: -23px;"></i>
+                                            <i class="fa fa-trash-o texto-cancelar-activado " style="font-size: 20px;"></i>
                                         </button>                                                                    
                                     </td>  
                                 </tr>

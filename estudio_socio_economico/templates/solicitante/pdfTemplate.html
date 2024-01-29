@@ -15,7 +15,7 @@
     <style type="text/css">
         @page {
             size: A4;
-            /*size: landscape;*/
+            size: landscape;
             margin: 0.5cm;            
             margin-top: 1cm;    
             margin-bottom: 2cm;    
@@ -24,6 +24,12 @@
                 content: "Pagina " counter(page) " de " counter(pages);
             }
         }
+        
+        @media print {
+            .page-break {
+                page-break-inside: avoid; /* Evita que el div se divida entre páginas */
+            }
+        }    
     </style>    
   </head>
 
@@ -36,7 +42,7 @@
 
     {% for seccion in preguntasEstudio %}
         {% if seccion.tipo == 'agregacion' %}
-        <div class="cont-agregacion" id="agregacion-{{ seccion.id }}">
+        <div class="cont-agregacion page-break " id="agregacion-{{ seccion.id }}">
         {% endif %}
         <div class="cont-seccion container border border-2 rounded-2 p-0 mb-5 borde-pagina-principal ">
             <h3 class="m-3 mb-3">{{ seccion.nombre }}</h3>                 
@@ -113,8 +119,10 @@
                     <table class="custom-table-se">                                     
                         <thead >
                             <tr>
-                                {% for elemento in seccion.elemento_set.all %}                                   
-                                <th class="font-xs" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                {% for elemento in seccion.elemento_set.all %}    
+                                    {% if elemento.tipo != 'separador' %}                               
+                                    <th class="font-xs" title="{{elemento.nombre}}"> {{elemento.nombre}}</th>
+                                    {% endif %}
                                 {% endfor %}                                
                             </tr>
                         </thead>                            

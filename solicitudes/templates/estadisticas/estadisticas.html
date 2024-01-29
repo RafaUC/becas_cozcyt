@@ -6,13 +6,13 @@ Estadisticas
 
 {% block body %}    
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<div class="rounded-2 p-1 my-4">
+<div class="rounded-2 p-1 my-1">
     <div class="row align-items-center m-0">
-        <p class="col h2 mx-3 mt-4">Estadisticas</p>
+        <p class="col h2 mx-3 mt-3">Estadisticas</p>
                 
     </div>
 </div>
-    <div class="mb-3 mx-0 py-4 ps-3 pe-0 horizontal-scroll">
+    <div class="mx-0 py-4 ps-3 pe-0 horizontal-scroll">
         <div class="row flex-nowrap m-0 p-0">
             {% for tarjetaDict in tarjetasEstadisticas %}
                 <button id="tarjetaEst-{{ forloop.counter0 }}" 

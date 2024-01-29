@@ -167,6 +167,12 @@ class RespuestaDocumento(models.Model):
     file = models.FileField(upload_to=documentoMediaPath, validators=[validador_pdf, validate_file_size])
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default=ESTADO_CHOICES[0][0])
 
+    def save(self, *args, **kwargs):
+        # Verificar si el campo 'file' ha cambiado        
+        if self.pk and self.file and self.file != RespuestaDocumento.objects.get(pk=self.pk).file:            
+            # El campo 'file' ha cambiado, actualizar el estado
+            self.estado = self.ESTADO_CHOICES[0][0]
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f'{self.solicitud}/ {self.documento}'

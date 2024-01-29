@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from modalidades.models import ciclo_actual
 from django.db.models import Q
 from datetime import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Estado(models.Model):
@@ -154,7 +155,7 @@ class Solicitante(Usuario):
     genero = models.CharField(verbose_name="Genero", max_length=255, choices=GENERO_CHOICES)    
     g_etnico = models.BooleanField(
         verbose_name="Origen Etnico", blank=False, null=True)    
-    municipio = models.ForeignKey(Municipio, verbose_name="Delegación/Municipio", null=True, blank=False, on_delete=models.CASCADE)
+    municipio = models.ForeignKey(Municipio, verbose_name="Delegación/Municipio", null=True, blank=False, on_delete=models.SET_NULL)
     colonia = models.CharField(
         verbose_name="Colonia/Fraccionamiento", max_length=255,blank=False, null=True)
     calle = models.CharField(
@@ -162,12 +163,12 @@ class Solicitante(Usuario):
     numero = models.CharField(verbose_name="Numero Domicilio", max_length=25, blank=False, null=True)
     codigo_postal = models.CharField(verbose_name="Codigo Postal", max_length=5, blank=False, null=True, validators=[MinLengthValidator(5), MaxLengthValidator(5)])
     tel_cel = models.CharField(verbose_name="Telefono Celular", max_length=10, null=True, blank=False, validators=[MinLengthValidator(10), MaxLengthValidator(10)])
-    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=False, validators=[MinLengthValidator(5), MaxLengthValidator(10)])    
-    grado = models.CharField(verbose_name="Grado", max_length=2, null=True, blank=False, choices=GRADO_CHOICES)
+    tel_fijo = models.CharField(verbose_name="Telefono Fijo", max_length=10, null=True, blank=True, validators=[MinLengthValidator(10), MaxLengthValidator(10)])    
+    grado = models.CharField(verbose_name="Semestre/Cuatrimestre", max_length=2, null=True, blank=False, choices=GRADO_CHOICES)
 
-    promedio = models.FloatField(verbose_name="Promedio", null=True, blank=False)    
+    promedio = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Promedio", null=True, blank=False, validators=[MaxValueValidator(limit_value=10.0), MinValueValidator(limit_value=0.0)])
     carrera = models.ForeignKey(Carrera, 
-        verbose_name="Carrera",  null=True, blank=False, on_delete=models.CASCADE)
+        verbose_name="Carrera",  null=True, blank=False, on_delete=models.SET_NULL)
     email_verified_at = models.DateTimeField(verbose_name="email_verified_at", null=True)
     created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True, null=True)
     updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True, null=True)

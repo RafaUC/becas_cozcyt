@@ -143,7 +143,7 @@
                     <div class="col-4">
                         {{ formDomicilio.tel_fijo.label }}
                         {{ formDomicilio.tel_fijo }}
-                        {{ formDomicilio.tel_fijo.error }}
+                        {{ formDomicilio.tel_fijo.errors }}
                     </div>
                 </div>
             </div>
@@ -229,6 +229,18 @@ document.getElementById('enableFormButton3').addEventListener('click', function(
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = false;
   }  
+});
+
+$(document).ready(function() {
+    {% if formPersonal.errors %}
+    $("#enableFormButton1").click();
+    {% endif %}
+    {% if formDomicilio.errors %}
+    $("#enableFormButton2").click();
+    {% endif %}
+    {% if formEscolar.errors %}
+    $("#enableFormButton3").click();
+    {% endif %}    
 });
 </script>
 
