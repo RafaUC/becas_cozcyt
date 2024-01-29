@@ -23,14 +23,14 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (6,'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 1),
 (7,'Comprobante de ingresos', 'Documento que acredita que cuentas con ingresos mensuales, quincenales, o incluso temporales.', 7, 1),
 (8,'Constancia de situación fiscal', 'Documento que avala los ingresos familiares.', 8, 1),
-(9,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 1),
+(9,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 9, 1),
 
 (10, 'INE', 'Credencial de elector visible y vigente.', 1, 6 ),
 (11, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 6 ),
 (12, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 6 ),
 (13, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 6 ),
 (14, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 5, 6 ),
-(15, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 6 ),
+(15, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 6, 6 ),
 
 (16,'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 2 ),
 (17,'INE', 'Credencial de elector visible y vigente.', 2, 2 ),
@@ -40,14 +40,14 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (21,'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 2 ),
 (22,'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 2 ),
 (23,'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 8, 2 ),
-(24,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 2 ),
+(24,'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 9, 2 ),
 
 (25, 'INE', 'Credencial de elector visible y vigente.', 1, 7 ),
 (26, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 7 ),
 (27, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 7 ),
 (28, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 7 ),
 (29, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 5, 7 ),
-(30, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 7 ),
+(30, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 6, 7 ),
 
 (31, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 3 ),
 (32, 'INE', 'Credencial de elector visible y vigente.', 2, 3 ),
@@ -58,7 +58,7 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (37, 'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 3 ),
 (38, 'Premio o constancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 8, 3 ),
 (39, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 9, 3 ),
-(40, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 10, 3 ),
+(40, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 10, 3 ),
 
 (41, 'INE', 'Credencial de elector visible y vigente.', 1, 8 ),
 (42, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 8 ),
@@ -66,7 +66,7 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (44, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 8 ),
 (45, 'Premio o constancia', 'Reconocimiento de participación o carta de asesor o entrenador.', 5, 8 ),
 (46, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 6, 8 ),
-(47, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 7, 8 ),
+(47, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 7, 8 ),
 
 (48, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 4 ),
 (49, 'INE', 'Credencial de elector visible y vigente.', 2, 4 ),
@@ -76,14 +76,14 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (53, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 6, 4 ),
 (54, 'Comprobante de ingresos', 'Documento que avala los ingresos familiares.', 7, 4 ),
 (55, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 8, 4 ),
-(56, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 4 ),
+(56, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 9, 4 ),
 
 (57, 'INE', 'Credencial de elector visible y vigente.', 1, 9 ),
 (58, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 9 ),
 (59, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 9 ),
 (60, 'Servicio colaborativo.', 'Servicio social colaborativo.', 4, 9 ),
 (61, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente', 5, 9 ),
-(62, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 9 ),
+(62, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 6, 9 ),
 
 (63, 'Acta de nacimiento', 'Acta de nacimiento vigente.', 1, 5 ),
 (64, 'INE', 'Credencial de elector visible y vigente.', 2, 5 ),
@@ -93,13 +93,13 @@ INSERT INTO `modalidades_documento` (id, nombre, descripcion, `order`, modalidad
 (68, 'Carta motivo y bajo protesta', 'Carta donde explique los motivos del porqué solicita la beca y de que no cuenta con otro tipo de apoyo.', 6, 5 ),
 (69, 'Cédula profesional', 'Cédula profesional.', 7, 5 ),
 (70, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 8, 5 ),
-(71, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 9, 5 ),
+(71, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 9, 5 ),
 
 (72, 'INE', 'Credencial de elector visible y vigente.', 1, 10 ),
 (73, 'Kardex de calificaciones', 'Constancia de calificaciones generales, último semestre cursado.', 2, 10 ),
 (74, 'Constancia de estudios', 'Constancia de estudios de este semestre.', 3, 10 ),
 (75, 'Servicio colaborativo', 'Servicio social colaborativo.', 4, 10 ),
 (76, 'Constancia de situación fiscal', 'Documento que contiene información clave de los contribuyente.', 5, 10 ),
-(77, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico".', 6, 10 )
+(77, 'Estudio socio económico', 'Documento que puede crear y descargar en el apartado de "Estudio socio económico". Debe imprimirlo, firmarlo y subirlo aquí en pdf.', 6, 10 )
 ON DUPLICATE KEY UPDATE
 nombre = nombre;

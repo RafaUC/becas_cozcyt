@@ -68,19 +68,19 @@
                                     </div>
                                     <div class="row">
                                         <div class="botonesEstado">
-                                            <div class="div" style="text-align: center !important; padding-top: 5px;">
+                                            <div class="div" style="text-align: center !important; padding-top: 5px;" atLeastOneCheckboxIsChecked()>
                                                 <div class="child col-sm-3" style="display: inline-block;">
                                                     {% if documentoResp.estado == "aprobado" %}
                                                     <input class="checkbox-docs-aceptar form-check-input" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}" checked>
                                                     {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "denegado"%}
-                                                    <input class="checkbox-docs-aceptar form-check-input" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
+                                                    <input class="checkbox-docs-aceptar form-check-input checkbox" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
                                                     {% endif %}
                                                 </div>
                                                 <div class="child col-sm-3" style="display: inline-block;">
                                                     {% if documentoResp.estado == "denegado" %}
                                                     <input class="checkbox-docs-rechazar form-check-input" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}" checked>
                                                     {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "aprobado"%}
-                                                    <input class="checkbox-docs-rechazar form-check-input" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
+                                                    <input class="checkbox-docs-rechazar form-check-input checkbox" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -108,7 +108,12 @@
         </form>
     </div>
     <script>
-        
+
+        function atLeastOneCheckboxIsChecked(){
+            const checkboxes = Array.from(document.querySelectorAll(".checkbox"));
+            return checkboxes.reduce((acc, curr) => acc || curr.checked, false);
+        }
+
         $(document).ready(function() {
             // Registra la función al cambiar el estado de los checkboxes con clase checkbox-docs-aceptar
             $('.checkbox-docs-aceptar').on('change', function() {
@@ -119,7 +124,6 @@
                 // Marca o desmarca el checkbox de rechazar dependiendo del estado del checkbox de aceptar
                 $checkboxRechazar.prop('checked', !$(this).prop('checked'));
             });
-
             $('.checkbox-docs-rechazar').on('change', function() {
                 // Busca el div padre con clase botonesEstado
                 var $botonesEstado = $(this).closest('.botonesEstado');                

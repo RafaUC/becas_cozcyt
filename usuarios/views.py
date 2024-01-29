@@ -96,7 +96,7 @@ def register(request):
             )  
             email.content_subtype = 'html'
             email.send()  #comentar esta linea para si no se desea mandar el correo
-            messages.success(request, 'Le enviamos un correo a su dirección de email para verificar su cuenta.')
+            messages.success(request, 'Le enviamos un correo a su dirección de email para verificar su cuenta. Si no visualiza ningún correo, revise su carpeta de spam.')
             return redirect("usuarios:login")  
             # return render(request, 'confirmar_email.html')
             #return HttpResponse('Please confirm your email address to complete the registration') 

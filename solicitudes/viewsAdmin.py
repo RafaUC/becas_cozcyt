@@ -429,27 +429,42 @@ def documentos_solicitante(request, pk):
         if seleccionDenegados != None and seleccionAceptados != None: 
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
             docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
-            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])   
-            notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
+            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)   
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0]) 
+            #Si la suma de la cantidad de los documentos acpetados más la cantidad de los documentos rechazados
+            #es igual a la cantidad de los documentos totales de la modalidad entonces se le manda al 
+            #solicitante la notificación, de lo contrario no se manda nada 
+            if len(seleccionDenegados) + len(seleccionAceptados) == len(documentosResp): 
+                notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
 
         #Todos los documentos fueron denegados
         if seleccionAceptados == None and seleccionDenegados != None:
+            # print(len(documentosResp)) 
+            # print(len(seleccionDenegados))
             docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
             docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])  
-            notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
+            #Si la cantidad de documentos recahzados es igual a la cantidad de los documentos totales de la modalidad
+            #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
+            if len(seleccionDenegados) == len(documentosResp):
+                notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
             #lo hacen automaticamente
             
         #Todos los documentos fueron aceptados
         if seleccionDenegados == None and seleccionAceptados != None: 
+            # print(documentos)
+            # print(len(documentosResp)) 
+            # print(len(seleccionAceptados))
             docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
-            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])            
+            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])  
+            #Si la cantidad de documentos aceptados es igual a la cantidad de los documentos totales de la modalidad
+            #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
+            if len(seleccionAceptados) == len(documentosResp):
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            notif.nueva(solicitante, f'Sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados.', 'solicitudes:historial')        
-            
+                notif.nueva(solicitante, f'Sus documentos para la modalidad de "{modalidad.nombre}" han sido aprobados.', 'solicitudes:historial')      
+
         if documentosResp.first():
             #el metodo .update()  en querysets no llama los recivers asi que se debe hacer almenos un save()
             documentosResp.first().save()
