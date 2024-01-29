@@ -742,7 +742,7 @@ th {
 }
 
 .red-errors .errorlist li {
-  color: #dc3545; /* Este es el color por defecto de 'text-danger' en Bootstrap */
+  color: var(--rosaF)/* Este es el color por defecto de 'text-danger' en Bootstrap */
 }
 
 /* Estilos para Solicitudes */
