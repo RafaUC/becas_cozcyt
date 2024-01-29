@@ -281,33 +281,34 @@ def getEstudioPDF(request):
     valoresRespuesta = {} #contiene los valores de las respuestas, una lista de strings si son opciones y una lista anidada en esa lista por las opciones seleccionadas
     for seccion in preguntasEstudio:
         for elemento in seccion.elemento_set.all():
-            if any(elemento.tipo == choice[0] for choice in Elemento.TIPO_CHOICES[6:]):
-                if elemento.tipo == Elemento.TIPO_CHOICES[7][0]:
-                    fAClasses = ['fa fa-square-o','fa fa-check-square']
-                else:
-                    fAClasses = ['fa fa-circle-thin', 'fa fa-check-circle']
-                choices = [fAClasses]
-                if respuestas[elemento.id].respuesta and not isinstance(respuestas[elemento.id].respuesta, Opcion):
-                    multiples = respuestas[elemento.id].respuesta.all()                    
-                else :
-                    multiples = None
-                opciones = list(elemento.opcion_set.all())
-                if elemento.opcionOtro :                        
-                        opciones.append(opcOtro)
-                for opcion in opciones:                    
-                        
-                    if (multiples and opcion in multiples) or (not multiples and opcion.id == respuestas[elemento.id].respuesta_id):
-                        if opcion.nombre == 'Otro' :
-                            choices.append([f'{opcion.nombre}:', respuestas[elemento.id].otro])
-                        else:
-                            choices.append([opcion.nombre])
+            if elemento.id in respuestas:
+                if any(elemento.tipo == choice[0] for choice in Elemento.TIPO_CHOICES[6:]):
+                    if elemento.tipo == Elemento.TIPO_CHOICES[7][0]:
+                        fAClasses = ['fa fa-square-o','fa fa-check-square']
                     else:
-                        choices.append(opcion.nombre)
-                valoresRespuesta[elemento.id] = choices
-            elif elemento.tipo == Elemento.TIPO_CHOICES[0][0]:
-                pass
-            else:
-                valoresRespuesta[elemento.id] = respuestas[elemento.id].getStringValue()
+                        fAClasses = ['fa fa-circle-thin', 'fa fa-check-circle']
+                    choices = [fAClasses]
+                    if (respuestas[elemento.id].respuesta and not isinstance(respuestas[elemento.id].respuesta, Opcion)):
+                        multiples = respuestas[elemento.id].respuesta.all()                    
+                    else :
+                        multiples = None
+                    opciones = list(elemento.opcion_set.all())
+                    if elemento.opcionOtro :                        
+                            opciones.append(opcOtro)
+                    for opcion in opciones:                    
+                            
+                        if (multiples and opcion in multiples) or (not multiples and opcion.id == respuestas[elemento.id].respuesta_id):
+                            if opcion.nombre == 'Otro' :
+                                choices.append([f'{opcion.nombre}:', respuestas[elemento.id].otro])
+                            else:
+                                choices.append([opcion.nombre])
+                        else:
+                            choices.append(opcion.nombre)
+                    valoresRespuesta[elemento.id] = choices
+                elif elemento.tipo == Elemento.TIPO_CHOICES[0][0]:
+                    pass
+                else:
+                    valoresRespuesta[elemento.id] = respuestas[elemento.id].getStringValue()
 
     template = get_template('solicitante/pdfTemplate.html')
     context = {               
@@ -332,7 +333,10 @@ def getEstudioPDF(request):
     # Crea un objeto HTML a partir del contenido HTML
     html = HTML(string=html_content, base_url=request.build_absolute_uri())    
     # Genera el PDF
-    pdf_file = html.write_pdf(stylesheets=[CSS(css_bootstrap_grid), CSS(css_main)], image_cache=ruta_carpeta_cache)    
+    pdf_file = html.write_pdf(
+        stylesheets=[CSS(css_bootstrap_grid), CSS(css_main)], 
+        image_cache=ruta_carpeta_cache,        
+    )    
     #pdf_file = html.write_pdf()    
     # Devuelve el PDF como una respuesta HTTP
     response = HttpResponse(pdf_file, content_type='application/pdf')

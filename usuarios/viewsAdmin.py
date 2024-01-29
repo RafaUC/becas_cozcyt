@@ -79,8 +79,10 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
         for field in fields:
             if ':' in term:
                 campo, valor = term.split(':', 1)
-                if campo in field:
+                if campo == 'nombre' and ('nombre' == field or 'solicitante__nombre' in field):                    
                     term_query |= Q(**{f'{field}__icontains': valor})
+                elif campo != 'nombre' and campo in field:                                            
+                    term_query |= Q(**{f'{field}__icontains': valor})                
             else:
                 term_query |= Q(**{f'{field}__icontains': term})        
 
@@ -90,8 +92,11 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
             q_objects |= term_query
         else:
             q_objects &= term_query
-            
-    queryset = queryset.filter(q_objects).exclude(exclude_objects)
+    
+    if search_terms and not q_objects:
+        queryset = model.objects.none()
+    else:
+        queryset = queryset.filter(q_objects).exclude(exclude_objects)
     return queryset
 
 @login_required

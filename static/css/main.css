@@ -863,7 +863,7 @@ i.rechazado:before {
   grid-gap: 1rem;
 }
 
-.tile img, .tile div, .tile canvas{
+.tile > * {
   width: 100%;
   height: 100%;
   object-fit: cover;

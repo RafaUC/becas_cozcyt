@@ -6,13 +6,8 @@
 
 {% block body %}
 
-<style>
-    .errorlist{
-        color: var(--rosaF);
-    }
-</style>
 
-<div class="border border-1 rounded-2 p-4 m-4 borde-tabla principal" style="background-color: white;">
+<div class="border border-1 rounded-2 p-4 m-4 borde-tabla principal red-errors" style="background-color: white;">
     <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>
         
         {% csrf_token %}        
@@ -22,12 +17,12 @@
             <div class="row align-items-center p-2">
                 <p class="h5">Datos personales</p>
                 <div class="col-4">
-                    {{ form.nombre.label }} *
+                    {{ form.nombre.label }}
                     {{ form.nombre }}
                     {{ form.nombre.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.ap_paterno.label }} *
+                    {{ form.ap_paterno.label }}
                     {{ form.ap_paterno }}
                     {{ form.ap_paterno.errors }}
                 </div>
@@ -39,12 +34,12 @@
             </div>
             <div class="row align-items-center p-2">
                 <div class="col-4">
-                    {{ form.fecha_nacimiento.label }} *
+                    {{ form.fecha_nacimiento.label }}
                     {{ form.fecha_nacimiento }}
                     {{ form.fecha_nacimiento.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.genero.label }} *
+                    {{ form.genero.label }}
                     {{ form.genero }}
                     {{ form.genero.errors }}
                 </div>
@@ -67,46 +62,46 @@
             <div class="row align-items-center p-2">
                 <p class="h5">Datos domicilio</p>    
                 <div class="col-4">
-                    {{ form.calle.label }} *
+                    {{ form.calle.label }} 
                     {{ form.calle }}
                     {{ form.calle.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.numero.label }} *
+                    {{ form.numero.label }} 
                     {{ form.numero }}
                     {{ form.numero.errors }}                    
                 </div>
                 <div class="col-4">
-                    {{ form.colonia.label }} *
+                    {{ form.colonia.label }} 
                     {{ form.colonia }}
                     {{ form.colonia.errors }}
                 </div>
             </div>    
             <div class="row align-items-center p-2">
                 <div class="col-4">
-                    {{ estadoSelectForm.estado.label }} *
+                    {{ estadoSelectForm.estado.label }} 
                     {{ estadoSelectForm.estado }}
                     {{ estadoSelectForm.estado.errors }}
                 </div>
                 <div class="col-4">                    
-                    {{ form.municipio.label }} *
+                    {{ form.municipio.label }} 
                     {{ form.municipio }}
                     {{ form.municipio.errors }}
                 </div>   
                 <div class="col-4">
-                    {{ form.codigo_postal.label }} *
+                    {{ form.codigo_postal.label }} 
                     {{ form.codigo_postal }}
                     {{ form.codigo_postal.errors }}
                 </div>             
             </div>    
             <div class="row align-items-center p-2">
                 <div class="col-4">
-                    {{ form.tel_cel.label }} *
+                    {{ form.tel_cel.label }} 
                     {{ form.tel_cel }}
                     {{ form.tel_cel.errors }}
                 </div>
                 <div class="col-4">
-                    {{ form.tel_fijo.label }}
+                    {{ form.tel_fijo.label }} 
                     {{ form.tel_fijo }}
                     {{ form.tel_fijo.error }}
                 </div>
@@ -117,24 +112,24 @@
             <div class="row align-items-center p-2">
                 <p class="h5">Datos escolares</p>
                 <div class="col-6">
-                    {{ institucionSelectForm.institucion.label }} *
+                    {{ institucionSelectForm.institucion.label }} 
                     {{ institucionSelectForm.institucion }}
                     {{ institucionSelectForm.institucion.errors }}
                 </div>
                 <div class="col-6">
-                    {{ form.carrera.label }} *
+                    {{ form.carrera.label }} 
                     {{ form.carrera }}
                     {{ form.carrera.errors }}
                 </div>                
             </div>
             <div class="row align-items-center p-2">
                 <div class="col-6">
-                    {{ form.grado.label }} *
+                    {{ form.grado.label }} 
                     {{ form.grado }}
                     {{ form.grado.errors }}
                 </div>
                 <div class="col-6">
-                    {{ form.promedio.label }} *
+                    {{ form.promedio.label }} 
                     {{ form.promedio }}
                     {{ form.promedio.errors }}
                 </div>
