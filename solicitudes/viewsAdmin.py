@@ -21,7 +21,7 @@ from usuarios.views import verificarRedirect
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual
-from .forms import FiltroForm
+from .forms import FiltroForm, EstadInfoSelectForm
 from modalidades.models import Modalidad
 from .models import *
 
@@ -139,39 +139,10 @@ def estadisticas(request):
     
     return render(request, 'estadisticas/estadisticas.html', context)
 
-@login_required
-def estadisticaSolicitudes(request):
-    url = verificarRedirect(request.user, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-
-    #config colores
-    colorInicial = (1, 0, 0)  # Color inicial en formato RGB
-    incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
-    minLuminosidad = 0.35  # Límite de la luminosidad antes de cambiar el tono
-    maxLuminosidad = 0.75  # Límite de la luminosidad antes de cambiar el tono    
-    incrementoHue = 0.011  # Incremento/decremento en el tono
-
-    conjuntosEstadisticos = []
-    valoresFrecuencias = Solicitud.objects.values('ciclo').annotate(frecuencia=Count('ciclo'))
-    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
-    labels = [dict(Solicitud.ESTADO_CHOICES).get(item['ciclo'], item['ciclo']) for item in valoresFrecuencias ]    
-    data = [item['frecuencia'] for item in valoresFrecuencias]
-    dataLabel = 'Solicitudes'
-
-    '''
-    import random
-    labels = [f"label {i + 1}" for i in range(50)]    
-    data = [random.randint(1, 100) for _ in range(50)]
-    data = sorted(data, reverse=True)
-    #'''
-
-    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)    
-    listaColores = [next(generadorColores) for _ in data]
-
+def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar'):
     conjuntoEst = {
         'grafico': {
-            'type': 'bar',
+            'type': type,
             'data': {
                 'labels': labels,
                 'datasets': [{
@@ -195,13 +166,94 @@ def estadisticaSolicitudes(request):
             }
         }
     }
-    conjuntosEstadisticos.append(conjuntoEst)
+    return conjuntoEst
+
+@login_required
+def estadisticaSolicitudes(request):
+    url = verificarRedirect(request.user, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return HttpResponse("", status=401)
+
+    estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
+    campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
+    extra_choices = [('genero','Genero'),]
+    if request.GET:
+        estadSelectForm = EstadInfoSelectForm(
+            request.GET, 
+            modelo_filtro=Solicitud, 
+            campo_filtro='ciclo', 
+            campo_estadistica_modelo=Solicitud,
+            exclude_choices = ['solicitante'],
+            extra_choices = extra_choices,
+            initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
+        )
+    else:
+        estadSelectForm = EstadInfoSelectForm(
+            modelo_filtro=Solicitud, 
+            campo_filtro='ciclo', 
+            campo_estadistica_modelo=Solicitud,
+            exclude_choices = ['solicitante'],
+            extra_choices = extra_choices,
+            initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
+        )
+
+    #config colores
+    colorInicial = (1, 0, 0)  # Color inicial en formato RGB
+    incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
+    minLuminosidad = 0.35  # Límite de la luminosidad antes de cambiar el tono
+    maxLuminosidad = 0.75  # Límite de la luminosidad antes de cambiar el tono    
+    incrementoHue = 0.011  # Incremento/decremento en el tono
+    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)    
+    
+    conjuntosEstadisticos = []
+    dataLabel = f'Solicitudes: {campo_estadistica}'    
+    #obtenemos el queryset basado en el filtro de ciclo
+    if estadistica_filtro == 'Todos':
+        queryset = Solicitud.objects.all()
+    else:
+        queryset = Solicitud.objects.filter(ciclo = estadistica_filtro)
+
+    if campo_estadistica == extra_choices[0][0]: #genero
+        campo_estadistica = 'solicitante__genero'
+    elif campo_estadistica == 'modalidad': #modalidad
+        campo_estadistica = 'modalidad__nombre'
+
+    #se seleccionan solo los valores unicos y su frecuencia
+    valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))    
+    #reordenan de mayor a menor
+    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
+    #se generan los labels para cada frecuencia, se intenta a ver si existe en los estados, sino se pone el valor en si
+    labels = [dict(Solicitud.ESTADO_CHOICES).get(item[campo_estadistica], item[campo_estadistica]) for item in valoresFrecuencias ]    
+    frecuencias = [item['frecuencia'] for item in valoresFrecuencias]
+    
+    listaColores = [next(generadorColores) for _ in frecuencias]
+
+    grafica = crearDictGrafica(labels, dataLabel, frecuencias, listaColores)
+    conjuntosEstadisticos.append(grafica)    
+    conjuntosEstadisticos.append({
+        'tipo': 'Leyenda',
+        'dataLabel': dataLabel,
+        'data': zip(listaColores, labels, frecuencias)
+    })
+    
+    valoresFrecuencias = queryset.values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))        
+    print(f'VALORES FRECUENCIA - {type(valoresFrecuencias)} - {valoresFrecuencias}')
+    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
+    labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]          
+    totales = ['$'+str(item['frecuencia'] * item['modalidad__monto']).replace(',','.') for item in valoresFrecuencias ]            
+    conjuntosEstadisticos.append({
+        'dataLabel': f'Dinero invertido por modalidad: {estadistica_filtro}',
+        'data': zip(labels, totales)
+    })
+    
 
     context = {
-        'conjuntosEstadisticos': conjuntosEstadisticos
+        'urlEstaditica': 'solicitudes:ESolicitudes',
+        'conjuntosEstadisticos': conjuntosEstadisticos,
+        'estadSelectForm': estadSelectForm
     }
     
-    return render(request, 'estadisticas/eSolicitudes.html', context)
+    return render(request, 'estadisticas/ebase.html', context)
 
 
 @login_required
