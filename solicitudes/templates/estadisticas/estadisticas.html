@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-Estadisticas
+Estadísticas
 {% endblock titulo %}
 
 {% block body %}    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-<div class="rounded-2 p-1 my-1">
-    <div class="row align-items-center m-0">
-        <p class="col h2 mx-3 mt-3">Estadisticas</p>
-                
-    </div>
-</div>
+    {% include 'estadisticas/eImports.html' %}
+    <!--
+    <div class="rounded-2 p-1 my-1">
+        <div class="row align-items-center m-0">
+            <p class="col h2 mx-3 mt-3">Estadísticas</p>
+                    
+        </div>
+    </div> -->    
     <div class="mx-0 py-4 ps-3 pe-0 horizontal-scroll">
         <div class="row flex-nowrap m-0 p-0">
             {% for tarjetaDict in tarjetasEstadisticas %}

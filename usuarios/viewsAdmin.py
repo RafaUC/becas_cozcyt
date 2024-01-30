@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import models
+from django.db.models import Count
 from .forms import *
 from .models import *
 from .views import verificarRedirect, borrarSelect
@@ -25,13 +26,26 @@ def inicio(request):
         return redirect(url)
     
     convocatoria = Convocatoria.objects.all().first()
-    solicitudesTotal = len(Solicitud.objects.filter(ciclo = ciclo_actual()))
-    solicitudes = Solicitud.objects.count()
+    solicitudes = Solicitud.objects.filter(ciclo = ciclo_actual()) #aceptadas
+
+    valoresFrecuencias = solicitudes.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
+    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)        
+    total = 0           
+    for item in valoresFrecuencias:        
+        total += item['frecuencia'] * item['modalidad__monto']        
+
+    presupuesto = 'Sin convocatoria'
+    presupuestoRestante = 'Sin convocatoria'
+    if convocatoria:
+        presupuesto = f'${convocatoria.presupuesto:,.2f}'
+        presupuestoRestante = f'${convocatoria.presupuesto-total:,.2f}'
 
     context = {
         'ciclo_actual': ciclo_actual(),
         'convocatoria' : convocatoria,
-        'solicitudes' : solicitudesTotal,
+        'solicitudes' : len(solicitudes),
+        'presupuesto': presupuesto,
+        'presupuestoRestante': presupuestoRestante
     }
 
     return render(request, 'admin/inicio.html', context)
