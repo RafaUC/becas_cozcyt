@@ -6,8 +6,7 @@
     --pantene5513: rgb(226,116,110);
     --pantene4914: rgb(187,68,51);
     --pantene5016: rgb(120,16,5);
-
-    --verdeBtns: #D5F5E2;
+    
     --letraGeneral: #676767;
     --bordesCard: #d1d1d1;
     --rosaF: #E4756F;
@@ -15,32 +14,20 @@
     --rosaC: #E9C3C1;
     
     --cancelar: #DCCBCA;
-    --blanco: #FFFFFF;
+  
+    --verdeBtns: #D5F5E2;
     --btnActivo: #B9E2C1;
     --btnActivo2: #8abc94;
 
-    /* Color styles */
-    --pagina-blanco: rgba(255, 255, 255, 1);
-    --pagina-fuerte: rgba(120, 21, 15, 1);
-    --pagina-principal: rgba(190, 70, 53, 1);
-    --pagina-tenue: rgba(228, 117, 111, 1);
-    --pagina-tenue-claro: rgba(254, 225, 229, 1);
-    --aceptado-desactivado: #ABEBC6;
-    --aceptado-activado: rgb(49, 185, 81);
-    --aceptado-hover: rgb(30, 139, 56);
-    --cancelar-desactivado: rgb(209, 134, 129);
-    --cancelar-activado: rgb(223, 87, 87);
-    --cancelar-hover: rgb(182, 65, 65);
-    --pagina-fondo: #EEE5E5/*#EEE5E5 #F1ECEC #F8F9FA*/;
-    --barra-lateral-fondo: #F8F9FA/*#EEE5E5 #F1ECEC #F8F9FA*/;
-    --pagina-gris: #b9b4b4;
-  
     --soli-doc-aprovada: #dfeafc;
     --soli-doc-error: #f6face;
     --soli-aceptada: #def8e3;
     --soli-rechazada: #ffe1df;
     --icon-solicitudes: rgba(27, 2, 37, 0.35);
   
+    --pagina-fondo: #EEE5E5/*#EEE5E5 #F1ECEC #F8F9FA*/;
+    --barra-lateral-fondo: #F8F9FA/*#EEE5E5 #F1ECEC #F8F9FA*/;
+    --pagina-gris: #b9b4b4;
     --gris-0: #f8f8f8; /* Blanco apagado */
     --gris-1: #efefef; /* Blanco apagado */
     --gris-2: #e0e0e0; /* Gris claro */
@@ -50,5 +37,26 @@
     --gris-6: #606060; /* Gris oscuro */
     --gris-7: #404040; /* Gris profundo */
     --gris-8: #202020; /* Gris intenso */
+    --blanco: #FFFFFF;
     --negro: #000000; /* Negro absoluto */
+
+
+    /* Color styles viejos 
+      No eliminar pero re asignados por compatibilidad con los estilos que aun los usen
+    */
+    --pagina-blanco: var(--blanco);
+    --pagina-fuerte: var(--pantene5016);
+    --pagina-principal: var(--pantene4914);
+    --pagina-tenue: var(--pantene5513);
+    --pagina-tenue-claro: var(--pantene651);
+    --aceptado-desactivado: var(--verdeBtns);
+    --aceptado-activado: var(--btnActivo);
+    --aceptado-hover: var(--btnActivo2);
+    --cancelar-desactivado: var(--rosaC);
+    --cancelar-activado: var(--rosaF);
+    --cancelar-hover: var(--rosaM);
+    
+    
+  
+    
   }
