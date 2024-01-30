@@ -16,6 +16,7 @@ from zipfile import ZipFile
 import uuid
 from openpyxl import Workbook
 from datetime import date
+from collections import Counter
 
 from usuarios.views import verificarRedirect
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
@@ -76,7 +77,13 @@ def GeneradorColores(color_inicial, incremento_luminosidad, min_luminosidad, max
         r, g, b = [int(x * 255.0) for x in colorsys.hls_to_rgb(h, l, s)]        
         yield r, g, b
 
-
+ESTADISTICAS_SOLICITUD_EXTRA_CHOICES = [
+        ('genero','Genero'),
+        ('instituciones', 'Instituciones'),
+        ('carreras', 'Carreras'),
+        ('estado', 'Estado'),
+        ('municipio', 'Municipio')
+    ]
 
 @login_required
 def estadisticas(request):
@@ -86,44 +93,49 @@ def estadisticas(request):
         return redirect(url)
 
     colorInicial = (190, 70, 53)  # Color inicial en formato RGB
-    incrementoIuminosidad = 0.1  # Incremento/decremento en la luminosidad
+    incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
     minLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono
     maxLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono    
-    incrementoHue = 0.03  # Incremento/decremento en el tono
+    incrementoHue = 0.016  # Incremento/decremento en el tono
     
     solicitudes = Solicitud.objects.filter(ciclo=ciclo_actual()).select_related('solicitante__municipio')
     municipiosParticipando = solicitudes.values('solicitante__municipio__id').distinct().count()
 
     tarjetasEstadisticas = [ #Lista de diccionarios que contienen la informacion de las tarjetas de cada estadistica
-        {
+        {            
             'titulo': 'Solicitudes recibidas',
             'iconCSS': 'fa-inbox',
             'valor': solicitudes.count(),
-            'url': 'solicitudes:ESolicitudes'
-        },
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica=ciclo&estadistica_filtro=Todos'
+        },        
         {
-            'titulo': 'Modalidades',
+            'titulo': 'Modalidades activas',
             'iconCSS': 'fa-object-group',
-            'valor': Modalidad.objects.all().count(),
-            'url': 'solicitudes:ESolicitudes'
-        },
+            'valor': Modalidad.objects.filter(mostrar = True).values('nombre').distinct().count(),
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ciclo_actual()}'
+        },   
         {
             'titulo': 'Instituciones registradas',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-university',
             'valor': Institucion.objects.all().count(),
-            'url': 'solicitudes:ESolicitudes'
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[1][0]}&estadistica_filtro={ciclo_actual()}'
         },
         {
             'titulo': 'Carreras registradas',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-graduation-cap',
             'valor': Carrera.objects.all().count(),
-            'url': 'solicitudes:ESolicitudes'
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[2][0]}&estadistica_filtro={ciclo_actual()}'
         },        
         {
             'titulo': 'Municipios participantes',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
-            'url': 'solicitudes:ESolicitudes'
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[4][0]}&estadistica_filtro={ciclo_actual()}'
         },
         
     ]
@@ -139,7 +151,17 @@ def estadisticas(request):
     
     return render(request, 'estadisticas/estadisticas.html', context)
 
-def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar'):
+def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar',minRotationLabel=0):        
+    # Verificar si hay más de 15 elementos y combinar los demás en un elemento "otros"
+    numValMax = 10
+    if len(labels) > numValMax:
+        otros_labels = ['Otros']
+        otros_data = [sum(data[numValMax:])]
+        otros_color = (100,100,100)  # Puedes ajustar este color según tus necesidades
+        labels = labels[:numValMax] + otros_labels
+        data = data[:numValMax] + otros_data
+        listaColores = listaColores[:numValMax] + [otros_color]
+
     conjuntoEst = {
         'grafico': {
             'type': type,
@@ -162,6 +184,14 @@ def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar
                 },
                 'layout': {
                     'padding': 10
+                },
+                'scales': {
+                    'x': {
+                        'ticks': {
+                            'maxRotation': 90,
+                            'minRotation': minRotationLabel
+                        }
+                    }
                 }               
             }
         }
@@ -176,7 +206,8 @@ def estadisticaSolicitudes(request):
 
     estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
-    extra_choices = [('genero','Genero'),]
+    campo_estadistica_original = campo_estadistica
+    
     if request.GET:
         estadSelectForm = EstadInfoSelectForm(
             request.GET, 
@@ -184,7 +215,7 @@ def estadisticaSolicitudes(request):
             campo_filtro='ciclo', 
             campo_estadistica_modelo=Solicitud,
             exclude_choices = ['solicitante'],
-            extra_choices = extra_choices,
+            extra_choices = ESTADISTICAS_SOLICITUD_EXTRA_CHOICES,
             initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
         )
     else:
@@ -193,7 +224,7 @@ def estadisticaSolicitudes(request):
             campo_filtro='ciclo', 
             campo_estadistica_modelo=Solicitud,
             exclude_choices = ['solicitante'],
-            extra_choices = extra_choices,
+            extra_choices = ESTADISTICAS_SOLICITUD_EXTRA_CHOICES,
             initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
         )
 
@@ -213,41 +244,86 @@ def estadisticaSolicitudes(request):
     else:
         queryset = Solicitud.objects.filter(ciclo = estadistica_filtro)
 
-    if campo_estadistica == extra_choices[0][0]: #genero
+    minRotationLabel = 0
+    if campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[0][0]: #genero
         campo_estadistica = 'solicitante__genero'
     elif campo_estadistica == 'modalidad': #modalidad
         campo_estadistica = 'modalidad__nombre'
+    elif campo_estadistica == 'ciclo': 
+        minRotationLabel = 90
+    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[1][0]:  #'instituciones'
+        campo_estadistica = 'solicitante__carrera__institucion__nombre'
+        minRotationLabel = 90
+    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[2][0]:  #'carreras'
+        campo_estadistica = 'solicitante__carrera__nombre'
+        minRotationLabel = 90
+    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[3][0]:  #'estado'
+        campo_estadistica = 'solicitante__municipio__estado__nombre'
+        minRotationLabel = 90
+    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[4][0]:  #'municipio'
+        campo_estadistica = 'solicitante__municipio__nombre'
+        minRotationLabel = 90
 
+    
     #se seleccionan solo los valores unicos y su frecuencia
-    valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))    
-    #reordenan de mayor a menor
-    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
+    
+    if campo_estadistica == 'ciclo':
+        valores = queryset.values_list(campo_estadistica, flat=True)
+        frecuencias = dict(Counter(valores))         
+        valores = queryset.values_list(campo_estadistica, flat=True)
+        valores_unicos = []
+        conjunto_vistos = set()
+        for elemento in valores:
+            if elemento not in conjunto_vistos:
+                valores_unicos.append(elemento)
+                conjunto_vistos.add(elemento)
+        valoresFrecuencias = []
+        for val in valores_unicos:
+            valoresFrecuencias.append({campo_estadistica: val, 'frecuencia': frecuencias[val]})
+    else:
+        valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))        
+        #reordenan de mayor a menor
+        valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
     #se generan los labels para cada frecuencia, se intenta a ver si existe en los estados, sino se pone el valor en si
     labels = [dict(Solicitud.ESTADO_CHOICES).get(item[campo_estadistica], item[campo_estadistica]) for item in valoresFrecuencias ]    
     frecuencias = [item['frecuencia'] for item in valoresFrecuencias]
     
     listaColores = [next(generadorColores) for _ in frecuencias]
 
-    grafica = crearDictGrafica(labels, dataLabel, frecuencias, listaColores)
+    grafica = crearDictGrafica(labels, dataLabel, frecuencias, listaColores, minRotationLabel=minRotationLabel)
     conjuntosEstadisticos.append(grafica)    
+
+    listaColores =listaColores.copy()
+    labels = labels.copy()
+    frecuencias =  frecuencias.copy()
+    listaColores.insert(0, (255,255,255))
+    labels.insert(0, 'Total')
+    frecuencias.insert(0, sum(frecuencias))
     conjuntosEstadisticos.append({
-        'tipo': 'Leyenda',
+        'tipo': 'leyenda',
         'dataLabel': dataLabel,
         'data': zip(listaColores, labels, frecuencias)
     })
     
-    valoresFrecuencias = queryset.values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))        
-    print(f'VALORES FRECUENCIA - {type(valoresFrecuencias)} - {valoresFrecuencias}')
+    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
-    labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]          
-    totales = ['$'+str(item['frecuencia'] * item['modalidad__monto']).replace(',','.') for item in valoresFrecuencias ]            
+    labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]   
+    total = 0       
+    totales = []
+    for item in valoresFrecuencias:
+        totales.append( f"${(item['frecuencia'] * item['modalidad__monto']):,.2f}")
+        total += item['frecuencia'] * item['modalidad__monto']
+    labels.insert(0, 'Total:')
+    totales.insert(0, f'${total:,.2f}')
     conjuntosEstadisticos.append({
-        'dataLabel': f'Dinero invertido por modalidad: {estadistica_filtro}',
+        'tipo': 'lista',
+        'dataLabel': f'Dinero invertido: {estadistica_filtro}',
         'data': zip(labels, totales)
     })
     
 
     context = {
+        'tituloEstadistica': f'Estadística {campo_estadistica_original} del ciclo: {estadistica_filtro}',
         'urlEstaditica': 'solicitudes:ESolicitudes',
         'conjuntosEstadisticos': conjuntosEstadisticos,
         'estadSelectForm': estadSelectForm

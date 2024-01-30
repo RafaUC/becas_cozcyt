@@ -7,8 +7,9 @@
 
 {% block body %}
 {% load static %}
+{% include 'estadisticas/eImports.html' %}
 <div class="rounded-2 p-1 my-4 principal">
-    <div class="row align-items-center principal">
+    <div class=" align-items-center principal">
         <p class="col mx-4 my-4 h3">Página de inicio</p>
         <p class="mx-5 h4 subtitulo-mod">Convocatoria {{ ciclo_actual }}</p>
     </div>
@@ -24,7 +25,7 @@
                             </div>
                             <div class="mx-3 mb-2">
                                 <h5 class="card-title">Presupuesto global</h5>
-                                <h6 class="font-bold">${{ convocatoria.presupuesto }}</h6>
+                                <h6 class="font-bold">{{ presupuesto }}</h6>
                             </div>
                         </div>
                     </div>
@@ -41,7 +42,7 @@
                             </div>
                             <div class="mx-3 mb-2">
                                 <h5 class="card-title">Presupuesto restante</h5>
-                                <h6 class="font-bold">$999,999.00</h6>
+                                <h6 class="font-bold">{{ presupuestoRestante }}</h6>
                             </div>
                         </div>
                     </div>
@@ -67,10 +68,32 @@
             </div>
         </div>
     </div>
-    <div class="rounded-2 mx-5 my-4" style="height: 300px; background-color: var(--gris-0);">    
-        <div class="row align-items-center principal">
-            <p class="col mx-4 my-4 h5 ">Solicitudes recibidas para el tipo de beca</p>
+    <div class="rounded-2 mx-5 my-4" style="min-height: 300px; background-color: var(--gris-0);">    
+        <div id="contenedorEstadisticaM" class="align-items-center principal">
+            
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "{% url 'solicitudes:ESolicitudes' %}", // Reemplaza esto con la ruta de tu servidor
+            method: 'GET',
+            data: {
+                campo_estadistica: 'modalidad',
+                estadistica_filtro: '{{ ciclo_actual }}'
+            },
+            success: function (data) {
+                // Inserta el contenido en el contenedor
+                $('#contenedorEstadisticaM').html(data);
+                $('#cont-filtro-estadistica').remove();
+            },
+            error: function () {
+                console.error('Error al cargar el contenido de la estadistica.');
+            }
+        });
+    });
+</script>
+
 {% endblock body %}
