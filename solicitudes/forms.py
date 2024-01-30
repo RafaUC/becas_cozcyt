@@ -84,7 +84,7 @@ class EstadInfoSelectForm(forms.Form):
 
         if modelo_filtro and campo_filtro and campo_estadistica_modelo:
             # Obtener los valores únicos basados en los parámetros de la consulta GET
-            valores = modelo_filtro.objects.order_by('-id').values_list(campo_filtro, flat=True)
+            valores = modelo_filtro.objects.all().values_list(campo_filtro, flat=True)
             valores_unicos = []
             conjunto_vistos = set()
             for elemento in valores:
@@ -99,9 +99,9 @@ class EstadInfoSelectForm(forms.Form):
             campos = [campo for campo in campo_estadistica_modelo._meta.get_fields() if
                       isinstance(campo, models.Field) and campo.name != 'id']
             self.fields['campo_estadistica'].choices = [(campo.name, campo.name) for campo in campos]
+            if exclude_choices:
+                self.fields['campo_estadistica'].choices = [choice for choice in self.fields['campo_estadistica'].choices if (choice[0] not in exclude_choices) or (choice[1] not in exclude_choices)]            
             if extra_choices:
                 for choice in extra_choices:
                     self.fields['campo_estadistica'].choices.append(choice)
-            if exclude_choices:
-                self.fields['campo_estadistica'].choices = [choice for choice in self.fields['campo_estadistica'].choices if (choice[0] not in exclude_choices) or (choice[1] not in exclude_choices)]
             self.fields['campo_estadistica'].label = 'Atributo'
