@@ -118,21 +118,21 @@ def estadisticas(request):
         },   
         {
             'titulo': 'Instituciones registradas',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-university',
             'valor': Institucion.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
             'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[1][0]}&estadistica_filtro={ciclo_actual()}'
         },
         {
             'titulo': 'Carreras registradas',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-graduation-cap',
             'valor': Carrera.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
             'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[2][0]}&estadistica_filtro={ciclo_actual()}'
         },        
         {
             'titulo': 'Municipios participantes',
-            'iconCSS': 'fa-object-group',
+            'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
             'url': 'solicitudes:ESolicitudes',
             'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[4][0]}&estadistica_filtro={ciclo_actual()}'
@@ -206,6 +206,7 @@ def estadisticaSolicitudes(request):
 
     estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
+    campo_estadistica_original = campo_estadistica
     
     if request.GET:
         estadSelectForm = EstadInfoSelectForm(
@@ -304,7 +305,7 @@ def estadisticaSolicitudes(request):
         'data': zip(listaColores, labels, frecuencias)
     })
     
-    valoresFrecuencias = queryset.values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
+    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
     labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]   
     total = 0       
@@ -322,6 +323,7 @@ def estadisticaSolicitudes(request):
     
 
     context = {
+        'tituloEstadistica': f'Estadística {campo_estadistica_original} del ciclo: {estadistica_filtro}',
         'urlEstaditica': 'solicitudes:ESolicitudes',
         'conjuntosEstadisticos': conjuntosEstadisticos,
         'estadSelectForm': estadSelectForm
