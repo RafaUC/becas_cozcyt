@@ -17,7 +17,7 @@ class ConvocatoriaForm(ModelForm):
             'presupuesto' : '',
             }
         widgets = {
-            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
+            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'onkeypress': "return isNumberPuntKey(event)", 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
             'fecha_inicio': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_inicio', 'type':'date', 'style':'width:auto;'}),
             'fecha_cierre': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_cierre', 'type':'date', 'style':'width:auto;'}),
         }
@@ -38,7 +38,7 @@ class ModalidadForm(ModelForm):
         widgets = {
             'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Talento especial, LABSOL...'}),
             'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Modalidad que se le otorga a los estudiantes que...', 'rows':3, 'cols':1}),
-            'monto' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. 4500.00'}),
+            'monto' : forms.TextInput(attrs={'class': 'form-control mt-1', 'onkeypress': "return isNumberPuntKey(event)", 'placeholder': 'Ej. 4500.00'}),
             'tipo': forms.Select(attrs={'class': 'form-control border-1 form-select'}),
         }
 
@@ -49,12 +49,12 @@ class DocumentoForm(ModelForm):
         labels = {
             'nombre': '',
             'descripcion': '',
-            'order' : '',
+            'order' : 'orden',
         }
         widgets = {
             'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Nombre de documento*' , 'style': 'text-align: center;'}),
             'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Descripción breve del documento*', 'rows':3, 'cols':1}),
-            'order': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
+            'order': forms.NumberInput(attrs={'class': 'border borde-pagina-gris opcion-digit', 'data-bs-original-title': "Orden en el que aparecerá el documento en los formularios."}),
         }
 
 DocumentoFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=1, can_delete=True)

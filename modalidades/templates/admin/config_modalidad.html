@@ -66,14 +66,14 @@
                             <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
                             <br>
                             <a href="{% url 'modalidades:AConfigEditarModalidades' modalidad.id %}"  class="btn" 
-                            style="background-color: #D5F5E2; color: #676767;">
+                            style="background-color: var(--verdeBtns); color: var(--letraGeneral);">
                                 Editar
                             </a>
-                            <a href="{% url 'modalidades:AConfigEliminarModalidades' modalidad.id %}" 
-                            class="btn" style="background-color: #E9C3C1; color: #676767;" 
-                            onclick="return confirm('¿Está seguro que desea eliminar esta modalidad permanentemente?')">
-                                Eliminar
-                            </a>
+                            <form style="display: inline;" class="" action="{% url 'modalidades:AConfigEliminarModalidades' modalidad.id %}" method="get" >                                                        
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta modalidad? <br> {{modalidad.nombre}}', 'Eliminar modalidad')" class="fondo-rosaC btn" style="color: var(--letraGeneral);">
+                                    Eliminar
+                                </button>                                
+                            </form>                            
                         </div>
                     </div>
                 </div>
