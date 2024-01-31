@@ -48,7 +48,7 @@
                         {{ form.tipo }}
                     </div>
                 </div>
-                <div class="child" style="">
+                <div class="child" >
                     <p class="agregarMod" id="descripcion-mods" style="padding-top: 5px; padding-bottom: 5px;"> Descripción </p>
                     {{ form.descripcion}}
                 </div>
@@ -66,20 +66,19 @@
                     </div>   
                     <div class="row" id = 'documentos-list'>
                         {{ formset.management_form}}
-                        {% for documento in formset %} 
-                        {{documento.order}}
+                        {% for documento in formset %}                         
                         <div class="documento-form col-md-4">
                             <div class="card">
-                                <div class="card-body" id="documentoMod" style="padding-top: 10px; padding-bottom: 10px;">
+                                <div class="card-body pb-0 text-end" id="" style="padding-top: 10px; padding-bottom: 10px;">
                                     <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
-                                    <p class="card-title">{{ documento }}</p>
+                                    <p class="card-title">{{ documento.as_p }}</p>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                         <div id='empty-form' class="hidden col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                             <div class="card">
-                                <div class="card-body" id="documentoMod">
+                                <div class="card-body pb-0 text-end" id="">
                                     <button id = 'cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)">X</button>
                                     <p class="card-title">{{ formset.empty_form.as_p }}</p>
                                 </div>
@@ -113,6 +112,7 @@
             totalNewForm.setAttribute('value', currenFormCount + 1)
             //add the new empty form element to our html form
             formCopyTarget.append(copyEmptyFormEl)
+            updateTooltips()
         }
 
         function cancel_adding_document(prefix_tag, cancelBtn){

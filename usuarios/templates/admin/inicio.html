@@ -11,7 +11,10 @@
 <div class="rounded-2 p-1 my-4 principal">
     <div class=" align-items-center principal">
         <p class="col mx-4 my-4 h3">Página de inicio</p>
-        <p class="mx-5 h4 subtitulo-mod">Convocatoria {{ ciclo_actual }}</p>
+        <p class="mx-5 h4 subtitulo-mod">
+            Convocatoria {{ ciclo_actual }}
+            <span class="m-3 font-sm texto-rosaM"> {{ convocatoria.mensaje_estado_convocatoria }} </span>
+        </p>
     </div>
     <div class="rounded-2 mx-5">          
         <div class="row">

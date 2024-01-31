@@ -27,11 +27,13 @@
                                 <p>Fecha de inicio</p>
                                 <!-- <input type="date" class="config-general-inputs" id="fecha_inicio" required> -->
                                 {{ convocatoria.fecha_inicio }}
+                                {{ convocatoria.fecha_inicio.errors }}
                             </div>
                             <div class="col">
                                 <p>Fecha de cierre</p>
                                 <!-- <input type="date" class="config-general-inputs" id="fecha_cierre" required> -->
                                 {{ convocatoria.fecha_cierre }}
+                                {{ convocatoria.fecha_cierre.errors }}
                             </div>
                         </div>
                         <div class="row" style="padding-bottom: 20px;">
@@ -39,17 +41,18 @@
                                 <p>Presupuesto para esta convocatoria</p>
                                 <!-- <input class="config-general-inputs" type="text" id="presupuesto" placeholder="$999,999.00"> -->
                                 {{ convocatoria.presupuesto }}
+                                {{ convocatoria.presupuesto.errors }}
                             </div>
                         </div>
                     </div>
                     <div class="row" style="padding-bottom: 10px; text-align: center;">
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
                             {% if convocatoria_existe %}
-                            <button type="button" class="btn btnEditar" name="editar" id="enableFormConvocatoria">Editar</button>
+                            <button type="button" class="btn btnEditar" name="editar" id="enableFormConvocatoria" {% if convocatoria.errors  %}disabled{% endif %}>Editar</button>
                             {% endif %} 
                         </div>
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="submit" class="btn btn-guardar" id="guardar" {% if convocatoria_existe %}disabled{% endif %}>Confirmar</button>  
+                            <button type="submit" class="btn btn-guardar" id="guardar" {% if convocatoria_existe and not convocatoria.errors  %}disabled{% endif %}>Confirmar</button>  
                         </div>
                     </div>
                 </div>    
