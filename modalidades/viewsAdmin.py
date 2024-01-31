@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.forms.models import modelformset_factory  #model form for querysets
+from django.forms import inlineformset_factory
 from usuarios.views import verificarRedirect
 from usuarios.models import Usuario
 from django.http import HttpResponse  
@@ -110,29 +111,27 @@ def agregarModalidad(request):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
     
-    form = ModalidadForm()
-    DocumetoModalidadFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=0)
+    modalidad = Modalidad()
+    form = ModalidadForm(request.POST or None, request.FILES or None, instance=modalidad)
+    DocumetoModalidadFormSet = inlineformset_factory(Modalidad, Documento, form=DocumentoForm, extra=0, can_delete=False)
     #Agregar el qs con los documentos base a la variable de qs
     # qs =  Documento.objects.filter(nombre__startswith='C')
-    formset = DocumetoModalidadFormSet(request.POST or None, queryset = Documento.objects.none())
+    formset = DocumetoModalidadFormSet(request.POST or None, instance=form.instance, prefix='form')
+    print(formset)
+    print(formset.empty_form)
     if request.method == "POST":
-        form = ModalidadForm(request.POST, request.FILES)
-        if form.is_valid():
-            if all([formset.is_valid()]):
-                modalidad = form.save(commit=False)
-                modalidad.save() 
-                for form in formset:
-                    documento = form.save(commit=False)
-                    documento.modalidad = modalidad
-                    documento.order = get_max_order(modalidad)
-                    # documento.order = 
-                    documento.save()
+        #form = ModalidadForm(request.POST, request.FILES)
+        if form.is_valid() and formset.is_valid():            
+            form.save()
+            formset.save()
             # print('modalidad creada')
-            else:
-                messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
-                return redirect("modalidades:AConfigAgregarModalidad")
+            
             messages.success(request, "Modalidad creada con éxito.")
             return redirect("modalidades:AConfigModalidades")
+        else:
+            messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
+            messages.error(request, form.errors)            
+            messages.error(request, formset.errors)      
     context = {
             'form' : form,
             'formset' : formset
@@ -146,12 +145,11 @@ def editarModalidad(request, modalidad_id):
     if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
         return redirect(url)
 
-    obj = Modalidad.objects.get(pk = modalidad_id)
+    obj = get_object_or_404(Modalidad, pk = modalidad_id)
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
     #formset = modelformset_factory(Model, form=ModelForm, extra=0)
-    DocumetoModalidadFormSet = modelformset_factory(Documento, form=DocumentoForm, extra=0)
-    qs = obj.get_documentos_children()
-    formset = DocumetoModalidadFormSet(request.POST or None, queryset = qs)
+    DocumetoModalidadFormSet = inlineformset_factory(Modalidad, Documento, form=DocumentoForm, extra=0, can_delete=False)    
+    formset = DocumetoModalidadFormSet(request.POST or None, instance=form.instance, prefix='form')
     context = {
         'modalidad' : obj , 
         'form' : form, 
@@ -162,20 +160,15 @@ def editarModalidad(request, modalidad_id):
             if len(obj.imagen) > 0: 
                 os.remove(obj.imagen.path) #Elimina la imagen del folder
             obj.imagen = request.FILES['imagen']
-        if all([form.is_valid(), formset.is_valid()]):
-            parent = form.save(commit=False)
-            parent.save()
-            #formset.save()
-            for form in formset:
-                child = form.save(commit=False)
-                child.modalidad = parent
-                child.save()
+        if form.is_valid() and formset.is_valid():
+            form.save()            
+            formset.save()            
             messages.success(request, "Cambios guardados.")
+            return redirect("modalidades:AConfigModalidades")
         else:
             messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
-            messages.error(request, [form.errors,formset.errors])
-            return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
-        return redirect("modalidades:AConfigModalidades")
+            messages.error(request, form.errors)            
+            messages.error(request, formset.errors)        
     return render(request, 'admin/editar_modalidad.html', context)
 
 @login_required

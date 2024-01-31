@@ -134,14 +134,12 @@ class Solicitante(Usuario):
     )
     GRADO_CHOICES = [(f"{i:02d}", f"{i:02d}") for i in range(1, 16)]
     
-    RFC_REGEX = r'^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$'
-    FOLIO_REGEX = r'^[a-zA-Z]{4}[0-9]{4}$'
+    RFC_REGEX = r'^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$'    
     GRADO_REGEX = r'^\d{1,2}$'
 
     folio = models.CharField(
-        verbose_name="Folio" ,max_length=12, null=True, blank=True,
-        validators=[
-            RegexValidator(FOLIO_REGEX,'El folio debe tener 4 letras seguidas de 4 números.')])
+        verbose_name="Folio" ,max_length=14, null=True, blank=True,
+        )
     rfc = models.CharField(
         verbose_name="RFC", max_length=13, 
         validators=[RegexValidator(RFC_REGEX,'Debe tener el formato de un RFC valido.')],
@@ -152,7 +150,7 @@ class Solicitante(Usuario):
         verbose_name="Apellido Materno", max_length=45, blank=True, null=True)
     fecha_nacimiento = models.DateField (
         verbose_name="Fecha de Nacimiento", blank=False, null=True)
-    genero = models.CharField(verbose_name="Genero", max_length=255, choices=GENERO_CHOICES)    
+    genero = models.CharField(verbose_name="Genero", max_length=255, choices=GENERO_CHOICES, null=True, blank=False)    
     g_etnico = models.BooleanField(
         verbose_name="Origen Etnico", blank=False, null=True)    
     municipio = models.ForeignKey(Municipio, verbose_name="Delegación/Municipio", null=True, blank=False, on_delete=models.SET_NULL)

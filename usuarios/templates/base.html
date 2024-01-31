@@ -34,7 +34,7 @@
     </title>
   </head>
 
-  <body class="hidden-ready">
+  <body class="hidden-ready ">
     {% include "mensajes.html" %}
     {% include "custom_confirm.html" %}
     <div >
@@ -170,7 +170,7 @@
         {% endif %}
 
         <div class="col nopadding nomargin d-flex flex-column justify-content-between overflow-auto" style="min-height: 100vh;">
-          <div class="mb-auto ">
+          <div class="mb-auto red-errors ">
 
             {% block body %}
             {% endblock body %}

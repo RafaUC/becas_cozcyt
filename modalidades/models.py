@@ -33,8 +33,7 @@ class Convocatoria(models.Model):
 
     @property
     def mostrar_precio(self):
-        return "%s" % self.presupuesto
-        # f'{self.modalidad}/  {self.solicitante}/  {self.ciclo}'
+        return "%s" % self.presupuesto        
     
     @property
     def fecha_convocatoria(self):
@@ -42,6 +41,25 @@ class Convocatoria(models.Model):
             return True
         else:
             return False
+        
+    @property
+    def mensaje_estado_convocatoria(self):        
+        if date.today() == self.fecha_cierre:
+            return f'Último día de convocatoria.'
+        elif date.today() < self.fecha_inicio:
+            dias_restantes = (self.fecha_inicio - date.today()).days
+            if dias_restantes < 2:
+                return f'Falta {dias_restantes} día para que inicie la convocatoria.'
+            else:
+                return f'Faltan {dias_restantes} días para que inicie la convocatoria.'
+        elif date.today() <= self.fecha_cierre:
+            dias_restantes = (self.fecha_cierre - date.today()).days+1
+            if dias_restantes < 2:
+                return f'Queda {dias_restantes} día para que la convocatoria termine.'
+            else:
+                return f'Quedan {dias_restantes} días para que la convocatoria termine.'
+        else:
+            return 'La convocatoria ha terminado.'
 
 class Modalidad(models.Model):
     TIPO_CHOICES = [
@@ -68,7 +86,7 @@ class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
     descripcion = models.CharField(max_length=255, verbose_name=_("Descripción"), null=False)
-    order = models.IntegerField(verbose_name='orden', default=100_000)
+    order = models.IntegerField(verbose_name='orden', default=0)
 
     class Meta:
         verbose_name = _("Documento")
