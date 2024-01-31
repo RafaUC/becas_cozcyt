@@ -74,6 +74,7 @@ def convocatorias(request):
     solicitud = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).first()    
     
     context = {
+        'convocatoria': convocatoria,
         'ciclo_actual': ciclo_actual(),
         'modalidades' : modalidades,        
         'solicitud_existe' : solicitud,
@@ -111,10 +112,19 @@ def documentos_convocatorias(request, modalidad_id):
     otra_solicitud_existe = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists()
     convocatoria = Convocatoria.objects.all().first()
 
-    #Si ya existe una solicitud e intenta solicitar otra
+    #verificar casos donde el usuario no deberia estar en esta vista
+    #el usuario ya tiene otra solicitud en otra convocatoria
     if not solicitud.id and otra_solicitud_existe:
-        solicitud = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
-        messages.warning(request, f'Ya estás participando en la modalidad de {solicitud.modalidad}')
+        solicitudExistente = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
+        messages.warning(request, f'Ya estás participando en la modalidad de {solicitudExistente.modalidad}.')
+        return redirect('solicitudes:convocatorias')
+    #no hay ninguna convocatoria activa
+    elif not solicitud.id and not convocatoria.fecha_convocatoria:
+        messages.warning(request, f'La convocatoria no esta activa.')
+        return redirect('solicitudes:convocatorias')
+    #no le corresponde esa modalidad de ingrego o reingreso
+    elif (modalidad.tipo == Modalidad.TIPO_CHOICES[0][0] and not solicitante.es_renovacion) or (modalidad.tipo == Modalidad.TIPO_CHOICES[1][0] and solicitante.es_renovacion):
+        messages.warning(request, f'No tiene los permisos correctos para ingresar a esa modalidad.')
         return redirect('solicitudes:convocatorias')
 
     if request.method == 'GET':    
@@ -173,6 +183,7 @@ def documentos_convocatorias(request, modalidad_id):
     }
 
     #si ya existe la solicitud se muestra la vista para modificar los documentos
+    print(solicitud.id)
     if solicitud.id:
         return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)    
     #si no existe la solicitud se muestra la vista para crear la solicitud

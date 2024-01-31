@@ -13,24 +13,29 @@
             <p class="agregarMod" id="titulo-mods"> Titulo de la modalidad </p>
             <input type="hidden" name="modalidad_id" value="{{ modalidad.id }}">
             <p>{{ form.nombre }}</p>
+            {{ form.nombre.errors }}
         </div>
         <div class="child col-4" style="display: inline-block; margin: 0 0 2% 20%; ">
             <p class="agregarMod" id="imagen-mods" style="padding-bottom: 5px;"> Imagen </p>
             {{ form.imagen}}
+            {{ form.imagen.errors }}
         </div>
         <div class="child col-4" style="display: inline-block;">
             <p class="agregarMod" id="titulo-mods"> Monto </p>
             {{ form.monto }}
+            {{ form.monto.errors }}
         </div>
         
         <div class="child col-4" style="display: inline-block; margin-left: 20%;">
             <p class="agregarMod" id="titulo-mods"> Tipo </p>
             {{ form.tipo }}
+            {{ form.tipo.errors }}
         </div>
     </div>
-    <div class="child" style="">
+    <div class="child" >
         <p class="agregarMod" id="descripcion-mods" style="padding-top: 5px; padding-bottom: 5px;"> Descripción </p>
         {{ form.descripcion}}
+        {{ form.descripcion.errors }}
     </div>
 
     <div class="row" style="padding-top: 40px; ">
@@ -51,9 +56,16 @@
             <div class="documento-form col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                 <input type="hidden" id="orderingInput" name="ordering" value="{{ documento.id.value }}">
                 <div class="card">
-                    <div class="card-body" id="documentoMod">                                       
-                        <a href="{% url 'modalidades:AConfigEliminarDocumento' modalidad.id documento.id.value %}" id='delete-document' 
-                        type="button" class="btn btnEliminar" onclick="return confirm('¿Está seguro que desea eliminar este documento permanentemente?')">X</a>
+                    <div class="card-body pb-0 text-end" id="">      
+                        {% if documento.id.value %}  
+                        <form style="display: inline;" class="" action="{% url 'modalidades:AConfigEliminarDocumento' modalidad.id documento.id.value %}" method="get" >                                                        
+                            <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar este documento de forma permanente? <br> {{documento.nombre.value}}')" class="btn btnEliminar" >
+                                X
+                            </button>                                
+                        </form>                 
+                        {% else %}
+                        <button id='cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)" >X</button>
+                        {% endif %}
                         <p class="card-title">{{ documento.as_p }}</p>
                     </div>
                 </div>
@@ -61,7 +73,7 @@
             {% endfor %}
             <div id='empty-form' class="hidden col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="card">
-                    <div class="card-body" id="documentoMod">
+                    <div class="card-body pb-0 text-end" id="">
                         <button id='cancel-document' type="button" class="btn btnEliminar" onclick="cancel_adding_document('form', this)" >X</button>
                         <p class="card-title">{{ formset.empty_form.as_p }}</p>
                     </div>

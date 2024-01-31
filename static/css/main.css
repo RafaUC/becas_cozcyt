@@ -152,6 +152,31 @@
   background-color: var(--pagina-gris) !important;
 }
 
+.texto-rosaF {
+  color: var(--rosaF);
+}
+
+.texto-rosaM {
+  color: var(--rosaM);
+}
+
+.texto-rosaC {
+  color: var(--rosaC);
+}
+
+.fondo-rosaF {
+  background-color: var(--rosaF);
+}
+
+.fondo-rosaM {
+  background-color: var(--rosaM);
+}
+
+.fondo-rosaC {
+  background-color: var(--rosaC);
+}
+
+
 .texto-pagina-blanco {
   color: var(--pagina-blanco);
 }
