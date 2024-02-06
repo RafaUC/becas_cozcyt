@@ -6,19 +6,16 @@ Estadísticas
 
 {% block body %}    
     {% include 'estadisticas/eImports.html' %}
-    <!--
-    <div class="rounded-2 p-1 my-1">
-        <div class="row align-items-center m-0">
-            <p class="col h2 mx-3 mt-3">Estadísticas</p>
-                    
-        </div>
-    </div> -->    
+<div class="rounded-2 p-1 my-4 principal">
+    <div class=" align-items-center principal">
+        <p class=" mx-4 my-4 h3">Estadísticas</p>
+    </div> 
     <div class="mx-0 py-4 ps-3 pe-0 horizontal-scroll">
         <div class="row flex-nowrap m-0 p-0">
             {% for tarjetaDict in tarjetasEstadisticas %}
                 {% if tarjetaDict.tipo == 'grande' %}
                     <button id="tarjetaEst-{{ forloop.counter0 }}" 
-                    class="tarjetaContenedor w-auto mx-2 border text-start texto-negro borde-pagina-principal px-3 " style=" border-radius: 15px; background-color: rgb({{ tarjetaDict.rgb.0 }}, {{ tarjetaDict.rgb.1 }}, {{ tarjetaDict.rgb.2 }});" 
+                    class="tarjetaContenedor w-auto mx-2 border text-start borde-pagina-principal px-3 principal" style=" border-radius: 15px; background-color: rgb({{ tarjetaDict.rgb.0 }}, {{ tarjetaDict.rgb.1 }}, {{ tarjetaDict.rgb.2 }});" 
                     onclick="moverTarjeta(this)" data-ajax-url="{% url tarjetaDict.url %}{{tarjetaDict.getData}}">
                         <div class="row">
                             {% for val in tarjetaDict.iconCSS %}
@@ -40,12 +37,12 @@ Estadísticas
                     </button>
                 {% else %}
                     <button id="tarjetaEst-{{ forloop.counter0 }}" 
-                    class="tarjetaContenedor mx-2 border text-start texto-negro borde-pagina-principal px-3" style="flex: 0 0 15rem; border-radius: 15px; background-color: rgb({{ tarjetaDict.rgb.0 }}, {{ tarjetaDict.rgb.1 }}, {{ tarjetaDict.rgb.2 }});" 
+                    class="tarjetaContenedor mx-2 border text-start principal px-3" style="flex: 0 0 15rem; border-radius: 15px; background-color: rgb({{ tarjetaDict.rgb.0 }}, {{ tarjetaDict.rgb.1 }}, {{ tarjetaDict.rgb.2 }});" 
                     onclick="moverTarjeta(this)" data-ajax-url="{% url tarjetaDict.url %}{{tarjetaDict.getData}}">
                         <p class="font-semi-bold font-xxl m-0 mt-2 p-0">
                             <i class="fa {{ tarjetaDict.iconCSS }}" aria-hidden="true"></i>
                         </p>
-                        <p class="font-semi-bold font-md mb-1">{{ tarjetaDict.titulo }}</p>
+                        <p class="font-normal font-md mb-1">{{ tarjetaDict.titulo }}</p>
                         <p class="font-bold font-lg">{{ tarjetaDict.valor }}</p>
                     </button>
                 {% endif %}
@@ -55,6 +52,7 @@ Estadísticas
     <div id="contenedor-estadistica" class="mx-3 mb-2">
 
     </div>
+</div>
 
     <script>
         function moverTarjeta(elemento) {
