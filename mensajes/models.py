@@ -33,7 +33,7 @@ class Notificacion(models.Model):
             try:                
                 return reverse(self.urlName, args=self.urlArgs)
             except Exception as e:
-                print(f"Error al calcular la redirección {self.urlName} {self.urlArgs}: {e}")
+                #print(f"Error al calcular la redirección {self.urlName} {self.urlArgs}: {e}")
                 return '#' # Retorna '#' si hay un error al calcular la redirección
         else:
             return '#' # Retorna '#' si urlName es None o vacío
