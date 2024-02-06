@@ -18,11 +18,7 @@ from django.urls import reverse
 # titulo: Titulo de la notificacion
 # plantilla: Plantilla con el que se renderizara el div de la notificacion
 def nueva(solicitante, mensaje, url=None, urlArgs=None, titulo=Notificacion.TITULO_DEFAULT, plantilla='notificacion_default.html'):
-    
-    if url:
-        url_invertida = reverse(url, args=urlArgs)
-    else:
-        url_invertida = '#'
+        
 
-    return Notificacion.objects.create(solicitante=solicitante, titulo=titulo, mensaje=mensaje, redireccion=url_invertida, plantilla=plantilla)
+    return Notificacion.objects.create(solicitante=solicitante, titulo=titulo, mensaje=mensaje, urlName=url, urlArgs=urlArgs, plantilla=plantilla)
 

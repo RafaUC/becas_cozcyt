@@ -8,3 +8,9 @@ una vez completado, ejecutar:
 - python3 manage.py migrate
 - python3 gruposYPermisos.py
 - python3 generarCatalogos.py
+
+
+
+COMANDOS:
+borrar notificaciones viejas: 
+- python3 manage.py delete_old_notifications
