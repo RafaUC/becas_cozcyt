@@ -24,36 +24,37 @@
                     {% for documento, documentoRespForm in listaDocumentos %}
                     <div class="col-md-4 red-errors align-self-end" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
-                            <div class="card-body" id="{{documento.id}}">                                
-                                <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
-                                    <div class="row " style="height: auto;">
-                                        <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>                                    
-                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>
-                                        
+                            <div data-bs-original-title="{{ documento.descripcion }}">
+                                <div class="card-body" id="{{documento.id}}">                                
+                                    <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                        <div class="row " style="height: auto;">
+                                            <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>      
+                                            <div class="m-3"></div>
+                                        </div>
+                                        <div class="row" style="padding-bottom: 10px;">
+                                            <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                            
+                                                <div class="card p-0" id="previewDoc">
+                                                    {% if documentoRespForm.instance.id %}
+                                                        <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" type="application/pdf" height="500"></iframe>                                        
+                                                    {% else %}
+                                                        <p class="text-center text-nofile"> La respuesta a este documento no existe. </p>
+                                                        <iframe src="" type="application/pdf" height="500"></iframe>                                        
+                                                    {% endif %}
+                                                </div>
+                                            
+                                        </div>
+                                    </a>
+                                    {% if documentoRespForm.instance.id %}
+                                    <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
+                                    {% else %}
+                                    <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                    {% endif %}
+                                    <div class="subir-documento" style="padding-bottom: 10px;">
+                                        <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
+                                        {{ documentoRespForm.file }}                                    
+                                        <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                     </div>
-                                    <div class="row" style="padding-bottom: 10px;">
-                                        <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
-                                        
-                                            <div class="card p-0" id="previewDoc">
-                                                {% if documentoRespForm.instance.id %}
-                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" type="application/pdf" height="500"></iframe>                                        
-                                                {% else %}
-                                                    <p class="text-center text-nofile"> La respuesta a este documento no existe. </p>
-                                                    <iframe src="" type="application/pdf" height="500"></iframe>                                        
-                                                {% endif %}
-                                            </div>
-                                        
-                                    </div>
-                                </a>
-                                {% if documentoRespForm.instance.id %}
-                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
-                                {% else %}
-                                <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
-                                {% endif %}
-                                <div class="subir-documento" style="padding-bottom: 10px;">
-                                    <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
-                                    {{ documentoRespForm.file }}                                    
-                                    <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                 </div>
                             </div>
                         </div>

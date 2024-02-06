@@ -116,7 +116,7 @@ def documentos_convocatorias(request, modalidad_id):
     #el usuario ya tiene otra solicitud en otra convocatoria
     if not solicitud.id and otra_solicitud_existe:
         solicitudExistente = Solicitud.objects.get(solicitante=solicitante, ciclo = ciclo_actual())
-        messages.warning(request, f'Ya estás participando en la modalidad de {solicitudExistente.modalidad}.')
+        messages.warning(request, f'Ya estás participando en la modalidad de {solicitudExistente.modalidad.nombre}.')
         return redirect('solicitudes:convocatorias')
     #no hay ninguna convocatoria activa
     elif not solicitud.id and not convocatoria.fecha_convocatoria:
