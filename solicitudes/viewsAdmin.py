@@ -498,43 +498,32 @@ def documentos_solicitante(request, pk):
         if 'estado-boton-denegado' in request.POST:
             seleccionDenegados = request.POST.getlist('estado-boton-denegado')
             seleccionDenegados = [int(id_str) for id_str in seleccionDenegados]
-            print(f'{seleccionDenegados}')
+        #print(f'{seleccionDenegados}')
+        #print(f'{seleccionAceptados}')
+
+        if seleccionAceptados:
+            docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
+            #print(docsAceptadosToUpdate)
+            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
+        if seleccionDenegados:
+            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)   
+            #print(docsDenegadosToUpdate)
+            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0]) 
 
         
         #Existieron documentos con error y otros fueron aprobados
-        if seleccionDenegados != None and seleccionAceptados != None: 
-            docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
-            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])
-            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)   
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0]) 
-            #Si la suma de la cantidad de los documentos acpetados más la cantidad de los documentos rechazados
-            #es igual a la cantidad de los documentos totales de la modalidad entonces se le manda al 
-            #solicitante la notificación, de lo contrario no se manda nada 
-            if len(seleccionDenegados) + len(seleccionAceptados) == len(documentosResp): 
-                notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
-            #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            #lo hacen automaticamente
-
-        #Todos los documentos fueron denegados
-        if seleccionAceptados == None and seleccionDenegados != None:
-            # print(len(documentosResp)) 
-            # print(len(seleccionDenegados))
-            docsDenegadosToUpdate = documentosResp.filter(id__in = seleccionDenegados)
-            docsDenegadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[2][0])  
+        if seleccionDenegados != None :                                   
             #Si la cantidad de documentos recahzados es igual a la cantidad de los documentos totales de la modalidad
             #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
             if len(seleccionDenegados) == len(documentosResp):
-                notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
+                notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
+            #Si hay algun elemento denegado entonces se notifica al usuario  
+            else: 
+                notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
             #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            #lo hacen automaticamente
-            
+            #lo hacen automaticamente    
         #Todos los documentos fueron aceptados
-        if seleccionDenegados == None and seleccionAceptados != None: 
-            # print(documentos)
-            # print(len(documentosResp)) 
-            # print(len(seleccionAceptados))
-            docsAceptadosToUpdate = documentosResp.filter(id__in = seleccionAceptados)   
-            docsAceptadosToUpdate.update(estado=RespuestaDocumento.ESTADO_CHOICES[1][0])  
+        elif seleccionDenegados == None and seleccionAceptados != None:         
             #Si la cantidad de documentos aceptados es igual a la cantidad de los documentos totales de la modalidad
             #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
             if len(seleccionAceptados) == len(documentosResp):
