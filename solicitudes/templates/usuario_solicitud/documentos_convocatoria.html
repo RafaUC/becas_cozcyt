@@ -63,10 +63,12 @@
                     {% for documento, documentoRespForm in listaDocumentos %}
                     <div class="col-md-4 red-errors align-self-end" style="padding-top: 10px; padding-bottom: 20px;">
                         <div class="card card-documento">
+                            {% if documento.descripcion|wordcount > 10 %}
                             <div data-bs-original-title="{{ documento.descripcion }}">
                                 <div class="card-body" id="{{documento.id}}">
                                     <div class="row " style="height: auto;">
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5> 
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatewords:10 }}</h8>
                                         <div class="m-3"></div>                               
                                     </div>
                                     <div class="row" style="padding-bottom: 10px;">
@@ -83,6 +85,27 @@
                                     </div>
                                 </div>
                             </div>
+                            {% else %}
+                            <div class="card-body" id="{{documento.id}}">
+                                <div class="row " style="height: auto;">
+                                    <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5> 
+                                    <h8 class="card-title" id="contenidoCard">{{ documento.descripcion }}</h8>
+                                    <div class="m-3"></div>                               
+                                </div>
+                                <div class="row" style="padding-bottom: 10px;">
+                                    <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                    <div class="card p-0" id="previewDoc">
+                                        <iframe src="" type="application/pdf" height="500"></iframe>  
+                                    </div>  
+                                </div>
+                                <div class="subir-documento ">
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc">Subir documento PDF</button>
+                                    <!-- <input class="pdfInput" type="file" name="{{documento.id}}" id="files" accept=".pdf" required> -->
+                                    {{ documentoRespForm.file }}
+                                    
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
                         {{ documentoRespForm.file.errors }}
                     </div>
