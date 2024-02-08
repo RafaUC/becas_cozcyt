@@ -33,6 +33,66 @@
                     {% for documento, documentoResp in listaDocumentos %}
                     <div class="col-md-4 align-self-end" style="padding-top: 10px; padding-bottom: 20px;">                        
                         <div class="card card-documento-solicitante">
+                            {% if documento.descripcion|wordcount > 10 %}
+                            <div data-bs-original-title="{{ documento.descripcion }}">
+                                <div class="card-body" id="{{documento.id}}">    
+                                    {% if documentoResp %}
+                                    <!-- 
+                                    <p class="text-center font-semi-bold" {% if documentoResp.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoResp.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoResp.get_estado_display }}</p>
+                                    -->
+                                    {% else %}
+                                    <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                    {% endif %}                            
+                                    <div class="row" style="height: auto;">
+                                        <!-- {{modalidad.id}} -->
+                                        <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatewords:10 }}</h8>
+                                    </div>
+                                    <div class="row" style="padding-bottom: 10px;">
+                                        <!-- Aquí la preview del documento antes de ser subido a la plataforma -->
+                                        <div class="card p-0" id="previewDoc">                                        
+                                                <!-- <iframe id="viewer" frameborder="0" scrolling="no" width="265" height="200" ></iframe> -->
+                                                {% if documentoResp %}
+                                                    <iframe src="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" type="application/pdf" height="500"></iframe>                                        
+                                                {% else %}
+                                                    <p class="text-center"> La respuesta a este documento no existe. </p>
+                                                    <iframe src="" type="application/pdf" height="500"></iframe>   
+                                                {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="subir-documento">
+                                        <div class="row">
+                                            <div class="documentoSolicitante">
+                                                <a class="texto-negro" {% if documentoResp %} href="{% url 'solicitudes:verPdf' solicitud.id documentoResp.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                                <button style="width: 100%;" type="button" class="btnSubirDoc"> {{ documentoResp.filename }} </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="botonesEstado">
+                                                <div class="div" style="text-align: center !important; padding-top: 5px;" atLeastOneCheckboxIsChecked()>
+                                                    <div class="child col-sm-3" style="display: inline-block;">
+                                                        {% if documentoResp.estado == "aprobado" %}
+                                                        <input class="checkbox-docs-aceptar form-check-input" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}" checked>
+                                                        {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "denegado"%}
+                                                        <input class="checkbox-docs-aceptar form-check-input checkbox" type="checkbox" name="estado-boton-aceptado" value="{{ documentoResp.id }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="child col-sm-3" style="display: inline-block;">
+                                                        {% if documentoResp.estado == "denegado" %}
+                                                        <input class="checkbox-docs-rechazar form-check-input" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}" checked>
+                                                        {% elif documentoResp.estado == "pendiente" or documentoResp.estado == "aprobado"%}
+                                                        <input class="checkbox-docs-rechazar form-check-input checkbox" type="checkbox" name="estado-boton-denegado" value="{{ documentoResp.id }}"> 
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                {{ documentoResp.estado }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
                             <div class="card-body" id="{{documento.id}}">    
                                 {% if documentoResp %}
                                 <!-- 
@@ -89,6 +149,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
