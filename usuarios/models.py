@@ -181,6 +181,46 @@ class Solicitante(Usuario):
             offset = -5
         cicloPrevio = ciclo_actual(offset=offset)                
         return Solicitud.objects.filter(solicitante=self, estado=Solicitud.ESTADO_CHOICES[3][0], ciclo=cicloPrevio).exists()
+    
+    @property
+    def info_completada(self):
+        """print(f'''
+            - nombre: {(self.nombre             is not None and self.nombre           != '' )}
+            - rfc: {(self.rfc                is not None and self.rfc              != '' )}
+            - ap_paterno: {(self.ap_paterno         is not None and self.ap_paterno       != '' )}
+            - fecha_nacimiento: {(self.fecha_nacimiento   is not None and self.fecha_nacimiento != '' )}
+            - genero:  {(self.genero             is not None and self.genero           != '' )}
+            - g_etnico: {(self.g_etnico           is not None and self.g_etnico         != '' )}
+            - municipio: {(self.municipio          is not None and self.municipio        != '' )}
+            - colonia: {(self.colonia            is not None and self.colonia          != '' )}
+            - calle: {(self.calle              is not None and self.calle            != '' )}
+            - numero:  {(self.numero             is not None and self.numero           != '' )}
+            - codigo_postal: {(self.codigo_postal      is not None and self.codigo_postal    != '' )}
+            - tel_cel: {(self.tel_cel            is not None and self.tel_cel          != '' )}
+            - grado: {(self.grado              is not None and self.grado            != '' )}
+            - promedio: {(self.promedio           is not None and self.promedio         != '' )}
+            - carrera: {(self.carrera            is not None and self.carrera          != '' )}
+              ''') #"""
+        if (
+            (self.nombre             is not None and self.nombre           != '' ) and
+            (self.rfc                is not None and self.rfc              != '' ) and
+            (self.ap_paterno         is not None and self.ap_paterno       != '' ) and
+            (self.fecha_nacimiento   is not None and self.fecha_nacimiento != '' ) and
+            (self.genero             is not None and self.genero           != '' ) and
+            (self.g_etnico           is not None and self.g_etnico         != '' ) and
+            (self.municipio          is not None and self.municipio        != '' ) and
+            (self.colonia            is not None and self.colonia          != '' ) and
+            (self.calle              is not None and self.calle            != '' ) and
+            (self.numero             is not None and self.numero           != '' ) and
+            (self.codigo_postal      is not None and self.codigo_postal    != '' ) and
+            (self.tel_cel            is not None and self.tel_cel          != '' ) and
+            (self.grado              is not None and self.grado            != '' ) and
+            (self.promedio           is not None and self.promedio         != '' ) and
+            (self.carrera            is not None and self.carrera          != '' )  
+        ):
+            return True
+        else:
+            return False
 
     def __str__(self):
         return self.nombre + " " + self.ap_paterno
