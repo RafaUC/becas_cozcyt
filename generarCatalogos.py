@@ -158,8 +158,9 @@ while True:
             'tel_fijo' : 'addressData.housePhoneNumber',                        
         }, separador=';')
           
-        GenerarNotificacionesUsuarios('Como solicitante aplicable para renovación, se le pide que por favor revise y actualice su información personal en su perfil.', 
+        """GenerarNotificacionesUsuarios('Como solicitante aplicable para renovación, se le pide que por favor revise y actualice su información personal en su perfil.', 
                                       'catalogos/SolicitantesReingreso.csv', 'id', separador=';')
+        """
 
         print('\n')
         input('A continuacion se crearan los registros de solicitudes pre existentes. Se espera que aparescan mensajes de errores. \n Pulse enter para continuar.')

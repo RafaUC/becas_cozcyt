@@ -37,6 +37,10 @@ def verificarRedirect(usuario, *permisos):
     elif usuario.has_perm('permiso_administrador') and ('permiso_administrador' not in permisos): #el usuario es admin pero los administradores no puede estar en la view
         return settings.LOGIN_REDIRECT_URL
     elif not Solicitante.objects.filter(id=usuario.id).exists() and (not usuario.has_perm('permiso_administrador')):   # el solicitante no existe y por lo tanto no ha completado su informacion persoanl
+        #print('nuevo solicitante')
+        return "usuarios:primer_login"
+    elif Solicitante.objects.filter(id=usuario.id).exists() and not Solicitante.objects.get(pk=usuario.id).info_completada :
+        #print('login incompleto')
         return "usuarios:primer_login"
     else: #si ningun caso anterior se ejecuto significa que el usuario puede estar en la view actual
         return
@@ -130,19 +134,35 @@ def activate(request, uidb64, token):
 @login_required
 def primerLogin(request):
     usuario = get_object_or_404(Usuario, id=request.user.id)
+    solicitante = Solicitante.objects.filter(id=request.user.id).first()
     form = SolicitanteForm()
     estadoSelectForm = EstadoSelectForm()
     institucionSelectForm = InstitucionSelectForm()
 
+    if solicitante :
+        form = SolicitanteForm(instance=solicitante)
+        if solicitante.municipio:
+            estadoSelectForm = EstadoSelectForm(initial={'estado': solicitante.municipio.estado.pk})                    
+        if solicitante.carrera :
+            institucionSelectForm = InstitucionSelectForm(initial={'institucion': solicitante.carrera.institucion.pk})                
+        
+
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:
         return redirect(settings.LOGIN_REDIRECT_URL)   
-    elif Solicitante.objects.filter(id=usuario.id).exists():        
-        return redirect(settings.LOGIN_REDIRECT_URL)  
+    elif Solicitante.objects.filter(id=usuario.id).exists() and Solicitante.objects.get(pk=usuario.id).info_completada:        
+        return redirect(settings.LOGIN_REDIRECT_URL)      
 
     if request.method == 'POST':
         form = SolicitanteForm(data = request.POST)
         estadoSelectForm = EstadoSelectForm(data = request.POST)   
         institucionSelectForm = InstitucionSelectForm(data = request.POST)
+        if solicitante :
+            form = SolicitanteForm(request.POST, instance=solicitante)
+            if solicitante.municipio:
+                estadoSelectForm = EstadoSelectForm(request.POST, initial={'estado': solicitante.municipio.estado.pk})                    
+            if solicitante.carrera :
+                institucionSelectForm = InstitucionSelectForm(request.POST, initial={'institucion': solicitante.carrera.institucion.pk})                
+            
         estadoSelectForm.errors.as_data()
         if form.is_valid() and estadoSelectForm.is_valid() and institucionSelectForm.is_valid():                        
             solicitante = form.save(commit=False)
