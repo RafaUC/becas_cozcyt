@@ -36,3 +36,18 @@
     {% endif %}
 
     {% endblock nombreUsuario %}
+
+    {% block adminEdit %}
+
+    <div class="col-4">
+        {{ formPersonal.curp.label }}
+        {{ formPersonal.curp }}
+        {{ formPersonal.curp.errors }}
+    </div>
+    <div class="col-4">
+        {{ formPersonal.email.label }}
+        {{ formPersonal.email }}
+        {{ formPersonal.email.errors }}
+    </div>
+
+    {% endblock adminEdit %}

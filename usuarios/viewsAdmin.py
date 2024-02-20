@@ -276,7 +276,7 @@ def editarUsuario(request, pk):
     
     solicitante = get_object_or_404(Solicitante, pk=pk)  
     #rfc = solicitante.rfc      
-    formPersonal = SolicitantePersonalesForm(instance = solicitante) #asegurarse de no modificar el rfc
+    formPersonal = SolicitantePersonalesAdminForm(instance = solicitante) #asegurarse de no modificar el rfc
     formDomicilio = SolicitanteDomicilioForm(instance = solicitante)
     formEscolar = SolicitanteEscolaresForm(instance = solicitante)
     if solicitante.municipio:
@@ -295,7 +295,7 @@ def editarUsuario(request, pk):
         if boton == 'personal':
             post = request.POST.copy()
             #post['rfc'] = rfc
-            formPersonal = SolicitantePersonalesForm(post, instance=solicitante)             
+            formPersonal = SolicitantePersonalesAdminForm(post, instance=solicitante)             
             if formPersonal.is_valid():
                 solicitante = formPersonal.save(commit=False)
                 #solicitante.rfc = rfc
