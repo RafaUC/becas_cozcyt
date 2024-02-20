@@ -46,7 +46,7 @@
                                     <div class="row" style="height: auto;">
                                         <!-- {{modalidad.id}} -->
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>
-                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatewords:10 }}</h8>
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatechars:55 }}</h8>
                                     </div>
                                     <div class="row" style="padding-bottom: 10px;">
                                         <!-- Aquí la preview del documento antes de ser subido a la plataforma -->

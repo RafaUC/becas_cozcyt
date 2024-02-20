@@ -68,7 +68,7 @@
                                 <div class="card-body" id="{{documento.id}}">
                                     <div class="row " style="height: auto;">
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5> 
-                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatewords:10 }}</h8>
+                                        <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatechars:55 }}</h8>
                                         <div class="m-3"></div>                               
                                     </div>
                                     <div class="row" style="padding-bottom: 10px;">
