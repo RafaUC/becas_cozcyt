@@ -160,7 +160,34 @@ class SolicitantePersonalesForm(SolicitanteForm):
                   'grado', 
                   'promedio', 
                   'carrera')
-           
+
+class SolicitantePersonalesAdminForm(SolicitanteForm):    
+
+    class Meta(SolicitanteForm.Meta):
+        exclude = ('municipio', 
+                  'colonia', 
+                  'calle', 
+                  'numero', 
+                  'codigo_postal', 
+                  'tel_cel', 
+                  'tel_fijo', 
+                  'grado', 
+                  'promedio', 
+                  'carrera')
+        
+        fields = SolicitanteForm.Meta.fields + ['curp', 'email']
+        widgets = SolicitanteForm.Meta.widgets.copy()
+        widgets.update({
+            'curp': forms.TextInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el CURP'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control border-1', 'placeholder': 'Ingrese el correo electrónico'}),            
+        })
+
+        labels = SolicitanteForm.Meta.labels.copy()
+        labels.update({
+            'curp': 'CURP *',
+            'email': 'Correo Electrónico *',            
+        })
+
     
         
 class SolicitanteDomicilioForm(SolicitanteForm):
