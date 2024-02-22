@@ -75,14 +75,14 @@ def get_model_fields(model, relatedFieldType, prefix='' ):
     return fields
 
 #Metodo para filtrar un queryset en base a un string de palabras clave a buscar en sus campos
-def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMPOS_BUSQUEDA['foreignKey']):  
+def BusquedaEnCamposQuerySet(queryset, search_query, matchExacto=False, relatedFieldType=CLASE_CAMPOS_BUSQUEDA['foreignKey']):  
     search_terms = search_query.split()     
     model = queryset.model 
     fields = get_model_fields(model, relatedFieldType)  
        
     
     q_objects = Q()
-    exclude_objects = Q()
+    exclude_objects = Q() 
 
     for term in search_terms:
         term_query = Q()        
@@ -90,13 +90,15 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
         is_or = term.startswith('~')  # Verifica si el término comienza con '~' para OR
         term = term[1:] if is_exclude or is_or else term
         
-        for field in fields:
+        for field in fields:                            
             if ':' in term:
                 campo, valor = term.split(':', 1)
                 if campo == 'nombre' and ('nombre' == field or 'solicitante__nombre' in field):                    
-                    term_query |= Q(**{f'{field}__icontains': valor})
-                elif campo != 'nombre' and campo in field:                                            
+                    term_query |= Q(**{f'{field}__icontains': valor})                            
+                elif not matchExacto and campo != 'nombre' and campo in field:                                            
                     term_query |= Q(**{f'{field}__icontains': valor})                
+                elif campo != 'nombre' and campo == field:
+                    term_query |= Q(**{f'{field}__exact': valor})    
             else:
                 term_query |= Q(**{f'{field}__icontains': term})        
 
@@ -106,7 +108,7 @@ def BusquedaEnCamposQuerySet(queryset, search_query, relatedFieldType=CLASE_CAMP
             q_objects |= term_query
         else:
             q_objects &= term_query
-    
+        
     if search_terms and not q_objects:
         queryset = model.objects.none()
     else:

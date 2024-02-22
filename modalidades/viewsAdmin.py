@@ -117,8 +117,8 @@ def agregarModalidad(request):
     #Agregar el qs con los documentos base a la variable de qs
     # qs =  Documento.objects.filter(nombre__startswith='C')
     formset = DocumetoModalidadFormSet(request.POST or None, instance=form.instance, prefix='form')
-    print(formset)
-    print(formset.empty_form)
+    #print(formset)
+    #print(formset.empty_form)
     if request.method == "POST":
         #form = ModalidadForm(request.POST, request.FILES)
         if form.is_valid() and formset.is_valid():            
