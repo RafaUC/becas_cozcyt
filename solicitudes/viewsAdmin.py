@@ -370,9 +370,9 @@ def listaSolicitudes(request):
         filtroModForm = FiltroForm(request.GET,search_query_name='~modalidad__id', prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='__str__', selectedAll=False)                               
                                 
         search_query = filtroSolForm.get_search_query()
-        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el primer filtro
+        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query, matchExacto=True) #filtra por el primer filtro
         search_query = filtroModForm.get_search_query()
-        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query) #filtra por el segundo filtro
+        solicitudes = BusquedaEnCamposQuerySet(solicitudes, search_query, matchExacto=True) #filtra por el segundo filtro
         search_query = request.GET.get('search', '')    
         
         #Si se hizo una busqueda de filtrado     
