@@ -68,4 +68,5 @@ urlpatterns = [
     path('administracion/configuracion/puntajes/cargarMunicipio', viewsAdmin.cargar_municipio_puntos, name='AConfigPuntajesCargarM'),
     path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
     path('administracion/eliminarUsuario/<int:user_id>/', viewsAdmin.eliminarUsuario, name='AEliminarUsuario'),
+    path('administracion/reEnviarConfirmaciones/', viewsAdmin.reEnviarConfirmaciones, name='AReEnviarConfirmaciones'),
 ]
