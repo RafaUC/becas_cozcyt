@@ -79,8 +79,14 @@ def cerrarSesion(request):
 
 def register(request):
     form = CreateUserForm()
-    if request.method == 'POST':
-        form = CreateUserForm(data = request.POST)
+    if request.method == 'POST':        
+        #Si un usuario no verificado intenta volver a registrarse, se intenta reusar ese usuario y reenviar el correo al nuevo correo
+        usrCurp = Usuario.objects.filter(is_active=False, curp=request.POST.get('curp')).first()        
+        usrEmail = Usuario.objects.filter(is_active=False, email=request.POST.get('email')).exclude(curp=request.POST.get('curp')).first()                
+        if usrEmail:           
+           usrEmail.delete()
+
+        form = CreateUserForm(data = request.POST, instance=usrCurp)
         if form.is_valid():
             #Hacer que el registro válido se guarda en la memoria, no en la base de datos
             user = form.save(commit=False)
@@ -122,14 +128,15 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user,token):        
         user.is_active = True    
         user.save()
-
         print('Correo confirmado')
         messages.success(request, 'Correo electrónico y cuenta confirmados. Ya puede iniciar sesión.')
-        return redirect("usuarios:login")
-        # return render(request,'confirmar_email.html')
-        # return HttpResponse('Gracias por verificar su email. Ya puede iniciar sesión en el sitio.') 
+        return redirect("usuarios:login")        
     else:  
-        return HttpResponse('Link inválido o no disponible.')  
+        if user and user.is_active:
+            messages.success(request, 'El correo electrónico y cuenta ya se encuentran confirmados. Ya puede iniciar sesión.')
+            return redirect("usuarios:login")    
+        else :
+            return HttpResponse('Link inválido o no disponible.')  
 
 @login_required
 def primerLogin(request):

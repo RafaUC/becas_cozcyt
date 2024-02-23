@@ -173,7 +173,12 @@ Lista de usuarios
         </div> 
     </div>
     <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal"> 
-        <p class="h4 mx-3">Usuarios no verificados</p>     
+        <div class="row m-0 p-0">
+            <div class="col h4 mx-3">Usuarios no verificados</div>   
+            <form class="col p-0 m-0 mx-3" action="{% url 'usuarios:AReEnviarConfirmaciones' %}" method="get" >                                                        
+                <button class="btn btnCancelar m-0 w-100 font-normal principal" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Re-enviar los correos de confirmación a los {{page_nover.paginator.count}} usuarios no verificados?')">Re-enviar correos de confirmación</button>                            
+            </form>  
+        </div>
         <div class="horizontal-scroll">
             <div>
                 <table class="table custom-table-simple principal">
@@ -212,19 +217,26 @@ Lista de usuarios
             </div>
         </div>
         <div class="pagination mx-3 font-semi-bold font-md justify-content-end">
-            <span class="step-links">                                
-                <span class="current font-xs me-1">
-                    Página {{ page_nover.number }} / {{ page_nover.paginator.num_pages }}.
-                </span>                
-                {% if page_nover.has_previous %}                    
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
-                {% endif %}
-                {% if page_nover.has_next %}
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
-                {% endif %}
+            <span class="col step-links">           
+                <span class="row current font-xs ms-1 pt-1">         
+                {{ page_nover.start_index }} a {{ page_nover.end_index }} de {{ page_nover.paginator.count }} resultados.              
+                </span>
             </span>
+            <div class="col d-flex justify-content-end">                  
+                <span class="step-links">                                
+                    <span class="current font-xs me-1">
+                        Página {{ page_nover.number }} / {{ page_nover.paginator.num_pages }}.
+                    </span>                
+                    {% if page_nover.has_previous %}                    
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                    {% endif %}
+                    {% if page_nover.has_next %}
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                    {% endif %}
+                </span>
+            </div>
         </div>            
     </div>
 </div>
