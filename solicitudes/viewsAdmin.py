@@ -910,14 +910,17 @@ def generarConcentradoXlsx(ciclo):
 
         #Ingresos
         #Punt_Ingresos
-        try:            
+        try:
             ingresos = [] #lista de querysets relacionados con ingresos    
             # Obtener todas las respuestas que pertenecen a las preguntas
             respuestas = RNumerico.objects.filter(elemento__id__in=ids_preguntas, solicitante=solicitud.solicitante)
             ingresos = respuestas.values_list('valor', flat=True)
-            ingresos = list(map(int, ingresos))        
-            ingresoTotal = sum(ingresos)   
-            values.append(ingresoTotal)
+            ingresos = list(map(float, ingresos)) 
+            ingresoTotal = sum(ingresos)               
+        except Exception as e:
+            ingresoTotal = None
+        values.append(ingresoTotal)
+        try:                        
             for puntaje in puntajesIngresosM:
                 limite_inferior, limite_superior = map(int, puntaje.nombre.replace('$', '').split('-'))
                 if limite_inferior <= ingresoTotal <= limite_superior:
