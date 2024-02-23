@@ -78,7 +78,7 @@ def calcular_puntaje(sender, instance, **kwargs):
         # Obtener todas las respuestas que pertenecen a las preguntas
         respuestas = RNumerico.objects.filter(elemento__id__in=ids_preguntas, solicitante=solicitante)    
         ingresos = respuestas.values_list('valor', flat=True)
-        ingresos = list(map(int, ingresos))        
+        ingresos = list(map(float, ingresos)) 
         ingresoTotal = sum(ingresos)        
         for puntaje in puntajes:
             limite_inferior, limite_superior = map(int, puntaje.nombre.replace('$', '').split('-'))
