@@ -11,10 +11,15 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import models
 from django.db.models import Count
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
 from .forms import *
 from .models import *
 from .views import verificarRedirect, borrarSelect
-
+from .tokens import account_activation_token
 from modalidades.models import *
 from solicitudes.models import *
 
@@ -239,7 +244,7 @@ def listaUsuarios(request):
     request.session['anterior'] = request.build_absolute_uri()
     usuarios = Usuario.objects.filter(is_superuser=True)
     solicitantes = Solicitante.objects.all()
-    usrNoVerif = User.objects.all().exclude(pk__in=usuarios.values('pk')).exclude(pk__in=solicitantes.values('pk'))
+    usrNoVerif = User.objects.filter(is_active=False)
 
     if (request.method == 'GET'):
         search_query = request.GET.get('search', '')    
@@ -436,6 +441,33 @@ def eliminarUsuario(request, user_id):
     user_to_delete.delete()
     messages.success(request, 'Usuario eliminado con éxito')
     #print('usuario '+ str(user_to_delete) + ' eliminado')    
+    anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
+    return redirect(anterior_url)
+
+@login_required
+def reEnviarConfirmaciones(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    usrNoConfirmados = Usuario.objects.filter(is_active=False)
+    for usuario in usrNoConfirmados:
+        mail_subject = 'Confirmar cuenta'  
+        message = render_to_string('email.html', {  
+            'user': usuario,  
+            'domain': get_current_site(request).domain,  
+            'uid':urlsafe_base64_encode(force_bytes(usuario.pk)),  
+            'token':account_activation_token.make_token(usuario),  
+        })  
+        to_email = usuario.email
+        email = EmailMessage(  
+                    mail_subject, message, to=[to_email]  
+        )  
+        email.content_subtype = 'html'
+        email.send()  #comentar esta linea para si no se desea mandar el correo
+        print(f'Correo enviado a {usuario.curp} {usuario.email}')
+    
     anterior_url = request.session.get('anterior', "usuarios:AUsuarios")
     return redirect(anterior_url)
 
