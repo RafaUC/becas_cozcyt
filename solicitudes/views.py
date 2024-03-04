@@ -185,6 +185,10 @@ def documentos_convocatorias(request, modalidad_id):
     #si ya existe la solicitud se muestra la vista para modificar los documentos
     print(solicitud.id)
     if solicitud.id:
+        convocatoria = Convocatoria.objects.all().first()
+        fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
+        if fecha_convocatoria == False:
+            messages.error(request, "Convocatoria cerrada.")
         return render(request, 'usuario_solicitud/modificar_docs_convocatoria.html', context)    
     #si no existe la solicitud se muestra la vista para crear la solicitud
     else:
