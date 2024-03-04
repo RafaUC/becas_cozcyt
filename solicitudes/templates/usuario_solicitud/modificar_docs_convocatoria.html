@@ -52,11 +52,17 @@
                                     {% else %}
                                     <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
                                     {% endif %}
+                                    {% if convocatoria.fecha_convocatoria %}
                                     <div class="subir-documento" style="padding-bottom: 10px;">
                                         <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
                                         {{ documentoRespForm.file }}                                    
                                         <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                     </div>
+                                    {% else %}
+                                    <div class="subir-documento" style="padding-bottom: 10px;">
+                                        <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% else %}
@@ -86,11 +92,17 @@
                                 {% else %}
                                 <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
                                 {% endif %}
+                                {% if convocatoria.fecha_convocatoria %}
                                 <div class="subir-documento" style="padding-bottom: 10px;">
                                     <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
                                     {{ documentoRespForm.file }}                                    
                                     <!-- <input type="button" value="Preview" onclick="PreviewFile();" /> -->
                                 </div>
+                                {% else %}
+                                <div class="subir-documento" style="padding-bottom: 10px;">
+                                    <button style="width: 100%;" type="button" class="btnSubirDoc"> {% if documentoRespForm.instance.id %} {{ documentoRespForm.instance.filename }} {% else %} Subir documentos {% endif %}</button>                                    
+                                </div>
+                                {% endif %}
                             </div>
                             {% endif %}
                         </div>

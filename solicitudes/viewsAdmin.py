@@ -23,7 +23,7 @@ from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual
 from .forms import FiltroForm, EstadInfoSelectForm
-from modalidades.models import Modalidad
+from modalidades.models import Modalidad, Convocatoria
 from .models import *
 
 from usuarios.models import Solicitante
@@ -512,16 +512,23 @@ def documentos_solicitante(request, pk):
 
         
         #Existieron documentos con error y otros fueron aprobados
-        if seleccionDenegados != None :                                   
-            #Si la cantidad de documentos recahzados es igual a la cantidad de los documentos totales de la modalidad
-            #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
-            if len(seleccionDenegados) == len(documentosResp):
-                notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
-            #Si hay algun elemento denegado entonces se notifica al usuario  
-            else: 
-                notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor, verifíquelos y re súbalos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
-            #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
-            #lo hacen automaticamente    
+        if seleccionDenegados != None :   
+            #Si la fecha de la convocatoria sigue abierta y el solicitante tuvo documentos erróneos
+            convocatoria = Convocatoria.objects.all().first()
+            fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
+            if fecha_convocatoria:
+                #Si la cantidad de documentos recahzados es igual a la cantidad de los documentos totales de la modalidad
+                #entonces se le manda al solicitante la notificación, de lo contrario no se manda nada
+                if len(seleccionDenegados) == len(documentosResp):
+                    notif.nueva(solicitante, f'Todos sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id]) 
+                #Si hay algun elemento denegado entonces se notifica al usuario  
+                else: 
+                    notif.nueva(solicitante, f'Algunos de sus documentos para la modalidad de "{modalidad.nombre}" han sido rechazados. Por favor verifíquelos.', 'solicitudes:documentos_convocatoria', urlArgs=[solicitud.modalidad_id])           
+                #No es necesario actualizar la info de la solicitud ya que las signals ligadas a los documentos respuesta
+                #lo hacen automaticamente 
+            #Si la fecha de la convocatoria ya se cerró y la documentación del solicitante tuvo errores
+            else:
+                notif.nueva(solicitante, f'Estimado solicitante, alguno de sus documentos no cumplió con lo establecido en la convocatoria, le invitamos a ser participe en la próxima convocatoria.', 'solicitudes:historial')   
         #Todos los documentos fueron aceptados
         elif seleccionDenegados == None and seleccionAceptados != None:         
             #Si la cantidad de documentos aceptados es igual a la cantidad de los documentos totales de la modalidad
