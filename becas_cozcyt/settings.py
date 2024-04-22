@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_htmx',
     'usuarios',
+    'transparencia',
     'mensajes',
     'modalidades',
     'solicitudes',
