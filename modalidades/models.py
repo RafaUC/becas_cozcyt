@@ -18,6 +18,13 @@ def ciclo_actual(offset=0):
         ciclo = "Enero - Junio"    
     return f"{ciclo} {año}"
 
+def obtener_mes_numero(mes):
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    return meses.index(mes) + 1
+
+def ordenar_lista_ciclos(registros):
+    return sorted(registros, key=lambda x: (int(x.split()[-1]), obtener_mes_numero(x.split()[0])))
+
 def modalidadMediaPath(instance, filename):
     ext = filename.split('.')[-1]  # Obtiene la extensión del archivo
     filename = f"{uuid4().hex}.{ext}"  # Genera un nombre único utilizando UUID
