@@ -19,6 +19,9 @@ from .tokens import account_activation_token
 from modalidades.models import *
 from modalidades.forms import *
 
+def rootRedirect(request):   
+    return redirect('transparencia:Tinicio')
+
 @login_required
 def loginRedirect(request):    
     usuario = get_object_or_404(Usuario, id=request.user.id)
