@@ -2,31 +2,7 @@
 <html lang="en">
   <head>
     {% load static %}
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>    
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->    
-    
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-
-
-    <!-- Bootstrap CSS -->
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">    
-    <link href="{% static 'css/modalidades.css' %}" rel="stylesheet">   
-    <link href="{% static 'css/colores.css' %}" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
-    <link href="{% static 'css/jquery.toast.css' %}" rel="stylesheet"> 
-    
-     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+    {% include 'base_head.html'%}
     <title>
         {% block titulo %}    
           
@@ -49,45 +25,21 @@
     </div>
     <!-- Seccion de la barra lateral  -->
     <div class="container-fluid p-0" >
-         
-
-      {% block body %}
-      {% endblock body %}
+      <div class="col nopadding nomargin d-flex flex-column justify-content-between overflow-auto" style="min-height: 100vh;">
+        {% block top %}
+        {% endblock top %}
+        <div class="mb-auto red-errors ">
+          {% block body %}
+          {% endblock body %}
+        </div>
+        {% include 'footer.html' %}
+      </div>
     </div>
 
     
     {% include 'base_custom_js.html' %}
 
+    
   </body>
-  <footer style="bottom: 0; width: 100%;">
-    <div class="section-footer container-fluid">
-      <div class="section-footer__row" style="padding: 5px;">
-        <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
-          <div class="section-footer__icons" style="padding: 0 0 5px 0;">
-            <img  src="{% static 'images/LogosLabsol2023-02.png' %}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
-            <img src="{% static 'images/GPLv3_Logo.svg.png' %}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
-          </div>
-          <div class="section-footer__list">
-            <ul class="list-section-footer">
-              <li class="list-section-footer-object">
-                <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #ffffff;">Acerca de </a>
-              </li>
-              <li class="list-section-footer-object">
-                <a href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="section-footer__row__col" style="padding: 10px;">
-          <div>
-            <p class=" nomargin" style="color: #fff;">
-              © 2023 
-              <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
-            </p>
-              <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  
 </html>

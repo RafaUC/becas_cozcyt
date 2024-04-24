@@ -458,6 +458,11 @@
 
 }
 
+.barra-superior.active{
+  border-color: var(--rosaF) !important;  
+  border-bottom: 4px solid;
+}
+
 .confpage-ul a {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
@@ -467,6 +472,10 @@
 
  .logo-barra {
   max-width: 250px;   
+}
+
+.logo-barra-top {
+  max-height: 65px;   
 }
 
 .menu-button-float {
