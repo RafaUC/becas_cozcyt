@@ -21,7 +21,7 @@ from collections import Counter
 from usuarios.views import verificarRedirect
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
-from modalidades.models import ciclo_actual
+from modalidades.models import ciclo_actual, ordenar_lista_ciclos
 from .forms import FiltroForm, EstadInfoSelectForm
 from modalidades.models import Modalidad, Convocatoria
 from .models import *
@@ -177,13 +177,17 @@ def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar
                 }]
             },
             'options': {
+                'responsive': True,
+                'maintainAspectRatio': False,
                 'plugins': {
                     'legend': {
                         'display': False
                     }, 
                 },
                 'layout': {
-                    'padding': 10
+                    'padding': {
+                        'bottom': 0
+                    }
                 },
                 'scales': {
                     'x': {
@@ -270,13 +274,9 @@ def estadisticaSolicitudes(request):
     if campo_estadistica == 'ciclo':
         valores = queryset.values_list(campo_estadistica, flat=True)
         frecuencias = dict(Counter(valores))         
-        valores = queryset.values_list(campo_estadistica, flat=True)
-        valores_unicos = []
-        conjunto_vistos = set()
-        for elemento in valores:
-            if elemento not in conjunto_vistos:
-                valores_unicos.append(elemento)
-                conjunto_vistos.add(elemento)
+        valores_unicos = queryset.order_by().values_list('ciclo', flat=True).distinct()
+        valores_unicos = ordenar_lista_ciclos(valores_unicos)
+        valores_unicos.reverse()
         valoresFrecuencias = []
         for val in valores_unicos:
             valoresFrecuencias.append({campo_estadistica: val, 'frecuencia': frecuencias[val]})
