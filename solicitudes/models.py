@@ -1,6 +1,6 @@
 from django.db import models
 from usuarios.models import Solicitante
-from modalidades.models import Modalidad, Documento, ciclo_actual
+from modalidades.models import Modalidad, Documento, ciclo_actual, ordenar_lista_ciclos
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -16,6 +16,11 @@ from estudio_socio_economico.models import Elemento, RNumerico
 from mensajes import notificaciones as notif
 # Create your models here.
 
+def getListaCiclos():
+    valores_unicos = Solicitud.objects.all().order_by().values_list('ciclo', flat=True).distinct()
+    valores_unicos = ordenar_lista_ciclos(valores_unicos)
+    valores_unicos.reverse()
+    return valores_unicos
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
