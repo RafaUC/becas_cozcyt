@@ -19,9 +19,9 @@ from django.contrib.auth import views as auth_views
 
 app_name = 'usuarios'
 urlpatterns = [    
-    path('', views.loginRedirect, name='rootRedirect'),
+    path('', views.rootRedirect, name='rootRedirect'),
     path('login/', views.loginSistema, name='login'),
-    path('loginRedirect/', views.loginRedirect, name='loginRedirect'),
+    path('sistema/', views.loginRedirect, name='loginRedirect'),
 
     path('primer_login/', views.primerLogin, name='primer_login'),
     path('registrar/', views.register, name='register'),    

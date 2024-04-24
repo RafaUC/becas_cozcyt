@@ -3,30 +3,7 @@
   <head>
     {% load static %}
     <!-- Required meta tags -->
-    <meta charset="utf-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>    
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->    
-    
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-
-
-    <!-- Bootstrap and CSS -->
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">
-    <link href="{% static 'css/modalidades.css' %}" rel="stylesheet">   
-    <link href="{% static 'css/colores.css' %}" rel="stylesheet">   
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>        
-    <link href="{% static 'css/jquery.toast.css' %}" rel="stylesheet"> 
-    
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.4"></script>    
+    {% include 'base_head.html'%}
     <title>
         {% block titulo %}    
           
@@ -178,78 +155,7 @@
           </div>
                     
           <!-- Pie de pagina -->
-          {% if perms.usuarios.permiso_administrador and request.user.is_superuser == 1 %}
-          <footer>
-            <div class="section-footer container-fluid">
-              <div class="section-footer__row" style="padding: 5px;">
-                <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
-                  <div class="section-footer__icons" style="padding: 0 0 5px 0;">
-                    <img  src="{% static 'images/LogosLabsol2023-02.png' %}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
-                    <img src="{% static 'images/GPLv3_Logo.svg.png' %}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
-                  </div>
-                  <div class="section-footer__list">
-                    <ul class="list-section-footer">
-                      <li class="list-section-footer-object">
-                        <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
-                      </li>
-                      <li class="list-section-footer-object">
-                        <a href="{% static 'files/Manual de usuario (Admin) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
-                      </li>
-                      <!-- <li class="list-section-footer-object">
-                        <a href="" style="color: #fff;">Mapa del sitio </a>
-                      </li> -->
-                    </ul>
-                  </div>
-                </div>
-                <div class="section-footer__row__col" style="padding: 10px;">
-                  <div>
-                    <p class=" nomargin" style="color: #fff;">
-                      © 2023 
-                      <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
-                    </p>
-                      <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </footer>
-          
-          {% else %}
-          <footer>
-            <div class="section-footer container-fluid">
-              <div class="section-footer__row" style="padding: 5px;">
-                <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
-                  <div class="section-footer__icons" style="padding: 0 0 5px 0;">
-                    <img  src="{% static 'images/LogosLabsol2023-02.png' %}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
-                    <img src="{% static 'images/GPLv3_Logo.svg.png' %}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
-                  </div>
-                  <div class="section-footer__list">
-                    <ul class="list-section-footer">
-                      <li class="list-section-footer-object">
-                        <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
-                      </li>
-                      <li class="list-section-footer-object">
-                        <a href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
-                      </li>
-                      <!-- <li class="list-section-footer-object">
-                        <a href="" style="color: #fff;">Mapa del sitio </a>
-                      </li> -->
-                    </ul>
-                  </div>
-                </div>
-                <div class="section-footer__row__col" style="padding: 10px;">
-                  <div>
-                    <p class=" nomargin" style="color: #fff;">
-                      © 2023 
-                      <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
-                    </p>
-                      <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </footer>
-          {% endif %}
+            {% include 'footer.html' %}
         </div>                
       </div>
     </div>
