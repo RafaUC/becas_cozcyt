@@ -35,8 +35,9 @@
                         Resultados
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' %}">{{ ciclosPrevios.0 }}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' %}">{{ ciclosPrevios.1 }}</a></li>
+                        {% for cicloNombre in ciclosPrevios %}        
+                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' forloop.counter0 %}">{{ cicloNombre }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

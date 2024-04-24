@@ -104,6 +104,10 @@
   background-color: var(--pagina-blanco) !important;
 }
 
+.blanco {
+  background-color: var(--blanco) !important;
+}
+
 .pagina-fondo {
   background-color: var(--pagina-fondo) !important;
 }
@@ -150,6 +154,10 @@
 
 .pagina-gris {
   background-color: var(--pagina-gris) !important;
+}
+
+.texto-rosaO {
+  color: var(--rosaO);
 }
 
 .texto-rosaF {

@@ -4,8 +4,62 @@
 Resultados
 {% endblock titulo %}
 
+{% load static %}
+
 {% block body %}
 
-    
+    <div class="mx-auto text-center texto-rosaO  mt-5 " style="max-width: 75vw;">
+        <p class="h3 font-bold my-4">
+            Aspirantes seleccionados para recibir estímulo  en el marco de 
+            la convocatoria “Estímulos COZCyT {{ciclo}}”
+        </p>
+        <p class="font-md my-4">
+            El Consejo Zacatecano de Ciencia, Tecnología e Innovación (COZCyT) a 
+            través de la Dirección de Desarrollo de Talento en HCTI 
+            informa que, como resultado de la sesión ordinaria del comité 
+            de becas COZCyT y conforme a lo establecido en la convocatoria 
+            “Estímulos COZCyT {{ciclo}}” <b>los folios siguientes son los aceptados.</b>
+        </p>
+        <p class="font-md my-4">
+            Únicamente los/as beneficiarios/as con el número de folio publicado en 
+            este apartado, recibirán un correo electrónico en los próximos días, por 
+            parte del departamento de Becas del COZCyT, indicando los pasos a seguir 
+            para llevar a cabo el trámite correspondiente para el estímulo.
+        </p>
+    </div>
+    <div class="blanco py-4 mx-auto text-center" style="padding-left: 6vw; padding-right: 6vw;">
+        <p class="h4">
+            titulo
+        </p>
+
+        <p class="font-xxs my-4">
+            El Consejo Zacatecano de Ciencia, Tecnología e Innovación, a través del área de recepción, 
+            con domicilio en Avenida de la Juventud No. 504 Col. Barro Sierra C.P. 98090, Zacatecas, 
+            Zacatecas, es el área responsable del tratamiento de los datos personales proporcionados 
+            en el ejercicio de sus funciones, los cuales serán protegidos conforme a lo que dispone la 
+            Ley de Protección de Datos Personales en Posesión de los Sujetos Obligados del Estado de 
+            Zacatecas y demás normatividad que resulte aplicable. Para cualquier duda o aclaración del 
+            presente o conocer el aviso de privacidad completo, lo puede consultar en la página COZCYT 
+            <a href="https://cozcyt.gob.mx/aviso-de-privacidad/">https://cozcyt.gob.mx/aviso-de-privacidad/</a> o en el teléfono 4929212816 ext. 1534.
+        </p>
+    </div>
+    <div class="my-5 mx-auto text-center" style="max-width: 35rem; max-height: 40vh;">
+        <div class="row p-3 align-items-center">
+            <div class="col-4">
+                <img class="img-fluid " src="{% static 'svg/a-man-who-uses-a-computer-negative-svgrepo-com.svg' %}" alt="persona con problemas en la computadora">
+            </div>
+            <div class="col-8">
+                <p class="h4">
+                    ¿No recuerda su folio?
+                </p>
+                <p class="font-sm my-1">
+                    Ingrese al Sistema de Impulso al Talento para consultarlo.
+                </p>
+                <a href="{% url 'usuarios:loginRedirect' %}" class="btn btnConvocatoria my-2 w-auto h-auto font-lg" type="button">
+                    Sitio web SIT
+                </a>
+            </div>
+        </div>
+    </div>    
 
 {% endblock body %}
