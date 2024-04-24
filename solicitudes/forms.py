@@ -5,6 +5,7 @@ from django.forms import ModelForm
 from django.db.models import Subquery
 
 from .models import *
+from modalidades.models import ordenar_lista_ciclos
 
 # class ConvocatoriaForm(ModelForm):
 
@@ -83,14 +84,20 @@ class EstadInfoSelectForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if modelo_filtro and campo_filtro and campo_estadistica_modelo:
-            # Obtener los valores únicos basados en los parámetros de la consulta GET
-            valores = modelo_filtro.objects.all().values_list(campo_filtro, flat=True)
-            valores_unicos = []
-            conjunto_vistos = set()
-            for elemento in valores:
-                if elemento not in conjunto_vistos:
-                    valores_unicos.append(elemento)
-                    conjunto_vistos.add(elemento)
+            #Generar las choices del estadistica_filtro
+            if campo_filtro == 'ciclo' and modelo_filtro == Solicitud:
+                valores_unicos = modelo_filtro.objects.all().order_by().values_list('ciclo', flat=True).distinct()
+                valores_unicos = ordenar_lista_ciclos(valores_unicos)
+                valores_unicos.reverse()
+            else:
+                # Obtener los valores únicos basados en los parámetros de la consulta GET
+                valores = modelo_filtro.objects.all().values_list(campo_filtro, flat=True)
+                valores_unicos = []
+                conjunto_vistos = set()
+                for elemento in valores:
+                    if elemento not in conjunto_vistos:
+                        valores_unicos.append(elemento)
+                        conjunto_vistos.add(elemento)
             self.fields['estadistica_filtro'].choices = [(valor, valor) for valor in valores_unicos]
             self.fields['estadistica_filtro'].choices.insert(0, ('Todos', 'Todos'))
             self.fields['estadistica_filtro'].label = campo_filtro
