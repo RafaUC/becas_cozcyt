@@ -939,3 +939,7 @@ i.rechazado:before {
 .jq-toast-single{
   font-size: 0.93rem !important;
 }
+
+.pointer       { 
+  cursor: pointer; 
+}

@@ -27,12 +27,18 @@
                 Inicio
               </a>
             </div>
-          </li>
-          <li class="nav-item mx-2">
-            <div class="barra-superior mt-1 {% if url_name == 'Tresultados' %}active{% endif %}">      
-              <a class="nav-link p-0" href="{% url 'transparencia:Tresultados' %}">
-                Resultados
-              </a>
+          </li>         
+          <li class="nav-item mx-2 dropdown">
+            <div class="barra-superior mt-1 {% if url_name == 'Tresultados' %}active{% endif %}">               
+                <div class="dropdown nav-link p-0 ">
+                    <div class="pointer" id="dropdownMenuButton" data-bs-toggle="dropdown" >
+                        Resultados
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' %}">{{ ciclosPrevios.0 }}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' %}">{{ ciclosPrevios.1 }}</a></li>
+                    </ul>
+                </div>
             </div>
           </li>
           <li class="nav-item mx-2">
@@ -43,7 +49,7 @@
             </div>
           </li>
           <li class="nav-item mx-2">
-            <div class="barra-superior mt-1 ">            
+            <div class="barra-superior mt-1 {% if url_name == 'Tacceder' %}active{% endif %}">            
               <a class="nav-link p-0" href="{% url 'usuarios:loginRedirect' %}">
                 Sistema de impulso al talento
               </a>
