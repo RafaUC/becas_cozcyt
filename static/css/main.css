@@ -976,6 +976,9 @@ i.rechazado:before {
     margin: 1em !important;
   }
   #info_conv_fechas{
-    margin: 0em !important;;
+    margin: 1em !important;;
+  }
+  #btnSabermas{
+    width: 40% !important;
   }
 }

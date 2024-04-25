@@ -55,44 +55,59 @@ Inicio Estimulos COZCyT
                     </h5>
                     <h6 style="text-align: center;">
                         <!-- fecha inicial -->
-                        dd/mm/aaaa
+                        <!-- dd/mm/aaaa -->
+                        {{convocatoria.fecha_inicio}}
                     </h6>
                     <h5 style="text-align: center;">
                         <strong>Fecha de cierre: </strong>
                     </h5>
                     <h6 style="text-align: center;">
                         <!-- fecha final -->
-                        dd/mm/aaaa
+                        <!-- dd/mm/aaaa -->
+                        {{convocatoria.fecha_cierre}}
                     </h6>
                     <p></p>
-                    <h5 style="text-align: center; color: var(--rosaF);">
-                        <!-- condicional que cambia el texto por
-                        "¡Convocatoria abierta!"
-                        "La convocatoria ha terminado" (esconder el botón)
-                         -->
-                        <strong>La convocatoria ha terminado </strong>
+                    <!-- Condicional que cambia el texto por
+                    * "¡Convocatoria abierta! Quedan x días para que la convocatoria termine"
+                    * "La convocatoria ha terminado" 
+                    -->
+                    {% if fecha_convocatoria %}
+                    <h5 style="text-align: center; color: var(--rosaF); margin-bottom: 0;">
+                        <strong> Convocatoria abierta </strong>
                     </h5>
+                    <h6 style="text-align: center; color: var(--rosaF);">
+                        {{ convocatoria.mensaje_estado_convocatoria }}
+                    </h6>
+                    {% else %}
+                    <h5 style="text-align: center; color: var(--rosaF);">
+                        <strong> La convocatoria ha terminado </strong>
+                    </h5>
+                    {%endif%}
                     
                 </div>
             </div>
         </div>
         <br>
-        <div style="text-align: center;">
-            <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria" style="width: 10%;">
-                Saber más
-            </a>
+        <div style="text-align: center; justify-content: center;">
+            <div class="" style="align-items: center;">
+                <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}">
+                    <button href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria" style="width: 10%;" id="btnSabermas">
+                        Saber más
+                    </button>
+                </a>
+            </div>
         </div>
         <br>
         <br>
     </div>
 
-    <div class="principal center" style="margin-top: 2em; width: 100%; align-items: center;">
+    <div class="principal center" style="margin-top: 1em; width: 100%; align-items: center;">
         <div class="flex-direction" style="display: flex; justify-content: center;">
             <!-- Carrusel, se obtienen y muestran las modalidades -->
             <div class="col-md-5" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
-                        <h5><strong>Si presenta alguna duda comuniquese con:</strong></h5>
+                        <h5 style="margin-bottom: 1em;"><strong>Si presenta alguna duda comuniquese con:</strong></h5>
 
                         <h6 style="margin-bottom: 0;">
                             <strong>Mtra. Sahara María del Río Venegas </strong> 
@@ -128,7 +143,7 @@ Inicio Estimulos COZCyT
             <div class="col-md-5 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
-                        <h5><strong>O visitenos en:</strong></h5>
+                        <h5 style="margin-bottom: 1em;"><strong>O visitenos en:</strong></h5>
                         <h6 style="">
                             Callejón No. 101, Parque de Ciencia y Tecnología, <strong>Ciudad 
                             Quantum</strong>, C.P. 98090, <strong> 
