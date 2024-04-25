@@ -777,6 +777,28 @@ th {
   word-wrap: break-word;
 }
 
+.tablaResultados {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  border: 1px solid; 
+}
+.tablaResultados th, .tablaResultados td {
+  font-weight: bold;
+  padding: 0.5rem 0.5rem;/* Espaciado interno en las celdas de datos */    
+  border: 1px solid; /* División vertical y borde alrededor de las celdas de datos */
+  border-left: 0px solid;
+  border-right: 0px solid;
+  border-color: var(--gris-3);
+  vertical-align: middle;
+  white-space: normal;
+  word-wrap: break-word;          
+}     
+
+.tablaResultados th {
+  background-color: var(--gris-0);
+}
+
 .form-control-label {
   border: none;
   margin: 2px; 
