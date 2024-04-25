@@ -943,3 +943,39 @@ i.rechazado:before {
 .pointer       { 
   cursor: pointer; 
 }
+
+
+.flex-direction{
+  flex-direction:row;
+}
+
+@media screen and (max-width: 700px) {
+  #container_inicio_sit{
+    margin-top: 0.5em;
+  }
+
+  .flex-direction{
+    flex-direction: column;
+  }
+  #inicio_imagen_becas { 
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 0.5em;  
+  }
+  #inicio_texto_becas{
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 1em !important;
+  }
+  #info_convocatoria_titulo{
+    margin: 0 1em 0 1em !important;
+  }
+  #info_modalidades{
+    margin: 1em !important;
+  }
+  #info_conv_fechas{
+    margin: 0em !important;;
+  }
+}

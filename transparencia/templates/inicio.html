@@ -1,0 +1,144 @@
+{% extends 'base_transparencia.html'%}
+
+{% block titulo %}
+Inicio Estimulos COZCyT
+{% endblock titulo %}
+
+{% load static %}
+{% block body %}
+
+    <div class="container flex-direction principal center" style="display: flex; margin-top: 2em; width: 100%;" id="container_inicio_sit">
+        <div class="col-md-6" id="inicio_imagen_becas">
+            <img class="img-fluid" src="{% static 'svg/inicio_stem_ej.svg' %}" alt="persona con problemas en la computadora">
+        </div>
+        <div class="col-md-5" id="inicio_texto_becas" style="margin: 3em 5em 0 5em;">
+            <h3 style="text-align: center;"><strong> Estímulos Sistema de Impulso al Talento </strong></h3>
+            <p></p>
+            <h5 style="text-align: justify;">
+                El Gobierno del Estado, a través del COZCyT, emite semestralmente la  convocatoria para Estímulos Sistema de 
+                Impulso al Talento, que consiste en un apoyo económico  con recursos estatales y cuyo propósito es fomentar 
+                las vocaciones de  Humanidades, Ciencia, Tecnología e Innovación (HCTI) en estudiantes de  instituciones de 
+                educación pública de nivel media superior, superior y posgrado en la entidad.
+            </h5>
+        </div>
+    </div>
+
+    <div class="principal center" style="margin-top: 2em; width: 100%; background-color: #fff; align-items: center;">
+        <div id="info_convocatoria_titulo">
+            <h3 style="text-align: center;">
+                <br>
+                <strong> Convocatoria {{ciclo}} </strong>
+            </h3>
+        </div>
+        <br>
+        <div class="flex-direction" style="display: flex; justify-content: center;">
+            <!-- Carrusel, se obtienen y muestran las modalidades -->
+            <div class="col-md-6" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
+                <div style="margin: 2em; display: flex;">
+                    <div class="col-md-8">
+                        <h5><strong>Excelencia Académica</strong></h5>
+                        <h6 style="text-align: justify;">
+                            Modalidad que se le otorga a estudiantes de nivel superior a partir del segundo semestre 
+                            de su carrera y con un promedio global de sus estudios superiores mínimo de 9.0.
+                        </h6>
+                    </div>
+                    <div class="col-md-3" style="margin-left: 3em;">
+                        <img class="img-fluid" src="{% static 'svg/a-man-who-uses-a-computer-negative-svgrepo-com.svg' %}" alt="persona con problemas en la computadora">
+                    </div>
+                </div>
+            </div>
+            <!-- Se obtienen las fechas de la convocatoria -->
+            <div class="col-md-3 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; margin-left: 1em; border: 0.7px solid #EEE5E5; border-radius: 10px;">
+                <div style="margin: 2em;">
+                    <h5 style="text-align: center;">
+                        <strong>Fecha de inicio: </strong>
+                    </h5>
+                    <h6 style="text-align: center;">
+                        <!-- fecha inicial -->
+                        dd/mm/aaaa
+                    </h6>
+                    <h5 style="text-align: center;">
+                        <strong>Fecha de cierre: </strong>
+                    </h5>
+                    <h6 style="text-align: center;">
+                        <!-- fecha final -->
+                        dd/mm/aaaa
+                    </h6>
+                    <p></p>
+                    <h5 style="text-align: center; color: var(--rosaF);">
+                        <!-- condicional que cambia el texto por
+                        "¡Convocatoria abierta!"
+                        "La convocatoria ha terminado" (esconder el botón)
+                         -->
+                        <strong>La convocatoria ha terminado </strong>
+                    </h5>
+                    
+                </div>
+            </div>
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria" style="width: 10%;">
+                Saber más
+            </a>
+        </div>
+        <br>
+        <br>
+    </div>
+
+    <div class="principal center" style="margin-top: 2em; width: 100%; align-items: center;">
+        <div class="flex-direction" style="display: flex; justify-content: center;">
+            <!-- Carrusel, se obtienen y muestran las modalidades -->
+            <div class="col-md-5" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
+                <div style="margin: 2em;">
+                    <div class="" style="text-align: center;">
+                        <h5><strong>Si presenta alguna duda comuniquese con:</strong></h5>
+
+                        <h6 style="margin-bottom: 0;">
+                            <strong>Mtra. Sahara María del Río Venegas </strong> 
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            Directora de Desarrollo de Talento en Ciencia, Tecnología e Innovación
+                        </h6>
+                        <h6 style="margin-bottom: 1em;">
+                            sdelrio@cozcyt.gob.mx
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            <strong> I.S.C. Nayeli Alcalá Aguilar </strong>
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            Jefa del Departamento de Becas 
+                        </h6>
+                        <h6 style="margin-bottom: 1em;">
+                            nalcala@cozcyt.gob.mx
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            <strong> José Luis Alfredo Estrada Espino </strong>
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            Encargado de Apoyos 
+                        </h6>
+                        <h6 style="margin-bottom: 0;">
+                            aestrada@cozcyt.gob.mx
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <!-- Se obtienen las fechas de la convocatoria -->
+            <div class="col-md-5 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center;">
+                <div style="margin: 2em;">
+                    <div class="" style="text-align: center;">
+                        <h5><strong>O visitenos en:</strong></h5>
+                        <h6 style="">
+                            Callejón No. 101, Parque de Ciencia y Tecnología, <strong>Ciudad 
+                            Quantum</strong>, C.P. 98090, <strong> 
+                            Edificio Photon Innovation Hub, Piso 3. </strong>
+                            Zacatecas, Zacatecas
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
