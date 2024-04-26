@@ -18,7 +18,7 @@ from openpyxl import Workbook
 from datetime import date
 from collections import Counter
 
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual, ordenar_lista_ciclos
@@ -86,12 +86,8 @@ ESTADISTICAS_SOLICITUD_EXTRA_CHOICES = [
     ]
 
 @login_required
+@user_passes_test(usuarioEsAdmin)
 def estadisticas(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
     colorInicial = (190, 70, 53)  # Color inicial en formato RGB
     incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
     minLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono
@@ -203,11 +199,8 @@ def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar
     return conjuntoEst
 
 @login_required
-def estadisticaSolicitudes(request):
-    url = verificarRedirect(request.user, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-
+@user_passes_test_httpresponse(usuarioEsAdmin)
+def estadisticaSolicitudes(request):    
     estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
     campo_estadistica_original = campo_estadistica
@@ -333,12 +326,8 @@ def estadisticaSolicitudes(request):
 
 
 @login_required
-def historialSolicitante(request, pk):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def historialSolicitante(request, pk):   
     solicitante = get_object_or_404(Solicitante, pk=pk)  
     solicitudes = Solicitud.objects.filter(solicitante = solicitante).order_by('-id')
 
@@ -350,12 +339,8 @@ def historialSolicitante(request, pk):
     return render(request, 'admin/historialSolicitante.html', context)
 
 @login_required
+@user_passes_test(usuarioEsAdmin)
 def listaSolicitudes(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
     cicloActual = ciclo_actual()
     request.session['anterior'] = request.get_full_path()        
     url_base_page = request.session['anterior'].split('&page=')[0]
@@ -461,12 +446,8 @@ def listaSolicitudes(request):
     return render(request, 'admin/solicitudes.html', context)
 
 @login_required
+@user_passes_test(usuarioEsAdmin)
 def documentos_solicitante(request, pk):   
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
     solicitante = get_object_or_404(Solicitante, pk=pk)  
     solicitud = get_object_or_404(Solicitud, solicitante=solicitante, ciclo=ciclo_actual())
     if notificar_si_falta_documentos(solicitud):
@@ -546,12 +527,8 @@ def documentos_solicitante(request, pk):
     return render(request, 'admin/documentosSolicitante.html', context)
 
 @login_required
-def concentradoSolicitud(request,pk):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def concentradoSolicitud(request,pk):   
     temp_dir =  os.path.join(settings.BASE_DIR,'temp/')     
     if not os.path.exists(temp_dir):# Si no existe, lo crea
         os.makedirs(temp_dir)
@@ -573,12 +550,8 @@ def concentradoSolicitud(request,pk):
     return response
 
 @login_required
+@user_passes_test(usuarioEsAdmin)
 def concentradoConvocatoria(request,ciclo):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
     temp_dir =  os.path.join(settings.BASE_DIR,'temp/')     
     if not os.path.exists(temp_dir):# Si no existe, lo crea
         os.makedirs(temp_dir)

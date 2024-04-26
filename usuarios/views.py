@@ -18,6 +18,7 @@ from .models import *
 from .tokens import account_activation_token
 from modalidades.models import *
 from modalidades.forms import *
+from .decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsSolicitante
 
 def rootRedirect(request):   
     return redirect('transparencia:Tinicio')
@@ -27,12 +28,15 @@ def loginRedirect(request):
     usuario = get_object_or_404(Usuario, id=request.user.id)
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
         return redirect("usuarios:AInicio")
+    elif Solicitante.objects.filter(id=usuario.id).exists() and not Solicitante.objects.get(pk=usuario.id).info_completada :        
+        return redirect("usuarios:primer_login")
     else:
         return redirect("solicitudes:convocatorias")
     
 #Verifica que el usuario tiene los permisos o el estado para estar en esa view, si no, retorna la url donde deberia ser redirigido
 #si no se dan permisos en el parametro permisos significa que no requere ningun permiso pero no puede entrar un admin
-def verificarRedirect(usuario, *permisos):    
+#DEPRECADO
+def verificarRedirect_(usuario, *permisos):    
     """if not any(usuario.has_perm(perm) for perm in permisos):  #el no usuario tiene permiso de estar en la pagina
         return settings.LOGIN_REDIRECT_URL """    
     if (not usuario.has_perm('permiso_administrador')) and ('permiso_administrador' in permisos): # el usuario no es admin y se requiere un admin        
@@ -62,14 +66,8 @@ def loginSistema(request):
             #si el usuario existe y se autentico
             if usuario is not None:                                
                 login(request, usuario)
-                messages.success(request, "Sesion iniciada correctamente.")                                         
-                succes_url = verificarRedirect(usuario, 'permiso_administrador', 'permiso_solicitante')
-                if succes_url is None:                    
-                    if 'next' in request.GET:                    
-                        succes_url = request.GET['next']                        
-                    else:                    
-                        succes_url = settings.LOGIN_REDIRECT_URL
-                return redirect(succes_url)
+                messages.success(request, "Sesion iniciada correctamente.")                                                         
+                return redirect(settings.LOGIN_REDIRECT_URL)
         else:            
             messages.error(request, "CURP o contraseña incorrectos.")                        
     context = {'form' : form}
@@ -217,12 +215,8 @@ def borrarSelect(formDep, formIndep, campoDep, campoIndep):
         formIndep.data._mutable = _mutable   
 
 @login_required
-def perfil(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsSolicitante)
+def perfil(request):      
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #rfc = solicitante.rfc      
     formPersonal = SolicitantePersonalesForm(instance = solicitante) #asegurarse de no modificar el rfc
@@ -299,11 +293,7 @@ def perfil(request):
     return render(request, 'solicitante/perfil.html', context)
 
 @login_required
-def sMensajes(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
+@user_passes_test(usuarioEsSolicitante)
+def sMensajes(request):    
     return render(request, 'solicitante/sMensajes.html')
 
