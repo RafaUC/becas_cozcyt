@@ -41,23 +41,25 @@ Inicio Estimulos COZCyT
                     <div class="swiper-wrapper">
                         {% for modalidad in modalidades %}
                         <div class="swiper-slide" style="width: auto !important;">
-                            <div style="margin: 2em; display: flex;">
-                                <div class="col-md-8">
+                            <div class="info_modalidad_slide" style="">
+                                <div class="info_modalidad_desc col-md-8" style="margin-bottom: 1em;">
                                     <h5><strong>{{modalidad.nombre}}</strong></h5>
                                     <h6 style="text-align: justify;">
-                                        {{modalidad.descripcion }}
+                                        {{modalidad.descripcion}}
                                     </h6>
                                 </div>
-                                <div class="col-md-4" style="margin-left: 3em;">
+                                <div class="info_modalidad_image col-md-4" style="text-align: center;">
                                     <img  class="imagen-modalidad img-fluid" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
+                    <div class="container">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div> 
             </div>
             <!--  Div que contiene las fechas de la convocatoria -->
@@ -103,8 +105,8 @@ Inicio Estimulos COZCyT
         <br>
         <div style="text-align: center; justify-content: center;">
             <div class="" style="align-items: center;">
-                <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}">
-                    <button href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria" style="width: 10%;" id="btnSabermas">
+                <a href="{{convocatoria.archivo_convocatoria.url}}">
+                    <button href="{{convocatoria.archivo_convocatoria.url}}" class="btn btnConvocatoria" style="width: 10%;" id="btnSabermas">
                         Saber más
                     </button>
                 </a>
