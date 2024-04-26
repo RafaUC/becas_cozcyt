@@ -781,7 +781,7 @@ th {
   width: 100%;
   table-layout: auto;
   border-collapse: collapse;
-  border: 1px solid; 
+  /*border: 1px solid; */
 }
 .tablaResultados th, .tablaResultados td {
   font-weight: bold;
