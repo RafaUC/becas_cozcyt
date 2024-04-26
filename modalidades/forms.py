@@ -15,6 +15,7 @@ class ConvocatoriaForm(ModelForm):
             'fecha_inicio' : '', 
             'fecha_cierre' : '', 
             'presupuesto' : '',
+            'archivo_convocatoria': '',
             }
         widgets = {
             'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'onkeypress': "return isNumberPuntKey(event)", 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
