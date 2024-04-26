@@ -982,3 +982,45 @@ i.rechazado:before {
     width: 40% !important;
   }
 }
+
+.swiper-pagination-fraction{
+  position: absolute !important;
+  bottom: 10px !important;
+  left: auto !important;
+  right: 2em !important;
+  width: auto !important;
+  color: #676767 !important;
+  font-weight: 700;
+  font-size: medium;
+}
+
+.swiper-pagination-current{
+  color: var(--rosaF) !important;
+}
+
+.swiper-button-next::after, .swiper-button-prev::after{
+  color: #676767;
+  font-size: 1.3em !important;
+  font-weight: bolder;
+  position: absolute !important;
+}
+
+.swiper-button-next{
+  left: 4em !important;
+  right: auto !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-top: 0 !important;
+  top: auto !important;
+  bottom: 2em !important;
+}
+
+.swiper-button-prev{
+  left: 2em !important;
+  right: auto !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-top: 0 !important;
+  top: auto !important;
+  bottom: 2em !important;
+}

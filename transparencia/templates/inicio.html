@@ -7,6 +7,7 @@ Inicio Estimulos COZCyT
 {% load static %}
 {% block body %}
 
+    <!-- Div que contiene la descripción de los Estímulos COZCyT -->
     <div class="container flex-direction principal center" style="display: flex; margin-top: 2em; width: 100%;" id="container_inicio_sit">
         <div class="col-md-6" id="inicio_imagen_becas">
             <img class="img-fluid" src="{% static 'svg/inicio_stem_ej.svg' %}" alt="persona con problemas en la computadora">
@@ -14,15 +15,16 @@ Inicio Estimulos COZCyT
         <div class="col-md-5" id="inicio_texto_becas" style="margin: 3em 5em 0 5em;">
             <h3 style="text-align: center;"><strong> Estímulos Sistema de Impulso al Talento </strong></h3>
             <p></p>
-            <h5 style="text-align: justify;">
+            <p class="font-md my-4" style="text-align: justify;">
                 El Gobierno del Estado, a través del COZCyT, emite semestralmente la  convocatoria para Estímulos Sistema de 
                 Impulso al Talento, que consiste en un apoyo económico  con recursos estatales y cuyo propósito es fomentar 
                 las vocaciones de  Humanidades, Ciencia, Tecnología e Innovación (HCTI) en estudiantes de  instituciones de 
                 educación pública de nivel media superior, superior y posgrado en la entidad.
-            </h5>
+            </p>
         </div>
     </div>
 
+    <!-- Div que contiene la información de las modalidades -->
     <div class="principal center" style="margin-top: 2em; width: 100%; background-color: #fff; align-items: center;">
         <div id="info_convocatoria_titulo">
             <h3 style="text-align: center;">
@@ -31,23 +33,34 @@ Inicio Estimulos COZCyT
             </h3>
         </div>
         <br>
+        <!-- Div que contiene el carrusel con la información de las modalidades -->
         <div class="flex-direction" style="display: flex; justify-content: center;">
-            <!-- Carrusel, se obtienen y muestran las modalidades -->
+            <!-- Carrusel donde se obtiene y muestra la info de las modalidades -->
             <div class="col-md-6" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
-                <div style="margin: 2em; display: flex;">
-                    <div class="col-md-8">
-                        <h5><strong>Excelencia Académica</strong></h5>
-                        <h6 style="text-align: justify;">
-                            Modalidad que se le otorga a estudiantes de nivel superior a partir del segundo semestre 
-                            de su carrera y con un promedio global de sus estudios superiores mínimo de 9.0.
-                        </h6>
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        {% for modalidad in modalidades %}
+                        <div class="swiper-slide" style="width: auto !important;">
+                            <div style="margin: 2em; display: flex;">
+                                <div class="col-md-8">
+                                    <h5><strong>{{modalidad.nombre}}</strong></h5>
+                                    <h6 style="text-align: justify;">
+                                        {{modalidad.descripcion }}
+                                    </h6>
+                                </div>
+                                <div class="col-md-4" style="margin-left: 3em;">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                    <div class="col-md-3" style="margin-left: 3em;">
-                        <img class="img-fluid" src="{% static 'svg/a-man-who-uses-a-computer-negative-svgrepo-com.svg' %}" alt="persona con problemas en la computadora">
-                    </div>
-                </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div> 
             </div>
-            <!-- Se obtienen las fechas de la convocatoria -->
+            <!--  Div que contiene las fechas de la convocatoria -->
             <div class="col-md-3 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; margin-left: 1em; border: 0.7px solid #EEE5E5; border-radius: 10px;">
                 <div style="margin: 2em;">
                     <h5 style="text-align: center;">
@@ -101,10 +114,10 @@ Inicio Estimulos COZCyT
         <br>
     </div>
 
+    <!-- Div que contiene el contacto del departamento de becas -->
     <div class="principal center" style="margin-top: 1em; width: 100%; align-items: center;">
         <div class="flex-direction" style="display: flex; justify-content: center;">
-            <!-- Carrusel, se obtienen y muestran las modalidades -->
-            <div class="col-md-5" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
+            <div class="col-md-4" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
                         <h5 style="margin-bottom: 1em;"><strong>Si presenta alguna duda comuniquese con:</strong></h5>
@@ -139,8 +152,7 @@ Inicio Estimulos COZCyT
                     </div>
                 </div>
             </div>
-            <!-- Se obtienen las fechas de la convocatoria -->
-            <div class="col-md-5 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center;">
+            <div class="col-md-4 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center; margin-left: 5em;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
                         <h5 style="margin-bottom: 1em;"><strong>O visitenos en:</strong></h5>
@@ -155,5 +167,18 @@ Inicio Estimulos COZCyT
             </div>
         </div>
     </div>
+
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+          pagination: {
+            el: ".swiper-pagination",
+            type: "fraction",
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
+    </script>
 
 {% endblock body %}
