@@ -36,6 +36,7 @@ class Convocatoria(models.Model):
     fecha_inicio = models.DateField(null=False, blank=False)
     fecha_cierre = models.DateField(null=False, blank=False)
     presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
+    ultimo_ciclo_publicado = models.CharField(max_length=255, verbose_name="Ultimo ciclo publicado", null=True, blank=True)
 
     def __str__(self):
         return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #date.today()
