@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.forms.models import modelformset_factory  #model form for querysets
 from django.forms import inlineformset_factory
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
 from usuarios.models import Usuario
 from django.http import HttpResponse  
 from django.views.decorators.http import require_POST
@@ -15,12 +15,8 @@ from .utils import *
 
 # Create your views here.
 @login_required
+@user_passes_test(usuarioEsAdmin)
 def configGeneral(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
     
@@ -64,12 +60,10 @@ def configGeneral(request):
         }
     return render(request, 'admin/config_general.html', context)
 
-def togglePublicarUltimosResultados(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+
+@login_required
+@user_passes_test(usuarioEsAdmin)
+def togglePublicarUltimosResultados(request):        
     convocatoria = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     if convocatoria:
         if convocatoria.ultimo_ciclo_publicado and convocatoria.ultimo_ciclo_publicado == ciclo_actual():
@@ -83,23 +77,15 @@ def togglePublicarUltimosResultados(request):
 
 @never_cache
 @login_required
-def configModalidades(request): #se muestran las modalidades 
-    usuario = get_object_or_404(Usuario, pk=request.user.id) 
+@user_passes_test(usuarioEsAdmin)
+def configModalidades(request): #se muestran las modalidades        
     modalidades = Modalidad.objects.all()
-
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenado su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
     return render(request, 'admin/config_modalidad.html', {'modalidades':modalidades})
 
 # Función que permite mostrar u ocultar una modalidad 
 @login_required
-def mostrar_modalidad(request, modalidad_id):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
+@user_passes_test(usuarioEsAdmin)
+def mostrar_modalidad(request, modalidad_id):    
     # messages.success(request, "Modalidad actualizada.")
     if request.method == "POST":
         modalidad = Modalidad.objects.get(pk = modalidad_id)
@@ -137,12 +123,8 @@ def mostrar_modalidad(request, modalidad_id):
             #     ), status=200, content_type="text/html",)
 
 @login_required
-def agregarModalidad(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def agregarModalidad(request):      
     modalidad = Modalidad()
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=modalidad)
     DocumetoModalidadFormSet = inlineformset_factory(Modalidad, Documento, form=DocumentoForm, extra=0, can_delete=False)
@@ -171,12 +153,8 @@ def agregarModalidad(request):
     return render(request, 'admin/config_agregar_modalidad.html', context)
 
 @login_required
-def editarModalidad(request, modalidad_id):
-    usuario =  get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
+@user_passes_test(usuarioEsAdmin)
+def editarModalidad(request, modalidad_id):    
     obj = get_object_or_404(Modalidad, pk = modalidad_id)
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
     #formset = modelformset_factory(Model, form=ModelForm, extra=0)
@@ -204,12 +182,8 @@ def editarModalidad(request, modalidad_id):
     return render(request, 'admin/editar_modalidad.html', context)
 
 @login_required
-def eliminarModalidad(request, modalidad_id):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def eliminarModalidad(request, modalidad_id):    
     modalidad = Modalidad.objects.get(pk = modalidad_id)
     if len(modalidad.imagen) > 0:
         os.remove(modalidad.imagen.path) #Elimina la imagen del folder
@@ -218,11 +192,8 @@ def eliminarModalidad(request, modalidad_id):
     return redirect("modalidades:AConfigModalidades")
 
 @login_required
-def eliminarDocumento(request, modalidad_id ,documento_id):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
+@user_passes_test(usuarioEsAdmin)
+def eliminarDocumento(request, modalidad_id ,documento_id):   
     # print('ID documento',documento_id)
     # item_id = int(request.POST['modalidad_id'])
     # order = get_object_or_404(Documento, pk=int(request.POST['documento_id']))
@@ -237,12 +208,8 @@ def eliminarDocumento(request, modalidad_id ,documento_id):
     return redirect("modalidades:AConfigEditarModalidades", modalidad_id)
 
 @login_required
-def ordenarDocumentos(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
+@user_passes_test(usuarioEsAdmin)
+def ordenarDocumentos(request):    
     documentos_id = request.POST.getlist('ordering')
     modalidad_id = request.POST.get('modalidad_id')
     print(documentos_id)
