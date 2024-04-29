@@ -26,9 +26,10 @@ def rootRedirect(request):
 @login_required
 def loginRedirect(request):    
     usuario = get_object_or_404(Usuario, id=request.user.id)
+    solicitante = Solicitante.objects.filter(id=usuario.id).first() #obtenermos el solisitante si es que existe
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
         return redirect("usuarios:AInicio")
-    elif Solicitante.objects.filter(id=usuario.id).exists() and not Solicitante.objects.get(pk=usuario.id).info_completada :        
+    elif not solicitante or (solicitante and not solicitante.info_completada ):        
         return redirect("usuarios:primer_login")
     else:
         return redirect("solicitudes:convocatorias")
@@ -215,7 +216,7 @@ def borrarSelect(formDep, formIndep, campoDep, campoIndep):
         formIndep.data._mutable = _mutable   
 
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def perfil(request):      
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #rfc = solicitante.rfc      
@@ -293,7 +294,7 @@ def perfil(request):
     return render(request, 'solicitante/perfil.html', context)
 
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def sMensajes(request):    
     return render(request, 'solicitante/sMensajes.html')
 

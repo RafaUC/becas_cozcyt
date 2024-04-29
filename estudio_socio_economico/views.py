@@ -48,7 +48,7 @@ def crearForms(forms, opcOtro, requestPost, preguntasEstudio, formModels, formMo
                     forms[elemento.id].fields['respuesta'].choices = choices
 
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def estudioSE(request):           
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 

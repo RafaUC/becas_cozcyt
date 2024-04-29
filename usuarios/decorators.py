@@ -18,18 +18,23 @@ def user_passes_test_httpresponse(test_func):
 
 def usuarioEsAdmin(usuario):    
     if usuario.has_perm('permiso_administrador') and usuario.is_superuser == 1:    
-        print('verificando si usuario es admin True')
+        ##print('verificando si usuario es admin True')
         return True
     else:
-        print('verificando si usuario es admin False')
+        ##print('verificando si usuario es admin False')
         return False
     
 def usuarioEsSolicitante(usuario):    
     if Solicitante.objects.filter(id=usuario.id).exists() and (not usuario.has_perm('permiso_administrador')):
-        print('verificando si usuario es solicitante True')
-        return True
+        #print('verificando si usuario es solicitante True')
+        if Solicitante.objects.get(pk=usuario.id).info_completada :  
+            #print('verificando si usuario es tiene su info True')
+            return True
+        else:
+            #print('verificando si usuario es tiene su info False')
+            return False
     else:
-        print('verificando si usuario es solicitante False')
+        #print('verificando si usuario es solicitante False')
         return False
     
 def usuarioesComun(usuario):
