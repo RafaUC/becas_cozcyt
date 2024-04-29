@@ -21,6 +21,7 @@ class ConvocatoriaForm(ModelForm):
             'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'onkeypress': "return isNumberPuntKey(event)", 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
             'fecha_inicio': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_inicio', 'type':'date', 'style':'width:auto;'}),
             'fecha_cierre': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_cierre', 'type':'date', 'style':'width:auto;'}),
+            'ultimo_ciclo_publicado' : forms.TextInput(attrs={'class': 'form-control mt-1', 'input_type': 'hidden', 'placeholder': ''}),
         }
 
 class ModalidadForm(ModelForm):

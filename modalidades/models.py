@@ -42,6 +42,7 @@ class Convocatoria(models.Model):
     fecha_cierre = models.DateField(null=False, blank=False)
     presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
     archivo_convocatoria = models.FileField(upload_to=modalidadMediaPath, validators=[validador_pdf], verbose_name="Convocatoria", null=True)
+    ultimo_ciclo_publicado = models.CharField(max_length=255, verbose_name="Ultimo ciclo publicado", null=True, blank=True)
 
     def __str__(self):
         return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #date.today()

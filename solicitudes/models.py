@@ -18,6 +18,10 @@ from mensajes import notificaciones as notif
 
 def getListaCiclos():
     valores_unicos = Solicitud.objects.all().order_by().values_list('ciclo', flat=True).distinct()
+    cicloACT = ciclo_actual()
+    valores_unicos = list(valores_unicos)
+    if cicloACT not in valores_unicos:
+        valores_unicos.append(cicloACT)
     valores_unicos = ordenar_lista_ciclos(valores_unicos)
     valores_unicos.reverse()
     return valores_unicos
