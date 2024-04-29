@@ -16,13 +16,20 @@ from .utils import *
 # Create your views here.
 @login_required
 def configGeneral(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
     obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
     convocatoriaForm = ConvocatoriaForm()
     
     convocatoria_existe = False
     if Convocatoria.objects.exists():
             convocatoria_existe = True
-    # print(convocatoria_existe)
+    print(convocatoria_existe)
+    print(obj.ultimo_ciclo_publicado)
+    ciclo = ciclo_actual()
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
         convocatoriaForm = ConvocatoriaForm(instance = obj)
         context = {'convocatoria' : convocatoriaForm}
@@ -56,12 +63,33 @@ def configGeneral(request):
                 messages.error(request, convocatoriaForm.errors)
                 print("convocatoria no valida")
 
-    context = {'convocatoria':convocatoriaForm, 'convocatoria_existe' : convocatoria_existe, }
+    context = {
+        'convocatoria':convocatoriaForm, 
+        'convocatoria_existe' : convocatoria_existe,
+        'ciclo': ciclo,
+        }
     return render(request, 'admin/config_general.html', context)
+
+def togglePublicarUltimosResultados(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
+    convocatoria = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
+    if convocatoria:
+        if convocatoria.ultimo_ciclo_publicado and convocatoria.ultimo_ciclo_publicado == ciclo_actual():
+            convocatoria.ultimo_ciclo_publicado = None
+        else:
+            convocatoria.ultimo_ciclo_publicado = ciclo_actual()
+        convocatoria.save()
+
+    return redirect('modalidades:AConfigGeneral')
+
 
 @never_cache
 @login_required
-def configModalidades(request): #se muestran las modalidades
+def configModalidades(request): #se muestran las modalidades 
     usuario = get_object_or_404(Usuario, pk=request.user.id) 
     modalidades = Modalidad.objects.all()
 
@@ -74,6 +102,10 @@ def configModalidades(request): #se muestran las modalidades
 # Función que permite mostrar u ocultar una modalidad 
 @login_required
 def mostrar_modalidad(request, modalidad_id):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
     # messages.success(request, "Modalidad actualizada.")
     if request.method == "POST":
         modalidad = Modalidad.objects.get(pk = modalidad_id)
@@ -179,6 +211,11 @@ def editarModalidad(request, modalidad_id):
 
 @login_required
 def eliminarModalidad(request, modalidad_id):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+    
     modalidad = Modalidad.objects.get(pk = modalidad_id)
     if len(modalidad.imagen) > 0:
         os.remove(modalidad.imagen.path) #Elimina la imagen del folder
@@ -188,6 +225,10 @@ def eliminarModalidad(request, modalidad_id):
 
 @login_required
 def eliminarDocumento(request, modalidad_id ,documento_id):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
     # print('ID documento',documento_id)
     # item_id = int(request.POST['modalidad_id'])
     # order = get_object_or_404(Documento, pk=int(request.POST['documento_id']))
@@ -203,6 +244,11 @@ def eliminarDocumento(request, modalidad_id ,documento_id):
 
 @login_required
 def ordenarDocumentos(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.id)  
+    url = verificarRedirect(usuario, 'permiso_administrador')    
+    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
+        return redirect(url)
+
     documentos_id = request.POST.getlist('ordering')
     modalidad_id = request.POST.get('modalidad_id')
     print(documentos_id)
