@@ -85,8 +85,16 @@ ESTADISTICAS_SOLICITUD_EXTRA_CHOICES = [
         ('municipio', 'Municipio')
     ]
 
+
 @login_required
 @user_passes_test(usuarioEsAdmin)
+def AdminEstadisticas(request):
+
+    return render(request, 'estadisticas/adminEstadisticas.html')
+
+
+#@login_required
+#@user_passes_test(usuarioEsAdmin)
 def estadisticas(request):
     colorInicial = (190, 70, 53)  # Color inicial en formato RGB
     incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
@@ -198,8 +206,8 @@ def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar
     }
     return conjuntoEst
 
-@login_required
-@user_passes_test_httpresponse(usuarioEsAdmin)
+#@login_required
+#@user_passes_test_httpresponse(usuarioEsAdmin)
 def estadisticaSolicitudes(request):    
     estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
