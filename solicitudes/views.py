@@ -57,7 +57,7 @@ def verPDF(request, soli, file):
 
 @never_cache
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def convocatorias(request):        
     solicitante = Solicitante.objects.get(pk=request.user.id)
     #obtener modalidades que le corresponden al usuario
@@ -92,7 +92,7 @@ def notificar_si_falta_documentos(solicitud):
         return False
 
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def documentos_convocatorias(request, modalidad_id):         
     solicitante = get_object_or_404(Usuario, pk=request.user.id)     
     solicitante = solicitante.solicitante
@@ -194,7 +194,7 @@ def documentoRespuesta(request, pk=None):
     return redirect('documentos_convocatoria')
 
 @login_required
-@user_passes_test(usuarioEsSolicitante)
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
 def historial(request):        
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     solicitudes = Solicitud.objects.filter(solicitante = solicitante).order_by('-id')

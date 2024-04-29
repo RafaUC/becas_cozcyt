@@ -40,6 +40,7 @@ def numNotifNL(request):
 @login_required
 @user_passes_test_httpresponse(usuarioEsSolicitante)
 def renderNotificaciones(request):   
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     page = request.GET.get('page', 1)    
     notificaciones = Notificacion.objects.filter(solicitante=solicitante)    
     paginator = Paginator(notificaciones, 20)
