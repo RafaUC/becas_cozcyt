@@ -71,3 +71,12 @@ def resultadosContenido(request,num,mod):
         'modalidadSelectForm': modalidadSelectForm,
     }
     return render(request, 'resultadosContenido.html', context)
+
+
+def transparenciaSIT(request):
+
+    context = {
+
+    }
+    context.update(getContextoBaseTransparencia(request))
+    return render(request, 'transparenciaSIT.html', context)
