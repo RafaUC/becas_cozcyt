@@ -973,3 +973,114 @@ i.rechazado:before {
 .pointer       { 
   cursor: pointer; 
 }
+
+
+.flex-direction{
+  flex-direction:row;
+}
+
+.info_modalidad_slide {
+  margin: 2em; 
+  display:flex;
+  flex-direction:row; 
+  flex-wrap:wrap;
+}
+
+@media screen and (max-width: 700px) {
+  #container_inicio_sit{
+    margin-top: 0.5em;
+  }
+
+  .flex-direction{
+    flex-direction: column;
+  }
+  #inicio_imagen_becas { 
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 0.5em;  
+  }
+  #inicio_texto_becas{
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 1em !important;
+  }
+  #info_convocatoria_titulo{
+    margin: 0 1em 0 1em !important;
+  }
+  #info_modalidades{
+    margin: 1em !important;
+  }
+  #info_conv_fechas{
+    margin: 1em !important;;
+  }
+  #btnSabermas{
+    width: 40% !important;
+  }
+
+  .info_modalidad_desc{
+    order: 2;
+  }
+  .info_modalidad_image{
+    order: 1;
+    text-align: center;
+  }
+}
+
+/* Numeración del carrusel */
+.swiper-pagination-fraction{
+  position: absolute !important;
+  bottom: 10px !important;
+  left: auto !important;
+  right: 2em !important;
+  width: auto !important;
+  color: #676767 !important;
+  font-weight: 700;
+  font-size: medium;
+}
+
+.swiper-pagination-total{
+  color: #a7a7a7 !important;
+}
+
+.swiper-pagination-current{
+  color: var(--rosaF) !important;
+}
+
+/* Flechitas del carrusel */
+.swiper-button-next::after, .swiper-button-prev::after{
+  color: #676767;
+  font-size: 1.3em !important;
+  font-weight: bolder;
+  position: absolute !important;
+}
+
+.info_modalidad_slide{
+  width: auto !important;
+}
+
+.swiper-button-next{
+  left: 4em !important;
+  right: auto !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-top: 0 !important;
+  top: auto !important;
+  bottom: 2em !important;
+}
+
+.swiper-button-prev{
+  left: 2em !important;
+  right: auto !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin-top: 0 !important;
+  top: auto !important;
+  bottom: 2em !important;
+}
+
+.swiper-slide-active{
+  height: auto !important;
+  width: inherit !important;
+}

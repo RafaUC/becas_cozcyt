@@ -68,6 +68,29 @@ class FiltroForm(forms.Form):
             return ''
         
     
+class EstadisticaSelectForm(forms.Form):
+     # Campo para los valores únicos de un campo específico
+    estadistica_filtro = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'EstadInfoSelect border-1 form-select form-select-sm'}))
+    # Campo para los nombres de los campos del modelo
+    campo_estadistica = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'EstadInfoSelect border-1 form-select form-select-sm'}))
+
+    def __init__(self, *args, **kwargs):
+        filtro_label = kwargs.pop('filtro_label', None)
+        filtro_choices = kwargs.pop('filtro_choices', None)
+        campo_label = kwargs.pop('campo_label', None)
+        campo_choices = kwargs.pop('campo_choices', None)
+        super().__init__(*args, **kwargs)
+
+        if filtro_label:
+            self.fields['estadistica_filtro'].label = filtro_label
+        if filtro_choices:
+            self.fields['estadistica_filtro'].choices = filtro_choices
+        if campo_label :
+            self.fields['campo_estadistica'].label = campo_label
+        if campo_choices: 
+            self.fields['campo_estadistica'].choices = campo_choices
+
+
 class EstadInfoSelectForm(forms.Form):
     # Campo para los valores únicos de un campo específico
     estadistica_filtro = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'EstadInfoSelect border-1 form-select form-select-sm'}))

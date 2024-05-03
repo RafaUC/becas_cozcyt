@@ -32,7 +32,13 @@ def configGeneral(request):
         for field in convocatoriaForm.fields.values():
             field.widget.attrs['disabled'] = 'disabled'
         if request.method == "POST":
-            convocatoriaForm = ConvocatoriaForm(request.POST, instance = obj)
+            convocatoriaForm = ConvocatoriaForm(request.POST or None, request.FILES or None, instance = obj)
+            # Eliminar documento en caso de que se suba otro
+            # nuevoArchivo = ConvocatoriaForm.instance.archivo_convocatoria #nuevo archivo de convocatoria
+            # if ConvocatoriaForm.instance.id and ConvocatoriaForm.instance.archivo_convocatoria is not None:                                                
+            #     oldFile = Convocatoria.objects.get(id=ConvocatoriaForm.instance.id).archivo_convocatoria
+            #     if ConvocatoriaForm.instance.file != oldFile:                    
+            #         oldFile.delete()  
             if convocatoriaForm.is_valid():                
                 convocatoriaForm.save()
                 messages.success(request, "Convocatoria actualizada.")            
@@ -44,7 +50,7 @@ def configGeneral(request):
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
         
         if request.method == "POST":
-            convocatoriaForm = ConvocatoriaForm(data = request.POST)
+            convocatoriaForm = ConvocatoriaForm(request.POST or None, request.FILES or None)
             if convocatoriaForm.is_valid():
                 convocatoriaForm.save()
                 messages.success(request, "Convocatoria agregada con éxito.")                
