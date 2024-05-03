@@ -22,9 +22,10 @@ from usuarios.decorators import user_passes_test, user_passes_test_httpresponse,
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual, ordenar_lista_ciclos
-from .forms import FiltroForm, EstadInfoSelectForm
+from .forms import FiltroForm, EstadInfoSelectForm, EstadisticaSelectForm
 from modalidades.models import Modalidad, Convocatoria
 from .models import *
+from solicitudes.models import getListaCiclos
 
 from usuarios.models import Solicitante
 from .views import notificar_si_falta_documentos
@@ -77,13 +78,53 @@ def GeneradorColores(color_inicial, incremento_luminosidad, min_luminosidad, max
         r, g, b = [int(x * 255.0) for x in colorsys.hls_to_rgb(h, l, s)]        
         yield r, g, b
 
-ESTADISTICAS_SOLICITUD_EXTRA_CHOICES = [
-        ('genero','Genero'),
+def getChoicesEtiqueta(choices, valor):
+    for val, label in choices:
+        if val == valor:
+            return label            
+    else:
+        return None 
+
+ESTADISTICAS_SOLICITUD_CHOICES = [
+        ('modalidad', 'Modalidades'),
+        ('ciclo', 'Número de solicitudes'),
+        ('estado solicitud', 'Estados de solicitud'),
+        ('puntaje', 'Puntajes'),
+        ('tipo', 'Tipos'),
+        ('genero','Géneros'),
         ('instituciones', 'Instituciones'),
         ('carreras', 'Carreras'),
-        ('estado', 'Estado'),
-        ('municipio', 'Municipio')
+        ('estado', 'Estados'),
+        ('municipio', 'Municipios')
     ]
+
+TODOS_STR = 'Todas'
+
+MAPEO_SOLICITUDES_CHOICES = {
+    'modalidad': 'modalidad__nombre',
+    'ciclo': 'ciclo',
+    'estado solicitud': 'estado',
+    'puntaje': 'puntaje',
+    'tipo': 'tipo',
+    'genero': 'solicitante__genero',
+    'instituciones': 'solicitante__carrera__institucion__nombre',
+    'carreras': 'solicitante__carrera__nombre',
+    'estado': 'solicitante__municipio__estado__nombre',
+    'municipio': 'solicitante__municipio__estado__nombre',
+}
+
+ANGULO_SOLICITUDES_CHOICES = {
+    'modalidad': 0,
+    'ciclo': 90,
+    'estado solicitud': 0,
+    'puntaje': 0,
+    'tipo': 0,
+    'genero': 0,
+    'instituciones': 90,
+    'carreras': 90,
+    'estado': 90,
+    'municipio': 90,
+}
 
 
 @login_required
@@ -102,7 +143,16 @@ def estadisticas(request):
     maxLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono    
     incrementoHue = 0.016  # Incremento/decremento en el tono
     
-    solicitudes = Solicitud.objects.filter(ciclo=ciclo_actual()).select_related('solicitante__municipio')
+    
+    ultimoCiclo = ciclo_actual()
+    #si el usuario no es admin se procede a verificar si los resultados estan publicados y la cantidad de ciclos disponibles
+    if not usuarioEsAdmin(request.user):
+        convocatoria = Convocatoria.objects.all().first() 
+        ultimoEsPublico = convocatoria.ultimo_ciclo_publicado == ciclo_actual()
+        if not ultimoEsPublico:            
+            ultimoCiclo = getListaCiclos()[1]            
+    solicitudes = Solicitud.objects.filter(ciclo=ultimoCiclo).select_related('solicitante__municipio')
+    
     municipiosParticipando = solicitudes.values('solicitante__municipio__id').distinct().count()
 
     tarjetasEstadisticas = [ #Lista de diccionarios que contienen la informacion de las tarjetas de cada estadistica
@@ -111,35 +161,35 @@ def estadisticas(request):
             'iconCSS': 'fa-inbox',
             'valor': solicitudes.count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica=ciclo&estadistica_filtro=Todos'
+            'getData': f'?campo_estadistica=ciclo&estadistica_filtro={TODOS_STR}'
         },        
         {
             'titulo': 'Modalidades activas',
             'iconCSS': 'fa-object-group',
             'valor': Modalidad.objects.filter(mostrar = True).values('nombre').distinct().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ciclo_actual()}'
+            'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ultimoCiclo}'
         },   
         {
             'titulo': 'Instituciones registradas',
             'iconCSS': 'fa-university',
             'valor': Institucion.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[1][0]}&estadistica_filtro={ciclo_actual()}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[6][0]}&estadistica_filtro={ultimoCiclo}'
         },
         {
             'titulo': 'Carreras registradas',
             'iconCSS': 'fa-graduation-cap',
             'valor': Carrera.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[2][0]}&estadistica_filtro={ciclo_actual()}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[7][0]}&estadistica_filtro={ultimoCiclo}'
         },        
         {
             'titulo': 'Municipios participantes',
             'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[4][0]}&estadistica_filtro={ciclo_actual()}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[9][0]}&estadistica_filtro={ultimoCiclo}'
         },
         
     ]
@@ -209,69 +259,56 @@ def crearDictGrafica(labels=[], dataLabel='', data=[], listaColores=[],type='bar
 #@login_required
 #@user_passes_test_httpresponse(usuarioEsAdmin)
 def estadisticaSolicitudes(request):    
-    estadistica_filtro = request.GET.get('estadistica_filtro', ciclo_actual())
-    campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
-    campo_estadistica_original = campo_estadistica
-    
-    if request.GET:
-        estadSelectForm = EstadInfoSelectForm(
-            request.GET, 
-            modelo_filtro=Solicitud, 
-            campo_filtro='ciclo', 
-            campo_estadistica_modelo=Solicitud,
-            exclude_choices = ['solicitante'],
-            extra_choices = ESTADISTICAS_SOLICITUD_EXTRA_CHOICES,
-            initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
-        )
-    else:
-        estadSelectForm = EstadInfoSelectForm(
-            modelo_filtro=Solicitud, 
-            campo_filtro='ciclo', 
-            campo_estadistica_modelo=Solicitud,
-            exclude_choices = ['solicitante'],
-            extra_choices = ESTADISTICAS_SOLICITUD_EXTRA_CHOICES,
-            initial={'estadistica_filtro': estadistica_filtro,'campo_estadistica': campo_estadistica} 
-        )
-
     #config colores
     colorInicial = (1, 0, 0)  # Color inicial en formato RGB
     incrementoIuminosidad = 0.06  # Incremento/decremento en la luminosidad
     minLuminosidad = 0.35  # Límite de la luminosidad antes de cambiar el tono
     maxLuminosidad = 0.75  # Límite de la luminosidad antes de cambiar el tono    
     incrementoHue = 0.011  # Incremento/decremento en el tono
-    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)    
-    
-    conjuntosEstadisticos = []
-    dataLabel = f'Solicitudes: {campo_estadistica}'    
+    generadorColores = GeneradorColores(colorInicial, incrementoIuminosidad, minLuminosidad, maxLuminosidad, incrementoHue)           
+
+    #obtener los ciclos que se van a poder mostrar
+    ciclos = getListaCiclos()
+    ultimoCiclo = ciclo_actual()
+    ultimoEsPublico = True
+    #si el usuario no es admin se procede a verificar si los resultados estan publicados y la cantidad de ciclos disponibles    
+    if not usuarioEsAdmin(request.user):
+        convocatoria = Convocatoria.objects.all().first() 
+        ultimoEsPublico = convocatoria.ultimo_ciclo_publicado == ciclo_actual()
+        if not ultimoEsPublico:
+            ultimoCiclo = ciclos[1]
+            ciclos = ciclos[1:]
+        ciclos = ciclos[:5]
+    ciclos.insert(0, TODOS_STR)
+    cicloChoices = [(opcion, opcion) for opcion in ciclos]
+
+    estadistica_filtro = request.GET.get('estadistica_filtro', ultimoCiclo)
+    campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
+    campo_estadistica_original = campo_estadistica    
+
     #obtenemos el queryset basado en el filtro de ciclo
-    if estadistica_filtro == 'Todos':
-        queryset = Solicitud.objects.all()
+    if estadistica_filtro == TODOS_STR:
+        if ultimoEsPublico:
+            queryset = Solicitud.objects.all()
+        else:
+            queryset = Solicitud.objects.exclude(ciclo=ciclo_actual())
     else:
         queryset = Solicitud.objects.filter(ciclo = estadistica_filtro)
 
-    minRotationLabel = 0
-    if campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[0][0]: #genero
-        campo_estadistica = 'solicitante__genero'
-    elif campo_estadistica == 'modalidad': #modalidad
-        campo_estadistica = 'modalidad__nombre'
-    elif campo_estadistica == 'ciclo': 
-        minRotationLabel = 90
-    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[1][0]:  #'instituciones'
-        campo_estadistica = 'solicitante__carrera__institucion__nombre'
-        minRotationLabel = 90
-    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[2][0]:  #'carreras'
-        campo_estadistica = 'solicitante__carrera__nombre'
-        minRotationLabel = 90
-    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[3][0]:  #'estado'
-        campo_estadistica = 'solicitante__municipio__estado__nombre'
-        minRotationLabel = 90
-    elif campo_estadistica == ESTADISTICAS_SOLICITUD_EXTRA_CHOICES[4][0]:  #'municipio'
-        campo_estadistica = 'solicitante__municipio__nombre'
-        minRotationLabel = 90
-
-    
+    estadSelectForm = EstadisticaSelectForm(
+        request.GET, 
+        filtro_label = 'Convocatoria',
+        filtro_choices = cicloChoices,
+        campo_label = 'Atributo',
+        campo_choices = ESTADISTICAS_SOLICITUD_CHOICES,
+    )
     #se seleccionan solo los valores unicos y su frecuencia
-    
+    campo_estadistica = MAPEO_SOLICITUDES_CHOICES.get(campo_estadistica_original, None)
+    minRotationLabel = ANGULO_SOLICITUDES_CHOICES.get(campo_estadistica_original, 0)
+    conjuntosEstadisticos = []
+    dataLabel = f'{getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original)}: Solicitudes'    
+
+    #obtenermos la infomacion para la estadistica, valores y frecuencias etc
     if campo_estadistica == 'ciclo':
         valores = queryset.values_list(campo_estadistica, flat=True)
         frecuencias = dict(Counter(valores))         
@@ -291,9 +328,11 @@ def estadisticaSolicitudes(request):
     
     listaColores = [next(generadorColores) for _ in frecuencias]
 
+    #generamos el conjunto estadistico de la grafica
     grafica = crearDictGrafica(labels, dataLabel, frecuencias, listaColores, minRotationLabel=minRotationLabel)
     conjuntosEstadisticos.append(grafica)    
 
+    #llenando el conjunto estadistico de la leyenda
     listaColores =listaColores.copy()
     labels = labels.copy()
     frecuencias =  frecuencias.copy()
@@ -306,6 +345,7 @@ def estadisticaSolicitudes(request):
         'data': zip(listaColores, labels, frecuencias)
     })
     
+    #llenando el conjunto estadistico de el Total de invercion
     valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
     labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]   
@@ -322,16 +362,31 @@ def estadisticaSolicitudes(request):
         'data': zip(labels, totales)
     })
     
+    tituloEst = componerTitulo(estadistica_filtro, campo_estadistica_original)
 
     context = {
-        'tituloEstadistica': f'Estadística {campo_estadistica_original} del ciclo: {estadistica_filtro}',
+        'tituloEstadistica': tituloEst,
         'urlEstaditica': 'solicitudes:ESolicitudes',
         'conjuntosEstadisticos': conjuntosEstadisticos,
         'estadSelectForm': estadSelectForm
-    }
-    
+    }    
     return render(request, 'estadisticas/ebase.html', context)
 
+
+
+def componerTitulo(estadistica_filtro, campo_estadistica_original ):
+    titulo = '"'
+    if campo_estadistica_original == 'ciclo':
+        titulo += f'{getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original)} '
+    else:
+        titulo += f'Solicitudes por {getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original).lower()} '
+    
+    if estadistica_filtro == TODOS_STR:
+        titulo += f'de todas las convocatorias'
+    else:
+        titulo += f'de la convocatoria: {estadistica_filtro}'
+    titulo += '"'
+    return titulo    
 
 @login_required
 @user_passes_test(usuarioEsAdmin)
