@@ -17,10 +17,8 @@ def migrarDatosdeCiclos(apps, schema_editor):
     #primero llenamos la tabla de ciclos con los ciclos ya existentes
     valores_unicos = Solicitud.objects.all().order_by().values_list('ciclo', flat=True).distinct()    
     valores_unicos = list(valores_unicos)    
-    valores_unicos = ordenar_lista_ciclos(valores_unicos)
-    valores_unicos.reverse()    
-
-    Ciclo.objects.create(nombre='Indefinido', presupuesto=None)
+    valores_unicos = ordenar_lista_ciclos(valores_unicos)    
+    
     for nombreCiclo in valores_unicos:
         Ciclo.objects.create(nombre=nombreCiclo, presupuesto=None)
     

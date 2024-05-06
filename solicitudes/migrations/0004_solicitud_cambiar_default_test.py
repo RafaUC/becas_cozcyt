@@ -16,11 +16,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='solicitud',
             name='ciclo',
-            field=models.CharField(default=modalidades.models.ciclo_actual, editable=False, max_length=50),
+            field=models.CharField(default=modalidades.models.ciclo_actual_pk, editable=False, max_length=50),
         ),
         migrations.AlterField(
             model_name='solicitud',
             name='ciclo_FK',
-            field=models.ForeignKey(blank=True, default=modalidades.models.ciclo_actual, null=True, on_delete=django.db.models.deletion.CASCADE, to='modalidades.ciclo'),
+            field=models.ForeignKey(blank=True, default=modalidades.models.ciclo_actual_pk, null=True, on_delete=django.db.models.deletion.CASCADE, to='modalidades.ciclo'),
         ),
     ]

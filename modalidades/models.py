@@ -10,7 +10,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 def ciclo_actual(offset=0):
-    return Ciclo.objects.first()
+    return Ciclo.objects.last()
+
+def ciclo_actual_pk():
+    return ciclo_actual().pk    
 
 def ciclo_actual_genNombre(offset=0):
     now = datetime.now()
@@ -64,9 +67,8 @@ class Convocatoria(models.Model):
     fecha_inicio = models.DateField(null=False, blank=False)
     fecha_cierre = models.DateField(null=False, blank=False)
     presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
-    archivo_convocatoria = models.FileField(upload_to=modalidadMediaPath, validators=[validador_pdf], verbose_name="Convocatoria", null=True)
-    ultimo_ciclo_publicado = models.CharField(max_length=255, verbose_name="Ultimo ciclo publicado", null=True, blank=True)
-    ultimo_ciclo_publicado_FK = models.ForeignKey(Ciclo, on_delete=models.SET_NULL, verbose_name=_("Ultimo ciclo publicado"), null=True, blank=True)
+    archivo_convocatoria = models.FileField(upload_to=modalidadMediaPath, validators=[validador_pdf], verbose_name="Convocatoria", null=True)    
+    ultimo_ciclo_publicado = models.ForeignKey(Ciclo, on_delete=models.SET_NULL, verbose_name=_("Ultimo ciclo publicado"), null=True, blank=True)
 
     def __str__(self):
         return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #date.today()
