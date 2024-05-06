@@ -71,7 +71,8 @@ def resultadosContenido(request,num,mod):
     else:
         modalidad = Modalidad.objects.filter(id=mod, mostrar=True).first()    
         if not modalidad:
-            modalidad = Modalidad.objects.filter(mostrar=True).first()    
+            modalidad = Modalidad.objects.filter(mostrar=True).first()   
+            mod = modalidad.id 
         modalidadSelectForm = ModalidadSelectForm(initial={'modalidad': mod})
 
         #obtener solicitudes aceptadas
