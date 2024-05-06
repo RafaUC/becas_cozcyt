@@ -1,6 +1,6 @@
 from django.db import models
 from usuarios.models import Solicitante
-from modalidades.models import Modalidad, Documento, ciclo_actual, ordenar_lista_ciclos
+from modalidades.models import Modalidad, Documento, ciclo_actual, ordenar_lista_ciclos, Ciclo
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -17,6 +17,7 @@ from mensajes import notificaciones as notif
 # Create your models here.
 
 def getListaCiclos():
+    '''
     valores_unicos = Solicitud.objects.all().order_by().values_list('ciclo', flat=True).distinct()
     cicloACT = ciclo_actual()
     valores_unicos = list(valores_unicos)
@@ -25,6 +26,8 @@ def getListaCiclos():
     valores_unicos = ordenar_lista_ciclos(valores_unicos)
     valores_unicos.reverse()
     return valores_unicos
+    '''
+    return Ciclo.objects.all()
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [
@@ -41,7 +44,8 @@ class Solicitud(models.Model):
 
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, null=False)
     solicitante = models.ForeignKey(Solicitante, on_delete=models.CASCADE, null=False)
-    ciclo = models.CharField(max_length=50, default=ciclo_actual(), editable=False, null=False)
+    ciclo = models.CharField(max_length=50, default=ciclo_actual, editable=False, null=False)
+    ciclo_FK = models.ForeignKey(Ciclo, on_delete=models.CASCADE, default=ciclo_actual, null=True, blank=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default=ESTADO_CHOICES[0][0])
     puntaje = models.IntegerField(default=0) 
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[1][0])
