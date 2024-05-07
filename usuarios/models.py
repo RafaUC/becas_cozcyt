@@ -4,7 +4,6 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-from modalidades.models import ciclo_actual
 from django.db.models import Q
 from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator

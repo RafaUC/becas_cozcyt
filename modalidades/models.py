@@ -9,30 +9,15 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-def ciclo_actual(offset=0):
-    return Ciclo.objects.last()
-
-def ciclo_actual_pk():
-    return ciclo_actual().pk    
-
-def ciclo_actual_genNombre(offset=0):
-    now = datetime.now()
-    mes = (now.month + offset) % 12
-    año = now.year + ((now.month + offset) // 12)
-    # Determinar el ciclo actual
-    if mes >= 8:
-        ciclo = "Agosto - Diciembre"
-    else:
-        ciclo = "Enero - Junio"    
-    return f"{ciclo} {año}"
-
+'''
 def obtener_mes_numero(mes):
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     return meses.index(mes) + 1
 
 def ordenar_lista_ciclos(registros):
     return sorted(registros, key=lambda x: (int(x.split()[-1]), obtener_mes_numero(x.split()[0])))
-
+'''
+    
 def validador_pdf(value):
     ext = os.path.splitext(value.name)[1]  # Obtener la extensión del archivo
     valid_extensions = ['.pdf']  # Lista de extensiones permitidas
@@ -45,20 +30,55 @@ def modalidadMediaPath(instance, filename):
     return os.path.join('media/', filename)  # Ruta de almacenamiento deseada
 
 
-class Ciclo(models.Model):
-    nombre = models.CharField(max_length=100, default=ciclo_actual_genNombre)
+def ciclo_actual_genNombre():
+    now = datetime.now()
+    mes = (now.month) % 12
+    año = now.year + ((now.month) // 12)
+    # Determinar el ciclo actual
+    if mes >= 8:
+        ciclo = "Agosto - Diciembre"
+    else:
+        ciclo = "Enero - Junio"    
+    return f"{ciclo} {año}"
+
+def ciclo_actual():
+    # Obtener el último ciclo disponible
+    ultimoCiclo = Ciclo.objects.order_by('-id').first()
+    nombreCiclo = ciclo_actual_genNombre()
+
+    # Verificar si el último ciclo está disponible            
+    if ultimoCiclo and ultimoCiclo.nombre == nombreCiclo:            
+        return ultimoCiclo
+    # Si no hay ciclos disponibles o el último ciclo no está disponible, crear uno nuevo
+    nuevo_ciclo = Ciclo.objects.create(nombre=nombreCiclo)
+    return nuevo_ciclo
+
+def getCiclo(index=0):
+    if index == 0:
+        return ciclo_actual()
+    else:
+        ciclos = Ciclo.objects.order_by('-id').all()
+        if len(ciclos) >= index:
+            return ciclos[index]
+        else:
+            return None        
+
+def ciclo_actual_pk():
+    return ciclo_actual().pk   
+
+class Ciclo(models.Model):                
+    nombre = models.CharField(max_length=100, unique=True, default=ciclo_actual_genNombre)
     presupuesto = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
 
-    def __str__(self):
-        return f'{self.nombre}' 
+    readonly_fields = ('nombre',)
+    class Meta:
+        ordering = ['-id']
+        verbose_name = 'Ciclo'
+        verbose_name_plural = 'Ciclos'        
 
-@receiver(post_save, sender=Ciclo)
-def set_presupuesto(sender, instance, created, **kwargs):
-    if created and not instance.presupuesto:
-        primer_convocatoria = Convocatoria.objects.first()
-        if primer_convocatoria:
-            instance.presupuesto = primer_convocatoria.presupuesto
-            instance.save()
+    def __str__(self):
+        return f'{self.nombre}'                      
+
 
 
 
