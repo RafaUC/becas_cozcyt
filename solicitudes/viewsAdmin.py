@@ -23,7 +23,7 @@ from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
 from modalidades.models import ciclo_actual
 from .forms import FiltroForm, EstadisticaSelectForm
-from modalidades.models import Modalidad, Convocatoria
+from modalidades.models import Modalidad, Convocatoria, MontoModalidad
 from .models import *
 from solicitudes.models import getListaCiclos
 
@@ -168,28 +168,28 @@ def estadisticas(request):
             'iconCSS': 'fa-object-group',
             'valor': Modalidad.objects.filter(mostrar = True).values('nombre').distinct().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ultimoCiclo}'
+            'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ultimoCiclo.id}'
         },   
         {
             'titulo': 'Instituciones registradas',
             'iconCSS': 'fa-university',
             'valor': Institucion.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[6][0]}&estadistica_filtro={ultimoCiclo}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[6][0]}&estadistica_filtro={ultimoCiclo.id}'
         },
         {
             'titulo': 'Carreras registradas',
             'iconCSS': 'fa-graduation-cap',
             'valor': Carrera.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[7][0]}&estadistica_filtro={ultimoCiclo}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[7][0]}&estadistica_filtro={ultimoCiclo.id}'
         },        
         {
             'titulo': 'Municipios participantes',
             'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[9][0]}&estadistica_filtro={ultimoCiclo}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[9][0]}&estadistica_filtro={ultimoCiclo.id}'
         },
         
     ]
@@ -279,10 +279,10 @@ def estadisticaSolicitudes(request):
             ultimoCiclo = ciclos[1]
             ciclos = ciclos[1:]
         ciclos = ciclos[:5]    
-    cicloChoices = [(ciclo.id, ciclo) for ciclo in ciclos]
+    cicloChoices = [(str(ciclo.id), ciclo) for ciclo in ciclos]
     cicloChoices.insert(0, (TODOS_STR, TODOS_STR))
 
-    estadistica_filtro = request.GET.get('estadistica_filtro', ultimoCiclo)
+    estadistica_filtro = request.GET.get('estadistica_filtro', ultimoCiclo.id)
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
     campo_estadistica_original = campo_estadistica    
 
@@ -339,23 +339,25 @@ def estadisticaSolicitudes(request):
     })
     
     #llenando el conjunto estadistico de el Total de invercion
-    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
+    montos = MontoModalidad.objects.filter(ciclo = ultimoCiclo).values('modalidad__nombre','monto')
+    montos = {monto['modalidad__nombre']: monto['monto'] for monto in montos}
+    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre').annotate(frecuencia=Count('modalidad__nombre'))            
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
     labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]   
     total = 0       
     totales = []
     for item in valoresFrecuencias:
-        totales.append( f"${(item['frecuencia'] * item['modalidad__monto']):,.2f}")
-        total += item['frecuencia'] * item['modalidad__monto']
+        totales.append( f"${(item['frecuencia'] * montos[item['modalidad__nombre']]):,.2f}")
+        total += item['frecuencia'] * montos[item['modalidad__nombre']]
     labels.insert(0, 'Total:')
     totales.insert(0, f'${total:,.2f}')
     conjuntosEstadisticos.append({
         'tipo': 'lista',
-        'dataLabel': f'Dinero invertido: {estadistica_filtro}',
+        'dataLabel': f'Dinero invertido: {getChoicesEtiqueta(choices=cicloChoices,valor=estadistica_filtro)}',
         'data': zip(labels, totales)
     })
-    
-    tituloEst = componerTitulo(estadistica_filtro, campo_estadistica_original)
+
+    tituloEst = componerTitulo(getChoicesEtiqueta(choices=cicloChoices,valor=estadistica_filtro), campo_estadistica_original)
 
     context = {
         'tituloEstadistica': tituloEst,
@@ -367,13 +369,12 @@ def estadisticaSolicitudes(request):
 
 
 
-def componerTitulo(estadistica_filtro, campo_estadistica_original ):
+def componerTitulo(estadistica_filtro, campo_estadistica_original):
     titulo = '"'
     if campo_estadistica_original == 'ciclo':
         titulo += f'{getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original)} '
     else:
-        titulo += f'Solicitudes por {getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original).lower()} '
-    
+        titulo += f'Solicitudes por {getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original).lower()} '    
     if estadistica_filtro == TODOS_STR:
         titulo += f'de todas las convocatorias'
     else:

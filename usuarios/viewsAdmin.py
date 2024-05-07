@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count,  F
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -30,23 +30,26 @@ from .decorators import user_passes_test, user_passes_test_httpresponse, usuario
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def inicio(request):        
-    convocatoria = Convocatoria.objects.all().first()
-    solicitudes = Solicitud.objects.filter(ciclo = ciclo_actual()) #aceptadas
+    convocatoria = Convocatoria.get_object()
+    cicloActual = ciclo_actual()
+    solicitudes = Solicitud.objects.filter(ciclo = cicloActual) #aceptadas
 
-    valoresFrecuencias = solicitudes.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre', 'modalidad__monto').annotate(frecuencia=Count('modalidad__nombre'))            
-    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)        
-    total = 0           
+    montos = MontoModalidad.objects.filter(ciclo = cicloActual).values('modalidad__nombre','monto')
+    montos = {monto['modalidad__nombre']: monto['monto'] for monto in montos}
+
+    valoresFrecuencias = solicitudes.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre').annotate(frecuencia=Count('modalidad__nombre'))                
+    valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)           
+    total = 0               
     for item in valoresFrecuencias:        
-        total += item['frecuencia'] * item['modalidad__monto']        
+        total += item['frecuencia'] * montos[item['modalidad__nombre']]         
 
     presupuesto = 'Sin convocatoria'
-    presupuestoRestante = 'Sin convocatoria'
-    if convocatoria:
-        presupuesto = f'${convocatoria.presupuesto:,.2f}'
-        presupuestoRestante = f'${convocatoria.presupuesto-total:,.2f}'
+    presupuestoRestante = 'Sin convocatoria'    
+    presupuesto = f'${cicloActual.presupuesto:,.2f}'
+    presupuestoRestante = f'${cicloActual.presupuesto-total:,.2f}'
 
     context = {
-        'ciclo_actual': ciclo_actual(),
+        'ciclo_actual': cicloActual,
         'convocatoria' : convocatoria,
         'solicitudes' : len(solicitudes),
         'presupuesto': presupuesto,
