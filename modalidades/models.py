@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime
 from datetime import date
+from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -68,7 +69,7 @@ def ciclo_actual_pk():
 
 class Ciclo(models.Model):                
     nombre = models.CharField(max_length=100, unique=True, default=ciclo_actual_genNombre)
-    presupuesto = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
+    presupuesto = models.DecimalField(max_digits=11, decimal_places=2, blank=False, null=False, default=0.0)
 
     readonly_fields = ('nombre',)
     class Meta:
@@ -81,12 +82,37 @@ class Ciclo(models.Model):
 
 
 
+class SingletonModel(models.Model):
+    """Singleton Django Model"""
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        """
+        Save object to the database. Removes all other entries if there
+        are any.
+        """
+        self.__class__.objects.exclude(id=self.id).delete()
+        super(SingletonModel, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_object(cls):
+        """
+        Load object from the database. Failing that, create a new empty
+        (default) instance of the object and return it (without saving it
+        to the database).
+        """
+        try:
+            return cls.objects.get()
+        except cls.DoesNotExist:
+            return cls()
 
 #clase de configuracion de convocatorias
-class Convocatoria(models.Model):
+class Convocatoria(SingletonModel):
     fecha_inicio = models.DateField(null=False, blank=False)
     fecha_cierre = models.DateField(null=False, blank=False)
-    presupuesto = models.DecimalField(max_digits=11, decimal_places=2)
+    fecha_nuevo_ciclo = models.DateField(null=False, blank=False, default=now)    
     archivo_convocatoria = models.FileField(upload_to=modalidadMediaPath, validators=[validador_pdf], verbose_name="Convocatoria", null=True)    
     ultimo_ciclo_publicado = models.ForeignKey(Ciclo, on_delete=models.SET_NULL, verbose_name=_("Ultimo ciclo publicado"), null=True, blank=True)
 
@@ -131,10 +157,10 @@ class Modalidad(models.Model):
     ]
     nombre = models.CharField(max_length=255, verbose_name="Nombre", null=False)
     imagen = models.ImageField(upload_to=modalidadMediaPath, verbose_name="Imagen", null=False)
-    descripcion = models.TextField(verbose_name="Descripción", null=False)
-    monto = models.DecimalField(max_digits=7, decimal_places=2,verbose_name="monto", null=True)
+    descripcion = models.TextField(verbose_name="Descripción", null=False)    
     mostrar = models.BooleanField(default=True)
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default=TIPO_CHOICES[1][0])
+    archivado = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.nombre} ({self.tipo})'
@@ -144,7 +170,19 @@ class Modalidad(models.Model):
     
     class Meta:        
         ordering = ['nombre','tipo']
+
+class MontoModalidad(models.Model):
+    modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False, blank=False)
+    ciclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE, verbose_name=_("Ciclo"), null=False, blank=False)
+    monto = models.DecimalField(max_digits=7, decimal_places=2,verbose_name=_("Monto"), null=False, blank=False, default=0.0)
     
+    class Meta:        
+        ordering = ['modalidad','-id']
+        unique_together = ('modalidad', 'ciclo')
+
+    def __str__(self):
+        return f"monto '{self.modalidad}' - {self.ciclo}"
+
 class Documento(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name=_("Modalidad"), null=False)
     nombre = models.CharField(max_length=255, verbose_name=_("Nombre"), null=False)
@@ -161,3 +199,4 @@ class Documento(models.Model):
     
     def get_queryset(self):
         return super().get_queryset().filter(nombre="Curp")
+    
