@@ -21,8 +21,8 @@ from collections import Counter
 from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
 from usuarios.viewsAdmin import BusquedaEnCamposQuerySet
 from usuarios.models import Usuario, Institucion, Carrera, Municipio
-from modalidades.models import ciclo_actual, ordenar_lista_ciclos
-from .forms import FiltroForm, EstadInfoSelectForm, EstadisticaSelectForm
+from modalidades.models import ciclo_actual
+from .forms import FiltroForm, EstadisticaSelectForm
 from modalidades.models import Modalidad, Convocatoria
 from .models import *
 from solicitudes.models import getListaCiclos
@@ -102,7 +102,7 @@ TODOS_STR = 'Todas'
 
 MAPEO_SOLICITUDES_CHOICES = {
     'modalidad': 'modalidad__nombre',
-    'ciclo': 'ciclo',
+    'ciclo': 'ciclo__nombre',
     'estado solicitud': 'estado',
     'puntaje': 'puntaje',
     'tipo': 'tipo',
@@ -278,9 +278,9 @@ def estadisticaSolicitudes(request):
         if not ultimoEsPublico:
             ultimoCiclo = ciclos[1]
             ciclos = ciclos[1:]
-        ciclos = ciclos[:5]
-    ciclos.insert(0, TODOS_STR)
-    cicloChoices = [(opcion, opcion) for opcion in ciclos]
+        ciclos = ciclos[:5]    
+    cicloChoices = [(ciclo.id, ciclo) for ciclo in ciclos]
+    cicloChoices.insert(0, (TODOS_STR, TODOS_STR))
 
     estadistica_filtro = request.GET.get('estadistica_filtro', ultimoCiclo)
     campo_estadistica = request.GET.get('campo_estadistica', 'modalidad')    
@@ -309,15 +309,8 @@ def estadisticaSolicitudes(request):
     dataLabel = f'{getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original)}: Solicitudes'    
 
     #obtenermos la infomacion para la estadistica, valores y frecuencias etc
-    if campo_estadistica == 'ciclo':
-        valores = queryset.values_list(campo_estadistica, flat=True)
-        frecuencias = dict(Counter(valores))         
-        valores_unicos = queryset.order_by().values_list('ciclo', flat=True).distinct()
-        valores_unicos = ordenar_lista_ciclos(valores_unicos)
-        valores_unicos.reverse()
-        valoresFrecuencias = []
-        for val in valores_unicos:
-            valoresFrecuencias.append({campo_estadistica: val, 'frecuencia': frecuencias[val]})
+    if campo_estadistica_original == 'ciclo':        
+        valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica)).order_by('-ciclo__id')
     else:
         valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))        
         #reordenan de mayor a menor

@@ -1,6 +1,6 @@
 from django.db import models
 from usuarios.models import Solicitante
-from modalidades.models import Modalidad, Documento, ciclo_actual, ciclo_actual_pk, ordenar_lista_ciclos, Ciclo
+from modalidades.models import Modalidad, Documento, ciclo_actual_pk, Ciclo
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -27,7 +27,7 @@ def getListaCiclos():
     valores_unicos.reverse()
     return valores_unicos
     '''
-    return Ciclo.objects.all()
+    return list(Ciclo.objects.all())
 
 class Solicitud(models.Model):
     ESTADO_CHOICES = [

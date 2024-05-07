@@ -105,8 +105,9 @@ Inicio Estimulos COZCyT
         <br>
         <div style="text-align: center; justify-content: center;">
             <div class="" style="align-items: center;">
-                <a href="{{convocatoria.archivo_convocatoria.url}}">
-                    <button href="{{convocatoria.archivo_convocatoria.url}}" class="btn btnConvocatoria" style="width: 10%;" id="btnSabermas">
+                
+                <a {% if convocatoria.archivo_convocatoria %} href="{{convocatoria.archivo_convocatoria.url}}" {% else %} href="#" {% endif %} >
+                    <button {% if convocatoria.archivo_convocatoria %} href="{{convocatoria.archivo_convocatoria.url}}" {% else %} href="#" {% endif %} class="btn btnConvocatoria" style="width: 10%;" id="btnSabermas">
                         Saber más
                     </button>
                 </a>
