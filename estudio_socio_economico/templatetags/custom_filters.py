@@ -5,8 +5,6 @@ from django.db import models
 from django import forms
 from django.utils.timesince import timesince
 from django.utils import timezone
-from datetime import datetime
-from datetime import date
 
 register = template.Library()
 logger = logging.getLogger(__name__)
