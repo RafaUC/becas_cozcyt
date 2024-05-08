@@ -3,9 +3,8 @@ import os
 from uuid import uuid4
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime
-from datetime import date
 from django.utils.timezone import now
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -32,9 +31,9 @@ def modalidadMediaPath(instance, filename):
 
 
 def ciclo_actual_genNombre():
-    now = datetime.now()
-    mes = (now.month) % 12
-    año = now.year + ((now.month) // 12)
+    ahora = now()
+    mes = ahora.month
+    año = ahora.year
     # Determinar el ciclo actual
     if mes >= 8:
         ciclo = "Agosto - Diciembre"
@@ -43,16 +42,16 @@ def ciclo_actual_genNombre():
     return f"{ciclo} {año}"
 
 def ciclo_actual():
-    # Obtener el último ciclo disponible
-    ultimoCiclo = Ciclo.objects.order_by('-id').first()
-    nombreCiclo = ciclo_actual_genNombre()
-
-    # Verificar si el último ciclo está disponible            
-    if ultimoCiclo and ultimoCiclo.nombre == nombreCiclo:            
-        return ultimoCiclo
-    # Si no hay ciclos disponibles o el último ciclo no está disponible, crear uno nuevo
-    nuevo_ciclo = Ciclo.objects.create(nombre=nombreCiclo)
-    return nuevo_ciclo
+    # Obtener el último ciclo disponible        
+    convocatoria = Convocatoria.get_object()
+    
+    #verificamos si el ciclo actual todavia esta bigente
+    if now() < convocatoria.fecha_nuevo_ciclo:
+        return Ciclo.objects.order_by('-id').first()
+    else:
+        nombreCiclo = ciclo_actual_genNombre()
+        nuevo_ciclo = Ciclo.objects.create(nombre=nombreCiclo)
+        return nuevo_ciclo     
 
 def getCiclo(index=0):
     if index == 0:
@@ -80,6 +79,12 @@ class Ciclo(models.Model):
     def __str__(self):
         return f'{self.nombre}'                      
 
+#reciber para aztualizar otros modelos cuando inicia un nuevo ciclo
+@receiver(post_save, sender=Ciclo)
+def nuevo_ciclo(sender, instance, created, **kwargs):
+    if created:
+        pass
+        
 
 
 class SingletonModel(models.Model):
@@ -117,7 +122,7 @@ class Convocatoria(SingletonModel):
     ultimo_ciclo_publicado = models.ForeignKey(Ciclo, on_delete=models.SET_NULL, verbose_name=_("Ultimo ciclo publicado"), null=True, blank=True)
 
     def __str__(self):
-        return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #date.today()
+        return f'Convocatoria {self.fecha_inicio} // {self.fecha_cierre}' #now().date()
 
     @property
     def mostrar_precio(self):
@@ -125,23 +130,23 @@ class Convocatoria(SingletonModel):
     
     @property
     def fecha_convocatoria(self):
-        if (date.today() >= self.fecha_inicio) and (date.today() <= self.fecha_cierre):
+        if (now().date() >= self.fecha_inicio) and (now().date() <= self.fecha_cierre):
             return True
         else:
             return False
         
     @property
     def mensaje_estado_convocatoria(self):        
-        if date.today() == self.fecha_cierre:
+        if now().date() == self.fecha_cierre:
             return f'Último día de convocatoria.'
-        elif date.today() < self.fecha_inicio:
-            dias_restantes = (self.fecha_inicio - date.today()).days
+        elif now().date() < self.fecha_inicio:
+            dias_restantes = (self.fecha_inicio - now().date()).days
             if dias_restantes < 2:
                 return f'Falta {dias_restantes} día para que inicie la convocatoria.'
             else:
                 return f'Faltan {dias_restantes} días para que inicie la convocatoria.'
-        elif date.today() <= self.fecha_cierre:
-            dias_restantes = (self.fecha_cierre - date.today()).days+1
+        elif now().date() <= self.fecha_cierre:
+            dias_restantes = (self.fecha_cierre - now().date()).days+1
             if dias_restantes < 2:
                 return f'Queda {dias_restantes} día para que la convocatoria termine.'
             else:

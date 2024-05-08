@@ -15,7 +15,7 @@ from django.db.models import Count
 from zipfile import ZipFile
 import uuid
 from openpyxl import Workbook
-from datetime import date
+from django.utils.timezone import now
 from collections import Counter
 
 from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
@@ -339,22 +339,61 @@ def estadisticaSolicitudes(request):
     })
     
     #llenando el conjunto estadistico de el Total de invercion
-    montos = MontoModalidad.objects.filter(ciclo = ultimoCiclo).values('modalidad__nombre','monto')
-    montos = {monto['modalidad__nombre']: monto['monto'] for monto in montos}
-    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre').annotate(frecuencia=Count('modalidad__nombre'))            
+    #print(estadistica_filtro == TODOS_STR)
+    if estadistica_filtro == TODOS_STR:
+        montos = MontoModalidad.objects.filter().values('modalidad__nombre','ciclo','monto')
+    else:
+        montos = MontoModalidad.objects.filter(ciclo = estadistica_filtro).values('modalidad__nombre','ciclo','monto')
+    #[print(monto) for monto in montos]
+    #nerar un diccionario anidado de 2 dimenciones para usar las claves de ciclo y modalidad
+    print(montos)
+    dictMontos = {}
+    for monto in montos:
+        print(monto)
+        ciclo = monto['ciclo']
+        modalidad_nombre = monto['modalidad__nombre']
+        monto_valor = monto['monto']        
+        # Verificar si el ciclo ya existe en el diccionario anidado
+        if ciclo not in dictMontos:
+            dictMontos[ciclo] = {}  # Inicializar un nuevo diccionario para este ciclo        
+        # Agregar la modalidad y el monto al diccionario interno correspondiente al ciclo
+        dictMontos[ciclo][modalidad_nombre] = monto_valor    
+    valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre','ciclo').annotate(frecuencia=Count('modalidad__nombre'))            
+    #[print(frec) for frec in valoresFrecuencias]
+    print(dictMontos)
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
-    labels = [item['modalidad__nombre']+':' for item in valoresFrecuencias ]   
-    total = 0       
-    totales = []
+    labels = {}
+    labels['total'] = 'Total:'
     for item in valoresFrecuencias:
-        totales.append( f"${(item['frecuencia'] * montos[item['modalidad__nombre']]):,.2f}")
-        total += item['frecuencia'] * montos[item['modalidad__nombre']]
-    labels.insert(0, 'Total:')
-    totales.insert(0, f'${total:,.2f}')
+        nuevaLabel = f"{item['modalidad__nombre']}:"
+        if item['modalidad__nombre'] not in labels:
+            labels[item['modalidad__nombre']] = nuevaLabel    
+    totales = {}
+    totales['total'] = 0    
+    for item in valoresFrecuencias:
+        cicloItem = item['ciclo']
+        nombreItem = item['modalidad__nombre']
+        valMonto = dictMontos.get(cicloItem, None)
+        if valMonto:
+            valMonto = valMonto.get(nombreItem, None)
+        if valMonto:
+            if nombreItem in totales:
+                totales[nombreItem] += item['frecuencia'] * valMonto  # f"${(item['frecuencia'] * valMonto):,.2f}"
+            else:
+                totales[nombreItem] = item['frecuencia'] * valMonto
+            totales['total']  += item['frecuencia'] * valMonto
+        #else:
+        #    totales[nombreItem] = f"NA"    
+    for clave, valor in totales.items():
+        if valor == 0:
+            totales[clave] = f"NA"
+        else:
+            totales[clave] = f"${(valor):,.2f}"
+    zipped_values = ((labels[key], totales[key]) for key in labels.keys() & totales.keys())
     conjuntosEstadisticos.append({
-        'tipo': 'lista',
+        'tipo': 'list',
         'dataLabel': f'Dinero invertido: {getChoicesEtiqueta(choices=cicloChoices,valor=estadistica_filtro)}',
-        'data': zip(labels, totales)
+        'data': zipped_values
     })
 
     tituloEst = componerTitulo(getChoicesEtiqueta(choices=cicloChoices,valor=estadistica_filtro), campo_estadistica_original)
@@ -792,7 +831,7 @@ def generarConcentradoXlsx(ciclo):
 
         #Edad
         try:
-            hoy = date.today()
+            hoy = now().date()
             fecha_nacimiento = solicitud.solicitante.fecha_nacimiento            
             edad = round((hoy - fecha_nacimiento).days / 365.25)
             values.append(edad)
