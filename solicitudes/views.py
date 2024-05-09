@@ -62,10 +62,10 @@ def convocatorias(request):
     solicitante = Solicitante.objects.get(pk=request.user.id)
     #obtener modalidades que le corresponden al usuario
     if solicitante.es_renovacion:
-        modalidades = Modalidad.objects.filter(mostrar=True, tipo=Modalidad.TIPO_CHOICES[0][0])
+        modalidades = Modalidad.objects.filter(mostrar=True, archivado=False, tipo=Modalidad.TIPO_CHOICES[0][0])
     else:
-        modalidades = Modalidad.objects.filter(mostrar=True, tipo=Modalidad.TIPO_CHOICES[1][0])
-    convocatoria = Convocatoria.objects.all().first()
+        modalidades = Modalidad.objects.filter(mostrar=True, archivado=False, tipo=Modalidad.TIPO_CHOICES[1][0])
+    convocatoria = Convocatoria.get_object()
     fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
     solicitud = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).first()    
     
@@ -103,7 +103,7 @@ def documentos_convocatorias(request, modalidad_id):
     except Solicitud.DoesNotExist:
         solicitud = Solicitud(modalidad=modalidad, solicitante=solicitante, ciclo=ciclo_actual())
     otra_solicitud_existe = Solicitud.objects.filter(solicitante = solicitante, ciclo = ciclo_actual()).exists()
-    convocatoria = Convocatoria.objects.all().first()
+    convocatoria = Convocatoria.get_object()
 
     #verificar casos donde el usuario no deberia estar en esta vista
     #el usuario ya tiene otra solicitud en otra convocatoria
@@ -178,7 +178,7 @@ def documentos_convocatorias(request, modalidad_id):
     #si ya existe la solicitud se muestra la vista para modificar los documentos
     print(solicitud.id)
     if solicitud.id:
-        convocatoria = Convocatoria.objects.all().first()
+        convocatoria = Convocatoria.get_object()
         fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
         if fecha_convocatoria == False:
             messages.error(request, "Convocatoria cerrada.")
