@@ -7,10 +7,11 @@ def poblarMontoModalidad(apps, schema_editor):
     Modalidad = apps.get_model('modalidades', 'Modalidad')
     MontoModalidad = apps.get_model('modalidades', 'MontoModalidad')
 
-    cicloActual = Ciclo.objects.order_by('-id').first()
+    ciclos = Ciclo.objects.all()
     modadlidades = Modalidad.objects.all()
-    for modalidad in modadlidades:
-        MontoModalidad.objects.create(modalida=modalidad, ciclo=cicloActual, monto=modalidad.monto)
+    for ciclo in ciclos:        
+        for modalidad in modadlidades:
+            MontoModalidad.objects.create(modalida=modalidad, ciclo=ciclo, monto=modalidad.monto)
 
 class Migration(migrations.Migration):
 
