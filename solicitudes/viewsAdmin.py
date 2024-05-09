@@ -147,7 +147,7 @@ def estadisticas(request):
     ultimoCiclo = ciclo_actual()
     #si el usuario no es admin se procede a verificar si los resultados estan publicados y la cantidad de ciclos disponibles
     if not usuarioEsAdmin(request.user):
-        convocatoria = Convocatoria.objects.all().first() 
+        convocatoria = Convocatoria.get_object()
         ultimoEsPublico = convocatoria.ultimo_ciclo_publicado == ciclo_actual()
         if not ultimoEsPublico:            
             ultimoCiclo = getListaCiclos()[1]            
@@ -166,7 +166,7 @@ def estadisticas(request):
         {
             'titulo': 'Modalidades activas',
             'iconCSS': 'fa-object-group',
-            'valor': Modalidad.objects.filter(mostrar = True).values('nombre').distinct().count(),
+            'valor': Modalidad.objects.filter(mostrar = True, archivado=False).values('nombre').distinct().count(),
             'url': 'solicitudes:ESolicitudes',
             'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ultimoCiclo.id}'
         },   
@@ -273,7 +273,7 @@ def estadisticaSolicitudes(request):
     ultimoEsPublico = True
     #si el usuario no es admin se procede a verificar si los resultados estan publicados y la cantidad de ciclos disponibles    
     if not usuarioEsAdmin(request.user):
-        convocatoria = Convocatoria.objects.all().first() 
+        convocatoria = Convocatoria.get_object()
         ultimoEsPublico = convocatoria.ultimo_ciclo_publicado == ciclo_actual()
         if not ultimoEsPublico:
             ultimoCiclo = ciclos[1]
@@ -345,11 +345,9 @@ def estadisticaSolicitudes(request):
     else:
         montos = MontoModalidad.objects.filter(ciclo = estadistica_filtro).values('modalidad__nombre','ciclo','monto')
     #[print(monto) for monto in montos]
-    #nerar un diccionario anidado de 2 dimenciones para usar las claves de ciclo y modalidad
-    print(montos)
+    #nerar un diccionario anidado de 2 dimenciones para usar las claves de ciclo y modalidad    
     dictMontos = {}
-    for monto in montos:
-        print(monto)
+    for monto in montos:        
         ciclo = monto['ciclo']
         modalidad_nombre = monto['modalidad__nombre']
         monto_valor = monto['monto']        
@@ -359,8 +357,7 @@ def estadisticaSolicitudes(request):
         # Agregar la modalidad y el monto al diccionario interno correspondiente al ciclo
         dictMontos[ciclo][modalidad_nombre] = monto_valor    
     valoresFrecuencias = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values('modalidad__nombre','ciclo').annotate(frecuencia=Count('modalidad__nombre'))            
-    #[print(frec) for frec in valoresFrecuencias]
-    print(dictMontos)
+    #[print(frec) for frec in valoresFrecuencias]    
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
     labels = {}
     labels['total'] = 'Total:'
@@ -384,12 +381,20 @@ def estadisticaSolicitudes(request):
             totales['total']  += item['frecuencia'] * valMonto
         #else:
         #    totales[nombreItem] = f"NA"    
-    for clave, valor in totales.items():
-        if valor == 0:
-            totales[clave] = f"NA"
+    totales_ordenados = sorted(totales.items(), key=lambda x: x[1], reverse=True)
+    totales_ordenados = [[key, value] for key, value in totales_ordenados]    
+    for tupla in totales_ordenados:
+        if tupla[1] == 0:
+            tupla[1] = f"NA"
         else:
-            totales[clave] = f"${(valor):,.2f}"
-    zipped_values = ((labels[key], totales[key]) for key in labels.keys() & totales.keys())
+            tupla[1] = f"${(tupla[1]):,.2f}"
+    
+    
+    # Crea zipped_values con los elementos ordenados
+    zipped_values = ((labels[key], valor) for key, valor in totales_ordenados if key in labels)
+    
+    #zipped_values = ((labels[key], totales[key]) for key in labels.keys() & totales.keys())
+
     conjuntosEstadisticos.append({
         'tipo': 'list',
         'dataLabel': f'Dinero invertido: {getChoicesEtiqueta(choices=cicloChoices,valor=estadistica_filtro)}',
@@ -442,7 +447,7 @@ def listaSolicitudes(request):
     url_base_page = request.session['anterior'].split('&page=')[0]
     url_base_page = url_base_page.split('?')[1] if '?' in url_base_page else ''    
     solicitudes = Solicitud.objects.filter(ciclo = cicloActual)  
-    modalidades = Modalidad.objects.all()
+    modalidades = Modalidad.objects.filter(archivado=False)
     filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
     filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='__str__', selectedAll=False)
 
@@ -591,7 +596,7 @@ def documentos_solicitante(request, pk):
         #Existieron documentos con error y otros fueron aprobados
         if seleccionDenegados != None :   
             #Si la fecha de la convocatoria sigue abierta y el solicitante tuvo documentos erróneos
-            convocatoria = Convocatoria.objects.all().first()
+            convocatoria = Convocatoria.get_object()
             fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
             if fecha_convocatoria:
                 #Si la cantidad de documentos recahzados es igual a la cantidad de los documentos totales de la modalidad

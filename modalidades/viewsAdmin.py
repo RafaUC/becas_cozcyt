@@ -17,50 +17,61 @@ from .utils import *
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def configGeneral(request):
-    obj = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
+    obj = Convocatoria.get_object() #Obtiene la primera convocatoria ya que solo existirá una
+    ciclo = ciclo_actual()
     convocatoriaForm = ConvocatoriaForm()
-    
+    cicloForm = CicloForm(instance = ciclo)
+
     convocatoria_existe = False
     if Convocatoria.objects.exists():
             convocatoria_existe = True
     print(convocatoria_existe)
     print(obj.ultimo_ciclo_publicado)
-    ciclo = ciclo_actual()
+    
     if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
         convocatoriaForm = ConvocatoriaForm(instance = obj)
         context = {'convocatoria' : convocatoriaForm}
         for field in convocatoriaForm.fields.values():
             field.widget.attrs['disabled'] = 'disabled'
+        for field in cicloForm.fields.values():
+            field.widget.attrs['disabled'] = 'disabled'
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(request.POST or None, request.FILES or None, instance = obj)
+            cicloForm = CicloForm(request.POST, instance=ciclo)
             # Eliminar documento en caso de que se suba otro
             # nuevoArchivo = ConvocatoriaForm.instance.archivo_convocatoria #nuevo archivo de convocatoria
             # if ConvocatoriaForm.instance.id and ConvocatoriaForm.instance.archivo_convocatoria is not None:                                                
             #     oldFile = Convocatoria.objects.get(id=ConvocatoriaForm.instance.id).archivo_convocatoria
             #     if ConvocatoriaForm.instance.file != oldFile:                    
             #         oldFile.delete()  
-            if convocatoriaForm.is_valid():                
+            if convocatoriaForm.is_valid() and cicloForm.is_valid():                
                 convocatoriaForm.save()
+                cicloForm.save()
                 messages.success(request, "Convocatoria actualizada.")            
                 return redirect("modalidades:AConfigGeneral")
             else:
                 messages.error(request, convocatoriaForm.errors)
+                messages.error(request, cicloForm.errors)
             
 
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
         
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(request.POST or None, request.FILES or None)
-            if convocatoriaForm.is_valid():
+            cicloForm = CicloForm(request.POST, instance=ciclo)
+            if convocatoriaForm.is_valid() and cicloForm.is_valid():
                 convocatoriaForm.save()
+                cicloForm.save()
                 messages.success(request, "Convocatoria agregada con éxito.")                
                 return redirect("modalidades:AConfigGeneral")
             else:
                 messages.error(request, convocatoriaForm.errors)
+                messages.error(request, cicloForm.errors)
                 print("convocatoria no valida")
 
     context = {
         'convocatoria':convocatoriaForm, 
+        'cicloForm': cicloForm,
         'convocatoria_existe' : convocatoria_existe,
         'ciclo': ciclo,
         }
@@ -70,7 +81,7 @@ def configGeneral(request):
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def togglePublicarUltimosResultados(request):        
-    convocatoria = Convocatoria.objects.all().first() #Obtiene la primera convocatoria ya que solo existirá una
+    convocatoria = Convocatoria.get_object() #Obtiene la primera convocatoria ya que solo existirá una
     if convocatoria:
         if convocatoria.ultimo_ciclo_publicado and convocatoria.ultimo_ciclo_publicado == ciclo_actual():
             convocatoria.ultimo_ciclo_publicado = None
@@ -85,7 +96,7 @@ def togglePublicarUltimosResultados(request):
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def configModalidades(request): #se muestran las modalidades        
-    modalidades = Modalidad.objects.all()
+    modalidades = Modalidad.objects.filter(archivado = False)
     return render(request, 'admin/config_modalidad.html', {'modalidades':modalidades})
 
 # Función que permite mostrar u ocultar una modalidad 
@@ -132,7 +143,9 @@ def mostrar_modalidad(request, modalidad_id):
 @user_passes_test(usuarioEsAdmin)
 def agregarModalidad(request):      
     modalidad = Modalidad()
+    montoModalidad = MontoModalidad(modalidad=modalidad, ciclo = ciclo_actual())
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=modalidad)
+    montoForm = MontoModalidadForm(request.POST or None, instance=montoModalidad)
     DocumetoModalidadFormSet = inlineformset_factory(Modalidad, Documento, form=DocumentoForm, extra=0, can_delete=False)
     #Agregar el qs con los documentos base a la variable de qs
     # qs =  Documento.objects.filter(nombre__startswith='C')
@@ -141,8 +154,9 @@ def agregarModalidad(request):
     #print(formset.empty_form)
     if request.method == "POST":
         #form = ModalidadForm(request.POST, request.FILES)
-        if form.is_valid() and formset.is_valid():            
+        if form.is_valid() and montoForm.is_valid() and formset.is_valid():            
             form.save()
+            montoForm.save()
             formset.save()
             # print('modalidad creada')
             
@@ -151,9 +165,11 @@ def agregarModalidad(request):
         else:
             messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
             messages.error(request, form.errors)            
+            messages.error(request, montoForm.errors)     
             messages.error(request, formset.errors)      
     context = {
             'form' : form,
+            'montoForm' : montoForm,
             'formset' : formset
     }
     return render(request, 'admin/config_agregar_modalidad.html', context)
@@ -162,37 +178,56 @@ def agregarModalidad(request):
 @user_passes_test(usuarioEsAdmin)
 def editarModalidad(request, modalidad_id):    
     obj = get_object_or_404(Modalidad, pk = modalidad_id)
+    imgPath = obj.imagen.path
+    montoModalidad = get_object_or_404(MontoModalidad, modalidad=obj, ciclo=ciclo_actual())
     form = ModalidadForm(request.POST or None, request.FILES or None, instance=obj)
+    montoForm = MontoModalidadForm(request.POST or None, instance=montoModalidad)
     #formset = modelformset_factory(Model, form=ModelForm, extra=0)
     DocumetoModalidadFormSet = inlineformset_factory(Modalidad, Documento, form=DocumentoForm, extra=0, can_delete=False)    
-    formset = DocumetoModalidadFormSet(request.POST or None, instance=form.instance, prefix='form')
-    context = {
-        'modalidad' : obj , 
-        'form' : form, 
-        'formset' : formset
-    }
-    if request.method == "POST":
-        if len(request.FILES) != 0:
-            if len(obj.imagen) > 0: 
-                os.remove(obj.imagen.path) #Elimina la imagen del folder
-            obj.imagen = request.FILES['imagen']
-        if form.is_valid() and formset.is_valid():
+    formset = DocumetoModalidadFormSet(request.POST or None, instance=form.instance, prefix='form')    
+    if request.method == "POST":        
+        if form.is_valid() and montoForm.is_valid() and formset.is_valid():
+            if len(request.FILES) != 0:
+                try:
+                    os.remove(imgPath) #Elimina la imagen del folder
+                except:
+                    pass
+                obj.imagen = request.FILES['imagen']
             form.save()            
+            montoForm.save()  
             formset.save()            
             messages.success(request, "Cambios guardados.")
             return redirect("modalidades:AConfigModalidades")
         else:
             messages.warning(request, "Porfavor verifique que todos los datos estén llenos.")
-            messages.error(request, form.errors)            
+            messages.error(request, form.errors)      
+            messages.error(request, montoForm.errors)        
             messages.error(request, formset.errors)        
+    context = {
+        'modalidad' : obj , 
+        'form' : form, 
+        'montoForm': montoForm,
+        'formset' : formset
+    }
     return render(request, 'admin/editar_modalidad.html', context)
 
 @login_required
 @user_passes_test(usuarioEsAdmin)
+def archivarModalidad(request, modalidad_id):   
+    modalidad = Modalidad.objects.get(pk = modalidad_id)    
+    modalidad.archivado = True
+    modalidad.save()
+    messages.success(request, "Modalidad archivada correctamente")
+    return redirect("modalidades:AConfigModalidades")
+
+@login_required
+@user_passes_test(usuarioEsAdmin)
 def eliminarModalidad(request, modalidad_id):    
-    modalidad = Modalidad.objects.get(pk = modalidad_id)
-    if len(modalidad.imagen) > 0:
+    modalidad = Modalidad.objects.get(pk = modalidad_id)    
+    try:
         os.remove(modalidad.imagen.path) #Elimina la imagen del folder
+    except:
+        pass
     modalidad.delete()
     messages.success(request, "Modalidad eliminada correctamente")
     return redirect("modalidades:AConfigModalidades")

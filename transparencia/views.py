@@ -21,8 +21,8 @@ def getContextoBaseTransparencia(request):
 
 def inicioTransparencia(request):
     ciclo = ciclo_actual()
-    convocatoria = Convocatoria.objects.all().first()
-    modalidades = Modalidad.objects.filter(pk__in = Modalidad.objects.values('nombre').distinct().annotate(pk = Subquery(Modalidad.objects.filter(nombre= OuterRef("nombre")).order_by("pk").values("pk")[:1])).values_list("pk", flat=True))
+    convocatoria = Convocatoria.get_object()
+    modalidades = Modalidad.objects.filter(mostrar=True, archivado=False, pk__in = Modalidad.objects.values('nombre').distinct().annotate(pk = Subquery(Modalidad.objects.filter(nombre= OuterRef("nombre")).order_by("pk").values("pk")[:1])).values_list("pk", flat=True))
     fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
     
     context = {
@@ -60,7 +60,7 @@ def resultados(request, num):
 def resultadosContenido(request,num,mod):
     ciclo = resultadosValidarCiclo(request, num)    
 
-    convocatoria = Convocatoria.objects.all().first() #Obtiene la convocatoria    
+    convocatoria = Convocatoria.get_object() #Obtiene la convocatoria    
     cicloAct = ciclo_actual()
     #si el ultimo siclo publicado no coincide con el actual y el seleccionado es el actual, siginifica que no esta publicado
     if convocatoria.ultimo_ciclo_publicado != cicloAct and ciclo == cicloAct:

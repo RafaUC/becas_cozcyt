@@ -4,10 +4,11 @@ from uuid import uuid4
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
-from django.utils import timezone
+from datetime import date
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 
 '''
 def obtener_mes_numero(mes):
@@ -41,16 +42,29 @@ def ciclo_actual_genNombre():
         ciclo = "Enero - Junio"    
     return f"{ciclo} {año}"
 
-def ciclo_actual():
-    # Obtener el último ciclo disponible        
-    convocatoria = Convocatoria.get_object()
-    
-    #verificamos si el ciclo actual todavia esta bigente
-    if now() < convocatoria.fecha_nuevo_ciclo:
-        return Ciclo.objects.order_by('-id').first()
+def gen_fecha_nuevo_ciclo(ahora=None):
+    if ahora is None:
+        ahora = now()
+    if ahora.month >= 8:
+        # Si el mes actual es agosto o posterior, la nueva fecha será el 1 de agosto del próximo año
+        nuevaFecha = date(ahora.year + 1, 8, 1)
     else:
-        nombreCiclo = ciclo_actual_genNombre()
-        nuevo_ciclo = Ciclo.objects.create(nombre=nombreCiclo)
+        # Si el mes actual es anterior a agosto, la nueva fecha será el 1 de agosto del año actual
+        nuevaFecha = date(ahora.year, 8, 1)
+    return nuevaFecha
+
+def ciclo_actual():
+    # Obtener el último ciclo disponible               
+    ultimoCiclo = Ciclo.objects.order_by('-id').first()
+    nombreUltimoCiclo = ciclo_actual_genNombre()
+
+    #verificamos si el ciclo actual todavia esta bigente
+    if ultimoCiclo and ultimoCiclo.nombre == nombreUltimoCiclo:
+        return ultimoCiclo
+    #si no se crea un nuevo ciclo y se actualiza la fecha del proximo en la config de la convocatoria
+    else:
+        print('Creando nuevo ciclo')        
+        nuevo_ciclo = Ciclo.objects.create(nombre=nombreUltimoCiclo)                
         return nuevo_ciclo     
 
 def getCiclo(index=0):
@@ -83,7 +97,15 @@ class Ciclo(models.Model):
 @receiver(post_save, sender=Ciclo)
 def nuevo_ciclo(sender, instance, created, **kwargs):
     if created:
-        pass
+        print('Ciclo creado, actualizando configuraciones')
+        modalidadesActivas = Modalidad.objects.filter(archivado=False)
+        for modalidad in modalidadesActivas:
+            ultimoMonto = MontoModalidad.objects.filter(modalidad=modalidad).order_by('-id').first()
+            ultimoMontoval = None
+            if ultimoMonto:
+                ultimoMontoval = ultimoMonto.monto
+            MontoModalidad.objects.create(modalidad=modalidad, ciclo=instance, monto=ultimoMontoval)
+
         
 
 
@@ -116,8 +138,7 @@ class SingletonModel(models.Model):
 #clase de configuracion de convocatorias
 class Convocatoria(SingletonModel):
     fecha_inicio = models.DateField(null=False, blank=False)
-    fecha_cierre = models.DateField(null=False, blank=False)
-    fecha_nuevo_ciclo = models.DateField(null=False, blank=False, default=now)    
+    fecha_cierre = models.DateField(null=False, blank=False)    
     archivo_convocatoria = models.FileField(upload_to=modalidadMediaPath, validators=[validador_pdf], verbose_name="Convocatoria", null=True)    
     ultimo_ciclo_publicado = models.ForeignKey(Ciclo, on_delete=models.SET_NULL, verbose_name=_("Ultimo ciclo publicado"), null=True, blank=True)
 

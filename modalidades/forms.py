@@ -13,15 +13,23 @@ class ConvocatoriaForm(ModelForm):
         fields = ('__all__')
         labels = {
             'fecha_inicio' : '', 
-            'fecha_cierre' : '', 
-            'presupuesto' : '',
+            'fecha_cierre' : '',             
             'archivo_convocatoria': '',
             }
-        widgets = {
-            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'onkeypress': "return isNumberPuntKey(event)", 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
+        widgets = {            
             'fecha_inicio': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_inicio', 'type':'date', 'style':'width:auto;'}),
             'fecha_cierre': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'config-general-inputs form-control', 'id':'fecha_cierre', 'type':'date', 'style':'width:auto;'}),
             'ultimo_ciclo_publicado' : forms.TextInput(attrs={'class': 'form-control mt-1', 'input_type': 'hidden', 'placeholder': ''}),
+        }
+class CicloForm(ModelForm):
+    class Meta:
+        model = Ciclo
+        fields = {'presupuesto'}
+        widgets = {
+            'presupuesto' : forms.TextInput(attrs={'class':'config-general-inputs form-control', 'rows':1, 'cols':13, 'onkeypress': "return isNumberPuntKey(event)", 'placeholder' : 'Ej. 999999.99, 867594.98', 'style':'resize:none; width:auto;'}),
+        }
+        labels = {
+            'presupuesto' : '', 
         }
 
 class ModalidadForm(ModelForm):
@@ -40,6 +48,15 @@ class ModalidadForm(ModelForm):
             'nombre' : forms.TextInput(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Talento especial, LABSOL...'}),
             'descripcion' : forms.Textarea(attrs={'class': 'form-control mt-1', 'placeholder': 'Ej. Modalidad que se le otorga a los estudiantes que...', 'rows':3, 'cols':1}),            
             'tipo': forms.Select(attrs={'class': 'form-control border-1 form-select'}),
+        }
+
+class MontoModalidadForm(ModelForm):
+    class Meta:
+        model = MontoModalidad
+        fields = ('monto',)
+        labels = {'monto': ''}
+        widgets = {
+            'monto' : forms.TextInput(attrs={'class': 'form-control mt-1', 'onkeypress': "return isNumberPuntKey(event)", 'placeholder': 'Ej. 4500.00'}),
         }
 
 class DocumentoForm(ModelForm):
