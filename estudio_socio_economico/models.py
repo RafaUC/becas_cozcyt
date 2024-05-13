@@ -162,7 +162,7 @@ class RCasillas(Respuesta):
                 string += ': '+ str(self.otro)
             if i < len(objs) - 1:
                 string += ', '
-        if string is '':
+        if string == '':
             return '-----'
         else :           
             return string

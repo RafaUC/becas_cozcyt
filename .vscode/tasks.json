@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start_debug_compose",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [                
+                "-f",
+                "docker-compose.debug.yml",
+                "up",
+                //"-d"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
