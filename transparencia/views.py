@@ -70,6 +70,7 @@ def resultadosContenido(request,num,mod):
     else:
         modalidadesdelCiclo = MontoModalidad.objects.filter(ciclo=ciclo).values_list('modalidad_id', flat=True).distinct()
         print(modalidadesdelCiclo)
+        print(modalidadesdelCiclo)
         modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, id=mod).first()
         if not modalidad:
             modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, mostrar=True, archivado=False).first()
