@@ -43,10 +43,14 @@ Inicio Estimulos COZCyT
                         <div class="swiper-slide" style="width: auto !important;">
                             <div class="info_modalidad_slide" style="">
                                 <div class="info_modalidad_desc col-md-8" style="margin-bottom: 1em;">
-                                    <h5><strong>{{modalidad.nombre}}</strong></h5>
-                                    <h6 style="text-align: justify;">
-                                        {{modalidad.descripcion}}
-                                    </h6>
+                                    <div class="info_modalidad_titulo">
+                                        <h5><strong>{{modalidad.nombre}}</strong></h5>
+                                    </div>
+                                    <div class="info_modalidad_descripcion">
+                                        <h6 style="text-align: justify;">
+                                            {{modalidad.descripcion}}
+                                        </h6>
+                                    </div>
                                 </div>
                                 <div class="info_modalidad_image col-md-4" style="text-align: center;">
                                     <img  class="imagen-modalidad img-fluid" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
@@ -122,7 +126,7 @@ Inicio Estimulos COZCyT
             <div class="col-md-4" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
-                        <h5 style="margin-bottom: 1em;"><strong>Si presenta alguna duda comuniquese con:</strong></h5>
+                        <h5 style="margin-bottom: 1em; color: var(--rosaO);"><strong>Si presenta alguna duda comuniquese con:</strong></h5>
 
                         <h6 style="margin-bottom: 0;">
                             <strong>Mtra. Sahara María del Río Venegas </strong> 
@@ -131,7 +135,7 @@ Inicio Estimulos COZCyT
                             Directora de Desarrollo de Talento en Ciencia, Tecnología e Innovación
                         </h6>
                         <h6 style="margin-bottom: 1em;">
-                            sdelrio@cozcyt.gob.mx
+                            <u>sdelrio@cozcyt.gob.mx</u>
                         </h6>
                         <h6 style="margin-bottom: 0;">
                             <strong> I.S.C. Nayeli Alcalá Aguilar </strong>
@@ -140,7 +144,7 @@ Inicio Estimulos COZCyT
                             Jefa del Departamento de Becas 
                         </h6>
                         <h6 style="margin-bottom: 1em;">
-                            nalcala@cozcyt.gob.mx
+                            <u>nalcala@cozcyt.gob.mx</u>
                         </h6>
                         <h6 style="margin-bottom: 0;">
                             <strong> José Luis Alfredo Estrada Espino </strong>
@@ -149,7 +153,7 @@ Inicio Estimulos COZCyT
                             Encargado de Apoyos 
                         </h6>
                         <h6 style="margin-bottom: 0;">
-                            aestrada@cozcyt.gob.mx
+                            <u>aestrada@cozcyt.gob.mx</u>
                         </h6>
                     </div>
                 </div>
@@ -157,7 +161,7 @@ Inicio Estimulos COZCyT
             <div class="col-md-4 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center; margin-left: 5em;">
                 <div style="margin: 2em;">
                     <div class="" style="text-align: center;">
-                        <h5 style="margin-bottom: 1em;"><strong>O visitenos en:</strong></h5>
+                        <h5 style="margin-bottom: 1em; color: var(--rosaO);"><strong>O visitenos en:</strong></h5>
                         <h6 style="">
                             Callejón No. 101, Parque de Ciencia y Tecnología, <strong>Ciudad 
                             Quantum</strong>, C.P. 98090, <strong> 

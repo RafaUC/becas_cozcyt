@@ -1026,6 +1026,13 @@ i.rechazado:before {
     order: 1;
     text-align: center;
   }
+
+  .info_modalidad_titulo{
+    order: 2;
+  }
+  .info_modalidad_descripcion{
+    order: 1;
+  }
 }
 
 /* Numeración del carrusel */
