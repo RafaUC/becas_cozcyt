@@ -18,18 +18,18 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from .forms import *
 from .models import *
-from .views import verificarRedirect, borrarSelect
+from .views import borrarSelect
 from .tokens import account_activation_token
 from modalidades.models import *
 from solicitudes.models import *
 
+#decoradores
+from .decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
+
+
 @login_required
-def inicio(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def inicio(request):        
     convocatoria = Convocatoria.objects.all().first()
     solicitudes = Solicitud.objects.filter(ciclo = ciclo_actual()) #aceptadas
 
@@ -121,12 +121,8 @@ def BusquedaEnCamposQuerySet(queryset, search_query, matchExacto=False, relatedF
     return queryset
 
 @login_required
-def listaInstituciones(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def listaInstituciones(request):        
     request.session['anterior'] = request.build_absolute_uri()       
     instituciones = Institucion.objects.all()
 
@@ -146,12 +142,8 @@ def listaInstituciones(request):
     return render(request, 'admin/instituciones.html', context)
 
 @login_required
-def crearEditarInstitucion(request, pk=None):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@user_passes_test_httpresponse(usuarioEsAdmin)
+def crearEditarInstitucion(request, pk=None):        
     if pk:
         instancia = get_object_or_404(Institucion, pk=pk)
         postUrl = request.build_absolute_uri(reverse('usuarios:AEditarInstitucion', args=[pk]))
@@ -189,12 +181,8 @@ def crearEditarInstitucion(request, pk=None):
     return render(request, 'modal_base.html', context)
 
 @login_required
-def eliminarInstitucion(request, pk):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
+@user_passes_test(usuarioEsAdmin)
+def eliminarInstitucion(request, pk):    
     institucionBorrar = get_object_or_404(Institucion, pk=pk)    
     institucionBorrar.delete()
     messages.success(request, 'Institución eliminada con éxito')    
@@ -202,12 +190,8 @@ def eliminarInstitucion(request, pk):
     return redirect(anterior_url)
 
 @login_required
-def listaCarreras(request, pkInst):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@user_passes_test_httpresponse(usuarioEsAdmin)
+def listaCarreras(request, pkInst):        
     institucion = get_object_or_404(Institucion, pk=pkInst)
     CarreraInlineFormSet = inlineformset_factory(Institucion, Carrera, form=CarreraForm, extra=1, exclude=['institucion'])
     postUrl = request.build_absolute_uri(reverse('usuarios:AListaCarreras', args=[pkInst]))
@@ -235,12 +219,8 @@ def listaCarreras(request, pkInst):
 
 
 @login_required
-def listaUsuarios(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def listaUsuarios(request):        
     request.session['anterior'] = request.build_absolute_uri()
     usuarios = Usuario.objects.filter(is_superuser=True)
     solicitantes = Solicitante.objects.all()
@@ -275,12 +255,8 @@ def listaUsuarios(request):
 
 
 @login_required
-def editarUsuario(request, pk):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def editarUsuario(request, pk):       
     solicitante = get_object_or_404(Solicitante, pk=pk)  
     #rfc = solicitante.rfc      
     formPersonal = SolicitantePersonalesAdminForm(instance = solicitante) #asegurarse de no modificar el rfc
@@ -359,20 +335,13 @@ def editarUsuario(request, pk):
     return render(request, 'admin/editar_usuario.html', context)
 
 @login_required
-def configuracion(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def configuracion(request):        
     return render(request, 'admin/configuracion.html')
 
 @login_required
-def puntajes(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
+@user_passes_test(usuarioEsAdmin)
+def puntajes(request):    
     mpForm = PuntajeMunicipioForm()
 
     if request.method == 'GET':
@@ -431,12 +400,8 @@ def cargar_municipio_puntos(request):
 
 
 @login_required
-def eliminarUsuario(request, user_id):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-
+@user_passes_test(usuarioEsAdmin)
+def eliminarUsuario(request, user_id):    
     user_to_delete = get_object_or_404(User, pk=user_id)    
     user_to_delete.delete()
     messages.success(request, 'Usuario eliminado con éxito')
@@ -445,12 +410,8 @@ def eliminarUsuario(request, user_id):
     return redirect(anterior_url)
 
 @login_required
-def reEnviarConfirmaciones(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsAdmin)
+def reEnviarConfirmaciones(request):        
     usrNoConfirmados = Usuario.objects.filter(is_active=False)
     for usuario in usrNoConfirmados:
         mail_subject = 'Confirmar cuenta'  
@@ -472,12 +433,8 @@ def reEnviarConfirmaciones(request):
     return redirect(anterior_url)
 
 @login_required
-def agregarAdmin(request, pk=None):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@user_passes_test_httpresponse(usuarioEsAdmin)
+def agregarAdmin(request, pk=None):        
     if pk:
         instancia = get_object_or_404(Usuario, pk=pk)
         postUrl = request.build_absolute_uri(reverse('usuarios:AAgregarAdmin', args=[pk]))
