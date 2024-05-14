@@ -14,7 +14,7 @@ from django.http import HttpResponseForbidden
 from .forms import *
 from .models import *
 from usuarios.models import Usuario
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsSolicitante
 from modalidades.models import *
 from modalidades.forms import *
 
@@ -57,12 +57,8 @@ def verPDF(request, soli, file):
 
 @never_cache
 @login_required
-def convocatorias(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
+def convocatorias(request):        
     solicitante = Solicitante.objects.get(pk=request.user.id)
     #obtener modalidades que le corresponden al usuario
     if solicitante.es_renovacion:
@@ -96,12 +92,9 @@ def notificar_si_falta_documentos(solicitud):
         return False
 
 @login_required
-def documentos_convocatorias(request, modalidad_id):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url: 
-        return redirect(url)
-        
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
+def documentos_convocatorias(request, modalidad_id):         
+    solicitante = get_object_or_404(Usuario, pk=request.user.id)     
     solicitante = solicitante.solicitante
     modalidad = get_object_or_404(Modalidad, pk=modalidad_id)
     documentos = Documento.objects.filter(modalidad__id=modalidad_id)
@@ -201,12 +194,8 @@ def documentoRespuesta(request, pk=None):
     return redirect('documentos_convocatoria')
 
 @login_required
-def historial(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
+def historial(request):        
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     solicitudes = Solicitud.objects.filter(solicitante = solicitante).order_by('-id')
 

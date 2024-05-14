@@ -1,17 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
 from usuarios.models import Usuario
 from .models import Seccion, Elemento, Opcion
 from.forms import SeccionFormSet, ElementoFormSet, OpcionFormSet
 from django.contrib import messages
 # Create your views here.
 
-def configEstudioGetForm(request):    
-    url = verificarRedirect(request.user, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-
+@user_passes_test_httpresponse(usuarioEsAdmin)
+def configEstudioGetForm(request):        
     context = {}
 
     if request.method == 'GET':  
@@ -41,12 +38,8 @@ def configEstudioGetForm(request):
 
 # Crear el inline formset para Elemento    
 # Donde "ElementoForm" es el ModelForm personalizado para el modelo Elemento que definiste anteriormente.
-def configEstudio(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(usuario, 'permiso_administrador')    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)  
-      
+@user_passes_test(usuarioEsAdmin)
+def configEstudio(request):         
     context = {}
 
     if request.method == 'POST':  

@@ -9,7 +9,7 @@ from pathlib import Path
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.http import JsonResponse
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsSolicitante
 from django.views.decorators.http import require_POST
 from django.views.decorators.http import require_http_methods
 
@@ -37,13 +37,10 @@ def numNotifNL(request):
     # Devuelve la respuesta como JSON
     return JsonResponse({'numero_mensajes_no_leidos': numero_mensajes_no_leidos})
 
-
-def renderNotificaciones(request):
-    solicitante = get_object_or_404(Usuario, pk=request.user.id)  
-    url = verificarRedirect(solicitante)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@login_required
+@user_passes_test_httpresponse(usuarioEsSolicitante)
+def renderNotificaciones(request):   
+    solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     page = request.GET.get('page', 1)    
     notificaciones = Notificacion.objects.filter(solicitante=solicitante)    
     paginator = Paginator(notificaciones, 20)

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django import forms as FForms
 from django.db.models import Prefetch
-from usuarios.views import verificarRedirect
+from usuarios.decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsSolicitante
 from usuarios.models import Usuario, Solicitante
 from .models import Seccion, Elemento, Opcion, Respuesta, RAgregacion
 from .forms import RNumericoForm, RTextoCortoForm, RTextoParrafoForm, RHoraForm, RFechaForm, ROpcionMultipleForm, RCasillasForm, RDesplegableForm
@@ -48,11 +48,8 @@ def crearForms(forms, opcOtro, requestPost, preguntasEstudio, formModels, formMo
                     forms[elemento.id].fields['respuesta'].choices = choices
 
 @login_required
-def estudioSE(request):    
-    url = verificarRedirect(request.user)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return redirect(url)
-    
+@user_passes_test(usuarioEsSolicitante, login_url='usuarios:loginRedirect')
+def estudioSE(request):           
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 
     preguntasEstudio = Seccion.objects.all().prefetch_related('elemento_set__opcion_set')    
@@ -145,11 +142,8 @@ def estudioSE(request):
 
 
 @login_required
-def agregarR(request, seccionID):
-    url = verificarRedirect(request.user)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@user_passes_test_httpresponse(usuarioEsSolicitante)
+def agregarR(request, seccionID):       
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 
     preguntasEstudio = Seccion.objects.filter(id = seccionID).prefetch_related('elemento_set__opcion_set')    
@@ -224,11 +218,8 @@ def agregarR(request, seccionID):
 
 
 @login_required
-def eliminarR(request, seccionID, registroID):
-    url = verificarRedirect(request.user)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-    
+@user_passes_test_httpresponse(usuarioEsSolicitante)
+def eliminarR(request, seccionID, registroID):        
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     registroAgregacion = get_object_or_404(RAgregacion, pk=registroID)      
     respuestas = Respuesta.objects.filter(rAgregacion=registroAgregacion, solicitante=solicitante).select_subclasses()
@@ -245,11 +236,8 @@ def eliminarR(request, seccionID, registroID):
 
 
 @login_required
-def getEstudioPDF(request):        
-    url = verificarRedirect(request.user)    
-    if url:          #Verifica si el usuario ha llenaodo su informacion personal por primera vez y tiene los permisos necesarios
-        return HttpResponse("", status=401)
-
+@user_passes_test_httpresponse(usuarioEsSolicitante)
+def getEstudioPDF(request):           
     ###########OBtener informacion ###############
     solicitante = get_object_or_404(Solicitante, pk=request.user.id)  
     #obtener los formularios del estudio SE # filter(tipo='unico', nombre='Prueba') 
