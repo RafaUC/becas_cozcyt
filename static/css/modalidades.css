@@ -38,11 +38,11 @@
   }
 
   .enlace-login{
-    color: var(--rosaM);
+    color: var(--rosaF);
   }
 
   .enlace-login:hover{
-    color: var(--pantene5513);
+    color: var(--rosaO);
   }
 
 /* Crear cuenta */
