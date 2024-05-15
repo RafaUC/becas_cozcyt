@@ -20,3 +20,4 @@ COPY requirements.txt /app/
 RUN pip3 install -r requirements.txt --break-system-packages
 COPY . /app/
 EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "becas_cozcyt.wsgi"]

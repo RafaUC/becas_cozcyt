@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Estadísticas
+{% endblock titulo %}
+
+{% block body %}
+{% include 'estadisticas/eImports.html' %}
+<div id="contenedorEstadisticas"></div>
+
+<script>
+    $(document).ready(function() {
+        // Cuando el documento esté listo, realiza la solicitud AJAX
+        $.ajax({
+            url: "{% url 'solicitudes:Estadisticas' %}", // URL a la que se realizará la solicitud
+            type: 'GET', // Método de solicitud (GET, POST, etc.)
+            dataType: 'html', // Tipo de datos que se espera recibir
+            success: function(data) {
+                // En caso de éxito, agrega el contenido recibido al elemento #contenedorEstadisticas
+                $('#contenedorEstadisticas').html(data);
+            },
+            error: function(xhr, status, error) {
+                // En caso de error, muestra un mensaje de error en la consola del navegador
+                console.error('Error al cargar stadisticas:', status, error);
+            }
+        });
+    });
+</script>
+
+{% endblock body %}

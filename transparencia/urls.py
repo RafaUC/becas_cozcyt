@@ -7,5 +7,5 @@ urlpatterns = [
     path('transparencia/', views.inicioTransparencia, name='Tinicio'),
     path('transparencia/resultados/<int:num>', views.resultados, name='Tresultados'),
     path('transparencia/resultados/<int:num>/<int:mod>', views.resultadosContenido, name='TresCont'),
-    path('transparencia/sit', views.inicioTransparencia, name='Tsit'),    
+    path('transparencia/sit', views.transparenciaSIT, name='Tsit'),    
 ]

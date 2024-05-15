@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+    app:
+        build: .
+        container_name: sistema_becas
+        restart: always
+        command: sh -c "pip install debugpy -t /tmp && cron && python3 manage.py crontab add && python3 -Xfrozen_modules=off /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"
+        depends_on:
+            - db-becas
+        links:
+            - db-becas
+        volumes:
+            - ./:/app
+        ports:
+            - 8000:8000
+            - 5678:5678
+          
+    db-becas:
+        image: mariadb
+        restart: always
+        container_name: db-becas
+        environment:
+            MYSQL_DATABASE: db-becas
+            MYSQL_USER: becas_user
+            MYSQL_PASSWORD: becas_password
+            MYSQL_ROOT_PASSWORD: becas_root_password
+        volumes:
+            - db-becas:/var/lib/mysql
+        ports:
+           - "3320:3306"
+
+    redis-becas:
+        image: redis
+        restart: always
+        container_name: redis-becas
+        ports:
+            - "6379:6379"
+
+volumes:
+    db-becas:

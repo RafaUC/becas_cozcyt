@@ -31,6 +31,7 @@ urlpatterns = [
     path('administracion/concentrado/solicitud/<int:pk>', viewsAdmin.concentradoSolicitud, name='AConcentradoSoli'),
     path('administracion/concentrado/convocatoria/<str:ciclo>', viewsAdmin.concentradoConvocatoria, name='AConcentradoConv'),
 
-    path('administracion/estadisticas', viewsAdmin.estadisticas, name='AEstadisticas'),
-    path('administracion/estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
+    path('estadisticas', viewsAdmin.estadisticas, name='Estadisticas'),
+    path('administracion/estadisticas', viewsAdmin.AdminEstadisticas, name='AEstadisticas'),
+    path('estadisticas/solicitudes', viewsAdmin.estadisticaSolicitudes, name='ESolicitudes'),
 ]

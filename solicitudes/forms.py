@@ -5,7 +5,6 @@ from django.forms import ModelForm
 from django.db.models import Subquery
 
 from .models import *
-from modalidades.models import ordenar_lista_ciclos
 
 # class ConvocatoriaForm(ModelForm):
 
@@ -68,47 +67,24 @@ class FiltroForm(forms.Form):
             return ''
         
     
-class EstadInfoSelectForm(forms.Form):
-    # Campo para los valores únicos de un campo específico
+class EstadisticaSelectForm(forms.Form):
+     # Campo para los valores únicos de un campo específico
     estadistica_filtro = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'EstadInfoSelect border-1 form-select form-select-sm'}))
-
     # Campo para los nombres de los campos del modelo
     campo_estadistica = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'EstadInfoSelect border-1 form-select form-select-sm'}))
 
     def __init__(self, *args, **kwargs):
-        modelo_filtro = kwargs.pop('modelo_filtro', None)
-        campo_filtro = kwargs.pop('campo_filtro', None)
-        campo_estadistica_modelo = kwargs.pop('campo_estadistica_modelo', None)
-        extra_choices = kwargs.pop('extra_choices', None)
-        exclude_choices = kwargs.pop('exclude_choices', None)
+        filtro_label = kwargs.pop('filtro_label', None)
+        filtro_choices = kwargs.pop('filtro_choices', None)
+        campo_label = kwargs.pop('campo_label', None)
+        campo_choices = kwargs.pop('campo_choices', None)
         super().__init__(*args, **kwargs)
 
-        if modelo_filtro and campo_filtro and campo_estadistica_modelo:
-            #Generar las choices del estadistica_filtro
-            if campo_filtro == 'ciclo' and modelo_filtro == Solicitud:
-                valores_unicos = modelo_filtro.objects.all().order_by().values_list('ciclo', flat=True).distinct()
-                valores_unicos = ordenar_lista_ciclos(valores_unicos)
-                valores_unicos.reverse()
-            else:
-                # Obtener los valores únicos basados en los parámetros de la consulta GET
-                valores = modelo_filtro.objects.all().values_list(campo_filtro, flat=True)
-                valores_unicos = []
-                conjunto_vistos = set()
-                for elemento in valores:
-                    if elemento not in conjunto_vistos:
-                        valores_unicos.append(elemento)
-                        conjunto_vistos.add(elemento)
-            self.fields['estadistica_filtro'].choices = [(valor, valor) for valor in valores_unicos]
-            self.fields['estadistica_filtro'].choices.insert(0, ('Todos', 'Todos'))
-            self.fields['estadistica_filtro'].label = campo_filtro
-
-            # Rellenar el campo campos_modelo con los nombres de los campos del modelo
-            campos = [campo for campo in campo_estadistica_modelo._meta.get_fields() if
-                      isinstance(campo, models.Field) and campo.name != 'id']
-            self.fields['campo_estadistica'].choices = [(campo.name, campo.name) for campo in campos]
-            if exclude_choices:
-                self.fields['campo_estadistica'].choices = [choice for choice in self.fields['campo_estadistica'].choices if (choice[0] not in exclude_choices) or (choice[1] not in exclude_choices)]            
-            if extra_choices:
-                for choice in extra_choices:
-                    self.fields['campo_estadistica'].choices.append(choice)
-            self.fields['campo_estadistica'].label = 'Atributo'
+        if filtro_label:
+            self.fields['estadistica_filtro'].label = filtro_label
+        if filtro_choices:
+            self.fields['estadistica_filtro'].choices = filtro_choices
+        if campo_label :
+            self.fields['campo_estadistica'].label = campo_label
+        if campo_choices: 
+            self.fields['campo_estadistica'].choices = campo_choices

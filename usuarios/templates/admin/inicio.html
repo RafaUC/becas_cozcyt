@@ -85,7 +85,7 @@
             method: 'GET',
             data: {
                 campo_estadistica: 'modalidad',
-                estadistica_filtro: '{{ ciclo_actual }}'
+                estadistica_filtro: '{{ ciclo_actual.pk }}'
             },
             success: function (data) {
                 // Inserta el contenido en el contenedor

@@ -6,9 +6,8 @@ from django.db.models import Subquery, OuterRef
 from modalidades.forms import *
 from solicitudes.forms import *
 from solicitudes.models import *
-from modalidades.models import ciclo_actual
 from .forms import ModalidadSelectForm
-from modalidades.models import Modalidad, Convocatoria, ciclo_actual
+from modalidades.models import Modalidad, Convocatoria, Ciclo
 from solicitudes.models import Solicitud
 
 
@@ -21,9 +20,9 @@ def getContextoBaseTransparencia(request):
 
 
 def inicioTransparencia(request):
-    ciclo = ciclo_actual
-    convocatoria = Convocatoria.objects.all().first()
-    modalidades = Modalidad.objects.filter(pk__in = Modalidad.objects.values('nombre').distinct().annotate(pk = Subquery(Modalidad.objects.filter(nombre= OuterRef("nombre")).order_by("pk").values("pk")[:1])).values_list("pk", flat=True))
+    ciclo = ciclo_actual()
+    convocatoria = Convocatoria.get_object()
+    modalidades = Modalidad.objects.filter(mostrar=True, archivado=False, pk__in = Modalidad.objects.values('nombre').distinct().annotate(pk = Subquery(Modalidad.objects.filter(nombre= OuterRef("nombre")).order_by("pk").values("pk")[:1])).values_list("pk", flat=True))
     fecha_convocatoria = convocatoria.fecha_convocatoria if convocatoria else False
     
     context = {
@@ -61,7 +60,7 @@ def resultados(request, num):
 def resultadosContenido(request,num,mod):
     ciclo = resultadosValidarCiclo(request, num)    
 
-    convocatoria = Convocatoria.objects.all().first() #Obtiene la convocatoria    
+    convocatoria = Convocatoria.get_object() #Obtiene la convocatoria    
     cicloAct = ciclo_actual()
     #si el ultimo siclo publicado no coincide con el actual y el seleccionado es el actual, siginifica que no esta publicado
     if convocatoria.ultimo_ciclo_publicado != cicloAct and ciclo == cicloAct:
@@ -69,10 +68,17 @@ def resultadosContenido(request,num,mod):
         titulo = "Los resultados de la convocatoria todavía no se han publicado."
         modalidadSelectForm = None
     else:
-        modalidad = Modalidad.objects.filter(id=mod, mostrar=True).first()    
+        modalidadesdelCiclo = MontoModalidad.objects.filter(ciclo=ciclo).values_list('modalidad_id', flat=True).distinct()
+        print(modalidadesdelCiclo)
+        print(modalidadesdelCiclo)
+        modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, id=mod).first()
         if not modalidad:
-            modalidad = Modalidad.objects.filter(mostrar=True).first()    
-        modalidadSelectForm = ModalidadSelectForm(initial={'modalidad': mod})
+            modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, mostrar=True, archivado=False).first()
+        if modalidad:    
+            mod = modalidad.id 
+        else:
+            mod = None
+        modalidadSelectForm = ModalidadSelectForm(ciclo=ciclo, initial={'modalidad': mod})
 
         #obtener solicitudes aceptadas
         solicitudes = Solicitud.objects.filter(ciclo=ciclo, modalidad=modalidad, estado=Solicitud.ESTADO_CHOICES[3][0]).select_related('solicitante').order_by('solicitante_id')
@@ -85,3 +91,12 @@ def resultadosContenido(request,num,mod):
         'modalidadSelectForm': modalidadSelectForm,
     }
     return render(request, 'resultadosContenido.html', context)
+
+
+def transparenciaSIT(request):
+
+    context = {
+
+    }
+    context.update(getContextoBaseTransparencia(request))
+    return render(request, 'transparenciaSIT.html', context)
