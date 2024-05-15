@@ -24,11 +24,11 @@ def configGeneral(request):
 
     convocatoria_existe = False
     if Convocatoria.objects.exists():
-            convocatoria_existe = True
-    print(convocatoria_existe)
-    print(obj.ultimo_ciclo_publicado)
+        convocatoria_existe = True
+    # print(convocatoria_existe)
+    # print(obj.ultimo_ciclo_publicado)
     
-    if obj != None: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
+    if convocatoria_existe == True: #Si ya existe una convocatoria, los datos se mostrarán deshabilitados y se podrán editar si se requiere
         convocatoriaForm = ConvocatoriaForm(instance = obj)
         context = {'convocatoria' : convocatoriaForm}
         for field in convocatoriaForm.fields.values():
@@ -55,7 +55,6 @@ def configGeneral(request):
             
 
     else: #Si no hay ninguna convocatoria, se creará una nueva con los campos habilitados
-        
         if request.method == "POST":
             convocatoriaForm = ConvocatoriaForm(request.POST or None, request.FILES or None)
             cicloForm = CicloForm(request.POST, instance=ciclo)

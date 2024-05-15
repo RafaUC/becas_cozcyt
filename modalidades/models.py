@@ -151,29 +151,32 @@ class Convocatoria(SingletonModel):
     
     @property
     def fecha_convocatoria(self):
-        if (now().date() >= self.fecha_inicio) and (now().date() <= self.fecha_cierre):
+        if self.fecha_inicio != None and ((now().date() >= self.fecha_inicio) and (now().date() <= self.fecha_cierre)):
             return True
         else:
             return False
         
     @property
     def mensaje_estado_convocatoria(self):        
-        if now().date() == self.fecha_cierre:
-            return f'Último día de convocatoria.'
-        elif now().date() < self.fecha_inicio:
-            dias_restantes = (self.fecha_inicio - now().date()).days
-            if dias_restantes < 2:
-                return f'Falta {dias_restantes} día para que inicie la convocatoria.'
+        if self.fecha_inicio != None:
+            if now().date() == self.fecha_cierre:
+                return f'Último día de convocatoria.'
+            elif now().date() < self.fecha_inicio:
+                dias_restantes = (self.fecha_inicio - now().date()).days
+                if dias_restantes < 2:
+                    return f'Falta {dias_restantes} día para que inicie la convocatoria.'
+                else:
+                    return f'Faltan {dias_restantes} días para que inicie la convocatoria.'
+            elif now().date() <= self.fecha_cierre:
+                dias_restantes = (self.fecha_cierre - now().date()).days+1
+                if dias_restantes < 2:
+                    return f'Queda {dias_restantes} día para que la convocatoria termine.'
+                else:
+                    return f'Quedan {dias_restantes} días para que la convocatoria termine.'
             else:
-                return f'Faltan {dias_restantes} días para que inicie la convocatoria.'
-        elif now().date() <= self.fecha_cierre:
-            dias_restantes = (self.fecha_cierre - now().date()).days+1
-            if dias_restantes < 2:
-                return f'Queda {dias_restantes} día para que la convocatoria termine.'
-            else:
-                return f'Quedan {dias_restantes} días para que la convocatoria termine.'
+                return 'La convocatoria ha terminado.'
         else:
-            return 'La convocatoria ha terminado.'
+            return 'Las fechas de la convocatoria no han sido definidas.'
 
 
 class Modalidad(models.Model):
