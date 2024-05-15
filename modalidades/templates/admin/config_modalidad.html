@@ -69,7 +69,7 @@
                             style="background-color: var(--verdeBtns); color: var(--letraGeneral);">
                                 Editar
                             </a>
-                            <form style="display: inline;" class="" action="{% url 'modalidades:AConfigEliminarModalidades' modalidad.id %}" method="get" >                                                        
+                            <form style="display: inline;" class="" action="{% url 'modalidades:AConfigArchivarModalidades' modalidad.id %}" method="get" >                                                        
                                 <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta modalidad? <br> {{modalidad.nombre}}', 'Eliminar modalidad')" class="fondo-rosaC btn" style="color: var(--letraGeneral);">
                                     Eliminar
                                 </button>                                

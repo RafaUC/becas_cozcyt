@@ -4,10 +4,9 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
-from modalidades.models import ciclo_actual
 from django.db.models import Q
-from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
+from modalidades.models import Ciclo
 
 
 class Estado(models.Model):
@@ -174,12 +173,19 @@ class Solicitante(Usuario):
     @property
     def es_renovacion(self):
         from solicitudes.models import Solicitud
+        '''        
         mes = datetime.now().month
         if mes >= 6 and mes <= 7:                
             offset = -7
         else:
             offset = -5
         cicloPrevio = ciclo_actual(offset=offset)                
+        '''
+        cicloPrevio = Ciclo.objects.all()        
+        if len(cicloPrevio) >= 2:            
+            cicloPrevio = cicloPrevio[1]        
+        else:
+            return None
         return Solicitud.objects.filter(solicitante=self, estado=Solicitud.ESTADO_CHOICES[3][0], ciclo=cicloPrevio).exists()
     
     @property

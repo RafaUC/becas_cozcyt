@@ -1,4 +1,4 @@
-Django ==4.1.7
+Django >=4.1.7,< 4.2
 Pillow ==10.0.0
 xlrd==2.0.1
 six==1.16.0

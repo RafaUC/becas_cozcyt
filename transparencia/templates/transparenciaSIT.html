@@ -1,0 +1,52 @@
+{% extends 'base_transparencia.html'%}
+
+{% block titulo %}
+Transparencia
+{% endblock titulo %}
+
+{% load static %}
+
+{% block body %}
+    {% include 'estadisticas/eImports.html' %}
+    <div class="mx-auto text-center texto-rosaO  mt-5 " style="max-width: 75vw;">
+        <p class="h3 font-bold my-4">
+            Transparencia del Sistema de Impulso al Talento
+        </p>
+        <p class="font-md my-4">
+            El Gobierno del Estado, a través del COZCyT, emite semestralmente la 
+            convocatoria para Estímulos Sistema de Impulso al Talento, que 
+            consiste en un apoyo económico  con recursos estatales y cuyo propósito 
+            es fomentar las vocaciones de  Humanidades, Ciencia, Tecnología e Innovación 
+            (HCTI) en estudiantes de  instituciones de educación pública de nivel media 
+            superior, superior y posgrado en la entidad.
+        </p>        
+    </div>
+    <div class="blanco pb-4 mx-auto text-center" style="padding-left: 6vw; padding-right: 6vw;">
+        <div id="contenedorEstadisticas">
+
+        </div>        
+        <p class="font-xxs my-4">
+           
+        </p>
+    </div>    
+
+    <script>
+        $(document).ready(function() {
+            // Cuando el documento esté listo, realiza la solicitud AJAX
+            $.ajax({
+                url: "{% url 'solicitudes:Estadisticas' %}", // URL a la que se realizará la solicitud
+                type: 'GET', // Método de solicitud (GET, POST, etc.)
+                dataType: 'html', // Tipo de datos que se espera recibir
+                success: function(data) {
+                    // En caso de éxito, agrega el contenido recibido al elemento #contenedorEstadisticas
+                    $('#contenedorEstadisticas').html(data);
+                },
+                error: function(xhr, status, error) {
+                    // En caso de error, muestra un mensaje de error en la consola del navegador
+                    console.error('Error al cargar stadisticas:', status, error);
+                }
+            });
+        });
+    </script>
+
+{% endblock body %}

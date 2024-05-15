@@ -15,7 +15,7 @@
         </div>
         <form method="POST" enctype="multipart/form-data" id="form-convocatoria">
         {% csrf_token %}   
-        <div class="rounded-2 mx-4">    
+        <div class="rounded-2 mx-4">     
             <div class="row">
                 <div class="d-grid gap-1 col-5 px-4">
                     <p class="col h5 subtitulo-config-general">Detalles de convocatoria</p>
@@ -40,8 +40,8 @@
                             <div class="col">
                                 <p>Presupuesto para esta convocatoria</p>
                                 <!-- <input class="config-general-inputs" type="text" id="presupuesto" placeholder="$999,999.00"> -->
-                                {{ convocatoria.presupuesto }}
-                                {{ convocatoria.presupuesto.errors }}
+                                {{ cicloForm.presupuesto }}
+                                {{ cicloForm.presupuesto.errors }}
                             </div>
                         </div>
                         <div class="row" style="padding-bottom: 20px;">
@@ -49,7 +49,7 @@
                                 <p>Archivo de la convocatoria</p>
                                 <!-- <input class="config-general-inputs" type="text" id="presupuesto" placeholder="$999,999.00"> -->
                                 {{ convocatoria.archivo_convocatoria }}
-                                {{ convocatoria.presupuesto.errors }}
+                                {{ convocatoria.archivo_convocatoria.errors }}
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             {% endif %} 
                         </div>
                         <div class="col" style="padding-top: 10px; padding-bottom: 10px;">
-                            <button type="submit" class="btn btn-guardar" id="guardar" {% if convocatoria_existe and not convocatoria.errors  %}disabled{% endif %}>Confirmar</button>  
+                            <button type="submit" class="btn btn-guardar" id="guardar" {% if convocatoria_existe and not convocatoria.errors and not cicloForm.errors   %}disabled{% endif %}>Confirmar</button>  
                         </div>
                     </div>
                 </div>    
