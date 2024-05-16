@@ -76,15 +76,23 @@ class EstadisticaSelectForm(forms.Form):
     def __init__(self, *args, **kwargs):
         filtro_label = kwargs.pop('filtro_label', None)
         filtro_choices = kwargs.pop('filtro_choices', None)
+        filtro_exclude = kwargs.pop('filtro_exclude', None)
         campo_label = kwargs.pop('campo_label', None)
         campo_choices = kwargs.pop('campo_choices', None)
+        campo_exclude = kwargs.pop('campo_exclude', None)
         super().__init__(*args, **kwargs)
 
         if filtro_label:
             self.fields['estadistica_filtro'].label = filtro_label
-        if filtro_choices:
+        if filtro_choices and not filtro_exclude:
             self.fields['estadistica_filtro'].choices = filtro_choices
+        elif filtro_exclude:
+            newChoices = [choice for choice in filtro_choices if choice[0] not in filtro_exclude]
+            self.fields['estadistica_filtro'].choices = newChoices
         if campo_label :
             self.fields['campo_estadistica'].label = campo_label
-        if campo_choices: 
+        if campo_choices and not campo_exclude: 
             self.fields['campo_estadistica'].choices = campo_choices
+        elif campo_exclude:
+            newChoices = [choice for choice in campo_choices if choice[0] not in campo_exclude]
+            self.fields['campo_estadistica'].choices = newChoices

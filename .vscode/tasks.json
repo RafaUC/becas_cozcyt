@@ -9,7 +9,7 @@
                 "-f",
                 "docker-compose.debug.yml",
                 "up",
-                //"-d"
+                "-d"
             ],
             "group": {
                 "kind": "build",
