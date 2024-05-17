@@ -986,6 +986,11 @@ i.rechazado:before {
   flex-wrap:wrap;
 }
 
+/* Item de resultados (Enero - Junio 2024, etc.) se le cambia el color cuando es seleccionado */
+.dropdown-item:active {
+  background-color: var(--rosaF) !important;
+}
+
 @media screen and (max-width: 700px) {
   #container_inicio_sit{
     margin-top: 0.5em;
@@ -1093,3 +1098,23 @@ i.rechazado:before {
   height: auto !important;
   width: inherit !important;
 }
+
+#enlaceSIT{
+  color: var(--rosaO); 
+  font-weight: 600; 
+  font-size: medium;
+}
+
+#enlaceSIT:hover{
+  color: var(--rosaM); 
+}
+
+/* Acordeón de preguntas frecuentes */
+/* .accordion-button::after {
+  border-radius: 25%;
+  background-color: white;
+}
+.accordion-button:not(.collapsed)::after {
+  border-radius: 25%;
+  background-color: white;
+} */
