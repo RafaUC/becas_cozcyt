@@ -18,7 +18,7 @@ SIT Información
                 con un apoyo económico por semestre, se abre dos convocatorias por año, y dependiendo de su calificación pueden elegir 
                 una de las 5 modalidades.
             </p>
-            <a class="" href="{% url 'usuarios:loginRedirect' %}" style="color: var(--rosaO); font-weight: 600;">Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </i></a>
+            <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style="">Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </i></a>
         </div>
         <div class="col-md-4" id="inicio_imagen_becas" style="">
             <img class="img-fluid" src="{% static 'svg/notion_ej.svg' %}" alt="persona con problemas en la computadora">
@@ -32,12 +32,18 @@ SIT Información
                 <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad" >
-                        <img class="imagen-modalidad" src="{% static 'svg/manual.svg' %}" alt="Card image cap" style="width: 50%;">
-                        <h4 class="card-title"><strong>¿Es su primera vez solicitando una modalidad?</strong></h4>
-                        <p>Consulte el <strong>manual de usuario</strong> para familiarizarse con el sistema.</p>
+                        <div>
+                            <img class="imagen-modalidad" src="{% static 'svg/manual.svg' %}" alt="Card image cap" style="width: 50%;">
+                        </div>
+                        <div>
+                            <h4 class="card-title"><strong>¿Es su primera vez solicitando una modalidad?</strong></h4>
+                        </div>
+                        <div>
+                            <p>Consulte el <strong>manual de usuario</strong> para familiarizarse con el sistema.</p>
+                        </div>
                         <div style="padding-bottom: 10px;">
-                            <a href="">
-                                <button href="" class="btn btnConvocatoria">
+                            <a href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}">
+                                <button href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}" class="btn btnConvocatoria">
                                 Manual de usuario
                                 </button>
                             </a>
@@ -51,10 +57,10 @@ SIT Información
                     <div class="card-body card-modalidad">
                         <img class="imagen-modalidad" src="{% static 'svg/reglamento.svg' %}" alt="Card image cap" style="width: 30%;">
                         <h4 class="card-title"><strong>Reglamento de operaciones</strong></h4>
-                        <h6>Consulte el <strong>reglamento de operaciones</strong> para saber más acerca de los Estímulos COZCyT.</h6>
+                        <p>Consulte el <strong>reglamento de operaciones</strong> para saber más acerca de los Estímulos COZCyT.</p>
                         <div style="padding-bottom: 10px;">
-                            <a href="">
-                                <button href="" class="btn btnConvocatoria">
+                            <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}">
+                                <button href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria">
                                 Reglamento
                                 </button>
                             </a>
@@ -68,10 +74,10 @@ SIT Información
                     <div class="card-body card-modalidad">
                         <img class="imagen-modalidad" src="{% static 'svg/seleccion.svg' %}" alt="Card image cap" style="width: 40%;">
                         <h4 class="card-title"><strong>Métodos de selección</strong></h4>
-                        <h6>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo y los criterios necesarios para su eligibilidad.</h6>
+                        <p>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo y los criterios necesarios para su eligibilidad.</p>
                         <div style="padding-bottom: 10px;">
-                            <a href="">
-                                <button href="" class="btn btnConvocatoria">
+                            <a href="{% static 'files/Diagrama_de_procesos.pdf' %}">
+                                <button href="{% static 'files/Diagrama_de_procesos.pdf' %}" class="btn btnConvocatoria">
                                 Diagrama de selección
                                 </button>
                             </a>
@@ -105,15 +111,15 @@ SIT Información
                                         <h5 style="text-align: justify;"><strong>Carta de exposición de motivos</strong></h5>
                                     </div>
                                     <div class="info_modalidad_descripcion">
-                                        <h6 style="text-align: justify;">
+                                        <p style="text-align: justify;">
                                             Documento necesario si es su primera vez solicitando una modalidad. Debe agregar
                                             los datos que se le piden, además de una breve explicación donde manifieste los
                                             motivos por los cuales solicita el estímulo.
-                                        </h6>
+                                        </p>
                                     </div>
                                     <br>
-                                    <a href="{{convocatoria.archivo_convocatoria.url}}">
-                                        <button href="{{convocatoria.archivo_convocatoria.url}}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
+                                    <a href="{% static 'files/Carta_expo_motivos.docx' %}">
+                                        <button href="{% static 'files/Carta_expo_motivos.docx' %}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
                                             Descargar
                                         </button>
                                     </a>
@@ -132,15 +138,15 @@ SIT Información
                                         <h5 style="text-align: justify;"><strong>Carta bajo protesta</strong></h5>
                                     </div>
                                     <div class="info_modalidad_descripcion">
-                                        <h6 style="text-align: justify;">
+                                        <p style="text-align: justify;">
                                             Documento necesario si es su primera vez solicitando una modalidad. Debe agregar
                                             los datos que se le piden, además de una breve explicación donde manifieste los
                                             motivos por los cuales solicita el estímulo.
-                                        </h6>
+                                        </p>
                                     </div>
                                     <br>
-                                    <a href="{{convocatoria.archivo_convocatoria.url}}">
-                                        <button href="{{convocatoria.archivo_convocatoria.url}}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
+                                    <a href="{% static 'files/Carta_bajo_protesta.docx' %}">
+                                        <button href="{% static 'files/Carta_bajo_protesta.docx' %}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
                                             Descargar
                                         </button>
                                     </a>
@@ -159,15 +165,15 @@ SIT Información
                                         <h5 style="text-align: justify;"><strong>Formato del servicio colaborativo</strong></h5>
                                     </div>
                                     <div class="info_modalidad_descripcion">
-                                        <h6 style="text-align: justify;">
+                                        <p style="text-align: justify;">
                                             Documento necesario si es su primera vez solicitando una modalidad. Debe agregar
                                             los datos que se le piden, además de una breve explicación donde manifieste los
                                             motivos por los cuales solicita el estímulo.
-                                        </h6>
+                                        </p>
                                     </div>
                                     <br>
-                                    <a href="{{convocatoria.archivo_convocatoria.url}}">
-                                        <button href="{{convocatoria.archivo_convocatoria.url}}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
+                                    <a href="{% static 'files/Formato-Servicio-colaborativo.docx' %}">
+                                        <button href="{% static 'files/Formato-Servicio-colaborativo.docx' %}" class="btn btnConvocatoria" style="width: 40%;" id="btnSabermas">
                                             Descargar
                                         </button>
                                     </a>
