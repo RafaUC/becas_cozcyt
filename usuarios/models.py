@@ -6,7 +6,8 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
-from modalidades.models import Ciclo
+from modalidades.models import Ciclo, SingletonModel
+import re
 
 
 class Estado(models.Model):
@@ -277,3 +278,35 @@ class PuntajeMunicipio(models.Model):
 
     def __str__(self):
         return f"PuntajeMun de {self.municipio} - {self.puntos} puntos"
+    
+class SiteColor(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+    color = models.CharField(max_length=30)
+
+    class Meta:        
+        ordering = ['id']
+
+    def __str__(self):
+        return f"{self.nombre}: {self.color}"
+
+    def save(self, *args, **kwargs):
+        if not self.is_valid_color(self.color):
+            raise ValueError("Invalid color format")
+        if self.pk is not None:
+            original = SiteColor.objects.get(pk=self.pk)
+            self.nombre = original.nombre
+        super().save(*args, **kwargs)
+
+    @staticmethod
+    def is_valid_color(value):
+        hex_pattern = re.compile(r'^#(?:[0-9a-fA-F]{3}){1,2}$')
+        rgb_pattern = re.compile(r'^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$')
+        rgba_pattern = re.compile(r'^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(0|1|0?\.\d+)\)$')
+        return bool(hex_pattern.match(value) or rgb_pattern.match(value) or rgba_pattern.match(value))
+    
+
+class CacheVersion(SingletonModel):
+    version = models.PositiveIntegerField(verbose_name="Version", default=0)
+
+    def __str__(self):
+        return self.version

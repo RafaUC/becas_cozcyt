@@ -99,8 +99,7 @@ ESTADISTICAS_SOLICITUD_CHOICES = [
     ]
 
 ESTADISTICAS_SOLICITUD_CHOICES_EXCLUDE_USER = [
-    'puntaje', 
-    'estado solicitud',    
+    'puntaje',     
 ]
 
 TODOS_STR = 'Todas'
@@ -121,7 +120,7 @@ MAPEO_SOLICITUDES_CHOICES_ADMIN = {
 MAPEO_SOLICITUDES_CHOICES_USER = {
     'modalidad': 'modalidad__nombre',
     'ciclo': 'ciclo__nombre',
-    #'estado solicitud': 'estado',    
+    'estado solicitud': 'estado',    
     'tipo': 'tipo',
     'genero': 'solicitante__genero',
     'instituciones': 'solicitante__carrera__institucion__nombre',

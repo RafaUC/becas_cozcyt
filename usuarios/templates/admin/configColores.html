@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Configuración colores
+{% endblock titulo %}
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+    <script>
+        function detectColorFormat(value) {
+            if (value.startsWith('#')) {
+                return 'hex';
+            } else if (value.startsWith('rgb(')) {
+                return 'rgb';
+            } else if (value.startsWith('rgba(')) {
+                return 'rgba';
+            } else {
+                return null; // Formato no reconocido
+            }
+        }
+
+        // Función para cambiar el formato del color picker
+        function changeColorPickerFormat(colorPicker, format) {
+            if (format === 'hex') {
+                colorPicker.setAttribute('data-opacity', 'false');
+            } else {
+                colorPicker.setAttribute('data-opacity', 'true');
+            }
+        }
+
+        // Función para manejar el evento 'paste' en el input de color
+        function handleColorPaste(event) {
+            const pastedValue = event.clipboardData.getData('text/plain');
+            const colorFormat = detectColorFormat(pastedValue);
+            console.log('HendleColorPaste')
+            if (colorFormat) {
+                console.log('colorFormat')
+                const colorPicker = event.target
+                colorPicker.setAttribute('data-current-color',pastedValue)
+                colorPicker.setAttribute('value',pastedValue)
+                //changeColorPickerFormat(event.target, colorFormat); // Pasar el colorPicker como argumento
+            }
+        }
+
+        jscolor.presets.default = {
+            format:'any'
+        };
+
+    </script>
+    <div class="rounded-2 p-1 mx-2 principal">
+        <div class="rounded-2 mx-4">
+            <div class="row">
+                <p class="col h5 subtitulo-mod">Configuración de color del sitio</p>
+            <hr>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ formset.management_form }}
+        
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6"><strong>Color</strong></div>
+                    <div class="col-md-6"><strong>Valor</strong></div>
+                </div>
+        
+                <div class="row row-cols-auto mb-3">
+                    <div class="col">
+                        {% for form in formset %}
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="font-semi-bold font-md">
+                                        {{ form.instance.nombre }}
+                                    </div>
+                                    {% for field in form.hidden_fields %}
+                                        {{ field }}
+                                    {% endfor %}
+                                </div>
+                                <div class="col">
+                                    {{ form.color }}
+                                    {{ form.color.errors }}
+                                </div>
+                            </div>
+                            {% if forloop.counter|divisibleby:"10" and not forloop.first %}
+                                </div>
+                                <div class="col">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+{% endblock body %}

@@ -65,4 +65,6 @@ admin.site.register(Carrera)
 admin.site.register(Institucion)
 admin.site.register(Municipio)
 admin.site.register(Estado)
+admin.site.register(SiteColor)
+admin.site.register(CacheVersion)
 

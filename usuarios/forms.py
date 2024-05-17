@@ -341,3 +341,24 @@ class AgregarAdminForm(UserCreationForm):
     
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Contraseña'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Confirme su contraseña'}))
+
+
+class SiteColorForm(forms.ModelForm):
+    class Meta:
+        model = SiteColor
+        fields = ['color']
+        labels = {
+            'color': 'Color',
+        }
+        widgets = {
+            #'nombre': forms.TextInput(attrs={'disabled': 'disabled'}),            
+            'color': forms.TextInput(attrs={'class': 'jscolor', 'data-jscolor': '{}', }),
+        }
+
+    def clean_value(self):
+        value = self.cleaned_data.get('value')
+        if not SiteColor.is_valid_color(value):
+            raise forms.ValidationError("Formato de color invalido. Usa #000000, rgb(0,0,0) o rgba(0,0,0).")
+        return value
+
+SiteColorFormSet = modelformset_factory(SiteColor, form=SiteColorForm, extra=0, can_delete=False)
