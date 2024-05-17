@@ -9,7 +9,7 @@ SIT Información
 
     <!-- Div que contiene la descripción del SIT -->
     <div class="flex-direction principal center" style="background-color: #fff; display: flex; width: 100%; align-items: center; justify-content: center; padding: 1em 0 1em 0;" id="container_inicio_sit">
-        <div class="col-md-4" id="inicio_texto_becas" style="margin: 0em 5em 0 0em; text-align: center;">
+        <div class="col-md-4" id="info_texto_sit" style="margin: 0em 5em 0 0em; text-align: center;">
             <h3 style="text-align: center;"><strong> Sistema de Impulso al Talento </strong></h3>
             <p></p>
             <p class="font-md my-4" style="text-align: justify;">
@@ -18,9 +18,9 @@ SIT Información
                 con un apoyo económico por semestre, se abre dos convocatorias por año, y dependiendo de su calificación pueden elegir 
                 una de las 5 modalidades.
             </p>
-            <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style="">Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </i></a>
+            <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style=""> <p class="font-md my-4" >Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </p></i></a>
         </div>
-        <div class="col-md-4" id="inicio_imagen_becas" style="">
+        <div class="col-md-4" id="inicio_imagen_sit" style="">
             <img class="img-fluid" src="{% static 'svg/notion_ej.svg' %}" alt="persona con problemas en la computadora">
         </div>
     </div>
@@ -31,14 +31,14 @@ SIT Información
             <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;" >
                 <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
-                    <div class="card-body card-modalidad" >
+                    <div class="card-body card-modalidad">
                         <div>
                             <img class="imagen-modalidad" src="{% static 'svg/manual.svg' %}" alt="Card image cap" style="width: 50%;">
                         </div>
-                        <div>
+                        <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>¿Es su primera vez solicitando una modalidad?</strong></h4>
                         </div>
-                        <div>
+                        <div style="height: 5em; align-content: center;">
                             <p>Consulte el <strong>manual de usuario</strong> para familiarizarse con el sistema.</p>
                         </div>
                         <div style="padding-bottom: 10px;">
@@ -55,9 +55,15 @@ SIT Información
                 <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
-                        <img class="imagen-modalidad" src="{% static 'svg/reglamento.svg' %}" alt="Card image cap" style="width: 30%;">
-                        <h4 class="card-title"><strong>Reglamento de operaciones</strong></h4>
-                        <p>Consulte el <strong>reglamento de operaciones</strong> para saber más acerca de los Estímulos COZCyT.</p>
+                        <div>
+                            <img class="imagen-modalidad" src="{% static 'svg/reglamento_1.svg' %}" alt="Card image cap" style="width: 45%;">
+                        </div>
+                        <div style="height: 5em; align-content: center;">
+                            <h4 class="card-title"><strong>Reglamento de operaciones</strong></h4>
+                        </div>
+                        <div style="height: 5em; align-content: center;">
+                            <p>Consulte el <strong>reglamento de operaciones</strong> para saber más acerca de los Estímulos COZCyT.</p>
+                        </div>
                         <div style="padding-bottom: 10px;">
                             <a href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}">
                                 <button href="{% static 'files/RO_Estimulos_y_Apoyos_Cozcyt.pdf' %}" class="btn btnConvocatoria">
@@ -72,9 +78,15 @@ SIT Información
                 <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
-                        <img class="imagen-modalidad" src="{% static 'svg/seleccion.svg' %}" alt="Card image cap" style="width: 40%;">
-                        <h4 class="card-title"><strong>Métodos de selección</strong></h4>
-                        <p>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo y los criterios necesarios para su eligibilidad.</p>
+                        <div >
+                            <img class="imagen-modalidad" src="{% static 'svg/seleccion.svg' %}" alt="Card image cap" style="width: 42%;">
+                        </div>
+                        <div style="height: 5em; align-content: center;">
+                            <h4 class="card-title"><strong>Métodos de selección</strong></h4>
+                        </div>
+                        <div style="height: 5em; align-content: center;">
+                            <p>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo y los criterios necesarios para su eligibilidad.</p>
+                        </div>
                         <div style="padding-bottom: 10px;">
                             <a href="{% static 'files/Diagrama_de_procesos.pdf' %}">
                                 <button href="{% static 'files/Diagrama_de_procesos.pdf' %}" class="btn btnConvocatoria">
@@ -125,7 +137,7 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 3em;">
+                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
                                     <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
                                 </div>
                             </div>
@@ -152,7 +164,7 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 3em;">
+                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
                                     <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
                                 </div>
                             </div>
@@ -179,7 +191,7 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 3em;">
+                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
                                     <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
                                 </div>
                             </div>

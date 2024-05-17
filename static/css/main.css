@@ -1040,6 +1040,17 @@ i.rechazado:before {
   .info_modalidad_descripcion{
     order: 1;
   }
+
+  #info_texto_sit{
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 1em !important;
+    order: 2;
+  }
+  #inicio_imagen_sit{
+    order:1;
+  }
 }
 
 /* Numeración del carrusel */
@@ -1102,7 +1113,6 @@ i.rechazado:before {
 #enlaceSIT{
   color: var(--rosaO); 
   font-weight: 600; 
-  font-size: medium;
 }
 
 #enlaceSIT:hover{
