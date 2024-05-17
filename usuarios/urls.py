@@ -51,6 +51,7 @@ urlpatterns = [
 
     path('perfil/',views.perfil, name='perfil'),
     path('mensajes/',views.sMensajes, name='mensajes'),
+    path('colores/', viewsAdmin.cargarColoresCSS, name='colores'),
     
 
 
@@ -69,4 +70,11 @@ urlpatterns = [
     path('administracion/editarUsuario/<int:pk>/', viewsAdmin.editarUsuario, name='AEditarUsuario'),
     path('administracion/eliminarUsuario/<int:user_id>/', viewsAdmin.eliminarUsuario, name='AEliminarUsuario'),
     path('administracion/reEnviarConfirmaciones/', viewsAdmin.reEnviarConfirmaciones, name='AReEnviarConfirmaciones'),
+
+    path('administracion/configuracion/colores/', viewsAdmin.configColores, name='AConfigColores'),
+    path('administracion/recargarColoresDefault/', viewsAdmin.load_colors_from_css, name='AReCargarColoresDefault'),    
+    path('administracion/reset_cache/colores', viewsAdmin.reset_cache_and_new_version,
+        kwargs={'view': 'usuarios:colores',}, 
+        name='AResetCacheColors'),
+
 ]
