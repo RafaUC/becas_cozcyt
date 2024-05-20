@@ -1086,8 +1086,8 @@ i.rechazado:before {
 }
 
 ul.cols-rows-automatico {
-  columns: 320px; /* Ancho mínimo de las columnas */
-  column-gap: 30px; /* Espacio entre las columnas */
+  columns: 327px; /* Ancho mínimo de las columnas */
+  column-gap: 15px; /* Espacio entre las columnas */
   list-style: none; /* Elimina los estilos de lista predeterminados */
   padding: 0; /* Elimina el padding predeterminado */
   margin: 0; /* Elimina el margin predeterminado */
@@ -1098,5 +1098,5 @@ ul.cols-rows-automatico li {
 }
 
 ul.cols-rows-automatico li.item {
-  min-width: 320px;                
+  min-width: 327px;                
 }

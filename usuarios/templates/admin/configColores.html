@@ -33,9 +33,9 @@ Configuración colores
             {% csrf_token %}
             {{ formset.management_form }}
         
-            <div class="container">
-                <div class="row">
-                    <p class="texto-rosaM font-md m-1 mb-3 p-0 pb-1">
+            <div class="m-2">
+                <div class="row mx-0">
+                    <p class="texto-rosaM font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
                         Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0)
                     </p>
                 </div>
@@ -43,7 +43,7 @@ Configuración colores
                 <ul class="cols-rows-automatico  mb-3">                    
                     {% for form in formset %}
                         <li class="item">
-                            <div class="row mb-2">
+                            <div class="row mx-0 mb-2">
                                 <div class="col px-1 text-end ">
                                     <div class="fondo-gris-0 px-2 font-semi-bold font-md">
                                         {{ form.instance.nombre }}
