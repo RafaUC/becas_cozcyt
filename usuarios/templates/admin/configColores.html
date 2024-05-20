@@ -64,10 +64,10 @@ Configuración colores
         </form>
         <div class="row m-4 mb-4 p-2 mb-1">
             <div class="col text-end">
-                <button class="btn btn-guardar m-0 font-md" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+                <button class="btn btn-guardar principal m-0 font-md font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
             </div>            
-            <form class="col p-0 m-0" action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
-                <button class="btn btnCancelar m-0 font-md" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+            <form class="col p-0 m-0 " action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
+                <button class="btn btnCancelar principal m-0 font-md font-semi-bold " type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
             </form>
         </div>  
     </div>

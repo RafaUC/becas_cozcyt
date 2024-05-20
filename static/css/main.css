@@ -572,39 +572,39 @@ a {
 }
 
 .font-xxs {
-  font-size: 0.714rem; /* 10px / 14px */
+  font-size: 0.714rem !important; /* 10px / 14px */
 }
 
 .font-xs {
-  font-size: 0.857rem; /* 12px / 14px */
+  font-size: 0.857rem !important; /* 12px / 14px */
 }
 
 .font-sm {
-  font-size: 1rem; /* 14px / 14px */
+  font-size: 1rem !important; /* 14px / 14px */
 }
 
 .font-md {
-  font-size: 1.143rem; /* 16px / 14px */
+  font-size: 1.143rem !important; /* 16px / 14px */
 }
 
 .font-lg {
-  font-size: 1.286rem; /* 18px / 14px */
+  font-size: 1.286rem !important; /* 18px / 14px */
 }
 
 .font-xl {
-  font-size: 1.429rem; /* 20px / 14px */
+  font-size: 1.429rem !important; /* 20px / 14px */
 }
 
 .font-xxl {
-  font-size: 1.857rem; /* 26px / 14px */
+  font-size: 1.857rem !important; /* 26px / 14px */
 }
 
 .font-xxL {
-  font-size: 3.25rem; /* 26px / 14px */
+  font-size: 3.25rem !important; /* 26px / 14px */
 }
 
 .font-sl {
-  font-size: 4rem; /* 26px / 14px */
+  font-size: 4rem !important; /* 26px / 14px */
 }
 /*
 .font-xs {
