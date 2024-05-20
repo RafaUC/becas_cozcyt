@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+import re
 from django.forms import modelformset_factory
 from django.forms import inlineformset_factory
 
@@ -355,10 +356,14 @@ class SiteColorForm(forms.ModelForm):
             'color': forms.TextInput(attrs={'class': 'jscolor', 'data-jscolor': '{}', }),
         }
 
-    def clean_value(self):
-        value = self.cleaned_data.get('value')
-        if not SiteColor.is_valid_color(value):
-            raise forms.ValidationError("Formato de color invalido. Usa #000000, rgb(0,0,0) o rgba(0,0,0).")
-        return value
+    def clean_color(self):
+        color = self.cleaned_data.get('color')
+        if not SiteColor.is_valid_color(color):
+            regex = r'^#([A-Fa-f0-9]{8})$'
+            if re.match(regex, color):
+                raise forms.ValidationError("Formato de color invalido. Usa rgba(0,0,0) para definir transparencia.")
+            else:                
+                raise forms.ValidationError("Formato de color invalido. Usa #000000, rgb(0,0,0) o rgba(0,0,0).")
+        return color
 
 SiteColorFormSet = modelformset_factory(SiteColor, form=SiteColorForm, extra=0, can_delete=False)

@@ -160,7 +160,7 @@
         color: #676767;
         color: var(--blanco); 
         width: auto;
-        border-radius: 50px; 
+        border-radius: 10px;
         border-width: 1.5px; 
         font-weight: 530;
     }
@@ -173,9 +173,8 @@
     
     .btnCancelar{
         background-color: #DFDFDF;
-        color: #A8A8A8; 
-        width: 40%;
-        border-radius: 50px; 
+        color: #A8A8A8;         
+        border-radius: 10px;
         border-width: 1.5px; 
         font-weight: 530;
     }

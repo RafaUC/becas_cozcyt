@@ -1084,3 +1084,19 @@ i.rechazado:before {
   height: auto !important;
   width: inherit !important;
 }
+
+ul.cols-rows-automatico {
+  columns: 320px; /* Ancho mínimo de las columnas */
+  column-gap: 30px; /* Espacio entre las columnas */
+  list-style: none; /* Elimina los estilos de lista predeterminados */
+  padding: 0; /* Elimina el padding predeterminado */
+  margin: 0; /* Elimina el margin predeterminado */
+}
+
+ul.cols-rows-automatico li {
+  break-inside: avoid; /* Evita que los elementos se rompan entre columnas */                        
+}
+
+ul.cols-rows-automatico li.item {
+  min-width: 320px;                
+}
