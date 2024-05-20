@@ -500,9 +500,10 @@ def load_colors_from_css(request):
                     else :
                         print(f'No se pudo crear el SiteColor: {name} with value {value}')
         messages.success(request,'colores.css importado con exito')
+        return redirect('usuarios:AResetCacheColors')
     else:
         messages.error(request,'No se pudo encontrar colores.css')
-    return redirect('usuarios:AConfigColores')
+        return redirect('usuarios:AConfigColores')
 
 
 @cache_page(None)  # won't expire, ever
@@ -545,16 +546,18 @@ def reset_cache_and_new_version(request, view='usuarios:colores', args=None):
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def configColores(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        formset = SiteColorFormSet(queryset=SiteColor.objects.all())
+    elif request.method == 'POST':
         formset = SiteColorFormSet(request.POST, queryset=SiteColor.objects.all())
         if formset.is_valid():
             formset.save()
             messages.success(request, 'Nueva vercion del esquema de colores del sitio guardada con exito.')
+            return redirect('usuarios:AResetCacheColors')
         else:
             messages.warning(request, 'No se pudo guardar el esquema de colores.')
             messages.error(request, formset.errors)
-    else: 
-        formset = SiteColorFormSet(queryset=SiteColor.objects.all())
+    
     context = {
         'formset':formset,
         }

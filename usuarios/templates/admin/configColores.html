@@ -8,45 +8,17 @@ Configuración colores
     {% include 'admin/config_nav.html' %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
     <script>
-        function detectColorFormat(value) {
-            if (value.startsWith('#')) {
-                return 'hex';
-            } else if (value.startsWith('rgb(')) {
-                return 'rgb';
-            } else if (value.startsWith('rgba(')) {
-                return 'rgba';
-            } else {
-                return null; // Formato no reconocido
-            }
-        }
-
-        // Función para cambiar el formato del color picker
-        function changeColorPickerFormat(colorPicker, format) {
-            if (format === 'hex') {
-                colorPicker.setAttribute('data-opacity', 'false');
-            } else {
-                colorPicker.setAttribute('data-opacity', 'true');
-            }
-        }
-
-        // Función para manejar el evento 'paste' en el input de color
-        function handleColorPaste(event) {
-            const pastedValue = event.clipboardData.getData('text/plain');
-            const colorFormat = detectColorFormat(pastedValue);
-            console.log('HendleColorPaste')
-            if (colorFormat) {
-                console.log('colorFormat')
-                const colorPicker = event.target
-                colorPicker.setAttribute('data-current-color',pastedValue)
-                colorPicker.setAttribute('value',pastedValue)
-                //changeColorPickerFormat(event.target, colorFormat); // Pasar el colorPicker como argumento
-            }
-        }
-
         jscolor.presets.default = {
             format:'any'
         };
+        function enviarFormulario(formularioId, boton) { 
+            // Obtener el formulario y el valor del botón
+            const formulario = $('#' + formularioId);            
+            const textoBoton = $(boton).text();
 
+            // Enviar el formulario                   
+            confrimSubmit(formulario, `¿${textoBoton}?`)            
+        }
     </script>
     <div class="rounded-2 p-1 mx-2 principal">
         <div class="rounded-2 mx-4">
@@ -55,45 +27,48 @@ Configuración colores
             <hr>
             </div>
         </div>
-    </div>
+    </div>       
     <div>
-        <form method="post" action="">
+        <form method="post" id="coloresForm">
             {% csrf_token %}
             {{ formset.management_form }}
         
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6"><strong>Color</strong></div>
-                    <div class="col-md-6"><strong>Valor</strong></div>
+                    <p class="texto-rosaM font-md m-1 mb-3 p-0 pb-1">
+                        Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0)
+                    </p>
                 </div>
-        
-                <div class="row row-cols-auto mb-3">
-                    <div class="col">
-                        {% for form in formset %}
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <div class="font-semi-bold font-md">
+                
+                <ul class="cols-rows-automatico  mb-3">                    
+                    {% for form in formset %}
+                        <li class="item">
+                            <div class="row mb-2">
+                                <div class="col px-1 text-end ">
+                                    <div class="fondo-gris-0 px-2 font-semi-bold font-md">
                                         {{ form.instance.nombre }}
                                     </div>
                                     {% for field in form.hidden_fields %}
                                         {{ field }}
                                     {% endfor %}
                                 </div>
-                                <div class="col">
-                                    {{ form.color }}
-                                    {{ form.color.errors }}
+                                <div class="col px-1 text-start">                                    
+                                        {{ form.color }}
+                                        {{ form.color.errors }}                                                                    
                                 </div>
-                            </div>
-                            {% if forloop.counter|divisibleby:"10" and not forloop.first %}
-                                </div>
-                                <div class="col">
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        
-            <button type="submit" class="btn btn-primary">Save</button>
+                            </div>                            
+                        </li>
+                    {% endfor %}                        
+                </ul>
+            </div>                  
         </form>
+        <div class="row m-4 mb-4 p-2 mb-1">
+            <div class="col text-end">
+                <button class="btn btn-guardar m-0 font-md" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+            </div>            
+            <form class="col p-0 m-0" action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
+                <button class="btn btnCancelar m-0 font-md" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+            </form>
+        </div>  
     </div>
 {% endblock body %}
