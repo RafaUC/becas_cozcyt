@@ -24,7 +24,7 @@
             100% {opacity: 0;}
         }
     </style>
-    <div class="rounded-2 p-1 mx-4 principal">
+    <div class="rounded-2 p-1 mx-4 texto-general">
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h5 subtitulo-mod">Modalidades</p>
@@ -66,11 +66,11 @@
                             <img class="imagen-modalidad" src="{{ modalidad.imagen.url }}" alt="Imagen modalidad">
                             <br>
                             <a href="{% url 'modalidades:AConfigEditarModalidades' modalidad.id %}"  class="btn" 
-                            style="background-color: var(--verdeBtns); color: var(--letraGeneral);">
+                            style="background-color: var(--exito-c); color: var(--texto-general);">
                                 Editar
                             </a>
                             <form style="display: inline;" class="" action="{% url 'modalidades:AConfigArchivarModalidades' modalidad.id %}" method="get" >                                                        
-                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta modalidad? <br> {{modalidad.nombre}}', 'Eliminar modalidad')" class="fondo-rosaC btn" style="color: var(--letraGeneral);">
+                                <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta modalidad? <br> {{modalidad.nombre}}', 'Eliminar modalidad')" class="fondo-secundario-c btn" style="color: var(--texto-general);">
                                     Eliminar
                                 </button>                                
                             </form>                            

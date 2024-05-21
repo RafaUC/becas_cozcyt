@@ -109,25 +109,25 @@
 }
 .jq-icon-info { 
     background-image: url(/static/images/infocircle.png); 
-    background-color: #F1F7FA; 
-    color: #d9edf7; 
-    border-color: #bce8f1; 
+    background-color: var(--notif-info-background);
+    color: var(--notif-info-texto);
+    border-color: var(--notif-info-border);
 }
 .jq-icon-warning { 
     background-image: url(/static/images/warning2.png); 
-    background-color: #FAF0E4; 
-    color: #fcf8e3; 
-    border-color: #faebcc; 
+    background-color: var(--notif-warning-background);
+    color:            var(--notif-warning-texto);
+    border-color:     var(--notif-warning-border);
 }
 .jq-icon-error { 
     background-image: url(/static/images/error_circle.png);
-    background-color: #F8E2E1; 
-    color: #676767; 
-    border-color: #676767; 
+    background-color: var(--notif-error-background);
+    color:            var(--notif-error-texto);
+    border-color:     var(--notif-error-border);
 }
 .jq-icon-success { 
     background-image: url(/static/images/icon_check_circle.png); 
-    background-color: #F1FAF3; 
-    color: #676767; 
-    border-color: #F1FAF3; 
+    background-color: var(--notif-exito-background);
+    color:            var(--notif-exito-texto);
+    border-color:     var(--notif-exito-border);
 }
