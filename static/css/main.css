@@ -100,8 +100,8 @@
   color: var(--negro) !important;
 }
 
-.pagina-blanco {
-  background-color: var(--pagina-blanco) !important;
+.blanco {
+  background-color: var(--blanco) !important;
 }
 
 .blanco {
@@ -116,113 +116,113 @@
   background-color: var(--barra-lateral-fondo) !important;
 }
 
-.pagina-fuerte {
-  background-color: var(--pagina-fuerte) !important;
+.principal-mf {
+  background-color: var(--principal-mf) !important;
 }
 
-.pagina-principal {
-  background-color: var(--pagina-principal) !important;
+.principal-f {
+  background-color: var(--principal-f) !important;
 }
 
-.pagina-tenue {
-  background-color: var(--pagina-tenue) !important;
+.principal {
+  background-color: var(--principal) !important;
 }
 
-.pagina-tenue-claro {
-  background-color: var(--pagina-tenue-claro) !important;
+.principal-mc {
+  background-color: var(--principal-mc) !important;
 }
 
-.aceptado-desactivado {
-  background-color: var(--aceptado-desactivado) !important;
+.exito-c {
+  background-color: var(--exito-c) !important;
 }
 
-.aceptado-activado {
-  background-color: var(--aceptado-activado) !important;
+.exito {
+  background-color: var(--exito) !important;
 }
 
-.aceptado-hover {
-  background-color: var(--aceptado-hover) !important;
+.exito-f {
+  background-color: var(--exito-f) !important;
 }
 
-.cancelar-desactivado {
-  background-color: var(--cancelar-desactivado) !important;
+.error-c {
+  background-color: var(error-c) !important;
 }
 
-.cancelar-activado {
-  background-color: var(--cancelar-activado) !important;
+.error {
+  background-color: var(--error) !important;
 }
 
 .pagina-gris {
-  background-color: var(--pagina-gris) !important;
+  background-color: var(--gris-principal) !important;
 }
 
-.texto-rosaO {
-  color: var(--rosaO);
+.texto-secundario-mf {
+  color: var(--secundario-mf);
 }
 
-.texto-rosaF {
-  color: var(--rosaF);
+.texto-secundario-f {
+  color: var(--secundario-f);
 }
 
-.texto-rosaM {
-  color: var(--rosaM);
+.texto-secundario {
+  color: var(--secundario);
 }
 
-.texto-rosaC {
-  color: var(--rosaC);
+.texto-secundario-c {
+  color: var(--secundario-c);
 }
 
-.fondo-rosaF {
-  background-color: var(--rosaF);
+.fondo-secundario-f {
+  background-color: var(--secundario-f);
 }
 
-.fondo-rosaM {
-  background-color: var(--rosaM);
+.fondo-secundario {
+  background-color: var(--secundario);
 }
 
-.fondo-rosaC {
-  background-color: var(--rosaC);
+.fondo-secundario-c {
+  background-color: var(--secundario-c);
 }
 
 
-.texto-pagina-blanco {
-  color: var(--pagina-blanco);
+.texto-blanco {
+  color: var(--blanco);
 }
 
-.texto-pagina-fuerte {
-  color: var(--pagina-fuerte);
+.texto-principal-mf {
+  color: var(--principal-mf);
 }
 
-.texto-pagina-principal {
-  color: var(--pagina-principal);
+.texto-principal-f {
+  color: var(--principal-f);
 }
 
-.texto-pagina-tenue {
-  color: var(--pagina-tenue);
+.texto-principal {
+  color: var(--principal);
 }
 
-.texto-pagina-tenue-claro {
-  color: var(--pagina-tenue-claro);
+.texto-principal-mc {
+  color: var(--principal-mc);
 }
 
-.texto-aceptado-desactivado {
-  color: var(--aceptado-desactivado);
+.texto-exito-c {
+  color: var(--exito-c);
 }
 
-.texto-aceptado-activado {
-  color: var(--aceptado-activado);
+.texto-exito {
+  color: var(--exito);
 }
 
-.texto-aceptado-hover {
-  color: var(--aceptado-hover);
+.texto-exito-f {
+  color: var(--exito-f);
 }
 
-.texto-cancelar-desactivado {
-  color: var(--cancelar-desactivado);
+.texto-error-c {
+  color: var(error-c);
 }
 
-.texto-cancelar-activado {
-  color: var(--cancelar-activado);
+.texto-error {
+  color: var(--error);
 }
 
 .texto-pagina-fondo {
@@ -230,51 +230,51 @@
 }
 
 .texto-pagina-gris {
-  color: var(--pagina-gris);
+  color: var(--gris-principal);
 }
 
-.borde-pagina-blanco {
-  border-color: var(--pagina-blanco) !important;
+.borde-blanco {
+  border-color: var(--blanco) !important;
 }
 
 .borde-pagina-gris {
-  border-color: var(--pagina-gris) !important;
+  border-color: var(--gris-principal) !important;
 }
 
-.borde-pagina-fuerte {
-  border-color: var(--pagina-fuerte) !important;
+.borde-principal-mf {
+  border-color: var(--principal-mf) !important;
 }
 
-.borde-pagina-principal {
-  border-color: var(--pagina-principal) !important;
+.borde-principal-f {
+  border-color: var(--principal-f) !important;
 }
 
-.borde-pagina-tenue {
-  border-color: var(--pagina-tenue) !important;
+.borde-principal {
+  border-color: var(--principal) !important;
 }
 
-.borde-pagina-tenue-claro {
-  border-color: var(--pagina-tenue-claro) !important;
+.borde-principal-mc {
+  border-color: var(--principal-mc) !important;
 }
 
-.borde-aceptado-desactivado {
-  border-color: var(--aceptado-desactivado) !important;
+.borde-exito-c {
+  border-color: var(--exito-c) !important;
 }
 
-.borde-aceptado-activado {
-  border-color: var(--aceptado-activado) !important;
+.borde-exito {
+  border-color: var(--exito) !important;
 }
 
-.borde-aceptado-hover {
-  border-color: var(--aceptado-hover) !important;
+.borde-exito-f {
+  border-color: var(--exito-f) !important;
 }
 
-.borde-cancelar-desactivado {
-  border-color: var(--cancelar-desactivado) !important;
+.borde-error-c {
+  border-color: var(error-c) !important;
 }
 
-.borde-cancelar-activado {
-  border-color: var(--cancelar-activado) !important;
+.borde-error {
+  border-color: var(--error) !important;
 }
 
 .borde-punteado {
@@ -314,8 +314,8 @@
 
 .btn-aceptado {
   color: #fff;
-  background-color: var(--aceptado-activado);
-  border-color: var(--aceptado-activado);
+  background-color: var(--exito);
+  border-color: var(--exito);
   font-weight: bold;
   border-radius: 10px;
   font-size: 17px; 
@@ -323,12 +323,12 @@
 
 .btn-aceptado:hover {
   color: #fff;
-  background-color: var(--aceptado-hover);
-  border-color: var(--aceptado-hover);
+  background-color: var(--exito-f);
+  border-color: var(--exito-f);
 }
 /*
 .btn-aceptado:focus, .btn-aceptado.focus {
-  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
+  box-shadow: 0 0 0 0.0rem var(--exito-f);
 }*/
 
 .btn-aceptado.disabled, .btn-aceptado:disabled {
@@ -340,103 +340,64 @@
 .btn-aceptado:not(:disabled):not(.disabled):active, .btn-aceptado:not(:disabled):not(.disabled).active,
 .show > .btn-aceptado.dropdown-toggle {
   color: #fff;
-  background-color: var(--aceptado-hover);
-  border-color: var(--aceptado-hover);
+  background-color: var(--exito-f);
+  border-color: var(--exito-f);
 }
 
-.btn-cancelar {
-  color: #fff;
-  background-color: var(--cancelar-activado);
-  border-color: var(--cancelar-activado);
-  font-weight: bold;
-  border-radius: 10px;
-  font-size: 17px; 
-}
 
-.btn-cancelar:hover {
-  color: #fff;
-  background-color: var(--cancelar-hover);
-  border-color: var(--cancelar-hover);
-}
-/*
-.btn-aceptado:focus, .btn-aceptado.focus {
-  box-shadow: 0 0 0 0.0rem var(--aceptado-hover);
-}*/
-
-.btn-cancelar.disabled, .btn-cancelar:disabled {
-  color: #fff;
-  background-color: #a7a7a7;
-  border-color: #a7a7a7;
-}
-
-.btn-cancelar:not(:disabled):not(.disabled):active, .btn-cancelar:not(:disabled):not(.disabled).active,
-.show > .btn-cancelar.dropdown-toggle {
-  color: #fff;
-  background-color: var(--cancelar-hover);
-  border-color: var(--cancelar-hover);
-}
 
 /*
 .btn-aceptado:not(:disabled):not(.disabled):active:focus, .btn-aceptado:not(:disabled):not(.disabled).active:focus,
 .show > .btn-aceptado.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem var(--aceptado-hover);
+  box-shadow: 0 0 0 0.2rem var(--exito-f);
 } */
 
-/* btn-pagina-tenue */
+/* btn-principal */
 
-.btn-pagina-tenue {
+.btn-principal {
   color: #fff; 
-  background-color: var(--pagina-tenue); 
-  border-color: var(--pagina-tenue); 
+  background-color: var(--principal); 
+  border-color: var(--principal); 
   padding: 0.5rem 1rem;
   font-size: 1rem;
   margin: 0.5rem;
 }
 
-.btn-pagina-tenue:hover {
+.btn-principal:hover {
   /* Estilos para el estado hover (al pasar el cursor sobre el botón) */
-  background-color: var(--pagina-principal);
-  border-color: var(--pagina-principal);
+  background-color: var(--principal-f);
+  border-color: var(--principal-f);
   color: #fff; 
 }
 
-/*
-.btn-pagina-tenue:focus,
-.btn-pagina-tenue.focus {
-  /* Estilos para el estado de enfoque (al hacer clic en el botón) 
-  box-shadow: 0 0 0 0.0rem var(--pagina-tenue); 
-} */
 
-.btn-pagina-tenue:active,
-.btn-pagina-tenue.active {
+
+.btn-principal:active,
+.btn-principal.active {
   /* Estilos para el estado activo (al presionar el botón) */
-  background-color: var(--pagina-tenue); 
-  border-color: var(--pagina-tenue); 
+  background-color: var(--principal); 
+  border-color: var(--principal); 
 }
 
 /* Estilo para el checkbox principal */
 .checkbox-principal.form-check-input:checked {
-  background-color: var(--pagina-principal);
-  border-color: var(--pagina-fuerte);
+  background-color: var(--principal-f);
+  border-color: var(--principal-mf);
 }
 
-/*
-.checkbox-principal.form-check-input:checked:focus {
-  box-shadow: 0 0 0 0.25rem var(--pagina-fuerte);
-}*/
 
 .checkbox-principal.form-check-input:checked:hover {
-  background-color: var(--pagina-principal);
-  border-color: var(--pagina-principal);
+  background-color: var(--principal-f);
+  border-color: var(--principal-f);
 }
 
 /* Estilo para el label (etiqueta) del checkbox principal */
 .checkbox-principal.form-check-label {
-  color: var(--pagina-fuerte);
+  color: var(--principal-mf);
 }
 
 .checkbox-principal.form-check-input:disabled {
-  background-color: var(--pagina-principal);
+  background-color: var(--principal-f);
   opacity: 0.65;
 }
 
@@ -453,21 +414,21 @@
 }
 
 .nav .nav-link.active {
-  border-color: var(--pagina-principal);  
-  background-color: var(--pagina-fuerte);
+  border-color: var(--principal-f);  
+  background-color: var(--principal-mf);
 }
 
 
 
 .nav-pills-opciones .nav-link.active{  
-  background-color: var(--rosaF);
-  color: var(--pagina-blanco);
+  background-color: var(--secundario-f);
+  color: var(--blanco);
   /*box-shadow: 0px 2px 1px #e1e1e1;*/
 
 }
 
 .barra-superior.active{
-  border-color: var(--rosaF) !important;  
+  border-color: var(--secundario-f) !important;  
   border-bottom: 4px solid;
 }
 
@@ -742,7 +703,7 @@ th {
 
 /* Estilo para filas alternas (para un efecto de rayas) */
 .custom-table-se tr:nth-child(odd) {
-  background-color: var(--pagina-blanco); /* Color de fondo para filas pares */
+  background-color: var(--blanco); /* Color de fondo para filas pares */
 }
 
 /* Estilo para la tabla */
@@ -759,10 +720,10 @@ th {
   padding: 0.5rem 0.5rem;/* Espaciado interno en el encabezado */  
   border: 0px solid; /* División vertical y borde alrededor de las celdas del encabezado */  
   border-bottom: 2px solid;
-  border-color: var(--pagina-gris);
+  border-color: var(--gris-principal);
   white-space: normal; 
   word-wrap: break-word;
-  background-color: var(--pagina-blanco); /* Color de fondo del encabezado */
+  background-color: var(--blanco); /* Color de fondo del encabezado */
 }
 
 /* Estilo para las celdas de datos de la tabla */
@@ -806,16 +767,16 @@ th {
 }
 
 .red-errors .errorlist li {
-  color: var(--rosaF);/* Este es el color por defecto de 'text-danger' en Bootstrap */
+  color: var(--error);/* Este es el color por defecto de 'text-danger' en Bootstrap */
 }
 
 .text-danger {
-  color: var(--rosaF) !important;
+  color: var(--error) !important;
 }
 
 /* Estilos para Solicitudes */
 .docRevicion {
-  background-color: var(--pagina-blanco); 
+  background-color: var(--blanco); 
 }
 
 .docError {
@@ -878,8 +839,8 @@ i.rechazado:before {
 
 .btn-barra-lateral:hover {
   color: #000;
-  background-color: var(--pagina-tenue-claro);
-  border-color: var(--pagina-tenue-claro);
+  background-color: var(--principal-mc);
+  border-color: var(--principal-mc);
 }
 
 .btn-barra-lateral.disabled, .btn-barra-lateral:disabled {
@@ -891,12 +852,12 @@ i.rechazado:before {
 .btn-barra-lateral:not(:disabled):not(.disabled):active, .btn-barra-lateral:not(:disabled):not(.disabled).active,
 .show > .btn-barra-lateral.dropdown-toggle {
   color: #fff;
-  background-color: var(--pagina-fuerte);
-  border-color: var(--pagina-fuerte);
+  background-color: var(--principal-mf);
+  border-color: var(--principal-mf);
 }
 
 .leidoFalse {
-  background-color: var(--pagina-blanco);  
+  background-color: var(--blanco);  
   color: var(--negro);
 }
 
@@ -1045,7 +1006,7 @@ i.rechazado:before {
 }
 
 .swiper-pagination-current{
-  color: var(--rosaF) !important;
+  color: var(--secundario-f) !important;
 }
 
 /* Flechitas del carrusel */

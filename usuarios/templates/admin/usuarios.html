@@ -5,8 +5,8 @@ Lista de usuarios
 {% endblock titulo %}
 
 {% block body %}
-<div class="rounded-2 p-1 my-4 principal">
-    <div class=" align-items-center principal">
+<div class="rounded-2 p-1 my-4 texto-general">
+    <div class=" align-items-center texto-general">
         <p class="col mx-4 my-4 h3">Lista de usuarios</p>
     </div>
     <div class="col mx-5">
@@ -31,11 +31,11 @@ Lista de usuarios
     </div>  
     
     
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal"> 
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla texto-general"> 
         <p class="h4 mx-3">Administradores</p>     
         <div class="horizontal-scroll">
             <div>
-                <table class="table custom-table-simple principal">
+                <table class="table custom-table-simple texto-general">
                     
                     <thead>
                         <tr>
@@ -60,7 +60,7 @@ Lista de usuarios
                             <td  style="text-align: right;">                        
                                 <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
                                     <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                        <i class="fa fa-trash-o texto-error m-0" style="font-size: 20px;"></i>
                                     </button>                                
                                 </form>
                             </td>  
@@ -86,11 +86,11 @@ Lista de usuarios
             </span>
         </div>            
     </div>
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla  principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla  texto-general">    
         <p class="h4 mx-3">Solicitantes</p>
         <div class="horizontal-scroll">
             <div>
-                <table class="table custom-table-simple principal">
+                <table class="table custom-table-simple texto-general">
             
                     <thead>
                         <tr>
@@ -136,7 +136,7 @@ Lista de usuarios
                                     </div>                            
                                     <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
                                         <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                            <i class="fa fa-trash-o texto-error m-0" style="font-size: 20px;"></i>
                                         </button>                                
                                     </form>
                                 </div>
@@ -172,16 +172,16 @@ Lista de usuarios
             </div>
         </div> 
     </div>
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal"> 
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla texto-general"> 
         <div class="row m-0 p-0">
             <div class="col h4 mx-3">Usuarios no verificados</div>   
             <form class="col p-0 m-0 mx-3" action="{% url 'usuarios:AReEnviarConfirmaciones' %}" method="get" >                                                        
-                <button class="btn btnCancelar m-0 w-100 font-normal principal" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Re-enviar los correos de confirmación a los {{page_nover.paginator.count}} usuarios no verificados?')">Re-enviar correos de confirmación</button>                            
+                <button class="btn btnCancelar m-0 w-100 font-normal texto-general" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Re-enviar los correos de confirmación a los {{page_nover.paginator.count}} usuarios no verificados?')">Re-enviar correos de confirmación</button>                            
             </form>  
         </div>
         <div class="horizontal-scroll">
             <div>
-                <table class="table custom-table-simple principal">
+                <table class="table custom-table-simple texto-general">
                     
                     <thead>
                         <tr>
@@ -206,7 +206,7 @@ Lista de usuarios
                             <td  style="text-align: right;">                        
                                 <form class="p-0 m-0" action="{% url 'usuarios:AEliminarUsuario' usuario.id %}" method="get" >                                                        
                                     <button id="btnEliminar" type="button" onclick="confrimSubmit(this,'¿Desea eliminar este usuario? <br> {{usuario.curp}}')" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                        <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                        <i class="fa fa-trash-o texto-error m-0" style="font-size: 20px;"></i>
                                     </button>                                
                                 </form>
                             </td>  

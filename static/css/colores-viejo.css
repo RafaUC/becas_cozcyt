@@ -1,0 +1,65 @@
+:root {
+    /* Color styles */
+    /* Paleta de colores */
+    --pantene651: rgb(252,226,228);
+    --pantene592: rgb(245,173,171);
+    --pantene5513: rgb(226,116,110);
+    --pantene4914: rgb(187,68,51);
+    --pantene5016: rgb(120,16,5);  
+    
+    --rosaC: #E1B2AF;
+    --rosaM: #E1B2AF;
+    --rosaF: #E4756F;
+    --rosaO: #BB756F;
+
+    --letraGeneral: #676767;
+    --bordesCard: #d1d1d1;
+
+    --cancelar: #DCCBCA;
+  
+    --btnActivo2: #8abc94;
+    --btnActivo: #B9E2C1;
+    --verdeBtns: #D5F5E2;        
+
+    --soli-doc-aprovada: #dfeafc;
+    --soli-doc-error: #f6face;
+    --soli-aceptada: #def8e3;
+    --soli-rechazada: #ffe1df;
+    --icon-solicitudes: rgba(27, 2, 37, 0.35);
+      
+    --pagina-fondo: #EEE5E5
+    --barra-lateral-fondo: #F8F9FA
+    --pagina-gris: #b9b4b4;
+    --gris-0: #f8f8f8; 
+    --gris-1: #efefef; 
+    --gris-2: #e0e0e0; 
+    --gris-3: #c0c0c0;
+    --gris-4: #a0a0a0;
+    --gris-5: #808080;
+    --gris-6: #606060;
+    --gris-7: #404040; 
+    --gris-8: #202020; 
+    --blanco: #FFFFFF;
+    --negro: #000000; 
+
+
+    /* Color styles viejos 
+      No eliminar pero re asignados por compatibilidad con los estilos que aun los usen
+    */
+    --pagina-blanco: var(--blanco);
+    --pagina-fuerte: var(--pantene5016);
+    --pagina-principal: var(--pantene4914);
+    --pagina-tenue: var(--pantene5513);
+    --pagina-tenue-claro: var(--pantene651);
+    --aceptado-desactivado: var(--verdeBtns);
+    --aceptado-activado: var(--btnActivo);
+    --aceptado-hover: var(--btnActivo2);
+    --cancelar-desactivado: var(--rosaC);
+    --cancelar-activado: var(--rosaF);
+    --cancelar-hover: var(--rosaM);
+    
+    
+    /* Colores electoral */
+    
+    
+  }

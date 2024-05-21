@@ -5,7 +5,7 @@
 {% endblock titulo %}
 
 {% block body %}
-    <div class="rounded-2 p-1 mx-4 principal">
+    <div class="rounded-2 p-1 mx-4 texto-general">
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h3 tituloModulo">
@@ -27,7 +27,7 @@
                             {% if documento.descripcion|wordcount > 10 %}
                             <div data-bs-original-title="{{ documento.descripcion }}">
                                 <div class="card-body" id="{{documento.id}}">                          
-                                    <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                    <a class="texto-general " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
                                         <div class="row " style="height: auto;">
                                             <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>  
                                             <h8 class="card-title" id="contenidoCard">{{ documento.descripcion|truncatechars:55 }}</h8>    
@@ -48,9 +48,9 @@
                                         </div>
                                     </a>
                                     {% if documentoRespForm.instance.id %}
-                                    <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
+                                    <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--exito-f);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--error);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
                                     {% else %}
-                                    <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                    <p class="text-center font-semi-bold" style="color: var(--error);"> La respuesta a este documento no existe. </p>
                                     {% endif %}
                                     {% if convocatoria.fecha_convocatoria %}
                                     <div class="subir-documento" style="padding-bottom: 10px;">
@@ -67,7 +67,7 @@
                             </div>
                             {% else %}
                             <div class="card-body" id="{{documento.id}}">                          
-                                <a class="principal " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
+                                <a class="texto-general " {% if documentoRespForm.instance.id %} href="{% url 'solicitudes:verPdf' solicitud.id documentoRespForm.instance.id %}" target="_blank" {% else %} href="#" {% endif %} >
                                     <div class="row " style="height: auto;">
                                         <h5 class="card-title" id="tituloCard">{{ documento.nombre }}</h5>  
                                         <h8 class="card-title" id="contenidoCard">{{ documento.descripcion}}</h8>    
@@ -88,9 +88,9 @@
                                     </div>
                                 </a>
                                 {% if documentoRespForm.instance.id %}
-                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--btnActivo2);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--rosaF);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
+                                <p class="text-center font-semi-bold" {% if documentoRespForm.instance.estado == 'aprobado' %} style="color: var(--exito-f);" {% elif documentoRespForm.instance.estado == 'denegado' %} style="color: var(--error);" {% endif %} >{{ documentoRespForm.instance.get_estado_display }}</p>
                                 {% else %}
-                                <p class="text-center font-semi-bold" style="color: var(--rosaF);"> La respuesta a este documento no existe. </p>
+                                <p class="text-center font-semi-bold" style="color: var(--error);"> La respuesta a este documento no existe. </p>
                                 {% endif %}
                                 {% if convocatoria.fecha_convocatoria %}
                                 <div class="subir-documento" style="padding-bottom: 10px;">

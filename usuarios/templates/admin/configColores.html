@@ -20,7 +20,7 @@ Configuración colores
             confrimSubmit(formulario, `¿${textoBoton}?`)            
         }
     </script>
-    <div class="rounded-2 p-1 mx-2 principal">
+    <div class="rounded-2 p-1 mx-2 texto-general">
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h5 subtitulo-mod">Configuración de color del sitio</p>
@@ -35,7 +35,7 @@ Configuración colores
         
             <div class="m-2">
                 <div class="row mx-0">
-                    <p class="texto-rosaM font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
+                    <p class="texto-secundario font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
                         Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0)
                     </p>
                 </div>
@@ -64,10 +64,10 @@ Configuración colores
         </form>
         <div class="row m-4 mb-4 p-2 mb-1">
             <div class="col text-end">
-                <button class="btn btn-guardar principal m-0 font-md font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+                <button class="btn btn-guardar texto-general m-0 font-md font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
             </div>            
             <form class="col p-0 m-0 " action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
-                <button class="btn btnCancelar principal m-0 font-md font-semi-bold " type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+                <button class="btn btnCancelar texto-general m-0 font-md font-semi-bold " type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
             </form>
         </div>  
     </div>

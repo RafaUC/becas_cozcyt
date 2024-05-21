@@ -8,7 +8,7 @@ Inicio Estimulos COZCyT
 {% block body %}
 
     <!-- Div que contiene la descripción de los Estímulos COZCyT -->
-    <div class="container flex-direction principal center" style="display: flex; margin-top: 2em; width: 100%;" id="container_inicio_sit">
+    <div class="container flex-direction texto-general center" style="display: flex; margin-top: 2em; width: 100%;" id="container_inicio_sit">
         <div class="col-md-6" id="inicio_imagen_becas">
             <img class="img-fluid" src="{% static 'svg/inicio_stem_ej.svg' %}" alt="persona con problemas en la computadora">
         </div>
@@ -25,7 +25,7 @@ Inicio Estimulos COZCyT
     </div>
 
     <!-- Div que contiene la información de las modalidades -->
-    <div class="principal center" style="margin-top: 2em; width: 100%; background-color: #fff; align-items: center;">
+    <div class="texto-general center" style="margin-top: 2em; width: 100%; background-color: #fff; align-items: center;">
         <div id="info_convocatoria_titulo">
             <h3 style="text-align: center;">
                 <br>
@@ -87,14 +87,14 @@ Inicio Estimulos COZCyT
                     * "La convocatoria ha terminado" 
                     -->
                     {% if fecha_convocatoria %}
-                    <h5 style="text-align: center; color: var(--rosaF); margin-bottom: 0;">
+                    <h5 style="text-align: center; color: var(--secundario-f); margin-bottom: 0;">
                         <strong> Convocatoria abierta </strong>
                     </h5>
-                    <h6 style="text-align: center; color: var(--rosaF);">
+                    <h6 style="text-align: center; color: var(--secundario-f);">
                         {{ convocatoria.mensaje_estado_convocatoria }}
                     </h6>
                     {% else %}
-                    <h5 style="text-align: center; color: var(--rosaF);">
+                    <h5 style="text-align: center; color: var(--secundario-f);">
                         <strong> La convocatoria ha terminado </strong>
                     </h5>
                     {%endif%}
@@ -118,7 +118,7 @@ Inicio Estimulos COZCyT
     </div>
 
     <!-- Div que contiene el contacto del departamento de becas -->
-    <div class="principal center" style="margin-top: 1em; width: 100%; align-items: center;">
+    <div class="texto-general center" style="margin-top: 1em; width: 100%; align-items: center;">
         <div class="flex-direction" style="display: flex; justify-content: center;">
             <div class="col-md-4" id="info_modalidades" style="border: 0.7px solid #EEE5E5; border-radius: 10px;">
                 <div style="margin: 2em;">

@@ -1,34 +1,51 @@
 :root {
-    /* Color styles */
-    /* Paleta de colores */
-    --pantene651: rgb(252,226,228);
-    --pantene592: rgb(245,173,171);
-    --pantene5513: rgb(226,116,110);
-    --pantene4914: rgb(187,68,51);
-    --pantene5016: rgb(120,16,5);
+/* =========================
+   Estilos Básicos del Sitio
+   ========================= */
+    --principal-mc: rgb(252,226,228); 
+    --principal-c:  rgb(245,173,171);
+    --principal:    rgb(226,116,110);
+    --principal-f:  rgb(187,68,51);
+    --principal-mf: rgb(120,16,5);
     
-    --letraGeneral: #676767;
-    --bordesCard: #d1d1d1;
-    --rosaO: #BB756F;
-    --rosaF: #E4756F;
-    --rosaM: #E1B2AF;
-    --rosaC: #E9C3C1;
+    --secundario-mc:#f5c7c4;
+    --secundario-c: #E1B2AF;
+    --secundario:   #E1B2AF;
+    --secundario-f: #E4756F;
+    --secundario-mf:#BB756F;
+
+    --texto-general:    #676767;
+    --pagina-fondo: #EEE5E5;
+    --barra-lateral-fondo:  #F8F9FA;
     
-    --cancelar: #DCCBCA;
-  
-    --verdeBtns: #D5F5E2;
-    --btnActivo: #B9E2C1;
-    --btnActivo2: #8abc94;
+    --exito-f:      #8abc94;
+    --exito:        #B9E2C1;
+    --exito-c:      #D5F5E2;
+    --error:        #E4756F;
+    --error-c:      #E1B2AF;
+    --precaucion:   #e4d26f;
+    --cancelar:     #DCCBCA;
+
+    --notif-info-background:    #F1F7FA; 
+    --notif-info-texto:         #d9edf7; 
+    --notif-info-border:        #bce8f1; 
+    --notif-warning-background: #FAF0E4; 
+    --notif-warning-texto:      #fcf8e3; 
+    --notif-warning-border:     #faebcc; 
+    --notif-error-background:   #F8E2E1; 
+    --notif-error-texto:        #676767; 
+    --notif-error-border:       #676767; 
+    --notif-exito-background:   #F1FAF3; 
+    --notif-exito-texto:        #676767; 
+    --notif-exito-border:       #F1FAF3; 
 
     --soli-doc-aprovada: #dfeafc;
     --soli-doc-error: #f6face;
     --soli-aceptada: #def8e3;
     --soli-rechazada: #ffe1df;
     --icon-solicitudes: rgba(27, 2, 37, 0.35);
-  
-    --pagina-fondo: #EEE5E5
-    --barra-lateral-fondo: #F8F9FA
-    --pagina-gris: #b9b4b4;
+
+    --gris-principal: #b9b4b4;
     --gris-0: #f8f8f8; 
     --gris-1: #efefef; 
     --gris-2: #e0e0e0; 
@@ -41,24 +58,4 @@
     --blanco: #FFFFFF;
     --negro: #000000; 
 
-
-    /* Color styles viejos 
-      No eliminar pero re asignados por compatibilidad con los estilos que aun los usen
-    */
-    --pagina-blanco: var(--blanco);
-    --pagina-fuerte: var(--pantene5016);
-    --pagina-principal: var(--pantene4914);
-    --pagina-tenue: var(--pantene5513);
-    --pagina-tenue-claro: var(--pantene651);
-    --aceptado-desactivado: var(--verdeBtns);
-    --aceptado-activado: var(--btnActivo);
-    --aceptado-hover: var(--btnActivo2);
-    --cancelar-desactivado: var(--rosaC);
-    --cancelar-activado: var(--rosaF);
-    --cancelar-hover: var(--rosaM);
-    
-    
-    /* Colores electoral */
-    
-    
-  }
+}
