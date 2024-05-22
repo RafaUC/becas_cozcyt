@@ -503,7 +503,7 @@ def load_colors_from_css(request):
         return redirect('usuarios:AResetCacheColors')
     else:
         messages.error(request,'No se pudo encontrar colores.css')
-        return redirect('usuarios:AConfigColores')
+        return redirect('usuarios:AConfigAparencia')
 
 
 @cache_page(None)  # won't expire, ever
@@ -539,27 +539,38 @@ def reset_cache_and_new_version(request, view='usuarios:colores', args=None):
     version.version = version.version + 1
     version.save()
     
-    return redirect('usuarios:AConfigColores')
+    return redirect('usuarios:AConfigAparencia')
 
 
 
 @login_required
 @user_passes_test(usuarioEsAdmin)
-def configColores(request):
+def configAparencia(request):
     if request.method == 'GET':
         formset = SiteColorFormSet(queryset=SiteColor.objects.all())
+        formImages = StaticImagesUploadForm()
     elif request.method == 'POST':
         formset = SiteColorFormSet(request.POST, queryset=SiteColor.objects.all())
-        if formset.is_valid():
+        formImages = StaticImagesUploadForm(request.POST, request.FILES)
+        if formset.is_valid() and formImages.is_valid():
             formset.save()
+            for field_name in formImages.cleaned_data:
+                image = formImages.cleaned_data[field_name]
+                if image:
+                    image_path = os.path.join(settings.STATICFILES_DIRS[0], 'images', field_name+'.png')
+                    with open(image_path, 'wb+') as destination:
+                        for chunk in image.chunks():
+                            destination.write(chunk)
             messages.success(request, 'Nueva vercion del esquema de colores del sitio guardada con exito.')
             return redirect('usuarios:AResetCacheColors')
         else:
             messages.warning(request, 'No se pudo guardar el esquema de colores.')
             messages.error(request, formset.errors)
+            messages.error(request, formImages.errors)
     
     context = {
         'formset':formset,
+        'formImages': formImages,
         }
-    return render(request, 'admin/configColores.html', context)
+    return render(request, 'admin/configAparencia.html', context)
 
