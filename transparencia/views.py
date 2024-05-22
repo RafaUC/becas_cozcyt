@@ -102,3 +102,11 @@ def transparenciaSIT(request):
     }
     context.update(getContextoBaseTransparencia(request))
     return render(request, 'transparenciaSIT.html', context)
+
+def transparenciaSITInfo(request):
+    
+    context = {
+
+    }
+    context.update(getContextoBaseTransparencia(request))
+    return render(request, 'sit.html', context)
