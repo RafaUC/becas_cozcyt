@@ -25,6 +25,7 @@ from solicitudes.models import *
 
 #decoradores
 from .decorators import user_passes_test, user_passes_test_httpresponse, usuarioEsAdmin
+from django.views.decorators.cache import cache_page
 
 
 @login_required
@@ -476,3 +477,100 @@ def agregarAdmin(request, pk=None):
         'modalForm': form,
     }
     return render(request, 'modal_base.html', context)
+
+
+@login_required
+@user_passes_test(usuarioEsAdmin)
+def load_colors_from_css(request):       
+    css_file_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'colores.css')
+    print(css_file_path)
+    print(os.path.exists(css_file_path))
+    if os.path.exists(css_file_path):
+        SiteColor.objects.all().delete()
+        with open(css_file_path, 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if line.strip().startswith('--'):
+                    name, value = line.strip().split(':')
+                    name = name.strip()[2:]  # Remove the leading '--'
+                    value = value.strip().rstrip(';')  # Remove the trailing ';'                    
+                    if SiteColor.is_valid_color(value):
+                        print(f'{name} - {value}')
+                        SiteColor.objects.create(nombre=name, color=value)
+                    else :
+                        print(f'No se pudo crear el SiteColor: {name} with value {value}')
+        messages.success(request,'colores.css importado con exito')
+        return redirect('usuarios:AResetCacheColors')
+    else:
+        messages.error(request,'No se pudo encontrar colores.css')
+        return redirect('usuarios:AConfigAparencia')
+
+
+@cache_page(None)  # won't expire, ever
+def cargarColoresCSS(request):
+    colors = SiteColor.objects.all()
+    css = ":root {\n"
+    for color in colors:
+        css += f"    --{color.nombre}: {color.color};\n"
+    css += "}\n"
+    return HttpResponse(css, content_type='text/css')
+
+@login_required
+@user_passes_test(usuarioEsAdmin)
+def reset_cache_and_new_version(request, view='usuarios:colores', args=None):
+    from django.core.cache import cache
+    from django.utils.cache import get_cache_key
+
+    if args is None:
+        path = reverse(view)
+    else:
+        path = reverse(view, args=args)
+
+    request.path = path
+    key = get_cache_key(request)
+    if key in cache:
+        print(f'existe un cache de "{key}": eliminando')
+        cache.delete(key)
+    else:
+        print(f'no se encontro un cache de "{key}": no se pudo eliminar')
+    
+    #crear nueva vercion de cache
+    version = CacheVersion.get_object()
+    version.version = version.version + 1
+    version.save()
+    
+    return redirect('usuarios:AConfigAparencia')
+
+
+
+@login_required
+@user_passes_test(usuarioEsAdmin)
+def configAparencia(request):
+    if request.method == 'GET':
+        formset = SiteColorFormSet(queryset=SiteColor.objects.all())
+        formImages = StaticImagesUploadForm()
+    elif request.method == 'POST':
+        formset = SiteColorFormSet(request.POST, queryset=SiteColor.objects.all())
+        formImages = StaticImagesUploadForm(request.POST, request.FILES)
+        if formset.is_valid() and formImages.is_valid():
+            formset.save()
+            for field_name in formImages.cleaned_data:
+                image = formImages.cleaned_data[field_name]
+                if image:
+                    image_path = os.path.join(settings.STATICFILES_DIRS[0], 'images', field_name+'.png')
+                    with open(image_path, 'wb+') as destination:
+                        for chunk in image.chunks():
+                            destination.write(chunk)
+            messages.success(request, 'Nueva vercion del esquema de colores del sitio guardada con exito.')
+            return redirect('usuarios:AResetCacheColors')
+        else:
+            messages.warning(request, 'No se pudo guardar el esquema de colores.')
+            messages.error(request, formset.errors)
+            messages.error(request, formImages.errors)
+    
+    context = {
+        'formset':formset,
+        'formImages': formImages,
+        }
+    return render(request, 'admin/configAparencia.html', context)
+

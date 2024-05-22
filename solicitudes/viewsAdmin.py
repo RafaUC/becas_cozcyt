@@ -98,13 +98,29 @@ ESTADISTICAS_SOLICITUD_CHOICES = [
         ('municipio', 'Municipios')
     ]
 
+ESTADISTICAS_SOLICITUD_CHOICES_EXCLUDE_USER = [
+    'puntaje',     
+]
+
 TODOS_STR = 'Todas'
 
-MAPEO_SOLICITUDES_CHOICES = {
+MAPEO_SOLICITUDES_CHOICES_ADMIN = {
     'modalidad': 'modalidad__nombre',
     'ciclo': 'ciclo__nombre',
     'estado solicitud': 'estado',
     'puntaje': 'puntaje',
+    'tipo': 'tipo',
+    'genero': 'solicitante__genero',
+    'instituciones': 'solicitante__carrera__institucion__nombre',
+    'carreras': 'solicitante__carrera__nombre',
+    'estado': 'solicitante__municipio__estado__nombre',
+    'municipio': 'solicitante__municipio__estado__nombre',
+}
+
+MAPEO_SOLICITUDES_CHOICES_USER = {
+    'modalidad': 'modalidad__nombre',
+    'ciclo': 'ciclo__nombre',
+    'estado solicitud': 'estado',    
     'tipo': 'tipo',
     'genero': 'solicitante__genero',
     'instituciones': 'solicitante__carrera__institucion__nombre',
@@ -279,6 +295,12 @@ def estadisticaSolicitudes(request):
             ultimoCiclo = ciclos[1]
             ciclos = ciclos[1:]
         ciclos = ciclos[:5]    
+        solicitudChoicesExclude = ESTADISTICAS_SOLICITUD_CHOICES_EXCLUDE_USER
+        mapeoSolicitudesChoices = MAPEO_SOLICITUDES_CHOICES_USER
+    #usuario es admin
+    else :
+        solicitudChoicesExclude = None
+        mapeoSolicitudesChoices = MAPEO_SOLICITUDES_CHOICES_ADMIN
     cicloChoices = [(str(ciclo.id), ciclo) for ciclo in ciclos]
     cicloChoices.insert(0, (TODOS_STR, TODOS_STR))
 
@@ -301,13 +323,16 @@ def estadisticaSolicitudes(request):
         filtro_choices = cicloChoices,
         campo_label = 'Atributo',
         campo_choices = ESTADISTICAS_SOLICITUD_CHOICES,
+        campo_exclude = solicitudChoicesExclude,
     )
     #se seleccionan solo los valores unicos y su frecuencia
-    campo_estadistica = MAPEO_SOLICITUDES_CHOICES.get(campo_estadistica_original, None)
+    campo_estadistica = mapeoSolicitudesChoices.get(campo_estadistica_original, None)
     minRotationLabel = ANGULO_SOLICITUDES_CHOICES.get(campo_estadistica_original, 0)
     conjuntosEstadisticos = []
     dataLabel = f'{getChoicesEtiqueta(ESTADISTICAS_SOLICITUD_CHOICES, campo_estadistica_original)}: Solicitudes'    
 
+    if not campo_estadistica:
+        raise Http404("Atributo no encontrado o no accesible")
     #obtenermos la infomacion para la estadistica, valores y frecuencias etc
     if campo_estadistica_original == 'ciclo':        
         valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica)).order_by('-ciclo__id')
@@ -332,6 +357,7 @@ def estadisticaSolicitudes(request):
     listaColores.insert(0, (255,255,255))
     labels.insert(0, 'Total')
     frecuencias.insert(0, sum(frecuencias))
+    frecuencias = [f"{num:,}" for num in frecuencias]
     conjuntosEstadisticos.append({
         'tipo': 'leyenda',
         'dataLabel': dataLabel,

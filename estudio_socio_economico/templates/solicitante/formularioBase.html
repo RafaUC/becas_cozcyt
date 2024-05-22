@@ -8,7 +8,7 @@
     {% if seccion.tipo == 'agregacion' %}
     <div class="cont-agregacion prin" id="agregacion-{{ seccion.id }}">
     {% endif %}
-    <div class=" cont-seccion border border-1 rounded-2 p-0 pb-2 mx-3 mb-5 borde-tabla principal">
+    <div class=" cont-seccion border border-1 rounded-2 p-0 pb-2 mx-3 mb-5 borde-tabla texto-general">
         <h3 class="m-3 mb-4">{{ seccion.nombre }}</h3>      
         <div class="row row-col row-elementos ps-4 m-0 mb-4 ">           
             {% for elemento in seccion.elemento_set.all %}
@@ -115,7 +115,7 @@
                                     {% endfor %}              
                                     <td class="font-xs " style="text-align: right;">                                                            
                                         <button id="btnEliminar-{{registro.first.rAgregacion.id}}" type="button" onclick="eliminarRegistro(this)" title="Eliminar" class="line-height-normal btn p-0 m-0" data-bs-original-title="Eliminar Elemento">
-                                            <i class="fa fa-trash-o texto-cancelar-activado " style="font-size: 20px;"></i>
+                                            <i class="fa fa-trash-o texto-error " style="font-size: 20px;"></i>
                                         </button>                                                                    
                                     </td>  
                                 </tr>

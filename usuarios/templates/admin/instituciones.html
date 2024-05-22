@@ -6,7 +6,7 @@ Lista de instituciones
 
 {% block body %}    
     {% include 'admin/config_nav.html' %}
-    <div class="rounded-2 p-1 mx-2 principal">
+    <div class="rounded-2 p-1 mx-2 texto-general">
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h5 subtitulo-mod">Lista de instituciones</p>
@@ -14,7 +14,7 @@ Lista de instituciones
             </div>
         </div>
     </div>
-    <div class="row align-items-center m-0 principal">
+    <div class="row align-items-center m-0 texto-general">
         <div class="col mt-1 mx-4">
             <div class="row align-items-center">
                 <div class="col-auto p-0">
@@ -38,7 +38,7 @@ Lista de instituciones
     </div>
     
     
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-1 borde-tabla principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-1 borde-tabla texto-general">    
         <div class="row mx-0">
             <div class="col ps-0">
                 <p class="h4 mx-3">Instituciones</p>           
@@ -49,7 +49,7 @@ Lista de instituciones
         </div>
         <div class="horizontal-scroll">
             <div>
-                <table class="table custom-table-simple principal">            
+                <table class="table custom-table-simple texto-general">            
                     <thead>
                         <tr>
                             <th class="borde-tabla text-center" style="width: 1%; border-bottom: 2px solid; color: #676767;"></th>
@@ -74,7 +74,7 @@ Lista de instituciones
                                     </button>  
                                     <form class="p-0 m-0" action="{% url 'usuarios:AEliminarInstitucion' institucion.id %}" method="get" >                                                        
                                         <button id="btnEliminar" type="button" onclick="confrimSubmit(this, '¿Desea eliminar esta institución? <br> {{institucion.nombre}}')" title="Eliminar Institución" class="line-height-normal btn p-0 m-0 mx-2" data-bs-original-title="Eliminar Institución">
-                                            <i class="fa fa-trash-o texto-cancelar-activado m-0" style="font-size: 20px;"></i>
+                                            <i class="fa fa-trash-o texto-error m-0" style="font-size: 20px;"></i>
                                         </button>                                
                                     </form>
                                 </div>

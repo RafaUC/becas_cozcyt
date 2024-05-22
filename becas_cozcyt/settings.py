@@ -62,6 +62,12 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",    
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 ROOT_URLCONF = 'becas_cozcyt.urls'
 
 TEMPLATES = [
@@ -75,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',                
                 'django.contrib.messages.context_processors.messages',
+                'usuarios.context_processors.cache_version',
             ],
         },
     },

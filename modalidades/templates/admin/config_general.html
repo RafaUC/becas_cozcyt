@@ -6,7 +6,7 @@
 
 {% block body %}
     {% include 'admin/config_nav.html' %}
-    <div class="rounded-2 p-1 mx-4 principal">
+    <div class="rounded-2 p-1 mx-4 texto-general">
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p class="col h5 subtitulo-mod">Configuración general</p>
@@ -73,7 +73,7 @@
             </div>   
             <div class="d-grid gap-1 col-md px-3 subtitulo-config-general"> 
                 <form class="p-0 m-0" action="{% url 'modalidades:APublicRes' %}" method="get" > 
-                    <button class="btn btnCancelar m-0 w-100 font-normal principal my-5" type="button" value="aceptar" 
+                    <button class="btn btnCancelar m-0 w-100 font-normal texto-general my-5" type="button" value="aceptar" 
                         {% if convocatoria.instance.ultimo_ciclo_publicado and convocatoria.instance.ultimo_ciclo_publicado == ciclo %}
                             onclick="confrimSubmit(this,'¿Desea revertir publicacion de los resultados y estadisticas del ciclo {{ciclo}}?')">Revertir publicacion de resultados
                         {% else %}

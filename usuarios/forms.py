@@ -1,11 +1,15 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+import re
+import os
 from django.forms import modelformset_factory
 from django.forms import inlineformset_factory
 
 from .models import *
 from django.contrib.auth import get_user_model
+from django.conf import settings
+
 User = get_user_model()
 
 class LoginForm(AuthenticationForm):
@@ -341,3 +345,70 @@ class AgregarAdminForm(UserCreationForm):
     
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Contraseña'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg my-3', 'placeholder': 'Confirme su contraseña'}))
+
+
+class SiteColorForm(forms.ModelForm):
+    class Meta:
+        model = SiteColor
+        fields = ['color']
+        labels = {
+            'color': 'Color',
+        }
+        widgets = {
+            #'nombre': forms.TextInput(attrs={'disabled': 'disabled'}),            
+            'color': forms.TextInput(attrs={'class': 'jscolor', 'data-jscolor': '{}', }),
+        }
+
+    def clean_color(self):
+        color = self.cleaned_data.get('color')
+        if not SiteColor.is_valid_color(color):
+            regex = r'^#([A-Fa-f0-9]{8})$'
+            if re.match(regex, color):
+                raise forms.ValidationError("Formato de color invalido. Usa rgba(0,0,0) para definir transparencia.")
+            else:                
+                raise forms.ValidationError("Formato de color invalido. Usa #000000, rgb(0,0,0) o rgba(0,0,0).")
+        return color
+
+SiteColorFormSet = modelformset_factory(SiteColor, form=SiteColorForm, extra=0, can_delete=False)
+
+
+class StaticImagesUploadForm(forms.Form):    
+    favicon = forms.ImageField(required=False)
+    logo = forms.ImageField(required=False)
+    logo_texto = forms.ImageField(required=False)
+    logo_texto_lab = forms.ImageField(required=False)
+    logo_licencia = forms.ImageField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(StaticImagesUploadForm, self).__init__(*args, **kwargs)
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+
+    def clean_image(self, image):
+        if image:
+            if not image.name.endswith('.png'):
+                raise ValidationError('Solo se permiten archivos PNG.')
+            if image.content_type != 'image/png':
+                raise ValidationError('El archivo debe ser una imagen PNG.')
+        return image
+
+    def clean_favicon(self):
+        return self.clean_image(self.cleaned_data.get('favicon'))
+
+    def clean_logo(self):
+        return self.clean_image(self.cleaned_data.get('logo'))
+
+    def clean_logo_texto(self):
+        return self.clean_image(self.cleaned_data.get('logo_texto'))
+
+    def clean_logo_texto_lab(self):
+        return self.clean_image(self.cleaned_data.get('logo_texto_lab'))
+
+    def clean_logo_licencia(self):
+        return self.clean_image(self.cleaned_data.get('logo_licencia'))
+
+    def get_image_path(self, field_name):
+        return os.path.join(settings.STATIC_URL, 'images', field_name)
+
+    def get_image_url(self, field_name):
+        return os.path.join(settings.STATIC_URL, 'images', field_name)

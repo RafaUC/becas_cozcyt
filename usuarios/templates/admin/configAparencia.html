@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Configuración colores
+{% endblock titulo %}
+
+{% block body %}
+    {% include 'admin/config_nav.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+    <script>
+        jscolor.presets.default = {
+            format:'any'
+        };
+        function enviarFormulario(formularioId, boton) { 
+            // Obtener el formulario y el valor del botón
+            const formulario = $('#' + formularioId);            
+            const textoBoton = $(boton).text();
+
+            // Enviar el formulario                   
+            confrimSubmit(formulario, `¿${textoBoton}?`)            
+        }
+    </script>
+    <div class="rounded-2 p-1 mx-2 texto-general">
+        <div class="rounded-2 mx-4">
+            <div class="row align-items-center">
+                <p class="col-auto h5 subtitulo-mod">Configuración de aparencia del sitio</p>
+                <div class="col">
+                    <div class="row m-2 p-0">
+                        <div class="col-5 text-end">
+                            <button class="btn btn-guardar texto-general m-0 font-sm font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+                        </div>            
+                        <form class="col-7 p-0 m-0 " action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
+                            <button class="btn btnCancelar texto-general m-0 font-sm font-semi-bold " type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+                        </form>
+                    </div>    
+                </div>             
+            </div>
+        </div>
+    </div>   
+    <form method="post" id="coloresForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <hr class="mx-4">
+        <div>
+            {{ formImages }}
+        </div>
+        <hr class="mx-4">
+        <div class="mb-5">                                    
+                {{ formset.management_form }}
+            
+                <div class="m-2">                
+                    <div class="row mx-0">
+                        <p class="texto-secundario font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
+                            Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0)
+                        </p>
+                    </div>
+                    
+                    <ul class="cols-rows-automatico  mb-3">                    
+                        {% for form in formset %}
+                            <li class="item">
+                                <div class="row mx-0 mb-2">
+                                    <div class="col px-1 text-end ">
+                                        <div class="fondo-gris-0 px-2 font-semi-bold font-md">
+                                            {{ form.instance.nombre }}
+                                        </div>
+                                        {% for field in form.hidden_fields %}
+                                            {{ field }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col px-1 text-start">                                    
+                                            {{ form.color }}
+                                            {{ form.color.errors }}                                                                    
+                                    </div>
+                                </div>                            
+                            </li>
+                        {% endfor %}                        
+                    </ul>
+                </div>                                  
+        </div>
+    </form>
+{% endblock body %}

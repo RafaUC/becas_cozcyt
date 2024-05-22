@@ -666,10 +666,10 @@
             <div id="parentDiv-{{ pDiv }}" class=" cont-seccion border border-1 rounded-2 p-0 mx-3 mb-5 pagina-fondo borde-tabla text-center">
                 
                 
-                <div class="row m-0 pt-2 text-center pagina-blanco"> 
+                <div class="row m-0 pt-2 text-center blanco"> 
                     <i class="handle fa fa-bars" aria-hidden="true"></i>
                 </div>          
-                <div class="row m-0 pb-3 align-items-center pagina-blanco">    
+                <div class="row m-0 pb-3 align-items-center blanco">    
                     {% for hidden in seccion.hidden_fields %}
                         {{ hidden }}
                         <div class="text-danger">
@@ -723,7 +723,7 @@
                                         {% for elemento in  elementoFormSet%}
                                             {% with eID=forloop.counter0 %}
                                                                                                                                                                         
-                                                <div id="elem-{{ pDiv }}-{{ eID }}" class="col cont-elem p-0 m-1 pagina-blanco border border-1 rounded rounded-3 borde-pagina-blanco" >
+                                                <div id="elem-{{ pDiv }}-{{ eID }}" class="col cont-elem p-0 m-1 blanco border border-1 rounded rounded-3 borde-blanco" >
                                                     
                                                     <div class="px-3 py-1 m-0 ">
                                                         <div class="row text-center mb-1"> 
@@ -793,7 +793,7 @@
                                                                 </div>                                                                                                                                       
                                                             </div>                          
                                                             <div class="col-auto p-0 m-0 ms-2">                                                                     
-                                                                <button type="button" onclick="agregarNuevaOpcion(this)" class="btn-a-opcion btn btn-pagina-tenue font-semi-bold font-xs p-1" >+ Opción</button>
+                                                                <button type="button" onclick="agregarNuevaOpcion(this)" class="btn-a-opcion btn btn-principal font-semi-bold font-xs p-1" >+ Opción</button>
                                                             </div>           
                                                         </div>
                                                         <div id="opciones-{{ pDiv }}-{{ eID }}" class="cont-opc">
@@ -805,7 +805,7 @@
                                                                         {{ opcionFormSet.management_form}}  
                                                                         {% for opcion in  opcionFormSet%}
                                                                             {% with oID=forloop.counter0 %}
-                                                                                <div id="opcion-{{ pDiv }}-{{ eID }}-{{ oID }}" class="cont-opcion col pagina-blanco borde-pagina-fondo border border-1 rounded-2 p-1 m-1">
+                                                                                <div id="opcion-{{ pDiv }}-{{ eID }}-{{ oID }}" class="cont-opcion col blanco borde-pagina-fondo border border-1 rounded-2 p-1 m-1">
                                                                                     <div class="row text-center p-0 m-0 align-items-center"> 
                                                                                         <i class="col-auto handle3 p-0 m-0 me-1 fa fa-bars font-xs" aria-hidden="true"></i>    
                                                                                         <div class="col p-0 m-0">
@@ -861,11 +861,11 @@
                                         ocultarElementoExtra('parentDiv-{{ pDiv }}')
                                         revisarFilasVacias('parentDiv-{{ pDiv }}')
                                     </script>  
-                                    <div class="row btn-a-elem m-0 p-3 align-items-center pagina-blanco">
+                                    <div class="row btn-a-elem m-0 p-3 align-items-center blanco">
                                         <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-guardar mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
                                     </div>                                                                              
                                 {% else %}                                        
-                                    <div class="row btn-a-elem m-0 p-3 align-items-center pagina-blanco">
+                                    <div class="row btn-a-elem m-0 p-3 align-items-center blanco">
                                         <button type="button" onclick="agregarNuevoElemento(this)" class="btn btn-guardar mt-2 mb-3 p-2">+ Agregar nueva pregunta</button>
                                     </div>
                                 {% endif %}

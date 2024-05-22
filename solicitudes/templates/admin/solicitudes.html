@@ -5,12 +5,12 @@ Administrar solicitudes
 {% endblock titulo %}
 
 {% block body %}    
-<div class="rounded-2 p-1 my-4 principal">
-    <div class=" align-items-center principal">
+<div class="rounded-2 p-1 my-4 texto-general">
+    <div class=" align-items-center texto-general">
         <p class=" mx-4 my-4 h3">Solicitudes {{ ciclo }}</p>
     </div>
 
-    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla principal">    
+    <div style="border-radius: 15px;" class="m-3 py-3 border border-2 borde-tabla texto-general">    
         <div class="row mx-0">
             <div class="col-3 ps-0">
                 <p class="h4 mx-3"><strong>Solicitudes</strong></p>           
@@ -63,7 +63,7 @@ Administrar solicitudes
         <div class="row">
             <div class="col-auto ms-2 mb-1">
                 <form class="p-0 m-0" action="{% url 'solicitudes:AConcentradoConv' ciclo %}" method="get" > 
-                <button class="btn btnCancelar m-0 w-100 font-normal principal" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Desea descargar el concentrado?')">Descargar concentrado</button>
+                <button class="btn btnCancelar m-0 w-100 font-normal texto-general" type="button" value="aceptar" onclick="confrimSubmit(this,'¿Desea descargar el concentrado?')">Descargar concentrado</button>
                 </form>
             </div>
             <div class="col text-end me-3 mb-1">
