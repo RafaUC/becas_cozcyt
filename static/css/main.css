@@ -1072,12 +1072,12 @@ i.rechazado:before {
 }
 
 #enlaceSIT{
-  color: var(--rosaO); 
+  color: var(--secundario-mf); 
   font-weight: 600; 
 }
 
 #enlaceSIT:hover{
-  color: var(--rosaM); 
+  color: var(--secundario); 
 }
 
 /* Acordeón de preguntas frecuentes */
