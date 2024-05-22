@@ -382,7 +382,7 @@ class StaticImagesUploadForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(StaticImagesUploadForm, self).__init__(*args, **kwargs)
         for field_name in self.fields:
-            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+            self.fields[field_name].widget.attrs.update({'class': 'form-control form-control-sm'})
 
     def clean_image(self, image):
         if image:
