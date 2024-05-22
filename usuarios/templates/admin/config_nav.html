@@ -1,5 +1,5 @@
-<div class="rounded-2 p-1 my-4 principal">
-    <p class="mx-4 my-4 h3 principal">Configuración</p>
+<div class="rounded-2 p-1 my-4 texto-general">
+    <p class="mx-4 my-4 h3 texto-general">Configuración</p>
 
 
     <nav class="navbar navbar-expand-lg navbar bg-white mx-3">          
@@ -21,7 +21,7 @@
             <a class="nav-link d-flex link-dark {% if url_name == 'AConfigEstudio' %}active{% endif %} h6" href="{% url 'estudioSE:AConfigEstudio' %}">Estudio socioeconómico</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link d-flex link-dark {% if url_name == 'AConfigAparencia' %}active{% endif %} h6" href="#">Apariencia</a>
+            <a class="nav-link d-flex link-dark {% if url_name == 'AConfigAparencia' %}active{% endif %} h6" href="{% url 'usuarios:AConfigAparencia' %}">Apariencia</a>
             </li>
         </ul>
         {% endwith %}

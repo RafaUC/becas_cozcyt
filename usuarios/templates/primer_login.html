@@ -7,12 +7,12 @@
 {% block body %}
 
 
-<div class="border border-1 rounded-2 p-4 m-4 borde-tabla principal red-errors" style="background-color: white;">
+<div class="border border-1 rounded-2 p-4 m-4 borde-tabla texto-general red-errors" style="background-color: white;">
     <form method="POST" id="mainForm" data-municipios-url="{% url 'usuarios:cargar_select_municipios' %}" data-carreras-url="{% url 'usuarios:cargar_select_carreras' %}" novalidate>
         
         {% csrf_token %}        
     
-        <p class="h4" style="color: var(--rosaF);">Complete sus datos personales </p>
+        <p class="h4" style="color: var(--error);">Complete sus datos personales </p>
         <div class="row">
             <div class="row align-items-center p-2">
                 <p class="h5">Datos personales</p>

@@ -68,9 +68,7 @@ def resultadosContenido(request,num,mod):
         titulo = "Los resultados de la convocatoria todavía no se han publicado."
         modalidadSelectForm = None
     else:
-        modalidadesdelCiclo = MontoModalidad.objects.filter(ciclo=ciclo).values_list('modalidad_id', flat=True).distinct()
-        print(modalidadesdelCiclo)
-        print(modalidadesdelCiclo)
+        modalidadesdelCiclo = MontoModalidad.objects.filter(ciclo=ciclo).values_list('modalidad_id', flat=True).distinct()                     
         modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, id=mod).first()
         if not modalidad:
             modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, mostrar=True, archivado=False).first()
@@ -79,11 +77,15 @@ def resultadosContenido(request,num,mod):
         else:
             mod = None
         modalidadSelectForm = ModalidadSelectForm(ciclo=ciclo, initial={'modalidad': mod})
-
+        modNombre = None
+        if modalidad:
+            modNombre = modalidad.nombre
+            
         #obtener solicitudes aceptadas
-        solicitudes = Solicitud.objects.filter(ciclo=ciclo, modalidad=modalidad, estado=Solicitud.ESTADO_CHOICES[3][0]).select_related('solicitante').order_by('solicitante_id')
+        solicitudes = Solicitud.objects.filter(ciclo=ciclo, modalidad__nombre=modNombre, estado=Solicitud.ESTADO_CHOICES[3][0]).select_related('solicitante').order_by('solicitante_id')
         folios = [solicitud.solicitante.folio for solicitud in solicitudes]
-        titulo = modalidad
+        titulo = modalidad.nombre
+        print(solicitudes.count())
 
     context = {
         'folios': folios,

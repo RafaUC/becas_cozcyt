@@ -5,7 +5,7 @@
 }
 
 .btn-editar-perfil{
-    background-color: var(--rosaF); 
+    background-color: var(--secundario-f); 
 }
 
 .btn-guardar{
@@ -38,11 +38,11 @@
   }
 
   .enlace-login{
-    color: var(--rosaF);
+    color: var(--secundario);
   }
 
   .enlace-login:hover{
-    color: var(--rosaO);
+    color: var(--principal);
   }
 
 /* Crear cuenta */
@@ -64,7 +64,7 @@
 }
 
 .btn-guardar-perfil{
-    background-color: var(--btnActivo);
+    background-color: var(--exito);
     color: var(--blanco);
     border-width: 1.5px; 
     font-weight: 530;
@@ -73,8 +73,8 @@
 
 .btn-guardar-perfil:hover{
     background-color: var(--blanco);
-    color: var(--btnActivo);
-    border-color: var(--btnActivo);
+    color: var(--exito);
+    border-color: var(--exito);
 }
 
 /* Convocatoria */
@@ -94,7 +94,7 @@
 }
 
 .btnConvocatoria{
-    background-color: var(--pantene5513); 
+    background-color: var(--principal); 
     color: #FFFFFF;  
     width: 70%; 
     border-radius: 50px; 
@@ -128,16 +128,16 @@
     }
     #previewDoc{
         height: 200px; 
-        color: var(--letraGeneral);;
+        color: var(--texto-general);;
     }
     
     .btnSubirDoc{
         background-color: var(--blanco);; 
-        color: var(--rosaM);
+        color: var(--secundario);
         width: 70%; 
         padding: 6px;
         font-size: medium;
-        border-color: var(--rosaM); 
+        border-color: var(--secundario); 
         border-radius: 50px; 
         border: 1.5px solid; 
         font-weight: 530;
@@ -147,7 +147,7 @@
         text-overflow: ellipsis;
     }
     .btnSubirDoc:hover{
-        background-color: var(--rosaM);
+        background-color: var(--secundario);
         color: var(--blanco); 
     }
     
@@ -156,26 +156,25 @@
     } 
     
     .btnSubirDocs{
-        background-color: var(--btnActivo);
+        background-color: var(--exito);
         color: #676767;
         color: var(--blanco); 
         width: auto;
-        border-radius: 50px; 
+        border-radius: 10px;
         border-width: 1.5px; 
         font-weight: 530;
     }
     
     .btnSubirDocs:hover{
         background-color: var(--blanco);
-        color: var(--btnActivo);
-        border-color: var(--btnActivo);
+        color: var(--exito);
+        border-color: var(--exito);
     }
     
     .btnCancelar{
         background-color: #DFDFDF;
-        color: #A8A8A8; 
-        width: 40%;
-        border-radius: 50px; 
+        color: #A8A8A8;         
+        border-radius: 10px;
         border-width: 1.5px; 
         font-weight: 530;
     }
@@ -189,7 +188,7 @@
     }
 
     .seccion-sidebar.active{
-        border-left: 10px solid var(--pantene5513);
+        border-left: 10px solid var(--principal);
     }
 
 /* Estudio socioeconómico */
@@ -247,8 +246,8 @@
 
 
 
-.principal{
-    color: var(--letraGeneral) !important;
+.texto-general{
+    color: var(--texto-general) !important;
 }
 
 .btn-regresar{
@@ -257,7 +256,7 @@
     color: #676767; 
     font-weight: 400; 
     text-decoration: none; 
-    background-color: var(--rosaC);
+    background-color: var(--secundario-c);
     border-radius: 10px;
     text-align: center;
     display: inline-block;
@@ -273,9 +272,9 @@
 #btnAgregarMod{
     padding: 6px 0 6px; 
     text-align: center; 
-    color: var(--letraGeneral) !important; 
+    color: var(--texto-general) !important; 
     text-decoration: none; 
-    background-color: var(--verdeBtns) !important; 
+    background-color: var(--exito-c) !important; 
     font-size: medium; 
     border-radius: 10px;
 }
@@ -283,17 +282,17 @@
     height: 25px;
     width: 25px;
     border-radius: 20px !important;
-    border-color: var(--rosaC);
+    border-color: var(--secundario-c);
     float: right;
 }
 
 .checkbox-modalidades.form-check-input:hover{
-    background-color: var(--rosaC);
+    background-color: var(--secundario-c);
 }
 
 .checkbox-modalidades.form-check-input:checked{
-    background-color: var(--rosaC);
-    border-color: var(--rosaC);
+    background-color: var(--secundario-c);
+    border-color: var(--secundario-c);
 }
 
 /* Configuración - Agregar modalidad */
@@ -305,8 +304,8 @@
     font-weight: bold;
 }
 .btnEliminar{
-    background-color: var(--rosaC);
-    color: var(--letraGeneral) !important; 
+    background-color: var(--secundario-c);
+    color: var(--texto-general) !important; 
 }
 #documentoMod{
     text-align: right; 
@@ -320,8 +319,8 @@
 }
 .btnEditar{
     border-radius: 10px;
-    background-color: var(--rosaC);
-    color: var(--letraGeneral) !important; 
+    background-color: var(--secundario-c);
+    color: var(--texto-general) !important; 
     margin-left: 10px;
     margin-right: 10px;
     width: auto;
@@ -334,7 +333,7 @@
 
 .config-general-inputs{
     border-radius: 5px;
-    color: var(--letraGeneral) !important; 
+    color: var(--texto-general) !important; 
     font-size: 15px;
     /* border-color: #a3a3a3; */
     border: 1px solid;
@@ -350,35 +349,35 @@
 
 .btnAceptarDocumento{
     background-color: var(--blanco); 
-    color: var(--btnActivo);
+    color: var(--exito);
     width: auto; 
     padding: 6px;
     font-size: medium;
-    border-color: var(--letraGeneral); 
+    border-color: var(--texto-general); 
     border-radius: 50px; 
     border: 1.5px solid; 
     font-weight: 530;
 }
 
 .btnAceptarDocumento:hover{
-    background-color: var(--btnActivo); 
+    background-color: var(--exito); 
     color: var(--blanco);
 }
 
 .btnRechazarDocumento{
     background-color: var(--blanco); 
-    color: var(--rosaF);
+    color: var(--error);
     width: auto; 
     padding: 6px;
     font-size: medium;
-    border-color: var(--letraGeneral); 
+    border-color: var(--texto-general); 
     border-radius: 50px; 
     border: 1.5px solid; 
     font-weight: 530;
 }
 
 .btnRechazarDocumento:hover{
-    background-color: var(--rosaF); 
+    background-color: var(--error); 
     color: var(--blanco);
 }
 
@@ -391,32 +390,32 @@
     height: 35px;
     width: 35px;
     border-radius: 20px !important;
-    border-color: var(--btnActivo);
+    border-color: var(--exito);
 }
 
 .checkbox-docs-rechazar{
     height: 35px;
     width: 35px;
     border-radius: 20px !important;
-    border-color: var(--rosaF);
+    border-color: var(--error);
 }
 
 .checkbox-docs-aceptar.form-check-input:hover{
-    background-color: var(--btnActivo);
+    background-color: var(--exito);
 }
 
 .checkbox-docs-rechazar.form-check-input:hover{
-    background-color: var(--rosaF);
+    background-color: var(--error);
 }
 
 .checkbox-docs-aceptar.form-check-input:checked{
-    background-color: var(--btnActivo);
-    border-color: var(--btnActivo);
+    background-color: var(--exito);
+    border-color: var(--exito);
 }
 
 .checkbox-docs-rechazar.form-check-input:checked{
-    background-color: var(--rosaF);
-    border-color: var(--rosaF);
+    background-color: var(--error);
+    border-color: var(--error);
 }
 
 
@@ -430,7 +429,7 @@
 /* Footer */
 
 .section-footer{
-    background-color: var(--rosaM);
+    background-color: var(--secundario);
 }
 
 @media (min-width: 768px){

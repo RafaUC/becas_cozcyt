@@ -18,16 +18,15 @@ class ModalidadSelectForm(forms.Form):
             modalidades = Modalidad.objects.filter(id__in=modalidades_ids, mostrar=True, archivado=False)
         else:            
             modalidades = Modalidad.objects.filter(id__in=modalidades_ids)
-                
-        modalidadesUnicas = []
+        
         modalidadesAgregadas = set()
-
-        for modalidad in modalidades:
+        
+        for modalidad in modalidades.all():
             # Verificar si el nombre de la persona ya está en el conjunto de nombres agregados            
             if modalidad.nombre in modalidadesAgregadas:
                 modalidades = modalidades.exclude(id=modalidad.id)
             modalidadesAgregadas.add(modalidad.nombre)                            
-
+        
         self.fields['modalidad'] = ModalidadChoiceFieldNT(
             queryset=modalidades,
             label="Modalidad",

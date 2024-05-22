@@ -8,20 +8,20 @@
 {% block body %}
 {% load static %}
 {% include 'estadisticas/eImports.html' %}
-<div class="rounded-2 p-1 my-4 principal">
-    <div class=" align-items-center principal">
+<div class="rounded-2 p-1 my-4 texto-general">
+    <div class=" align-items-center texto-general">
         <p class="col mx-4 my-4 h3">Página de inicio</p>
         <p class="mx-5 h4 subtitulo-mod">
             Convocatoria {{ ciclo_actual }}
-            <span class="m-3 font-sm texto-rosaM"> {{ convocatoria.mensaje_estado_convocatoria }} </span>
+            <span class="m-3 font-sm texto-secundario"> {{ convocatoria.mensaje_estado_convocatoria }} </span>
         </p>
     </div>
     <div class="rounded-2 mx-5">          
         <div class="row">
             <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
-                <a class="principal" href="{% url 'modalidades:AConfigGeneral' %}">
+                <a class="texto-general" href="{% url 'modalidades:AConfigGeneral' %}">
                 <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
-                    <div class="card-body card-inicio" style="background-color: var(--rosaC);">
+                    <div class="card-body card-inicio" style="background-color: var(--secundario-c);">
                         <div class="row" align="left">
                             <div class="mx-3 mb-4" align="left">
                                 <img src="{% static 'images/icon_wallet.png' %}" style="width: 13%;">
@@ -36,7 +36,7 @@
                 </a>
             </div>
             <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
-                <a class="principal" href="{% url 'solicitudes:AEstadisticas' %}">
+                <a class="texto-general" href="{% url 'solicitudes:AEstadisticas' %}">
                 <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
                     <div class="card-body card-inicio" style="background-color: var(--soli-rechazada);">
                         <div class="row" align="left">
@@ -53,9 +53,9 @@
                 </a>
             </div>
             <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;">
-                <a class="principal" href="{% url 'solicitudes:ASolicitudes' %}">
+                <a class="texto-general" href="{% url 'solicitudes:ASolicitudes' %}">
                 <div class="card inicio-info" style="border-radius: 10px; height: 100%;">
-                    <div class="card-body card-inicio" style="background-color: var(--rosaM);">
+                    <div class="card-body card-inicio" style="background-color: var(--secundario);">
                         <div class="row" align="left">
                             <div class="mx-3 mb-4" align="left">
                                 <img src="{% static 'images/icon_versions.png' %}" style="width: 13%;">
@@ -72,7 +72,7 @@
         </div>
     </div>
     <div class="rounded-2 mx-5 my-4" style="min-height: 300px; background-color: var(--gris-0);">    
-        <div id="contenedorEstadisticaM" class="align-items-center principal">
+        <div id="contenedorEstadisticaM" class="align-items-center texto-general">
             
         </div>
     </div>
