@@ -947,10 +947,17 @@ i.rechazado:before {
   flex-wrap:wrap;
 }
 
+/* Item de resultados (Enero - Junio 2024, etc.) se le cambia el color cuando es seleccionado */
+.dropdown-item:active {
+  background-color: var(--rosaF) !important;
+}
+
 @media screen and (max-width: 700px) {
   #container_inicio_sit{
     margin-top: 0.5em;
   }
+
+  
 
   .flex-direction{
     flex-direction: column;
@@ -986,6 +993,24 @@ i.rechazado:before {
   .info_modalidad_image{
     order: 1;
     text-align: center;
+  }
+
+  .info_modalidad_titulo{
+    order: 2;
+  }
+  .info_modalidad_descripcion{
+    order: 1;
+  }
+
+  #info_texto_sit{
+    float: none;
+    margin-right: 0;
+    width: auto;
+    margin: 1em !important;
+    order: 2;
+  }
+  #inicio_imagen_sit{
+    order:1;
   }
 }
 
@@ -1046,6 +1071,24 @@ i.rechazado:before {
   width: inherit !important;
 }
 
+#enlaceSIT{
+  color: var(--rosaO); 
+  font-weight: 600; 
+}
+
+#enlaceSIT:hover{
+  color: var(--rosaM); 
+}
+
+/* Acordeón de preguntas frecuentes */
+/* .accordion-button::after {
+  border-radius: 25%;
+  background-color: white;
+}
+.accordion-button:not(.collapsed)::after {
+  border-radius: 25%;
+  background-color: white;
+} */
 ul.cols-rows-automatico {
   columns: 327px; /* Ancho mínimo de las columnas */
   column-gap: 15px; /* Espacio entre las columnas */
