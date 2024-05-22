@@ -2,11 +2,14 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 import re
+import os
 from django.forms import modelformset_factory
 from django.forms import inlineformset_factory
 
 from .models import *
 from django.contrib.auth import get_user_model
+from django.conf import settings
+
 User = get_user_model()
 
 class LoginForm(AuthenticationForm):
@@ -367,3 +370,45 @@ class SiteColorForm(forms.ModelForm):
         return color
 
 SiteColorFormSet = modelformset_factory(SiteColor, form=SiteColorForm, extra=0, can_delete=False)
+
+
+class StaticImagesUploadForm(forms.Form):    
+    favicon = forms.ImageField(required=False)
+    logo = forms.ImageField(required=False)
+    logo_texto = forms.ImageField(required=False)
+    logo_texto_lab = forms.ImageField(required=False)
+    logo_licencia = forms.ImageField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(StaticImagesUploadForm, self).__init__(*args, **kwargs)
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+
+    def clean_image(self, image):
+        if image:
+            if not image.name.endswith('.png'):
+                raise ValidationError('Solo se permiten archivos PNG.')
+            if image.content_type != 'image/png':
+                raise ValidationError('El archivo debe ser una imagen PNG.')
+        return image
+
+    def clean_favicon(self):
+        return self.clean_image(self.cleaned_data.get('favicon'))
+
+    def clean_logo(self):
+        return self.clean_image(self.cleaned_data.get('logo'))
+
+    def clean_logo_texto(self):
+        return self.clean_image(self.cleaned_data.get('logo_texto'))
+
+    def clean_logo_texto_lab(self):
+        return self.clean_image(self.cleaned_data.get('logo_texto_lab'))
+
+    def clean_logo_licencia(self):
+        return self.clean_image(self.cleaned_data.get('logo_licencia'))
+
+    def get_image_path(self, field_name):
+        return os.path.join(settings.STATIC_URL, 'images', field_name)
+
+    def get_image_url(self, field_name):
+        return os.path.join(settings.STATIC_URL, 'images', field_name)

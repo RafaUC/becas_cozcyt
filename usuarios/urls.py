@@ -71,7 +71,7 @@ urlpatterns = [
     path('administracion/eliminarUsuario/<int:user_id>/', viewsAdmin.eliminarUsuario, name='AEliminarUsuario'),
     path('administracion/reEnviarConfirmaciones/', viewsAdmin.reEnviarConfirmaciones, name='AReEnviarConfirmaciones'),
 
-    path('administracion/configuracion/colores/', viewsAdmin.configColores, name='AConfigColores'),
+    path('administracion/configuracion/colores/', viewsAdmin.configAparencia, name='AConfigAparencia'),
     path('administracion/recargarColoresDefault/', viewsAdmin.load_colors_from_css, name='AReCargarColoresDefault'),    
     path('administracion/reset_cache/colores', viewsAdmin.reset_cache_and_new_version,
         kwargs={'view': 'usuarios:colores',}, 
