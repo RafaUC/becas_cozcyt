@@ -546,6 +546,9 @@ def reset_cache_and_new_version(request, view='usuarios:colores', args=None):
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def configAparencia(request):
+    #si no existe ningun registro de colores, se inicializan 
+    if not SiteColor.objects.all().exists():
+        return redirect('usuarios:AReCargarColoresDefault')
     if request.method == 'GET':
         formset = SiteColorFormSet(queryset=SiteColor.objects.all())
         formImages = StaticImagesUploadForm()

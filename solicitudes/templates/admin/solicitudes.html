@@ -75,16 +75,16 @@ Administrar solicitudes
                 <form id="seleccionadosForm" role="search" method="POST"> 
                     {% csrf_token %}  
                     <input type="hidden" id=id-input-boton-presionado name="boton-presionado" value="">
-                    <table class="table custom-table-simple">            
+                    <table class="table custom-table-simple">             
                         <thead>
                             <tr>                    
-                                <th class="borde-tabla text-center" style="width: 7rem; border-bottom: 2px solid; color: #676767;"> Folio</th>  
-                                <th class="borde-tabla" style="border-bottom: 2px solid; color: #676767;"> Nombre</th>
-                                <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> CURP</th>                                        
-                                <th class="borde-tabla text-center" style="width: 3rem; border-bottom: 2px solid; color: #676767;"> Puntaje</th>
-                                <th class="borde-tabla text-center" style="width: 10rem; border-bottom: 2px solid; color: #676767;"> Modalidad</th>  
-                                <th class="borde-tabla text-center" style="width: 5rem; border-bottom: 2px solid; color: #676767;"> Tipo</th>  
-                                <th class="borde-tabla text-center" style="width: 8rem; border-bottom: 2px solid; color: #676767;"> Estado</th>  
+                                <th class="borde-tabla text-center ordenable" style="width: 7rem; border-bottom: 2px solid; color: #676767;" data-order="folio">Folio</th>  
+                                <th class="borde-tabla ordenable" style="border-bottom: 2px solid; color: #676767;" data-order="nombre">Nombre</th>
+                                <th class="borde-tabla text-center ordenable" style="width: 5rem; border-bottom: 2px solid; color: #676767;" data-order="curp">CURP</th>                                        
+                                <th class="borde-tabla text-center ordenable" style="width: 3rem; border-bottom: 2px solid; color: #676767;" data-order="puntaje">Puntaje</th>
+                                <th class="borde-tabla text-center ordenable" style="width: 10rem; border-bottom: 2px solid; color: #676767;" data-order="modalidad">Modalidad</th>  
+                                <th class="borde-tabla text-center ordenable" style="width: 5rem; border-bottom: 2px solid; color: #676767;" data-order="tipo">Tipo</th>  
+                                <th class="borde-tabla text-center ordenable" style="width: 8rem; border-bottom: 2px solid; color: #676767;" data-order="estado">Estado</th>  
                                 <th class="borde-tabla text-end px-0" style="white-space: nowrap; width: 1rem; border-bottom: 2px solid; color: #676767;">
                                     <label class="font-normal" for="id-select-todo-check" data-bs-original-title="Selecciona todos los elementos que coincidan con los filtros y búsqueda">
                                         Selec. todo
@@ -164,18 +164,21 @@ Administrar solicitudes
                         Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.                    
                     </span>                
                     {% if page_soli.has_previous %}                    
-                        <a href="{{ request.path }}?{{ url_base_page }}&page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                        <a href="{{ request.build_absolute_uri }}" href-compose="page=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="page={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                                            
                     {% endif %}
                     {% if page_soli.has_next %}
-                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                        <a href="{{ request.path }}?{{ url_base_page }}&page={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="page={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="page={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                     {% endif %}                
                 </span>
             </div>
         </div>        
     </div>
 </div>
+
+    {% include 'admin/admin_tabla_js.html' %}
+
     <script>
         function enviarFormulario(formularioId, boton) { 
             // Obtener el formulario y el valor del botón
