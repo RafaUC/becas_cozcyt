@@ -465,17 +465,33 @@ def historialSolicitante(request, pk):
 
     return render(request, 'admin/historialSolicitante.html', context)
 
+MAPEO_ORDERING_SOLICITUDES = {
+    'folio': 'solicitante__folio',
+    'nombre': 'solicitante__nombre',
+    'curp': 'solicitante__curp',
+    'puntaje': '-puntaje',
+    'modalidad': 'modalidad',
+    'tipo': 'tipo',
+    'estado': 'estado',
+}
+
 @login_required
 @user_passes_test(usuarioEsAdmin)
 def listaSolicitudes(request):
     cicloActual = ciclo_actual()
-    request.session['anterior'] = request.get_full_path()        
+    request.session['anterior'] = request.get_full_path()            
     url_base_page = request.session['anterior'].split('&page=')[0]
     url_base_page = url_base_page.split('?')[1] if '?' in url_base_page else ''    
     solicitudes = Solicitud.objects.filter(ciclo = cicloActual)  
     modalidades = Modalidad.objects.filter(archivado=False)
     filtroSolForm = FiltroForm(prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)
     filtroModForm = FiltroForm(prefix='filtMod', nombre='Modalidad', queryset=modalidades, to_field_name='__str__', selectedAll=False)
+
+    if 'order' in request.GET:
+        orderVal = request.GET.get('order', '')
+        mapeo = MAPEO_ORDERING_SOLICITUDES.get(orderVal,None)
+        if mapeo:
+            solicitudes = solicitudes.order_by(mapeo)
 
     if 'search' in request.GET:
         filtroSolForm = FiltroForm(request.GET,search_query_name='~estado', prefix='filtEst', nombre='Estado Solicitud', choices=Solicitud.ESTADO_CHOICES, selectedAll=False)

@@ -1,0 +1,50 @@
+<script>
+    // Obtener todos los elementos con la clase 'ordenable'
+    const ordenableHeaders = document.querySelectorAll('.ordenable');
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+    // Obtener el valor del parámetro 'order' de la URL
+    const orderParam = getQueryParam('order');
+
+    // Agregar evento click a cada encabezado de la tabla
+    ordenableHeaders.forEach(header => {
+        if (header.getAttribute('data-order') === orderParam) {
+            header.classList.add('active');
+            header.textContent += " ▼";
+        }                
+        header.addEventListener('click', function() {
+            // Obtener el valor del atributo 'data-order'
+            const orderValue = this.getAttribute('data-order');
+
+            // Obtener la URL actual
+            const currentUrl = window.location.href;
+
+            // Redirigir a la URL actualizada
+            window.location.href = setGetParams(window.location.href, {'order': orderValue});
+        });
+    });
+
+    function composeHref() {
+        const elements = document.querySelectorAll('[href-compose]');
+        elements.forEach(element => {
+            const baseHref = element.getAttribute('href');
+            const hrefComposeValue = element.getAttribute('href-compose');
+            const params = {};
+
+            // Parse href-compose parameters
+            const pairs = hrefComposeValue.split('&');
+            pairs.forEach(pair => {
+                const [key, value] = pair.split('=');
+                params[key] = value;
+            });
+
+            const newHref = setGetParams(baseHref, params);
+            element.setAttribute('href', newHref);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', composeHref);
+
+</script>
