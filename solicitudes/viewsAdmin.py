@@ -86,8 +86,9 @@ def getChoicesEtiqueta(choices, valor):
         return None 
 
 ESTADISTICAS_SOLICITUD_CHOICES = [
-        ('modalidad', 'Modalidades'),
         ('ciclo', 'Número de solicitudes'),
+        ('modalidad', 'Modalidades'),        
+        ('aceptadas', 'Solicitudes aceptadas'),   
         ('estado solicitud', 'Estados de solicitud'),
         ('puntaje', 'Puntajes'),
         ('tipo', 'Tipos'),
@@ -107,6 +108,7 @@ TODOS_STR = 'Todas'
 MAPEO_SOLICITUDES_CHOICES_ADMIN = {
     'modalidad': 'modalidad__nombre',
     'ciclo': 'ciclo__nombre',
+    'aceptadas': 'modalidad__nombre',
     'estado solicitud': 'estado',
     'puntaje': 'puntaje',
     'tipo': 'tipo',
@@ -132,6 +134,7 @@ MAPEO_SOLICITUDES_CHOICES_USER = {
 ANGULO_SOLICITUDES_CHOICES = {
     'modalidad': 0,
     'ciclo': 90,
+    'aceptadas': 90,
     'estado solicitud': 0,
     'puntaje': 0,
     'tipo': 0,
@@ -186,26 +189,33 @@ def estadisticas(request):
             'url': 'solicitudes:ESolicitudes',
             'getData': f'?campo_estadistica=modalidad&estadistica_filtro={ultimoCiclo.id}'
         },   
+        {            
+            'titulo': 'Solicitudes aceptadas',
+            'iconCSS': 'fa-inbox',
+            'valor': solicitudes.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).count(),
+            'url': 'solicitudes:ESolicitudes',
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[2][0]}&estadistica_filtro={ultimoCiclo.id}'
+        },    
         {
             'titulo': 'Instituciones registradas',
             'iconCSS': 'fa-university',
             'valor': Institucion.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[6][0]}&estadistica_filtro={ultimoCiclo.id}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[7][0]}&estadistica_filtro={ultimoCiclo.id}'
         },
         {
             'titulo': 'Carreras registradas',
             'iconCSS': 'fa-graduation-cap',
             'valor': Carrera.objects.all().count(),
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[7][0]}&estadistica_filtro={ultimoCiclo.id}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[8][0]}&estadistica_filtro={ultimoCiclo.id}'
         },        
         {
             'titulo': 'Municipios participantes',
             'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
             'url': 'solicitudes:ESolicitudes',
-            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[9][0]}&estadistica_filtro={ultimoCiclo.id}'
+            'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[10][0]}&estadistica_filtro={ultimoCiclo.id}'
         },
         
     ]
@@ -336,12 +346,24 @@ def estadisticaSolicitudes(request):
     #obtenermos la infomacion para la estadistica, valores y frecuencias etc
     if campo_estadistica_original == 'ciclo':        
         valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica)).order_by('-ciclo__id')
+    elif campo_estadistica_original == 'aceptadas':      
+        choice1, choice2 = Solicitud.ESTADO_CHOICES[-2:]
+
+        valoresFrecuencias = queryset.filter(estado__in=[choice1[0], choice2[0]]).values(campo_estadistica,'estado').annotate(frecuencia=Count(campo_estadistica))        
+        #valoresFrecuenciasAceptadas = queryset.filter(estado=Solicitud.ESTADO_CHOICES[3][0]).values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))        
+        #valoresFrecuenciasRechazadas = queryset.filter(estado=Solicitud.ESTADO_CHOICES[4][0]).values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))        
     else:
         valoresFrecuencias = queryset.values(campo_estadistica).annotate(frecuencia=Count(campo_estadistica))        
         #reordenan de mayor a menor
         valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)
     #se generan los labels para cada frecuencia, se intenta a ver si existe en los estados, sino se pone el valor en si
-    labels = [dict(Solicitud.ESTADO_CHOICES).get(item[campo_estadistica], item[campo_estadistica]) for item in valoresFrecuencias ]    
+    if 'estado' in valoresFrecuencias[0]:
+        par1 = ' ('
+        par2 = ')'
+    else:
+        par1 = ''
+        par2 = ''
+    labels = [dict(Solicitud.ESTADO_CHOICES).get(item[campo_estadistica], f"{item[campo_estadistica]}{par1}{item.get('estado','')}{par2}") for item in valoresFrecuencias ]    
     frecuencias = [item['frecuencia'] for item in valoresFrecuencias]
     
     listaColores = [next(generadorColores) for _ in frecuencias]
@@ -386,12 +408,20 @@ def estadisticaSolicitudes(request):
     #[print(frec) for frec in valoresFrecuencias]    
     valoresFrecuencias = sorted(valoresFrecuencias, key=lambda x: x['frecuencia'], reverse=True)    
     labels = {}
-    labels['total'] = 'Total:'
+    labels['presupuesto'] = 'Presupuesto:'
+    labels['total'] = 'Total invertido:'
     for item in valoresFrecuencias:
         nuevaLabel = f"{item['modalidad__nombre']}:"
         if item['modalidad__nombre'] not in labels:
             labels[item['modalidad__nombre']] = nuevaLabel    
     totales = {}
+    if estadistica_filtro != TODOS_STR:
+        try:
+            totales['presupuesto'] = Ciclo.objects.get(id=estadistica_filtro).presupuesto
+        except:
+            totales['presupuesto'] = 0
+    else:
+        totales['presupuesto'] = 0
     totales['total'] = 0    
     for item in valoresFrecuencias:
         cicloItem = item['ciclo']
