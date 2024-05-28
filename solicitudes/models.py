@@ -51,7 +51,7 @@ class Solicitud(models.Model):
 
     readonly_fields = ('ciclo',)
     class Meta:
-        ordering = ['-puntaje','-id']
+        ordering = ['-id']
         verbose_name = 'Solicitud'
         verbose_name_plural = 'Solicitudes'
         unique_together = ('modalidad', 'ciclo','solicitante')

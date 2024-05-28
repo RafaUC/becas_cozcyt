@@ -949,7 +949,7 @@ i.rechazado:before {
 
 /* Item de resultados (Enero - Junio 2024, etc.) se le cambia el color cuando es seleccionado */
 .dropdown-item:active {
-  background-color: var(--rosaF) !important;
+  background-color: var(--secundario-f) !important;
 }
 
 @media screen and (max-width: 700px) {
@@ -1089,18 +1089,90 @@ i.rechazado:before {
   border-radius: 25%;
   background-color: white;
 } */
-ul.cols-rows-automatico {
-  columns: 327px; /* Ancho mínimo de las columnas */
+
+ul.cols-rows-auto-colores {
+  columns: 350px; /* Ancho mínimo de las columnas */
   column-gap: 15px; /* Espacio entre las columnas */
   list-style: none; /* Elimina los estilos de lista predeterminados */
   padding: 0; /* Elimina el padding predeterminado */
   margin: 0; /* Elimina el margin predeterminado */
 }
 
-ul.cols-rows-automatico li {
+ul.cols-rows-auto-colores li {
   break-inside: avoid; /* Evita que los elementos se rompan entre columnas */                        
 }
 
-ul.cols-rows-automatico li.item {
-  min-width: 327px;                
+ul.cols-rows-auto-colores li.item {
+  min-width: 350px;                
+}
+
+.ordenable {
+  cursor: pointer;  
+}
+
+.ordenable.active {
+  background-color: var(--gris-2);
+}
+
+
+
+/* estilo para pc */
+@media (min-width: 768px) {
+  ul.cols-rows-auto-beneficiarios {
+    columns: 370px; /* Ancho mínimo de las columnas */
+    column-gap: 2px; /* Espacio entre las columnas */
+    list-style: none; /* Elimina los estilos de lista predeterminados */
+    padding: 0; /* Elimina el padding predeterminado */
+    margin: 0; /* Elimina el margin predeterminado */
+  }
+  
+  ul.cols-rows-auto-beneficiarios li {
+    break-inside: avoid; /* Evita que los elementos se rompan entre columnas */                        
+    position: relative;
+  }
+  
+  ul.cols-rows-auto-beneficiarios li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px; /* Mueve el pseudo-elemento al borde derecho */
+    width: 2px; /* Ancho del pseudo-elemento igual al column-gap */
+    height: 100%;
+    background-color: var(--gris-principal); /* Color del gap */
+  }
+  
+  ul.cols-rows-auto-beneficiarios li.item {
+    min-width: 370px;                
+  }
+}
+
+/* Estilo para móviles */
+@media (max-width: 767px) {
+  ul.cols-rows-auto-beneficiarios {
+    columns: 360px; /* Ancho mínimo de las columnas */
+    column-gap: 2px; /* Espacio entre las columnas */
+    list-style: none; /* Elimina los estilos de lista predeterminados */
+    padding: 0; /* Elimina el padding predeterminado */
+    margin: 0; /* Elimina el margin predeterminado */
+  }
+  
+  ul.cols-rows-auto-beneficiarios li {
+    break-inside: avoid; /* Evita que los elementos se rompan entre columnas */                        
+    position: relative;
+  }
+  
+  ul.cols-rows-auto-beneficiarios li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px; /* Mueve el pseudo-elemento al borde derecho */
+    width: 2px; /* Ancho del pseudo-elemento igual al column-gap */
+    height: 100%;
+    background-color: var(--gris-principal); /* Color del gap */
+  }
+  
+  ul.cols-rows-auto-beneficiarios li.item {
+    min-width: 60px;      
+    font-size: 0.714rem !important;          
+  }
 }

@@ -45,6 +45,19 @@
     })
   })
 
+  function setGetParams(url, params) {      
+      let urlObj = new URL(url);      
+      let queryParams = urlObj.searchParams;
+      
+      for (let key in params) {          
+          if (params.hasOwnProperty(key)) {              
+              queryParams.set(key, params[key]);
+          }
+      }      
+      urlObj.search = queryParams.toString();      
+      return urlObj.toString();
+  }
+
   $(document).ready(function() {      
     updateTooltips();
         
