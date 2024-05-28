@@ -2,6 +2,7 @@
 <html lang="en" >
   <head>
     {% load static %}
+    {% load custom_filters %}
     <!-- Required meta tags -->
     {% include 'base_head.html'%}
     <title>
@@ -32,7 +33,7 @@
         <div id="barraLateral-containter" class="col-auto nopadding  collapse-horizontal">          
           <div id="barraLateral-body" class="barra-lateral-desktop sticky-top d-flex flex-column justify-content-between flex-shrink-0 p-3 barra-lateral-fondo border-end border-1">            
             <a href="{% url 'usuarios:rootRedirect' %}" class="d-flex flex-column align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-              <img class="img-fluid logo-barra my-2" src="{% static 'images/logo_texto.png' %}?v={{ cache_version }}" alt="Logo" > 
+              <img class="img-fluid logo-barra my-2" src="{{ 'logo_texto.png'|static_image }}?v={{ cache_version }}" alt="Logo" > 
             </a>
             <hr>
             {% with url_name=request.resolver_match.url_name %}
