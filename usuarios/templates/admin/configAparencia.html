@@ -27,9 +27,9 @@ Configuración colores
                 <p class="col-auto h5 subtitulo-mod">Configuración de apariencia del sitio</p>
                 <div class="col text-end">
                     <div class="d-inline-flex justify-content-end">
-                        <button class="btn btn-guardar texto-general m-0 mx-1 font-sm font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+                        <button class="btn btn-guardar texto-general m-0 mx-1 font-sm" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
                         <form class="p-0 m-0" action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
-                            <button class="btn btnCancelar texto-general m-0 mx-1 font-sm font-semi-bold" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+                            <button class="btn btnCancelar texto-general m-0 mx-1 font-sm" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
                         </form>
                     </div>
                 </div>             
@@ -57,8 +57,8 @@ Configuración colores
             
                 <div class="m-2">                
                     <div class="row mx-0">
-                        <p class="texto-secundario font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
-                            Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0,0)
+                        <p class="texto-principal font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
+                            Formatos de colores aceptados a continuación: <strong>&nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0,0)</strong>
                         </p>
                     </div>
                     
