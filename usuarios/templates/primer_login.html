@@ -16,41 +16,41 @@
         <div class="row">
             <div class="row align-items-center p-2">
                 <p class="h5">Datos personales</p>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.nombre.label }}
                     {{ form.nombre }}
                     {{ form.nombre.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.ap_paterno.label }}
                     {{ form.ap_paterno }}
                     {{ form.ap_paterno.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.ap_materno.label }}
                     {{ form.ap_materno }}
                     {{ form.ap_materno.errors }}
                 </div>
             </div>
             <div class="row align-items-center p-2">
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.fecha_nacimiento.label }}
                     {{ form.fecha_nacimiento }}
                     {{ form.fecha_nacimiento.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.genero.label }}
                     {{ form.genero }}
                     {{ form.genero.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.g_etnico.label }}
                     {{ form.g_etnico }}
                     {{ form.g_etnico.errors }}
                 </div>
             </div>
             <div class="row align-items-center p-2">
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.rfc.label }}
                     {{ form.rfc }}
                     {{ form.rfc.errors }}
@@ -61,46 +61,46 @@
         <div class="row">            
             <div class="row align-items-center p-2">
                 <p class="h5">Datos domicilio</p>    
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.calle.label }} 
                     {{ form.calle }}
                     {{ form.calle.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.numero.label }} 
                     {{ form.numero }}
                     {{ form.numero.errors }}                    
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.colonia.label }} 
                     {{ form.colonia }}
                     {{ form.colonia.errors }}
                 </div>
             </div>    
             <div class="row align-items-center p-2">
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ estadoSelectForm.estado.label }} 
                     {{ estadoSelectForm.estado }}
                     {{ estadoSelectForm.estado.errors }}
                 </div>
-                <div class="col-4">                    
+                <div class="col-md-4">                    
                     {{ form.municipio.label }} 
                     {{ form.municipio }}
                     {{ form.municipio.errors }}
                 </div>   
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.codigo_postal.label }} 
                     {{ form.codigo_postal }}
                     {{ form.codigo_postal.errors }}
                 </div>             
             </div>    
             <div class="row align-items-center p-2">
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.tel_cel.label }} 
                     {{ form.tel_cel }}
                     {{ form.tel_cel.errors }}
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     {{ form.tel_fijo.label }} 
                     {{ form.tel_fijo }}
                     {{ form.tel_fijo.errors }}
@@ -111,24 +111,24 @@
         <div class="row">
             <div class="row align-items-center p-2">
                 <p class="h5">Datos escolares</p>
-                <div class="col-6">
+                <div class="col-md-6">
                     {{ institucionSelectForm.institucion.label }} 
                     {{ institucionSelectForm.institucion }}
                     {{ institucionSelectForm.institucion.errors }}
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     {{ form.carrera.label }} 
                     {{ form.carrera }}
                     {{ form.carrera.errors }}
                 </div>                
             </div>
             <div class="row align-items-center p-2">
-                <div class="col-6">
+                <div class="col-md-6">
                     {{ form.grado.label }} 
                     {{ form.grado }}
                     {{ form.grado.errors }}
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                     {{ form.promedio.label }} 
                     {{ form.promedio }}
                     {{ form.promedio.errors }}
@@ -136,7 +136,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="d-grid gap-2 col-4 mx-auto">
+            <div class="d-grid gap-2 col-sm-3 mx-auto">
                 <button type="submit" class="btn btn-guardar btn-lg my-3 " name="guardar">Guardar</button>    
             </div>            
         </div>
