@@ -1077,7 +1077,7 @@ i.rechazado:before {
 }
 
 #enlaceSIT:hover{
-  color: var(--secundario-c); 
+  color: var(--secundario); 
 }
 
 /* Acordeón de preguntas frecuentes */
