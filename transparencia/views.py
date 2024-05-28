@@ -2,6 +2,8 @@ from django.shortcuts import render
 from solicitudes.models import getListaCiclos
 from django.db.models import Count
 from django.db.models import Subquery, OuterRef
+from django.db.models import OuterRef, Subquery, DecimalField, F
+
 
 from modalidades.forms import *
 from solicitudes.forms import *
@@ -54,7 +56,7 @@ def resultados(request, num):
         'ciclo': ciclo,        
     }
     context.update(getContextoBaseTransparencia(request))
-    return render(request, 'resultados.html', context)
+    return render(request, 'beneficiarios.html', context)
 
 
 def resultadosContenido(request,num,mod):
@@ -67,6 +69,7 @@ def resultadosContenido(request,num,mod):
         folios = []
         titulo = "Los resultados de la convocatoria todavía no se han publicado."
         modalidadSelectForm = None
+        solicitudes = None
     else:
         modalidadesdelCiclo = MontoModalidad.objects.filter(ciclo=ciclo).values_list('modalidad_id', flat=True).distinct()                     
         modalidad = Modalidad.objects.filter(id__in=modalidadesdelCiclo, id=mod).first()
@@ -82,17 +85,31 @@ def resultadosContenido(request,num,mod):
             modNombre = modalidad.nombre
             
         #obtener solicitudes aceptadas
-        solicitudes = Solicitud.objects.filter(ciclo=ciclo, modalidad__nombre=modNombre, estado=Solicitud.ESTADO_CHOICES[3][0]).select_related('solicitante').order_by('solicitante_id')
+        #solicitudes = Solicitud.objects.filter(ciclo=ciclo, modalidad__nombre=modNombre, estado=Solicitud.ESTADO_CHOICES[3][0]).select_related('solicitante').order_by('solicitante_id')
+        
+        
+        monto_subquery = MontoModalidad.objects.filter(
+            modalidad=OuterRef('modalidad'),
+            ciclo=OuterRef('ciclo')
+            ).values('monto')[:1]
+        solicitudes = Solicitud.objects.\
+            filter(ciclo=ciclo, modalidad__nombre=modNombre, estado=Solicitud.ESTADO_CHOICES[3][0]).\
+            order_by('solicitante__ap_paterno','solicitante__ap_materno','solicitante__nombre').\
+            select_related('modalidad', 'ciclo', 'solicitante').annotate(
+                monto=Subquery(monto_subquery, output_field=DecimalField(max_digits=7, decimal_places=2))
+            )        
+        for solicitud in solicitudes:
+            solicitud.monto = f"${(solicitud.monto):,.2f}"
         folios = [solicitud.solicitante.folio for solicitud in solicitudes]
-        titulo = modalidad.nombre
-        print(solicitudes.count())
+        titulo = modalidad.nombre   
 
     context = {
         'folios': folios,
-        'titulo': titulo,
+        'titulo': titulo,        
+        'solicitudes': solicitudes,
         'modalidadSelectForm': modalidadSelectForm,
     }
-    return render(request, 'resultadosContenido.html', context)
+    return render(request, 'beneficiariosContenido.html', context)
 
 
 def transparenciaSIT(request):

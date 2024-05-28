@@ -28,14 +28,14 @@
             </div>
           </li>         
           <li class="nav-item mx-2 dropdown">
-            <div class="barra-superior mt-1 {% if url_name == 'Tresultados' %}active{% endif %}">               
+            <div class="barra-superior mt-1 {% if url_name == 'TBeneficiarios' %}active{% endif %}">               
                 <div class="dropdown nav-link p-0 ">
                     <div class="pointer" id="dropdownMenuButton" data-bs-toggle="dropdown" >
                         Resultados
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         {% for cicloNombre in ciclosPrevios %}        
-                        <li><a class="dropdown-item" href="{% url 'transparencia:Tresultados' forloop.counter0 %}">{{ cicloNombre }}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'transparencia:TBeneficiarios' forloop.counter0 %}">{{ cicloNombre }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>

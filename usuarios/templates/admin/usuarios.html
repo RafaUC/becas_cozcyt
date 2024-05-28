@@ -76,12 +76,12 @@ Lista de usuarios
                     Página {{ page_admin.number }} / {{ page_admin.paginator.num_pages }}.
                 </span>                
                 {% if page_admin.has_previous %}                    
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                    <a href="{{ request.build_absolute_uri }}" href-compose="pageA=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                    <a href="{{ request.build_absolute_uri }}" href-compose="pageA={{ page_admin.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
                 {% endif %}
                 {% if page_admin.has_next %}
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                    <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{ page_admin.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                    <a href="{{ request.build_absolute_uri }}" href-compose="pageA={{ page_admin.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                    <a href="{{ request.build_absolute_uri }}" href-compose="pageA={{ page_admin.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                 {% endif %}
             </span>
         </div>            
@@ -161,12 +161,12 @@ Lista de usuarios
                         Página {{ page_soli.number }} / {{ page_soli.paginator.num_pages }}.
                     </span>                
                     {% if page_soli.has_previous %}                    
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageS=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageS={{ page_soli.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
                     {% endif %}
                     {% if page_soli.has_next %}
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageA={{request.GET.pageA}}&pageS={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageS={{ page_soli.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageS={{ page_soli.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                     {% endif %}                
                 </span>
             </div>
@@ -228,16 +228,19 @@ Lista de usuarios
                         Página {{ page_nover.number }} / {{ page_nover.paginator.num_pages }}.
                     </span>                
                     {% if page_nover.has_previous %}                    
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageN=1" class="fa fa-angle-double-left" aria-hidden="true"></a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageN={{ page_nover.previous_page_number }}" class="fa fa-angle-left" aria-hidden="true"> </a>                    
                     {% endif %}
                     {% if page_nover.has_next %}
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
-                        <a href="{{ request.path }}?search={{ request.GET.search }}&pageS={{request.GET.pageS}}&pageA={{request.GET.pageA}}&pageN={{ page_nover.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageN={{ page_nover.next_page_number }}" class="fa fa-angle-right" aria-hidden="true"> </a>
+                        <a href="{{ request.build_absolute_uri }}" href-compose="pageN={{ page_nover.paginator.num_pages }}" class="fa fa-angle-double-right" aria-hidden="true"> </a>
                     {% endif %}
                 </span>
             </div>
         </div>            
     </div>
 </div>
+
+{% include 'admin/admin_tabla_js.html' %}
+
 {% endblock body %}
