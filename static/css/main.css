@@ -766,7 +766,7 @@ th {
   
 }
 
-.red-errors .errorlist li {
+.red-errors .errorlist li { 
   color: var(--error);/* Este es el color por defecto de 'text-danger' en Bootstrap */
 }
 
@@ -952,9 +952,28 @@ i.rechazado:before {
   background-color: var(--rosaF) !important;
 }
 
+#container_inicio_sit {
+  background: linear-gradient(to right, #fff 50%, var(--pagina-fondo) 50%); 
+  display: flex; 
+  width: 100%; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 3em 0 1em 0; 
+  position: relative;
+}
+
+#container_sit{
+  background-color: #fff; 
+  display: flex; 
+  width: 100%; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 1em 0 1em 0;
+}
+
 @media screen and (max-width: 700px) {
   #container_inicio_sit{
-    margin-top: 0.5em;
+    background: linear-gradient( #fff 40%, var(--pagina-fondo) 60%); 
   }
 
   
@@ -1012,6 +1031,7 @@ i.rechazado:before {
   #inicio_imagen_sit{
     order:1;
   }
+
 }
 
 /* Numeración del carrusel */
