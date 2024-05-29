@@ -2,7 +2,7 @@
 {% load custom_filters %}    
     <div class="leido{{notif.leido}} row m-0 p-2">
         <div class="col-2 p-0 m-0">
-            <img class="img-fluid w-85 m-0 p-0" src="{% static 'images\logo.png' %}?v={{ cache_version }}" alt="iconCozcyt">
+            <img class="img-fluid w-85 m-0 p-0" src="{{ 'sit_logo.png'|static_image }}?v={{ cache_version }}" alt="iconCozcyt">
         </div>
         <div class="col p-0 m-0 font-xs">
             <div class="row m-0 p-0">
