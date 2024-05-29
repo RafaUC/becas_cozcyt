@@ -122,6 +122,7 @@ MAPEO_SOLICITUDES_CHOICES_ADMIN = {
 MAPEO_SOLICITUDES_CHOICES_USER = {
     'modalidad': 'modalidad__nombre',
     'ciclo': 'ciclo__nombre',
+    'aceptadas': 'modalidad__nombre',
     'estado solicitud': 'estado',    
     'tipo': 'tipo',
     'genero': 'solicitante__genero',
