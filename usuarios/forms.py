@@ -387,15 +387,11 @@ class StaticImagesUploadForm(forms.Form):
                 self.fields[field_name] = forms.ImageField(required=False)
         
         for field_name in self.fields:
-<<<<<<< HEAD
             self.fields[field_name].required = False
             self.fields[field_name].widget.attrs.update({
                 'accept': 'image/png, image/svg+xml, image/webp',
                 'class': 'form-control form-control-sm'
             })
-=======
-            self.fields[field_name].widget.attrs.update({'class': 'form-control form-control-sm'})
->>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
 
     def clean_image(self, image):
         if image:            

@@ -949,9 +949,6 @@ i.rechazado:before {
 
 /* Item de resultados (Enero - Junio 2024, etc.) se le cambia el color cuando es seleccionado */
 .dropdown-item:active {
-<<<<<<< HEAD
-  background-color: var(--secundario-f) !important;
-=======
   background-color: var(--principal) !important;
 }
 
@@ -972,7 +969,6 @@ i.rechazado:before {
   align-items: center; 
   justify-content: center; 
   padding: 1em 0 1em 0;
->>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
 }
 
 @media screen and (max-width: 700px) {
