@@ -67,22 +67,6 @@
             </div>            
         </div>
         </form>
-<<<<<<< HEAD
-        <div class="row"> 
-            <div class="d-grid gap-1 col-5 px-4">
-                <p class="col h5 subtitulo-config-general">Publicación de resultados</p>
-            </div>   
-            <div class="d-grid gap-1 col-md px-3 subtitulo-config-general"> 
-                <form class="p-0 m-0" action="{% url 'modalidades:APublicRes' %}" method="get" > 
-                    <button class="btn btnCancelar m-0 w-100 font-normal texto-general my-5" type="button" value="aceptar" 
-                        {% if convocatoria.instance.ultimo_ciclo_publicado and convocatoria.instance.ultimo_ciclo_publicado == ciclo %}
-                            onclick="confrimSubmit(this,'¿Desea revertir publicacion de los beneficiarios y estadisticas del ciclo {{ciclo}}?')">Revertir publicacion de beneficiarios
-                        {% else %}
-                            onclick="confrimSubmit(this,'¿Desea publicar los beneficiarios y estadisticas del ciclo {{ciclo}}?')">Publicar beneficiarios del ciclo actual
-                        {% endif %}
-                    </button>
-                </form>
-=======
         <div class="rounded-2 mx-4">
             <div class="row">
                 <p></p>
@@ -91,21 +75,20 @@
         </div>
         <div class="rounded-2 mx-4"> 
             <div class="row"> 
-                <div class="d-grid gap-1 col-md-5 px-4">
+                <div class="d-grid gap-1 col-5 px-4">
                     <p class="col h5 subtitulo-config-general">Publicación de resultados</p>
                 </div>   
                 <div class="d-grid gap-1 col-md px-3 subtitulo-config-general"> 
                     <form class="p-0 m-0" action="{% url 'modalidades:APublicRes' %}" method="get" > 
                         <button class="btn btnCancelar m-0 w-100 font-normal texto-general my-5" type="button" value="aceptar" 
                             {% if convocatoria.instance.ultimo_ciclo_publicado and convocatoria.instance.ultimo_ciclo_publicado == ciclo %}
-                                onclick="confrimSubmit(this,'¿Desea revertir publicacion de los resultados y estadisticas del ciclo {{ciclo}}?')">Revertir publicacion de resultados
+                                onclick="confrimSubmit(this,'¿Desea revertir publicacion de los beneficiarios y estadisticas del ciclo {{ciclo}}?')">Revertir publicacion de beneficiarios
                             {% else %}
-                                onclick="confrimSubmit(this,'¿Desea publicar los resultados y estadisticas del ciclo {{ciclo}}?')">Publicar resultados del ciclo actual
+                                onclick="confrimSubmit(this,'¿Desea publicar los beneficiarios y estadisticas del ciclo {{ciclo}}?')">Publicar beneficiarios del ciclo actual
                             {% endif %}
                         </button>
                     </form>
                 </div>
->>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
             </div>
         </div>
         <div class="rounded-2 mx-4">
