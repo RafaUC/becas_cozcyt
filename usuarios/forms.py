@@ -373,39 +373,51 @@ SiteColorFormSet = modelformset_factory(SiteColor, form=SiteColorForm, extra=0, 
 
 
 class StaticImagesUploadForm(forms.Form):    
-    favicon = forms.ImageField(required=False)
-    logo = forms.ImageField(required=False)
-    logo_texto = forms.ImageField(required=False)
-    logo_texto_lab = forms.ImageField(required=False)
-    logo_licencia = forms.ImageField(required=False)
+    valid_extensions = ['.png', '.svg', '.webp']
+    valid_content_types = ['image/png', 'image/svg+xml', 'image/webp']
 
     def __init__(self, *args, **kwargs):
         super(StaticImagesUploadForm, self).__init__(*args, **kwargs)
+        
+        image_dir = os.path.join(settings.STATICFILES_DIRS[0], 'images')
+        file_list = os.listdir(image_dir)
+        for filename in reversed(file_list):
+            if filename.endswith(tuple(self.valid_extensions)):
+                field_name = os.path.splitext(filename)[0]  # Obtener nombre del archivo sin extensión
+                self.fields[field_name] = forms.ImageField(required=False)
+        
         for field_name in self.fields:
-            self.fields[field_name].widget.attrs.update({'accept': 'image/png','class': 'form-control form-control-sm'})
+<<<<<<< HEAD
+            self.fields[field_name].required = False
+            self.fields[field_name].widget.attrs.update({
+                'accept': 'image/png, image/svg+xml, image/webp',
+                'class': 'form-control form-control-sm'
+            })
+=======
+            self.fields[field_name].widget.attrs.update({'class': 'form-control form-control-sm'})
+>>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
 
     def clean_image(self, image):
-        if image:
-            if not image.name.endswith('.png'):
-                raise ValidationError('Solo se permiten archivos PNG.')
-            if image.content_type != 'image/png':
-                raise ValidationError('El archivo debe ser una imagen PNG.')
+        if image:            
+            if not any(image.name.endswith(ext) for ext in self.valid_extensions):
+                raise ValidationError(f'Solo se permiten archivos {", ".join(self.valid_extensions)}.')            
+            if image.content_type not in self.valid_content_types:
+                raise ValidationError(f'El archivo debe ser una imagen {", ".join(self.valid_content_types)}.')
         return image
 
-    def clean_favicon(self):
-        return self.clean_image(self.cleaned_data.get('favicon'))
-
-    def clean_logo(self):
-        return self.clean_image(self.cleaned_data.get('logo'))
-
-    def clean_logo_texto(self):
-        return self.clean_image(self.cleaned_data.get('logo_texto'))
-
-    def clean_logo_texto_lab(self):
-        return self.clean_image(self.cleaned_data.get('logo_texto_lab'))
-
-    def clean_logo_licencia(self):
-        return self.clean_image(self.cleaned_data.get('logo_licencia'))
+    def clean(self):
+        cleaned_data = super().clean()
+        # Obtener los nombres de los campos de tipo ImageField dinámicamente
+        image_fields = [field_name for field_name, field in self.fields.items() if isinstance(field, forms.ImageField)]
+        for field in image_fields:
+            image = cleaned_data.get(field)
+            if image:
+                try:
+                    cleaned_data[field] = self.clean_image(image)
+                except ValidationError as e:
+                    # Agregar el error al campo específico
+                    self.add_error(field, e)
+        return cleaned_data
 
     def get_image_path(self, field_name):
         return os.path.join(settings.STATIC_URL, 'images', field_name)
