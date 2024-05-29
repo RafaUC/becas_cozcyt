@@ -5,6 +5,7 @@ SIT Información
 {% endblock titulo %}
 
 {% load static %}
+{% load custom_filters %}
 {% block body %}
 
     <!-- Div que contiene la descripción del SIT -->
@@ -21,7 +22,7 @@ SIT Información
             <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style=""> <p class="font-md my-4" >Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </p></i></a>
         </div>
         <div class="col-md-4" id="inicio_imagen_sit" style="">
-            <img class="img-fluid" src="{% static 'svg/notion_ej.svg' %}" alt="persona con problemas en la computadora">
+            <img class="img-fluid" src="{{ 'notion_ej.svg'|static_image }}?v={{ cache_version }}" alt="persona con problemas en la computadora">
         </div>
     </div>
 
@@ -33,7 +34,7 @@ SIT Información
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div>
-                            <img class="imagen-modalidad" src="{% static 'svg/manual.svg' %}" alt="Card image cap" style="width: 50%;">
+                            <img class="imagen-modalidad" src="{{ 'manual.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 50%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>¿Es su primera vez solicitando una modalidad?</strong></h4>
@@ -56,7 +57,7 @@ SIT Información
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div>
-                            <img class="imagen-modalidad" src="{% static 'svg/reglamento_1.svg' %}" alt="Card image cap" style="width: 45%;">
+                            <img class="imagen-modalidad" src="{{ 'reglamento_1.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 45%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>Reglamento de operaciones</strong></h4>
@@ -79,7 +80,7 @@ SIT Información
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div >
-                            <img class="imagen-modalidad" src="{% static 'svg/seleccion.svg' %}" alt="Card image cap" style="width: 42%;">
+                            <img class="imagen-modalidad" src="{{ 'seleccion.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 42%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>Métodos de selección</strong></h4>
@@ -138,7 +139,7 @@ SIT Información
                                     <br>
                                 </div>
                                 <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'icono_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
@@ -165,7 +166,7 @@ SIT Información
                                     <br>
                                 </div>
                                 <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'icono_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
@@ -192,7 +193,7 @@ SIT Información
                                     <br>
                                 </div>
                                 <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'icono_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
@@ -218,7 +219,7 @@ SIT Información
                     <strong> Preguntas frecuentes </strong>
                 </h3>
                 <h5> texto texto</h5>
-                <img class="imagen-modalidad" src="{% static 'svg/preguntasF.svg' %}" alt="Card image cap" style="width: 75%;">
+                <img class="imagen-modalidad" src="{{ 'preguntasF.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 75%;">
             </div>
             <div class="col-md-6 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center; margin-left: 5em;">
                 <div class="accordion accordion-flush" id="accordionFlushExample" style="width: 100%;">

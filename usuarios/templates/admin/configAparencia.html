@@ -4,6 +4,7 @@
 Configuración colores
 {% endblock titulo %}
 {% load static %}
+{% load custom_filters %}
 
 {% block body %}
     {% include 'admin/config_nav.html' %}
@@ -43,8 +44,8 @@ Configuración colores
             {% for campo in formImages %}
                 <div class="col p-3" style="display: flex; flex-direction: column;">
                     {{ campo.label }}
-                    {% with img_path="images/"|add:campo.name|add:".png" %}
-                    <img class="img-fluid my-2" src="{% static img_path %}?v={{ cache_version }}" alt="{{campo.name}}.png" style="max-height: 100px; max-width: 100%; object-fit: contain;"> 
+                    {% with img_path=campo.name|add:".png" %}
+                    <img class="img-fluid my-2" src="{{ img_path|static_image }}?v={{ cache_version }}" alt="{{campo.name}}.png" style="max-height: 100px; max-width: 100%; object-fit: contain;"> 
                     {% endwith %}
                     {{ campo }}
                     {{ campo.errors }}

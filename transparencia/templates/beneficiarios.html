@@ -5,6 +5,7 @@ Beneficiarios
 {% endblock titulo %}
 
 {% load static %}
+{% load custom_filters %}
 
 {% block body %}
 
@@ -45,7 +46,7 @@ Beneficiarios
     <div class="my-5 mx-auto text-center" style="max-width: 35rem; max-height: 40vh;">
         <div class="row p-3 align-items-center">
             <div class="col-4">
-                <img class="img-fluid " src="{% static 'svg/a-man-who-uses-a-computer-negative-svgrepo-com.svg' %}" alt="persona con problemas en la computadora">
+                <img class="img-fluid " src="{{ 'a-man-who-uses-a-computer-negative-svgrepo-com.svg'|static_image }}?v={{ cache_version }}" alt="persona con problemas en la computadora">
             </div>
             <div class="col-8">
                 <p class="h4">
