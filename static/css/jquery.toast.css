@@ -108,25 +108,25 @@
     background-position: 10px; 
 }
 .jq-icon-info { 
-    background-image: url(/static/images/infocircle.png); 
+    background-image: url(/static/images/toast/infocircle.png); 
     background-color: var(--notif-info-background);
     color: var(--notif-info-texto);
     border-color: var(--notif-info-border);
 }
 .jq-icon-warning { 
-    background-image: url(/static/images/warning2.png); 
+    background-image: url(/static/images/toast/warning2.png); 
     background-color: var(--notif-warning-background);
     color:            var(--notif-warning-texto);
     border-color:     var(--notif-warning-border);
 }
 .jq-icon-error { 
-    background-image: url(/static/images/error_circle.png);
+    background-image: url(/static/images/toast/error_circle.png);
     background-color: var(--notif-error-background);
     color:            var(--notif-error-texto);
     border-color:     var(--notif-error-border);
 }
 .jq-icon-success { 
-    background-image: url(/static/images/icon_check_circle.png); 
+    background-image: url(/static/images/toast/icon_check_circle.png); 
     background-color: var(--notif-exito-background);
     color:            var(--notif-exito-texto);
     border-color:     var(--notif-exito-border);

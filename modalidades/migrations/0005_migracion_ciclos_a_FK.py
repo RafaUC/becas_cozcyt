@@ -20,7 +20,7 @@ def migrarDatosdeCiclos(apps, schema_editor):
     valores_unicos = ordenar_lista_ciclos(valores_unicos)    
     
     for nombreCiclo in valores_unicos:
-        Ciclo.objects.create(nombre=nombreCiclo, presupuesto=None)
+        Ciclo.objects.create(nombre=nombreCiclo, presupuesto=convocatoria.presupuesto)
     
     #asignar el ciclo en el campo temporal de la convocatoria
     try:

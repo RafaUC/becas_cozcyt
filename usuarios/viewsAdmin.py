@@ -560,7 +560,16 @@ def configAparencia(request):
             for field_name in formImages.cleaned_data:
                 image = formImages.cleaned_data[field_name]
                 if image:
-                    image_path = os.path.join(settings.STATICFILES_DIRS[0], 'images', field_name+'.png')
+                    old_path = os.path.join(settings.STATICFILES_DIRS[0], 'images', f'{field_name}')
+                    if os.path.exists(f'{old_path}.png'):
+                        os.remove(f'{old_path}.png')
+                    elif os.path.exists(f'{old_path}.svg'):
+                        os.remove(f'{old_path}.svg')
+                    elif os.path.exists(f'{old_path}.webp'):
+                        os.remove(f'{old_path}.webp')
+
+                    file_extension = os.path.splitext(image.name)[1]                    
+                    image_path = os.path.join(settings.STATICFILES_DIRS[0], 'images', f'{field_name}{file_extension}')
                     with open(image_path, 'wb+') as destination:
                         for chunk in image.chunks():
                             destination.write(chunk)

@@ -5,10 +5,11 @@ SIT Información
 {% endblock titulo %}
 
 {% load static %}
+{% load custom_filters %}
 {% block body %}
 
     <!-- Div que contiene la descripción del SIT -->
-    <div class="flex-direction texto-general center" style="background-color: #fff; display: flex; width: 100%; align-items: center; justify-content: center; padding: 1em 0 1em 0;" id="container_inicio_sit">
+    <div class="flex-direction center" style="" id="container_sit">
         <div class="col-md-4" id="info_texto_sit" style="margin: 0em 5em 0 0em; text-align: center;">
             <h3 style="text-align: center;"><strong> Sistema de Impulso al Talento </strong></h3>
             <p></p>
@@ -18,22 +19,36 @@ SIT Información
                 con un apoyo económico por semestre, se abre dos convocatorias por año, y dependiendo de su calificación pueden elegir 
                 una de las 5 modalidades.
             </p>
-            <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style=""> <p class="font-md my-4" >Ir al sitio web del SIT <i class="fa fa-long-arrow-right px-1 align-self-center" aria-hidden="true"> </p></i></a>
+            <div style="padding-bottom: 10px;">
+                <a href="{% url 'usuarios:loginRedirect' %}">
+                    <button href="{% url 'usuarios:loginRedirect' %}" class="btn btnConvocatoria">
+                        Ir al sitio web del SIT 
+                        <svg  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /> 
+                        </svg>
+                    </button>
+                </a>
+            </div>
+            <!-- <a class="" href="{% url 'usuarios:loginRedirect' %}" id="enlaceSIT" style=""> 
+                <p class="font-md my-4" >
+                Ir al sitio web del SIT 
+                <svg  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /> 
+                </p></svg>
+            </a> -->
         </div>
         <div class="col-md-4" id="inicio_imagen_sit" style="">
-            <img class="img-fluid" src="{% static 'svg/notion_ej.svg' %}" alt="persona con problemas en la computadora">
+            <img class="img-fluid" src="{{ 'inicio_imagen_sit.svg'|static_image }}?v={{ cache_version }}" alt="persona con problemas en la computadora">
         </div>
     </div>
 
     <!-- Div que contiene los documentos importantes del sit -->
     <div class="texto-general center">
-        <div class="row" style="align-items: center; justify-content: center;">
+        <div class="row mx-0 px-0" style="align-items: center; justify-content: center;">
             <div class="col-md-4" style="padding-top: 10px; padding-bottom: 10px;" >
                 <!-- {{modalidad.tipo}}{{solicitante.es_renovacion}} -->
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div>
-                            <img class="imagen-modalidad" src="{% static 'svg/manual.svg' %}" alt="Card image cap" style="width: 50%;">
+                            <img class="imagen-modalidad" src="{{ 'inicio_manual.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 50%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>¿Es su primera vez solicitando una modalidad?</strong></h4>
@@ -56,7 +71,7 @@ SIT Información
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div>
-                            <img class="imagen-modalidad" src="{% static 'svg/reglamento_1.svg' %}" alt="Card image cap" style="width: 45%;">
+                            <img class="imagen-modalidad" src="{{ 'inicio_reglamento.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 45%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>Reglamento de operaciones</strong></h4>
@@ -79,13 +94,13 @@ SIT Información
                 <div class="card" data-bs-original-title="" style="background-color: transparent; border: none;">
                     <div class="card-body card-modalidad">
                         <div >
-                            <img class="imagen-modalidad" src="{% static 'svg/seleccion.svg' %}" alt="Card image cap" style="width: 42%;">
+                            <img class="imagen-modalidad" src="{{ 'inicio_metodo_seleccion.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 42%;">
                         </div>
                         <div style="height: 5em; align-content: center;">
                             <h4 class="card-title"><strong>Métodos de selección</strong></h4>
                         </div>
                         <div style="height: 5em; align-content: center;">
-                            <p>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo y los criterios necesarios para su eligibilidad.</p>
+                            <p>Consulte el <strong>proceso de selección</strong> para saber los pasos que se llevarán a cabo para su eligibilidad.</p>
                         </div>
                         <div style="padding-bottom: 10px;">
                             <a href="{% static 'files/Diagrama_de_procesos.pdf' %}">
@@ -117,7 +132,7 @@ SIT Información
                     <div class="swiper-wrapper">
                         <!-- Primera slide del carrusel -->
                         <div class="swiper-slide" style="width: auto !important;">
-                            <div class="info_modalidad_slide" style="">
+                            <div class="info_modalidad_slide" style="justify-content: center;">
                                 <div class="info_modalidad_desc col-md-8" style="margin-bottom: 1em; text-align: center;">
                                     <div class="info_modalidad_titulo">
                                         <h5 style="text-align: justify;"><strong>Carta de exposición de motivos</strong></h5>
@@ -137,14 +152,14 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                <div class="col-md-4" style="text-align: center;">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'inicio_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
                         <!-- Segunda slide del carrusel -->
                         <div class="swiper-slide" style="width: auto !important;">
-                            <div class="info_modalidad_slide" style="">
+                            <div class="info_modalidad_slide" style="justify-content: center;">
                                 <div class="info_modalidad_desc col-md-8" style="margin-bottom: 1em; text-align: center;">
                                     <div class="info_modalidad_titulo">
                                         <h5 style="text-align: justify;"><strong>Carta bajo protesta</strong></h5>
@@ -164,14 +179,14 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                <div class="col-md-4" style="text-align: center;">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'inicio_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
                         <!-- Tercera slide del carrusel -->
                         <div class="swiper-slide" style="width: auto !important;">
-                            <div class="info_modalidad_slide" style="">
+                            <div class="info_modalidad_slide" style="justify-content: center;">
                                 <div class="info_modalidad_desc col-md-8" style="margin-bottom: 1em; text-align: center;">
                                     <div class="info_modalidad_titulo">
                                         <h5 style="text-align: justify;"><strong>Formato del servicio colaborativo</strong></h5>
@@ -191,8 +206,8 @@ SIT Información
                                     </a>
                                     <br>
                                 </div>
-                                <div class="info_modalidad_image col-md-3" style="text-align: center; margin-left: 2em;">
-                                    <img  class="imagen-modalidad img-fluid" src="{% static 'svg/icono_documento.svg' %}" alt="Imagen modalidad">
+                                <div class="col-md-4" style="text-align: center;">
+                                    <img  class="imagen-modalidad img-fluid" src="{{ 'inicio_documento.svg'|static_image }}?v={{ cache_version }}" alt="Imagen modalidad">
                                 </div>
                             </div>
                         </div>
@@ -212,13 +227,13 @@ SIT Información
     <!-- Div que contiene las preguntas frecuentes-->
     <div class="texto-general center" style="margin-top: 1em; width: 100%; align-items: center;">
         <div class="flex-direction" style="display: flex; justify-content: center; text-align: center;">
-            <div class="col-md-3" id="info_modalidades" style="color: var(--rosaO);">
+            <div class="col-md-3" id="info_modalidades" style="color: var(--secundario-mf);">
                 <h3 style="text-align: center;">
                     <br>
                     <strong> Preguntas frecuentes </strong>
                 </h3>
                 <h5> texto texto</h5>
-                <img class="imagen-modalidad" src="{% static 'svg/preguntasF.svg' %}" alt="Card image cap" style="width: 75%;">
+                <img class="imagen-modalidad" src="{{ 'inicio_preguntasF.svg'|static_image }}?v={{ cache_version }}" alt="Card image cap" style="width: 75%;">
             </div>
             <div class="col-md-6 center" id="info_conv_fechas" style="border: 0.7px solid #EEE5E5; border-radius: 10px; display: flex; align-items: center; margin-left: 5em;">
                 <div class="accordion accordion-flush" id="accordionFlushExample" style="width: 100%;">
