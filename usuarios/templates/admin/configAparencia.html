@@ -39,51 +39,68 @@ Configuración colores
     </div>   
     <form method="post" id="coloresForm" enctype="multipart/form-data" class="">
         {% csrf_token %}
+        <ul class="nav nav-tabs nav-pills nav-pills-opciones mx-4" style="border-bottom: 0px;" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link d-flex link-dark active h6" id="imagenes-tab" data-bs-toggle="tab" data-bs-target="#imagenes" type="button" role="tab" aria-controls="imagenes" aria-selected="true">Imagenes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link d-flex link-dark h6" id="colores-tab" data-bs-toggle="tab" data-bs-target="#colores" type="button" role="tab" aria-controls="colores" aria-selected="false">Colores</button>
+            </li>
+        </ul>
         <hr class="mx-4">
-        <div class="row row-cols-3 mx-3 mb-4 font-semi-bold">
-            {% for campo in formImages %}
-                <div class="col p-3" style="display: flex; flex-direction: column;">
-                    {{ campo.label }}
-                    {% with img_path=campo.name|add:".png" %}
-                    <img class="img-fluid my-2" src="{{ img_path|static_image }}?v={{ cache_version }}" alt="{{campo.name}}.png" style="max-height: 100px; max-width: 100%; object-fit: contain;"> 
-                    {% endwith %}
-                    {{ campo }}
-                    {{ campo.errors }}
+        <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="imagenes" role="tabpanel" aria-labelledby="imagenes-tab">
+                <div class="row row-cols-3 mx-3 mb-4 font-semi-bold">
+                    {% for campo in formImages %}
+                        <div class="col p-3" style="display: flex; flex-direction: column;">
+                            {{ campo.label }}
+                            {% with img_path=campo.name|add:".png" %}
+                            <img class="img-fluid my-2" src="{{ img_path|static_image }}?v={{ cache_version }}" alt="{{campo.name}}.png" style="max-height: 100px; max-width: 100%; object-fit: contain;"> 
+                            {% endwith %}
+                            {{ campo }}
+                            {{ campo.errors }}
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-        <hr class="mx-4">
-        <div class="mb-5">                                    
-                {{ formset.management_form }}
-            
-                <div class="m-2">                
-                    <div class="row mx-0">
-                        <p class="texto-secundario font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
-                            Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0,0)
-                        </p>
-                    </div>
-                    
-                    <ul class="cols-rows-auto-colores  mb-3">                    
-                        {% for form in formset %}
-                            <li class="item">
-                                <div class="row mx-0 mb-2">
-                                    <div class="col px-1 text-start ">
-                                        <div class="fondo-gris-0 px-2 font-semi-bold font-md">
-                                            {{ form.instance.nombre }}
+            </div>                
+            <div class="tab-pane fade" id="colores" role="tabpanel" aria-labelledby="colores-tab">
+                <div class="mb-5">                                    
+                    {{ formset.management_form }}
+                
+                    <div class="m-2">                
+                        <div class="row mx-0">
+                            <p class="texto-secundario font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
+                                Formatos de colores: &nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0,0)
+                            </p>
+                        </div>
+                        
+                        <ul class="cols-rows-auto-colores  mb-3">                    
+                            {% for form in formset %}
+                                <li class="item">
+                                    <div class="row mx-0 mb-2">
+                                        <div class="col px-1 text-start ">
+                                            <div class="fondo-gris-0 px-2 font-semi-bold font-md">
+                                                {{ form.instance.nombre }}
+                                            </div>
+                                            {% for field in form.hidden_fields %}
+                                                {{ field }}
+                                            {% endfor %}
                                         </div>
-                                        {% for field in form.hidden_fields %}
-                                            {{ field }}
-                                        {% endfor %}
-                                    </div>
-                                    <div class="col px-1 text-start">                                    
-                                            {{ form.color }}
-                                            {{ form.color.errors }}                                                                    
-                                    </div>
-                                </div>                            
-                            </li>
-                        {% endfor %}                        
-                    </ul>
-                </div>                                  
+                                        <div class="col px-1 text-start">                                    
+                                                {{ form.color }}
+                                                {{ form.color.errors }}                                                                    
+                                        </div>
+                                    </div>                            
+                                </li>
+                            {% endfor %}                        
+                        </ul>
+                    </div>                                  
+                </div>
+            </div>
+
         </div>
+        
+        
     </form>
 {% endblock body %}
