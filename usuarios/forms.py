@@ -380,7 +380,8 @@ class StaticImagesUploadForm(forms.Form):
         super(StaticImagesUploadForm, self).__init__(*args, **kwargs)
         
         image_dir = os.path.join(settings.STATICFILES_DIRS[0], 'images')
-        for filename in os.listdir(image_dir):
+        file_list = os.listdir(image_dir)
+        for filename in reversed(file_list):
             if filename.endswith(tuple(self.valid_extensions)):
                 field_name = os.path.splitext(filename)[0]  # Obtener nombre del archivo sin extensión
                 self.fields[field_name] = forms.ImageField(required=False)
