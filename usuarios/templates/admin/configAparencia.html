@@ -4,7 +4,10 @@
 Configuración colores
 {% endblock titulo %}
 {% load static %}
+<<<<<<< HEAD
 {% load custom_filters %}
+=======
+>>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
 
 {% block body %}
     {% include 'admin/config_nav.html' %}
@@ -28,9 +31,15 @@ Configuración colores
                 <p class="col-auto h5 subtitulo-mod">Configuración de apariencia del sitio</p>
                 <div class="col text-end">
                     <div class="d-inline-flex justify-content-end">
+<<<<<<< HEAD
                         <button class="btn btn-guardar texto-general m-0 mx-1 font-sm font-semi-bold" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
                         <form class="p-0 m-0" action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
                             <button class="btn btnCancelar texto-general m-0 mx-1 font-sm font-semi-bold" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+=======
+                        <button class="btn btn-guardar texto-general m-0 mx-1 font-sm" type="button" value="guardar" onclick="enviarFormulario('coloresForm', this)">Guardar cambios</button>
+                        <form class="p-0 m-0" action="{% url 'usuarios:AReCargarColoresDefault' %}" method="get"> 
+                            <button class="btn btnCancelar texto-general m-0 mx-1 font-sm" type="button" value="recargar" onclick="confrimSubmit(this,'¿Desea recargar colores por defecto? <br> {{usuario.curp}}')">Recargar colores por defecto</button>
+>>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
                         </form>
                     </div>
                 </div>             
@@ -48,6 +57,7 @@ Configuración colores
             </li>
         </ul>
         <hr class="mx-4">
+<<<<<<< HEAD
         <div class="tab-content" id="myTabContent">
 
             <div class="tab-pane fade show active" id="imagenes" role="tabpanel" aria-labelledby="imagenes-tab">
@@ -86,6 +96,38 @@ Configuración colores
                                             {% for field in form.hidden_fields %}
                                                 {{ field }}
                                             {% endfor %}
+=======
+        <div class="row row-cols-3 mx-3 mb-4 font-semi-bold">
+            {% for campo in formImages %}
+                <div class="col p-3" style="display: flex; flex-direction: column;">
+                    {{ campo.label }}
+                    {% with img_path="images/"|add:campo.name|add:".png" %}
+                    <img class="img-fluid my-2" src="{% static img_path %}?v={{ cache_version }}" alt="{{campo.name}}.png" style="max-height: 100px; max-width: 100%; object-fit: contain;"> 
+                    {% endwith %}
+                    {{ campo }}
+                    {{ campo.errors }}
+                </div>
+            {% endfor %}
+        </div>
+        <hr class="mx-4">
+        <div class="mb-5">                                    
+                {{ formset.management_form }}
+            
+                <div class="m-2">                
+                    <div class="row mx-0">
+                        <p class="texto-principal font-md m-1 mx-0 mb-3 p-0 px-2 pb-1">
+                            Formatos de colores aceptados a continuación: <strong>&nbsp; #000000 &nbsp; rgb(0,0,0) &nbsp; rgba(0,0,0,0)</strong>
+                        </p>
+                    </div>
+                    
+                    <ul class="cols-rows-automatico  mb-3">                    
+                        {% for form in formset %}
+                            <li class="item">
+                                <div class="row mx-0 mb-2">
+                                    <div class="col px-1 text-start ">
+                                        <div class="fondo-gris-0 px-2 font-semi-bold font-md">
+                                            {{ form.instance.nombre }}
+>>>>>>> 9ca64d2f3d333059a6f08187791b7e35640abc98
                                         </div>
                                         <div class="col px-1 text-start">                                    
                                                 {{ form.color }}
