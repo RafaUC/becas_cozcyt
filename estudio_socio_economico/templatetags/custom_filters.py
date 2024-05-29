@@ -7,6 +7,7 @@ from django.utils.timesince import timesince
 from django.utils import timezone
 from django.templatetags.static import static
 import os
+from django.conf import settings
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -91,19 +92,25 @@ def elapsed_time(timestamp):
 @register.filter
 def static_image(filename):
     base_path, ext = os.path.splitext(filename)
-    imageDir = "images"
-    
-    if ext:
+    imageDir = "images"    
+    basedir = settings.BASE_DIR    
+    staticPath = settings.STATIC_URL    
+
+    if staticPath.startswith("/"):
+        staticPath = staticPath[1:] 
+
+    if ext:        
         # Si tiene extensión, verifica si el archivo existe
-        path = static(os.path.join(imageDir,filename))
-        if os.path.isfile(path):
-            return path    
+        path = os.path.join(imageDir,filename)      
+        absPath = os.path.join(basedir,staticPath,path)                
+        if os.path.isfile(absPath):
+            return static(path)    
     # Si no tiene extensión, verifica las posibles extensiones
     extensions = ['png', 'svg', 'webp']
-    for ext in extensions:
-        path = static(os.path.join(imageDir,f'{base_path}.{ext}'))
-        if os.path.isfile(path):
-            return path
-    
+    for ext in extensions:        
+        path = os.path.join(imageDir,f'{base_path}.{ext}')      
+        absPath = os.path.join(basedir,staticPath,path)            
+        if os.path.isfile(absPath):
+            return static(path)    
     # Retorna un archivo por defecto si no se encuentra el archivo
     return static(os.path.join(imageDir,f'{base_path}.png')) # Default to .png if none found
