@@ -573,7 +573,7 @@ def configAparencia(request):
                     with open(image_path, 'wb+') as destination:
                         for chunk in image.chunks():
                             destination.write(chunk)
-            messages.success(request, 'Nueva vercion del esquema de colores del sitio guardada con exito.')
+            messages.success(request, 'Nueva versión del esquema de colores del sitio guardada con exito.')
             return redirect('usuarios:AResetCacheColors')
         else:
             messages.warning(request, 'No se pudo guardar el esquema de colores.')
