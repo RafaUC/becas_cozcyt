@@ -971,12 +971,10 @@ i.rechazado:before {
   padding: 1em 0 1em 0;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 45em) {
   #container_inicio_sit{
     background: linear-gradient(#fff 40%, var(--pagina-fondo) 60%); 
   }
-
-  
 
   .flex-direction{
     flex-direction: column;
