@@ -3,74 +3,92 @@
 
 {% if perms.usuarios.permiso_administrador and request.user.is_superuser == 1 %}
     <footer>
-    <div class="section-footer container-fluid">
-        <div class="section-footer__row" style="padding: 5px;">
-            <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
-                <div class="section-footer__icons" style="padding: 0 0 5px 0;">
-                <img  src="{{ 'sit_logo_texto_lab.png'|static_image }}?v={{ cache_version }}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
-                <img src="{{ 'sit_logo_licencia.png'|static_image }}?v={{ cache_version }}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
+        <div class="section-footer flex-direction" style="">
+            <div class="col-md-4 section-footer__credits">
+                <div class="section-footer__licence nomargin" style="color: #fff;">
+                    <p class=" nomargin">
+                        © 2023 - <span id="year"></span>
+                        <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
+                    </p>
+                    <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
                 </div>
-                <div class="section-footer__list">
-                <ul class="list-section-footer">
-                    <li class="list-section-footer-object">
-                    <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
-                    </li>
-                    <li class="list-section-footer-object">
-                    <a href="{% static 'files/Manual de usuario (Admin) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
-                    </li>
-                    <!-- <li class="list-section-footer-object">
-                    <a href="" style="color: #fff;">Mapa del sitio </a>
-                    </li> -->
-                </ul>
+                <div class="section-footer__developers">
+                    <p style="margin: 0.5em 0 0.5em 0">
+                        <a href="https://www.linkedin.com/in/rafael-uribe-caldera-040426301/" style="color: #fff;">@Rafael Uribe (desarrollador) </a>
+                    </p>
+                    <a href="https://www.linkedin.com/in/esmeralda-pacheco-b8a73130b/" style="color: #fff;">@Esmeralda Pacheco (desarrolladora) </a>
                 </div>
             </div>
-            <div class="section-footer__row__col" style="padding: 10px;">
-                <div>
-                <p class=" nomargin" style="color: #fff;">
-                    © 2023 - <span id="year"></span>
-                    <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
-                </p>
-                    <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
+            <div class="col-md-4 section-footer__list" style="">
+                <div class=" section-footer__links" style="">
+                    <ul class="list-section-footer" style="padding-left: 0em;">
+                        <li class="list-section-footer-object">
+                            <a href="{% static 'files/Manual de usuario (Admin) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
+                        </li>
+                        <li class="list-section-footer-object">
+                            <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
+                        </li>
+                        <li class="list-section-footer-object">
+                            <a href="{% url 'transparencia:Tinicio' %}" style="color: #fff;">Transparencia </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 section-footer__icons" style="">
+                <div class="" style="">
+                    <div class="section-footer__images" style="">
+                        <img src="{{ 'sit_logo_texto_lab.png'|static_image }}?v={{ cache_version }}" title="Laboratorio de Software Libre Network" width="40%" style="">
+                        <br>
+                        <img src="{{ 'sit_logo_licencia.png'|static_image }}?v={{ cache_version }}" title="GNU General Public License v.3." width="30%" style=""> 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </footer>
     
     {% else %}
     <footer>
-    <div class="section-footer container-fluid">
-        <div class="section-footer__row" style="padding: 5px;">
-        <div class="section-footer__row__col" style="padding: 5px 0 0 0; float: right;">
-            <div class="section-footer__icons" style="padding: 0 0 5px 0;">
-            <img  src="{{ 'sit_logo_texto_lab.png'|static_image }}?v={{ cache_version }}" title="Laboratorio de Software Libre Network" width="70" style="margin: 0 20px;">
-            <img src="{{ 'sit_logo_licencia.png'|static_image }}?v={{ cache_version }}" title="GNU General Public License v.3." width="50" style="margin: 0 20px;"> 
+        <div class="section-footer flex-direction" style="">
+            <div class="col-md-4 section-footer__credits">
+                <div class="section-footer__licence nomargin" style="color: #fff;">
+                    <p class=" nomargin">
+                        © 2023 - <span id="year"></span>
+                        <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
+                    </p>
+                    <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
+                </div>
+                <div class="section-footer__developers">
+                    <p style="margin: 0.5em 0 0.5em 0">
+                        <a href="https://www.linkedin.com/in/rafael-uribe-caldera-040426301/" style="color: #fff;">@Rafael Uribe (desarrollador) </a>
+                    </p>
+                    <a href="https://www.linkedin.com/in/esmeralda-pacheco-b8a73130b/" style="color: #fff;">@Esmeralda Pacheco (desarrolladora) </a>
+                </div>
             </div>
-            <div class="section-footer__list">
-            <ul class="list-section-footer">
-                <li class="list-section-footer-object">
-                <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
-                </li>
-                <li class="list-section-footer-object">
-                <a href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
-                </li>
-                <!-- <li class="list-section-footer-object">
-                <a href="" style="color: #fff;">Mapa del sitio </a>
-                </li> -->
-            </ul>
+            <div class="col-md-4 section-footer__list" style="">
+                <div class=" section-footer__links" style="">
+                    <ul class="list-section-footer" style="padding-left: 0em;">
+                        <li class="list-section-footer-object">
+                            <a href="{% static 'files/Manual de usuario (Solicitante) - Sistema de impulso al talento.pdf' %}" style="color: #fff;">Manual de usuario </a>
+                        </li>
+                        <li class="list-section-footer-object">
+                            <a href="https://cozcyt.gob.mx/estimulos-cozcyt/" style="color: #fff;">Acerca de </a>
+                        </li>
+                        <li class="list-section-footer-object">
+                            <a href="{% url 'transparencia:Tinicio' %}" style="color: #fff;">Transparencia </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 section-footer__icons" style="">
+                <div class="" style="">
+                    <div class="section-footer__images" style="">
+                        <img src="{{ 'sit_logo_texto_lab.png'|static_image }}?v={{ cache_version }}" title="Laboratorio de Software Libre Network" width="40%" style="">
+                        <br>
+                        <img src="{{ 'sit_logo_licencia.png'|static_image }}?v={{ cache_version }}" title="GNU General Public License v.3." width="30%" style=""> 
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="section-footer__row__col" style="padding: 10px;">
-            <div>
-            <p class=" nomargin" style="color: #fff;">
-                © 2023 - <span id="year"></span>
-                <a href="https://labsol.cozcyt.gob.mx/" style="color: #fff;"> Labsol Network.</a>
-            </p>
-                <a href="https://www.gnu.org/licenses/gpl-3.0.html" style="color: #fff;"> Bajo licencia GPL v.3.</a>
-            </div>
-        </div>
-        </div>
-    </div>
     </footer>
 {% endif %}
 <script>
