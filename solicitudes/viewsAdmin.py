@@ -116,7 +116,7 @@ MAPEO_SOLICITUDES_CHOICES_ADMIN = {
     'instituciones': 'solicitante__carrera__institucion__nombre',
     'carreras': 'solicitante__carrera__nombre',
     'estado': 'solicitante__municipio__estado__nombre',
-    'municipio': 'solicitante__municipio__estado__nombre',
+    'municipio': 'solicitante__municipio__nombre',
 }
 
 MAPEO_SOLICITUDES_CHOICES_USER = {
@@ -129,7 +129,7 @@ MAPEO_SOLICITUDES_CHOICES_USER = {
     'instituciones': 'solicitante__carrera__institucion__nombre',
     'carreras': 'solicitante__carrera__nombre',
     'estado': 'solicitante__municipio__estado__nombre',
-    'municipio': 'solicitante__municipio__estado__nombre',
+    'municipio': 'solicitante__municipio__nombre',
 }
 
 ANGULO_SOLICITUDES_CHOICES = {
@@ -212,7 +212,7 @@ def estadisticas(request):
             'getData': f'?campo_estadistica={ESTADISTICAS_SOLICITUD_CHOICES[8][0]}&estadistica_filtro={ultimoCiclo.id}'
         },        
         {
-            'titulo': 'Municipios participantes',
+            'titulo': 'Municipios registrados',
             'iconCSS': 'fa-map-marker',
             'valor': municipiosParticipando,
             'url': 'solicitudes:ESolicitudes',
