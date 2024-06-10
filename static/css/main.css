@@ -971,7 +971,7 @@ i.rechazado:before {
   padding: 1em 0 1em 0;
 }
 
-@media screen and (max-width: 45em) {
+@media screen and (max-width: 767px) {
   #container_inicio_sit{
     background: linear-gradient(#fff 40%, var(--pagina-fondo) 60%); 
   }
@@ -1135,7 +1135,7 @@ ul.cols-rows-auto-colores li.item {
 
 
 /* estilo para pc */
-@media (min-width: 768px) {
+@media (min-width: 767px) {
   ul.cols-rows-auto-beneficiarios {
     columns: 370px; /* Ancho mínimo de las columnas */
     column-gap: 2px; /* Espacio entre las columnas */
