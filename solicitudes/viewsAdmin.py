@@ -162,7 +162,7 @@ def estadisticas(request):
     minLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono
     maxLuminosidad = 0.8  # Límite de la luminosidad antes de cambiar el tono    
     incrementoHue = 0.016  # Incremento/decremento en el tono
-    
+    ciclo = ciclo_actual()
     
     ultimoCiclo = ciclo_actual()
     #si el usuario no es admin se procede a verificar si los resultados estan publicados y la cantidad de ciclos disponibles
@@ -227,6 +227,7 @@ def estadisticas(request):
         tarjetaDict['rgb'] = next(generadorColores)
 
     context = {
+        'ciclo': ciclo,
         'tarjetasEstadisticas': tarjetasEstadisticas
     }
     
