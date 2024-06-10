@@ -478,7 +478,7 @@
     padding: 0 0 0.5em 0;
 }
 
-@media screen and (max-width: 45em){
+@media screen and (max-width: 767px){
     .section-footer {
         padding: 2em 2em 2em 2em ;
         align-items: baseline;
